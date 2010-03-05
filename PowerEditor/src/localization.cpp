@@ -20,7 +20,49 @@
 #include "ShortcutMapper.h"
 #include "EncodingMapper.h"
 
-void Notepad_plus::changeMenuLang(generic_string & pluginsTrans, generic_string & windowTrans)
+#include "localization.h"
+
+
+void NativeLangSpeaker::init(TiXmlDocumentA *nativeLangDocRootA)
+{
+	if (nativeLangDocRootA)
+	{
+		_nativeLangA =  nativeLangDocRootA->FirstChild("NotepadPlus");
+		if (_nativeLangA)
+		{
+			_nativeLangA = _nativeLangA->FirstChild("Native-Langue");
+			if (_nativeLangA)
+			{
+				TiXmlElementA *element = _nativeLangA->ToElement();
+				const char *rtl = element->Attribute("RTL");
+				if (rtl)
+					_isRTL = (strcmp(rtl, "yes") == 0);
+                else
+                    _isRTL = false;
+
+                // get original file name (defined by Notpad++) from the attribute
+                _fileName = element->Attribute("filename");
+
+				if (_fileName && stricmp("english.xml", _fileName) == 0)
+                {
+					_nativeLangA = NULL;
+					return;
+				}
+				// get encoding
+				TiXmlDeclarationA *declaration =  _nativeLangA->GetDocument()->FirstChild()->ToDeclaration();
+				if (declaration)
+				{
+					const char * encodingStr = declaration->Encoding();
+					EncodingMapper *em = EncodingMapper::getInstance();
+                    int enc = em->getEncodingFromString(encodingStr);
+                    _nativeLangEncoding = (enc != -1)?enc:CP_ACP;
+				}
+			}	
+		}
+    }
+}
+
+void NativeLangSpeaker::changeMenuLang(HMENU menuHandle, generic_string & pluginsTrans, generic_string & windowTrans)
 {
 	if (!_nativeLangA) return;
 	TiXmlNodeA *mainMenu = _nativeLangA->FirstChild("Menu");
@@ -47,9 +89,9 @@ void Notepad_plus::changeMenuLang(generic_string & pluginsTrans, generic_string 
 
 #ifdef UNICODE
 			const wchar_t *nameW = wmc->char2wchar(name, _nativeLangEncoding);
-			::ModifyMenu(_mainMenuHandle, id, MF_BYPOSITION, 0, nameW);
+			::ModifyMenu(menuHandle, id, MF_BYPOSITION, 0, nameW);
 #else
-			::ModifyMenu(_mainMenuHandle, id, MF_BYPOSITION, 0, name);
+			::ModifyMenu(menuHandle, id, MF_BYPOSITION, 0, name);
 #endif
 		}
 		else 
@@ -92,9 +134,9 @@ void Notepad_plus::changeMenuLang(generic_string & pluginsTrans, generic_string 
 
 #ifdef UNICODE
 		const wchar_t *nameW = wmc->char2wchar(name, _nativeLangEncoding);
-		::ModifyMenu(_mainMenuHandle, id, MF_BYCOMMAND, id, nameW);
+		::ModifyMenu(menuHandle, id, MF_BYCOMMAND, id, nameW);
 #else
-		::ModifyMenu(_mainMenuHandle, id, MF_BYCOMMAND, id, name);
+		::ModifyMenu(menuHandle, id, MF_BYCOMMAND, id, name);
 #endif
 	}
 
@@ -112,7 +154,7 @@ void Notepad_plus::changeMenuLang(generic_string & pluginsTrans, generic_string 
 		if (!xStr || !yStr || !name)
 			continue;
 
-		HMENU hSubMenu = ::GetSubMenu(_mainMenuHandle, x);
+		HMENU hSubMenu = ::GetSubMenu(menuHandle, x);
 		if (!hSubMenu)
 			continue;
 		HMENU hSubMenu2 = ::GetSubMenu(hSubMenu, y);
@@ -139,10 +181,9 @@ void Notepad_plus::changeMenuLang(generic_string & pluginsTrans, generic_string 
 		::ModifyMenu(hMenu, pos, MF_BYPOSITION, 0, name);
 #endif
 	}
-	::DrawMenuBar(_hSelf);
 }
 
-void Notepad_plus::changeLangTabContextMenu()
+void NativeLangSpeaker::changeLangTabContextMenu(HMENU hCM)
 {
 	const int POS_CLOSE = 0;
 	const int POS_CLOSEBUT = 1;
@@ -234,7 +275,7 @@ void Notepad_plus::changeLangTabContextMenu()
 			}	
 		}
 	}
-	HMENU hCM = _tabPopupMenu.getMenuHandle();
+	//HMENU hCM = _tabPopupMenu.getMenuHandle();
 	
 #ifdef UNICODE
 	WcharMbcsConvertor *wmc = WcharMbcsConvertor::getInstance();
@@ -418,7 +459,7 @@ void Notepad_plus::changeLangTabContextMenu()
 #endif
 }
 
-void Notepad_plus::changeLangTabDrapContextMenu()
+void NativeLangSpeaker::changeLangTabDrapContextMenu(HMENU hCM)
 {
 	const int POS_GO2VIEW = 0;
 	const int POS_CLONE2VIEW = 1;
@@ -445,7 +486,7 @@ void Notepad_plus::changeLangTabDrapContextMenu()
 					cloneToViewA = element->Attribute("name");
 			}
 		}
-		HMENU hCM = _tabPopupDropMenu.getMenuHandle();
+		//HMENU hCM = _tabPopupDropMenu.getMenuHandle();
 #ifdef UNICODE
 		WcharMbcsConvertor *wmc = WcharMbcsConvertor::getInstance();
 		if (goToViewA && goToViewA[0])
@@ -475,7 +516,7 @@ void Notepad_plus::changeLangTabDrapContextMenu()
 	}
 }
 
-void Notepad_plus::changeConfigLang()
+void NativeLangSpeaker::changeConfigLang(HWND hDlg)
 {
 	if (!_nativeLangA) return;
 
@@ -485,7 +526,7 @@ void Notepad_plus::changeConfigLang()
 	styleConfDlgNode = styleConfDlgNode->FirstChild("StyleConfig");
 	if (!styleConfDlgNode) return;
 
-	HWND hDlg = _configStyleDlg.getHSelf();
+	//HWND hDlg = _configStyleDlg.getHSelf();
 
 #ifdef UNICODE
 	WcharMbcsConvertor *wmc = WcharMbcsConvertor::getInstance();
@@ -525,7 +566,6 @@ void Notepad_plus::changeConfigLang()
 			}
 		}
 	}
-	hDlg = _configStyleDlg.getHSelf();
 	styleConfDlgNode = styleConfDlgNode->FirstChild("SubDialog");
 	
 	for (TiXmlNodeA *childNode = styleConfDlgNode->FirstChildElement("Item");
@@ -553,7 +593,7 @@ void Notepad_plus::changeConfigLang()
 }
 
 
-void Notepad_plus::changeStyleCtrlsLang(HWND hDlg, int *idArray, const char **translatedText)
+void NativeLangSpeaker::changeStyleCtrlsLang(HWND hDlg, int *idArray, const char **translatedText)
 {
 	const int iColorStyle = 0;
 	const int iUnderline = 8;
@@ -579,7 +619,7 @@ void Notepad_plus::changeStyleCtrlsLang(HWND hDlg, int *idArray, const char **tr
 	}
 }
 
-void Notepad_plus::changeUserDefineLang()
+void NativeLangSpeaker::changeUserDefineLang(UserDefineDialog *userDefineDlg)
 {
 	if (!_nativeLangA) return;
 
@@ -589,7 +629,7 @@ void Notepad_plus::changeUserDefineLang()
 	userDefineDlgNode = userDefineDlgNode->FirstChild("UserDefine");
 	if (!userDefineDlgNode) return;
 
-	UserDefineDialog *userDefineDlg = _pEditView->getUserDefineDlg();
+	//UserDefineDialog *userDefineDlg = _pEditView->getUserDefineDlg();
 
 	HWND hDlg = userDefineDlg->getHSelf();
 #ifdef UNICODE
@@ -742,7 +782,7 @@ void Notepad_plus::changeUserDefineLang()
 	}
 }
 
-void Notepad_plus::changeFindReplaceDlgLang()
+void NativeLangSpeaker::changeFindReplaceDlgLang(FindReplaceDlg & findReplaceDlg)
 {
 	if (_nativeLangA)
 	{
@@ -777,17 +817,17 @@ void Notepad_plus::changeFindReplaceDlgLang()
 				}
 			}
 
-			_findReplaceDlg.changeTabName(FIND_DLG, pNppParam->getFindDlgTabTitiles()._find.c_str());
-			_findReplaceDlg.changeTabName(REPLACE_DLG, pNppParam->getFindDlgTabTitiles()._replace.c_str());
-			_findReplaceDlg.changeTabName(FINDINFILES_DLG, pNppParam->getFindDlgTabTitiles()._findInFiles.c_str());
+			findReplaceDlg.changeTabName(FIND_DLG, pNppParam->getFindDlgTabTitiles()._find.c_str());
+			findReplaceDlg.changeTabName(REPLACE_DLG, pNppParam->getFindDlgTabTitiles()._replace.c_str());
+			findReplaceDlg.changeTabName(FINDINFILES_DLG, pNppParam->getFindDlgTabTitiles()._findInFiles.c_str());
 		}
 	}
-	changeDlgLang(_findReplaceDlg.getHSelf(), "Find");
+	changeDlgLang(findReplaceDlg.getHSelf(), "Find");
 }
 
-void Notepad_plus::changePrefereceDlgLang() 
+void NativeLangSpeaker::changePrefereceDlgLang(PreferenceDlg & preference) 
 {
-	changeDlgLang(_preference.getHSelf(), "Preference");
+	changeDlgLang(preference.getHSelf(), "Preference");
 
 	char titre[128];
 
@@ -795,93 +835,93 @@ void Notepad_plus::changePrefereceDlgLang()
 	WcharMbcsConvertor *wmc = WcharMbcsConvertor::getInstance();
 #endif
 
-	changeDlgLang(_preference._barsDlg.getHSelf(), "Global", titre);
+	changeDlgLang(preference._barsDlg.getHSelf(), "Global", titre);
 	if (*titre)
 	{
 #ifdef UNICODE
 		const wchar_t *nameW = wmc->char2wchar(titre, _nativeLangEncoding);
-		_preference._ctrlTab.renameTab(TEXT("Global"), nameW);
+		preference._ctrlTab.renameTab(TEXT("Global"), nameW);
 #else
-		_preference._ctrlTab.renameTab("Global", titre);
+		preference._ctrlTab.renameTab("Global", titre);
 #endif
 	}
-	changeDlgLang(_preference._marginsDlg.getHSelf(), "Scintillas", titre);
+	changeDlgLang(preference._marginsDlg.getHSelf(), "Scintillas", titre);
 	if (*titre)
 	{
 #ifdef UNICODE
 		const wchar_t *nameW = wmc->char2wchar(titre, _nativeLangEncoding);
-		_preference._ctrlTab.renameTab(TEXT("Scintillas"), nameW);
+		preference._ctrlTab.renameTab(TEXT("Scintillas"), nameW);
 #else
-		_preference._ctrlTab.renameTab("Scintillas", titre);
-#endif
-	}
-
-	changeDlgLang(_preference._defaultNewDocDlg.getHSelf(), "NewDoc", titre);
-	if (*titre)
-	{
-#ifdef UNICODE
-		const wchar_t *nameW = wmc->char2wchar(titre, _nativeLangEncoding);
-		_preference._ctrlTab.renameTab(TEXT("NewDoc"), nameW);
-#else
-		_preference._ctrlTab.renameTab("NewDoc", titre);
+		preference._ctrlTab.renameTab("Scintillas", titre);
 #endif
 	}
 
-	changeDlgLang(_preference._fileAssocDlg.getHSelf(), "FileAssoc", titre);
+	changeDlgLang(preference._defaultNewDocDlg.getHSelf(), "NewDoc", titre);
 	if (*titre)
 	{
 #ifdef UNICODE
 		const wchar_t *nameW = wmc->char2wchar(titre, _nativeLangEncoding);
-		_preference._ctrlTab.renameTab(TEXT("FileAssoc"), nameW);
+		preference._ctrlTab.renameTab(TEXT("NewDoc"), nameW);
 #else
-		_preference._ctrlTab.renameTab("FileAssoc", titre);
+		preference._ctrlTab.renameTab("NewDoc", titre);
 #endif
 	}
 
-	changeDlgLang(_preference._langMenuDlg.getHSelf(), "LangMenu", titre);
+	changeDlgLang(preference._fileAssocDlg.getHSelf(), "FileAssoc", titre);
 	if (*titre)
 	{
 #ifdef UNICODE
 		const wchar_t *nameW = wmc->char2wchar(titre, _nativeLangEncoding);
-		_preference._ctrlTab.renameTab(TEXT("LangMenu"), nameW);
+		preference._ctrlTab.renameTab(TEXT("FileAssoc"), nameW);
 #else
-		_preference._ctrlTab.renameTab("LangMenu", titre);
+		preference._ctrlTab.renameTab("FileAssoc", titre);
 #endif
 	}
 
-	changeDlgLang(_preference._printSettingsDlg.getHSelf(), "Print", titre);
+	changeDlgLang(preference._langMenuDlg.getHSelf(), "LangMenu", titre);
 	if (*titre)
 	{
 #ifdef UNICODE
 		const wchar_t *nameW = wmc->char2wchar(titre, _nativeLangEncoding);
-		_preference._ctrlTab.renameTab(TEXT("Print"), nameW);
+		preference._ctrlTab.renameTab(TEXT("LangMenu"), nameW);
 #else
-		_preference._ctrlTab.renameTab("Print", titre);
+		preference._ctrlTab.renameTab("LangMenu", titre);
 #endif
 	}
-	changeDlgLang(_preference._settingsDlg.getHSelf(), "MISC", titre);
+
+	changeDlgLang(preference._printSettingsDlg.getHSelf(), "Print", titre);
 	if (*titre)
 	{
 #ifdef UNICODE
 		const wchar_t *nameW = wmc->char2wchar(titre, _nativeLangEncoding);
-		_preference._ctrlTab.renameTab(TEXT("MISC"), nameW);
+		preference._ctrlTab.renameTab(TEXT("Print"), nameW);
 #else
-		_preference._ctrlTab.renameTab("MISC", titre);
+		preference._ctrlTab.renameTab("Print", titre);
 #endif
 	}
-	changeDlgLang(_preference._backupDlg.getHSelf(), "Backup", titre);
+	changeDlgLang(preference._settingsDlg.getHSelf(), "MISC", titre);
 	if (*titre)
 	{
 #ifdef UNICODE
 		const wchar_t *nameW = wmc->char2wchar(titre, _nativeLangEncoding);
-		_preference._ctrlTab.renameTab(TEXT("Backup"), nameW);
+		preference._ctrlTab.renameTab(TEXT("MISC"), nameW);
 #else
-		_preference._ctrlTab.renameTab("Backup", titre);
+		preference._ctrlTab.renameTab("MISC", titre);
+#endif
+	}
+	changeDlgLang(preference._backupDlg.getHSelf(), "Backup", titre);
+	if (*titre)
+	{
+#ifdef UNICODE
+		const wchar_t *nameW = wmc->char2wchar(titre, _nativeLangEncoding);
+		preference._ctrlTab.renameTab(TEXT("Backup"), nameW);
+#else
+		preference._ctrlTab.renameTab("Backup", titre);
 #endif
 	}
 }
 
-void Notepad_plus::changeShortcutLang()
+void NativeLangSpeaker::changeShortcutLang()
 {
 	if (!_nativeLangA) return;
 
@@ -959,7 +999,7 @@ void Notepad_plus::changeShortcutLang()
 
 }
 
-void Notepad_plus::changeShortcutmapperLang(ShortcutMapper * sm)
+void NativeLangSpeaker::changeShortcutmapperLang(ShortcutMapper * sm)
 {
 	if (!_nativeLangA) return;
 
@@ -994,7 +1034,7 @@ void Notepad_plus::changeShortcutmapperLang(ShortcutMapper * sm)
 }
 
 
-TiXmlNodeA * Notepad_plus::searchDlgNode(TiXmlNodeA *node, const char *dlgTagName)
+TiXmlNodeA * NativeLangSpeaker::searchDlgNode(TiXmlNodeA *node, const char *dlgTagName)
 {
 	TiXmlNodeA *dlgNode = node->FirstChild(dlgTagName);
 	if (dlgNode) return dlgNode;
@@ -1008,7 +1048,7 @@ TiXmlNodeA * Notepad_plus::searchDlgNode(TiXmlNodeA *node, const char *dlgTagNam
 	return NULL;
 }
 
-bool Notepad_plus::changeDlgLang(HWND hDlg, const char *dlgTagName, char *title)
+bool NativeLangSpeaker::changeDlgLang(HWND hDlg, const char *dlgTagName, char *title)
 {
 	if (title)
 		title[0] = '\0';
@@ -1065,145 +1105,4 @@ bool Notepad_plus::changeDlgLang(HWND hDlg, const char *dlgTagName, char *title)
 	return true;
 }
 
-bool Notepad_plus::reloadLang() 
-{
-	NppParameters *pNppParam = NppParameters::getInstance();
-
-	if (!pNppParam->reloadLang())
-	{
-		return false;
-	}
-
-	TiXmlDocumentA *nativeLangDocRootA = pNppParam->getNativeLangA();
-	if (!nativeLangDocRootA)
-	{
-		return false;
-	}
-	_nativeLangA =  nativeLangDocRootA->FirstChild("NotepadPlus");
-	if (!_nativeLangA)
-	{
-		return false;
-	}
-	_nativeLangA = _nativeLangA->FirstChild("Native-Langue");
-	if (!_nativeLangA)
-	{
-		return false;
-	}
-	TiXmlElementA *element = _nativeLangA->ToElement();
-	const char *rtl = element->Attribute("RTL");
-	if (rtl)
-		_isRTL = (strcmp(rtl, "yes") == 0);
-
-	// get encoding
-	TiXmlDeclarationA *declaration =  _nativeLangA->GetDocument()->FirstChild()->ToDeclaration();
-	if (declaration)
-	{
-		const char * encodingStr = declaration->Encoding();
-		EncodingMapper *em = EncodingMapper::getInstance();
-		_nativeLangEncoding = em->getEncodingFromString(encodingStr);
-	}
-	
-	pNppParam->reloadContextMenuFromXmlTree(_mainMenuHandle);
-
-	generic_string pluginsTrans, windowTrans;
-	changeMenuLang(pluginsTrans, windowTrans);
-
-	int indexWindow = ::GetMenuItemCount(_mainMenuHandle) - 3;
-
-	if (_pluginsManager.hasPlugins() && pluginsTrans != TEXT(""))
-	{
-		::ModifyMenu(_mainMenuHandle, indexWindow - 1, MF_BYPOSITION, 0, pluginsTrans.c_str());
-	}
-	
-	if (windowTrans != TEXT(""))
-	{
-		::ModifyMenu(_mainMenuHandle, indexWindow, MF_BYPOSITION, 0, windowTrans.c_str());
-		windowTrans += TEXT("...");
-		::ModifyMenu(_mainMenuHandle, IDM_WINDOW_WINDOWS, MF_BYCOMMAND, IDM_WINDOW_WINDOWS, windowTrans.c_str());
-	}
-	// Update scintilla context menu strings
-	vector<MenuItemUnit> & tmp = pNppParam->getContextMenuItems();
-	size_t len = tmp.size();
-	TCHAR menuName[64];
-	for (size_t i = 0 ; i < len ; i++)
-	{
-		if (tmp[i]._itemName == TEXT(""))
-		{
-			::GetMenuString(_mainMenuHandle, tmp[i]._cmdID, menuName, 64, MF_BYCOMMAND);
-			tmp[i]._itemName = purgeMenuItemString(menuName);
-		}
-	}
-	
-	vector<CommandShortcut> & shortcuts = pNppParam->getUserShortcuts();
-	len = shortcuts.size();
-
-	for(size_t i = 0; i < len; i++) 
-	{
-		CommandShortcut & csc = shortcuts[i];
-		::GetMenuString(_mainMenuHandle, csc.getID(), menuName, 64, MF_BYCOMMAND);
-		csc.setName(purgeMenuItemString(menuName, true).c_str());
-	}
-	_accelerator.updateFullMenu();
-
-	_scintaccelerator.updateKeys();
-
-
-	if (_tabPopupMenu.isCreated())
-	{
-		changeLangTabContextMenu();
-	}
-	if (_tabPopupDropMenu.isCreated())
-	{
-		changeLangTabDrapContextMenu();
-	}
-
-	if (_preference.isCreated())
-	{
-		changePrefereceDlgLang();
-	}
-
-	if (_configStyleDlg.isCreated())
-	{
-		changeConfigLang();
-	}
-
-	if (_findReplaceDlg.isCreated())
-	{
-		changeFindReplaceDlgLang();
-	}
-
-	if (_goToLineDlg.isCreated())
-	{
-		changeDlgLang(_goToLineDlg.getHSelf(), "GoToLine");
-	}
-
-	if (_runDlg.isCreated())
-	{
-		changeDlgLang(_runDlg.getHSelf(), "Run");
-	}
-
-	if (_runMacroDlg.isCreated())
-	{
-		changeDlgLang(_runMacroDlg.getHSelf(), "MultiMacro");
-	}
-
-	if (_goToLineDlg.isCreated())
-	{
-		changeDlgLang(_goToLineDlg.getHSelf(), "GoToLine");
-	}
-
-	if (_colEditorDlg.isCreated())
-	{
-		changeDlgLang(_colEditorDlg.getHSelf(), "ColumnEditor");
-	}
-
-	UserDefineDialog *udd = _pEditView->getUserDefineDlg();
-	if (udd->isCreated())
-	{
-		changeUserDefineLang();
-	}
-
-	_lastRecentFileList.setLangEncoding(_nativeLangEncoding);
-	return true;
-}
 
