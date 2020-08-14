@@ -1369,8 +1369,8 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 		{
 			if (not wParam || not lParam) // Clean up current session
 			{
-				delete _pShortcutMapper;
-				_pShortcutMapper = nullptr;
+				//delete _pShortcutMapper;
+				//_pShortcutMapper = nullptr;
 				return TRUE;
 			}
 

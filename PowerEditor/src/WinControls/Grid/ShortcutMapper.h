@@ -49,17 +49,21 @@ public:
     };
 
 	void destroy() {};
+
 	void doDialog(bool isRTL = false) {
-		if (isRTL)
+		if (!isCreated())
 		{
-			DLGTEMPLATE *pMyDlgTemplate = NULL;
-			HGLOBAL hMyDlgTemplate = makeRTLResource(IDD_SHORTCUTMAPPER_DLG, &pMyDlgTemplate);
-			::DialogBoxIndirectParam(_hInst, pMyDlgTemplate, _hParent, dlgProc, reinterpret_cast<LPARAM>(this));
-			::GlobalFree(hMyDlgTemplate);
+			create(IDD_SHORTCUTMAPPER_DLG, isRTL);
 		}
-		else
-			::DialogBoxParam(_hInst, MAKEINTRESOURCE(IDD_SHORTCUTMAPPER_DLG), _hParent, dlgProc, reinterpret_cast<LPARAM>(this));
+
+		if (!::IsWindowVisible(_hSelf))
+		{
+			//prepare2Cancel();
+		}
+
+		display();
 	};
+
 	void getClientRect(RECT & rc) const;
 
 	bool findKeyConflicts(__inout_opt generic_string * const keyConflictLocation,

@@ -2669,11 +2669,15 @@ void Notepad_plus::command(int id)
 		case IDM_SETTING_SHORTCUT_MAPPER_MACRO :
         case IDM_SETTING_SHORTCUT_MAPPER_RUN :
 		{
+			//refer to IDM_LANGSTYLE_CONFIG_DLG below.
+
+			if(!_pShortcutMapper) {
+				_pShortcutMapper = new ShortcutMapper;
+			}
             GridState st = id==IDM_SETTING_SHORTCUT_MAPPER_MACRO?STATE_MACRO:id==IDM_SETTING_SHORTCUT_MAPPER_RUN?STATE_USER:STATE_MENU;
-			ShortcutMapper shortcutMapper;
-            shortcutMapper.init(_pPublicInterface->getHinst(), _pPublicInterface->getHSelf(), st);
-			shortcutMapper.doDialog(_nativeLangSpeaker.isRTL());
-			shortcutMapper.destroy();
+			_pShortcutMapper->init(_pPublicInterface->getHinst(), _pPublicInterface->getHSelf(), st);
+			_pShortcutMapper->doDialog(_nativeLangSpeaker.isRTL());
+
 			break;
 		}
 		case IDM_SETTING_PREFERENCE:
