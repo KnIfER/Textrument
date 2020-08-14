@@ -2372,9 +2372,8 @@ void NppParameters::feedFindHistoryParameters(TiXmlNode *node)
 	if (boolStr)
 		_findHistory._isSearch2ButtonsMode = (lstrcmp(TEXT("yes"), boolStr) == 0);
 
-	boolStr = (findHistoryRoot->ToElement())->Attribute(TEXT("regexBackward4PowerUser"));
-	if (boolStr)
-		_findHistory._regexBackward4PowerUser = (lstrcmp(TEXT("yes"), boolStr) == 0);
+	//boolStr = (findHistoryRoot->ToElement())->Attribute(TEXT("regexBackward4PowerUser"));
+	//if (boolStr) _findHistory._regexBackward4PowerUser = (lstrcmp(TEXT("yes"), boolStr) == 0);
 }
 
 void NppParameters::feedShortcut(TiXmlNode *node)

@@ -349,13 +349,14 @@ void FindReplaceDlg::fillFindHistory()
 	if (findHistory._searchMode == FindHistory::regExpr)
 	{
 		//regex doesn't allow wholeword
-		::SendDlgItemMessage(_hSelf, IDWHOLEWORD, BM_SETCHECK, BST_UNCHECKED, 0);
-		::EnableWindow(::GetDlgItem(_hSelf, IDWHOLEWORD), (BOOL)false);
+		//::SendDlgItemMessage(_hSelf, IDWHOLEWORD, BM_SETCHECK, BST_UNCHECKED, 0);
+		//::EnableWindow(::GetDlgItem(_hSelf, IDWHOLEWORD), (BOOL)false);
 
+		//xxx
 		// regex upward search is disabled
-		::SendDlgItemMessage(_hSelf, IDC_BACKWARDDIRECTION, BM_SETCHECK, BST_UNCHECKED, 0);
-		::EnableWindow(::GetDlgItem(_hSelf, IDC_BACKWARDDIRECTION), nppParams.regexBackward4PowerUser() ? TRUE : FALSE);
-		::EnableWindow(::GetDlgItem(_hSelf, IDC_FINDPREV), nppParams.regexBackward4PowerUser() ? TRUE : FALSE);
+		//::SendDlgItemMessage(_hSelf, IDC_BACKWARDDIRECTION, BM_SETCHECK, BST_UNCHECKED, 0);
+		//::EnableWindow(::GetDlgItem(_hSelf, IDC_BACKWARDDIRECTION), nppParams.regexBackward4PowerUser() ? TRUE : FALSE);
+		//::EnableWindow(::GetDlgItem(_hSelf, IDC_FINDPREV), nppParams.regexBackward4PowerUser() ? TRUE : FALSE);
 		
 		// If the search mode from history is regExp then enable the checkbox (. matches newline)
 		::EnableWindow(GetDlgItem(_hSelf, IDREDOTMATCHNL), true);
@@ -1456,9 +1457,9 @@ INT_PTR CALLBACK FindReplaceDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 					bool isRegex = (_options._searchType == FindRegex);
 					if (isRegex) 
 					{	
-						//regex doesn't allow whole word
-						_options._isWholeWord = false;
-						::SendDlgItemMessage(_hSelf, IDWHOLEWORD, BM_SETCHECK, _options._isWholeWord?BST_CHECKED:BST_UNCHECKED, 0);
+						//xxx regex doesn't allow whole word
+						//_options._isWholeWord = false;
+						//::SendDlgItemMessage(_hSelf, IDWHOLEWORD, BM_SETCHECK, _options._isWholeWord?BST_CHECKED:BST_UNCHECKED, 0);
 
 						//regex upward search is disabled
 						if (!nppParamInst.regexBackward4PowerUser())
@@ -1468,7 +1469,8 @@ INT_PTR CALLBACK FindReplaceDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 						}
 					}
 
-					::EnableWindow(::GetDlgItem(_hSelf, IDWHOLEWORD), (BOOL)!isRegex);
+					//::EnableWindow(::GetDlgItem(_hSelf, IDWHOLEWORD), (BOOL)!isRegex);
+					::EnableWindow(::GetDlgItem(_hSelf, IDWHOLEWORD), true);
 
 					// regex upward search is disabled
 					BOOL doEnable = TRUE;
@@ -1617,14 +1619,31 @@ bool FindReplaceDlg::processFindNext(const TCHAR *txt2find, const FindOption *op
 
 	(*_ppEditView)->execute(SCI_CALLTIPCANCEL);
 
+	int enlargeCount=0;
+
 	int stringSizeFind = lstrlen(txt2find);
-	TCHAR *pText = new TCHAR[stringSizeFind + 1];
-	wcscpy_s(pText, stringSizeFind + 1, txt2find);
+
+	if (pOptions->_searchType == FindRegex && pOptions->_isWholeWord && ! (stringSizeFind>4 
+		&& txt2find[0]=='\\' && txt2find[1]=='b' && txt2find[stringSizeFind-1]=='b' && txt2find[stringSizeFind-2]=='\\' ))
+	{
+		enlargeCount=4;
+	}
+
+	TCHAR *pText = new TCHAR[stringSizeFind + 1 + enlargeCount];
+	if(enlargeCount) {
+		wcscpy_s(pText+2, stringSizeFind + 1, txt2find);
+		pText[0]='\\';
+		pText[1]='b';
+		pText[stringSizeFind+2]='\\';
+		pText[stringSizeFind+3]='b';
+	} else {
+		wcscpy_s(pText, stringSizeFind + 1, txt2find);
+	}
 	
 	if (pOptions->_searchType == FindExtended)
 	{
 		stringSizeFind = Searching::convertExtendedToString(txt2find, pText, stringSizeFind);
-	}
+	} 
 
 	int docLength = int((*_ppEditView)->execute(SCI_GETLENGTH));
 	Sci_CharacterRange cr = (*_ppEditView)->getSelection();

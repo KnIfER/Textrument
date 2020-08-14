@@ -1178,7 +1178,7 @@ struct FindHistory final
 	bool _isFolderFollowDoc = false;
 
 	// Allow regExpr backward search: this option is not present in UI, only to modify in config.xml
-	bool _regexBackward4PowerUser = false;
+	bool _regexBackward4PowerUser = true;
 };
 
 
