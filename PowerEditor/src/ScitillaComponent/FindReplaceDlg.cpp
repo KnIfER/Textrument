@@ -923,8 +923,10 @@ INT_PTR CALLBACK FindReplaceDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 			 generic_string findInFilesFilterTip = pNativeSpeaker->getLocalizedStrFromID("find-in-files-filter-tip", TEXT("Find in cpp, cxx, h, hxx && hpp:\r*.cpp *.cxx *.h *.hxx *.hpp\r\rFind in all files except exe, obj && log:\r*.* !*.exe !*.obj !*.log"));
 			 _filterTip = CreateToolTip(IDD_FINDINFILES_FILTERS_STATIC, _hSelf, _hInst, const_cast<PTSTR>(findInFilesFilterTip.c_str()));
 
-			::SetWindowTextW(::GetDlgItem(_hSelf, IDC_FINDPREV), TEXT("▲"));
+			::SetWindowTextW(::GetDlgItem(_hSelf, IDC_FINDPREV), TEXT("▲ Find Last"));
 			::SetWindowTextW(::GetDlgItem(_hSelf, IDC_FINDNEXT), TEXT("▼ Find Next"));
+			//::SetWindowTextW(::GetDlgItem(_hSelf, IDC_FINDPREV), TEXT("▲"));
+			//::SetWindowTextW(::GetDlgItem(_hSelf, IDC_FINDNEXT), TEXT("▼"));
 			return TRUE;
 		}
 
