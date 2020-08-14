@@ -3035,8 +3035,8 @@ void Notepad_plus::setTitle()
 	{
 		result += buf->getFullPathName();
 	}
-	result += TEXT(" - ");
-	result += _pPublicInterface->getClassName();
+	result += TEXT(" - NoteMad++");
+	//result += _pPublicInterface->getClassName();
 
 	if (_isAdministrator)
 		result += TEXT(" [Administrator]");
