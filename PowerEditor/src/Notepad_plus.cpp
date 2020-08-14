@@ -5970,8 +5970,11 @@ void Notepad_plus::launchFileSwitcherPanel()
 
 		_pFileSwitcherPanel->setBackgroundColor(bgColor);
 		_pFileSwitcherPanel->setForegroundColor(fgColor);
+
 	}
 	_pFileSwitcherPanel->display();
+	checkMenuItem(IDM_VIEW_TABLIST, true);
+	_pFileSwitcherPanel->setClosed(false);
 }
 
 

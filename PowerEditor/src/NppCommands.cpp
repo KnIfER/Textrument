@@ -718,7 +718,18 @@ void Notepad_plus::command(int id)
 			}
 		}
 		break;
-
+		case IDM_VIEW_TABLIST:
+		{
+			boolean showing=_pFileSwitcherPanel && not _pFileSwitcherPanel->isClosed();
+			if(showing) {
+				_pFileSwitcherPanel->display(false);
+				_pFileSwitcherPanel->setClosed(true);
+				checkMenuItem(IDM_VIEW_TABLIST, false);
+			} else {
+				launchFileSwitcherPanel();
+			}
+		}
+		break;
 		case IDM_VIEW_FILEBROWSER:
 		{
 			if (_pFileBrowser == nullptr) // first launch, check in params to open folders
