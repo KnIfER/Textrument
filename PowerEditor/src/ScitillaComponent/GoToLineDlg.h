@@ -103,6 +103,9 @@ private :
 					}
 					break;
 				}
+				if(offOpened) {
+					break;
+				}
 			} else {
 				if(intClosed) {
 					offOpened = true;
