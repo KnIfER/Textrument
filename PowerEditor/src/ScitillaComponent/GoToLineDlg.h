@@ -30,6 +30,7 @@
 #include "resource.h"
 #include "ScintillaEditView.h"
 
+
 class GoToLineDlg : public StaticDialog
 {
 public :
@@ -49,6 +50,8 @@ public :
 	void doDialog(bool isRTL = false) {
 		if (!isCreated())
 			create(IDD_GOLINE, isRTL);
+		//int currentGoLine = (*_ppEditView)->currentGoLine;
+		//::SetDlgItemInt(_hSelf, ID_GOLINE_EDIT, currentGoLine, FALSE);
 		display();
 	};
 
@@ -72,10 +75,50 @@ private :
         ::SetDlgItemText(_hSelf, ID_GOLINE_EDIT, TEXT(""));
     };
 
-    int getLine() const {
-        BOOL isSuccessful;
-        int line = ::GetDlgItemInt(_hSelf, ID_GOLINE_EDIT, &isSuccessful, FALSE);
-        return (isSuccessful?line:-1);
+    int getLine(int& outOffset) const {
+		//BOOL isSuccessful;
+		//int line = ::GetDlgItemInt(_hSelf, ID_GOLINE_EDIT, &isSuccessful, FALSE);
+		//return (isSuccessful?line:-1);
+
+		//string str;
+		const int max = 256;
+		TCHAR filters[max+1];
+
+		int len = GetDlgItemText(_hSelf, ID_GOLINE_EDIT, filters, max);
+
+		bool intOpened=false;
+		bool intClosed=false;
+		bool offOpened=false;
+		int number=0;
+
+		for(int i=0;i<len;i++) {
+			int intVal = filters[i]-'0';
+			int valval = intVal>=0&&intVal<=9;
+			if(!valval) {
+				if(intOpened) {
+					intOpened=false;
+					intClosed = true;
+					if(filters[i]==':') {
+						continue;
+					}
+					break;
+				}
+			} else {
+				if(intClosed) {
+					offOpened = true;
+				} else {
+					intOpened = true;
+				}
+			}
+			if(offOpened) {
+				outOffset = outOffset*10+intVal;
+			}
+			else if(intOpened) {
+				number = number*10+intVal;
+			}
+		}
+
+		return number;
     };
 
 };

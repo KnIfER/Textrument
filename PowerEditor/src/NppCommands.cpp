@@ -1288,6 +1288,7 @@ void Notepad_plus::command(int id)
 		{
 			bool isFirstTime = !_goToLineDlg.isCreated();
 			_goToLineDlg.doDialog(_nativeLangSpeaker.isRTL());
+
 			if (isFirstTime)
 				_nativeLangSpeaker.changeDlgLang(_goToLineDlg.getHSelf(), "GoToLine");
 		}

@@ -45,17 +45,28 @@ INT_PTR CALLBACK GoToLineDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM)
 			{
 				case IDCANCEL : // Close
 					display(false);
-                    cleanLineEdit();
+                    //cleanLineEdit();
 					return TRUE;
 
 				case IDOK :
                 {
-                    int line = getLine();
+					int offset=0;
+                    int line = getLine(offset);
+					auto mode = _mode;
+					if(offset>0) {
+						if(mode==go2offsset) {
+							line+=offset;
+						} else {
+							mode = go2offsset;
+							(*_ppEditView)->execute(SCI_ENSUREVISIBLE, line-1);
+							line = (*_ppEditView)->execute(SCI_POSITIONFROMLINE, line-1)+offset;
+						}
+					}
                     if (line != -1)
                     {
-                        display(false);
-                        cleanLineEdit();
-						if (_mode == go2line)
+                        //display(false);
+                        //cleanLineEdit();
+						if (mode == go2line)
 						{
 							(*_ppEditView)->execute(SCI_ENSUREVISIBLE, line-1);
 							(*_ppEditView)->execute(SCI_GOTOLINE, line-1);
@@ -136,6 +147,7 @@ void GoToLineDlg::updateLinesNumbers() const
 		current = static_cast<unsigned int>((*_ppEditView)->execute(SCI_GETCURRENTPOS));
 		limit = static_cast<unsigned int>((*_ppEditView)->getCurrentDocLen() - 1);
 	}
+
     ::SetDlgItemInt(_hSelf, ID_CURRLINE, current, FALSE);
     ::SetDlgItemInt(_hSelf, ID_LASTLINE, limit, FALSE);
 }

@@ -1620,6 +1620,7 @@ bool FindReplaceDlg::processFindNext(const TCHAR *txt2find, const FindOption *op
 	(*_ppEditView)->execute(SCI_CALLTIPCANCEL);
 
 	int enlargeCount=0;
+	int leftRight=0;
 
 	int stringSizeFind = lstrlen(txt2find);
 
