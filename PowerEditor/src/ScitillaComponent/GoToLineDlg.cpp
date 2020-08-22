@@ -62,7 +62,7 @@ INT_PTR CALLBACK GoToLineDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM)
 							line = (*_ppEditView)->execute(SCI_POSITIONFROMLINE, line-1)+offset;
 						}
 					}
-                    if (line != -1)
+                    if (line>=0)
                     {
                         //display(false);
                         //cleanLineEdit();

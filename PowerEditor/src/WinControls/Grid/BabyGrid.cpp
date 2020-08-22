@@ -2939,21 +2939,22 @@ LRESULT CALLBACK GridProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			   BGHS[SelfIndex].GRIDHASFOCUS	= TRUE;
                DrawCursor(hWnd,SelfIndex);
                //SetCurrentCellStatus(hWnd,SelfIndex); //redundant
-               SetHomeRow(hWnd,SelfIndex,BGHS[SelfIndex].cursorrow,BGHS[SelfIndex].cursorcol);
-               SetHomeCol(hWnd,SelfIndex,BGHS[SelfIndex].cursorrow,BGHS[SelfIndex].cursorcol);
+
+               //SetHomeRow(hWnd,SelfIndex,BGHS[SelfIndex].cursorrow,BGHS[SelfIndex].cursorcol);
+               //SetHomeCol(hWnd,SelfIndex,BGHS[SelfIndex].cursorrow,BGHS[SelfIndex].cursorcol);
 
                wParam=MAKEWPARAM(GetMenu(hWnd),BGN_GOTFOCUS);
                lParam = 0;
-               SendMessage(GetParent(hWnd),WM_COMMAND,wParam,lParam);
-                   {TEXTMETRIC tm;
-                    HDC hdc;
-                    hdc=GetDC(hWnd);
-                    GetTextMetrics(hdc,&tm);
-                    ReleaseDC(hWnd,hdc);
-                    BGHS[SelfIndex].fontascentheight = (int)tm.tmAscent;
-                    CreateCaret(hWnd,NULL,3,tm.tmAscent);
-                   }
-			   RefreshGrid(hWnd);
+               //SendMessage(GetParent(hWnd),WM_COMMAND,wParam,lParam);
+               //    {TEXTMETRIC tm;
+               //     HDC hdc;
+               //     hdc=GetDC(hWnd);
+               //     GetTextMetrics(hdc,&tm);
+               //     ReleaseDC(hWnd,hdc);
+               //     BGHS[SelfIndex].fontascentheight = (int)tm.tmAscent;
+               //     CreateCaret(hWnd,NULL,3,tm.tmAscent);
+               //    }
+			   //RefreshGrid(hWnd);
 			break;
 		case WM_KILLFOCUS:
                DestroyCaret();
