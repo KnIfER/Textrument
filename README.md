@@ -1,5 +1,12 @@
-What is Notepad++ ?
+What is Note~~p~~Mad++ ?
 ===================
+
+[NotePad++魔改笔记](https://blog.csdn.net/sinat_27171121/article/details/108002522)
+1. 第一波质感图标 (via Material design icons) 
+2. ~~改进搜索~~
+3. 追加“文档列表面板”菜单项
+4. 非模态的快捷键对话框
+5. 带偏移的行跳转(line:offset)
 
 [![GitHub release](https://img.shields.io/github/release/notepad-plus-plus/notepad-plus-plus.svg)](../../releases/latest)
 &nbsp;&nbsp;&nbsp;&nbsp;[![Appveyor build status](https://ci.appveyor.com/api/projects/status/github/notepad-plus-plus/notepad-plus-plus?branch=master&svg=true)](https://ci.appveyor.com/project/donho/notepad-plus-plus)
