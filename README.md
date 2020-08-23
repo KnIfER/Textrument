@@ -1,4 +1,4 @@
-What is Note~~p~~Mad++ ?
+What is Not~~ep~~Mad++ ?
 ===================
 
 [NotePad++魔改笔记](https://blog.csdn.net/sinat_27171121/article/details/108002522)
