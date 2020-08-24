@@ -578,7 +578,7 @@ void PluginsManager::notify(size_t indexPluginInfo, const SCNotification *notifi
 		SCNotification scNotif = *notification;
 		try
 		{
-			_pluginInfos[indexPluginInfo]->_pBeNotified((SCNotification*)notification);
+			_pluginInfos[indexPluginInfo]->_pBeNotified(&scNotif);
 		}
 		catch (std::exception& e)
 		{
