@@ -31,6 +31,7 @@
 #include <vector>
 #include <windows.h>
 #include <commctrl.h>
+#include "Notepad_plus_msgs.h"
 
 const int nbMax = 45;
 #define	IDI_SEPARATOR_ICON -1
@@ -47,6 +48,7 @@ public :
 	};
 	HIMAGELIST getHandle() const {return _hImglst;};
 	void addIcon(int iconID) const;
+	void addIcon(HICON iconID) const;
 	bool changeIcon(int index, const TCHAR *iconLocation) const;
 	void setIconSize(int size) const;
 
@@ -68,6 +70,13 @@ typedef struct
 
 	int _stdIcon;
 } ToolBarButtonUnit;
+
+typedef struct {
+	UINT		message;		// identification of icon in tool bar (menu ID)
+	HBITMAP		hBmp;			// bitmap for toolbar ( deprecated )
+	HICON		hIcon;			// icon for toolbar ( deprecated )
+	toolbarIcons* ORH;
+} tDynamicList;
 
 typedef std::vector<ToolBarButtonUnit> ToolBarIconIDs;
 
@@ -116,6 +125,12 @@ public :
 	};
 
 	void reInit(int size);
+
+	void addIcon(HICON iconI);
+
+	void addIcon(tDynamicList iconI);
+
+	int size();
 
 	int getNbIcon() const {
 		return int(_tbiis.size());

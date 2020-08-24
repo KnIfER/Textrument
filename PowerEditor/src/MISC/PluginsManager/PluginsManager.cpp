@@ -578,7 +578,7 @@ void PluginsManager::notify(size_t indexPluginInfo, const SCNotification *notifi
 		SCNotification scNotif = *notification;
 		try
 		{
-			_pluginInfos[indexPluginInfo]->_pBeNotified(&scNotif);
+			_pluginInfos[indexPluginInfo]->_pBeNotified((SCNotification*)notification);
 		}
 		catch (std::exception& e)
 		{
@@ -594,17 +594,39 @@ void PluginsManager::notify(size_t indexPluginInfo, const SCNotification *notifi
 	}
 }
 
+int cc=0;
 // broadcast the notification to all plugins
 void PluginsManager::notify(const SCNotification *notification)
 {
 	if (_noMoreNotification) // this boolean should be enabled after NPPN_SHUTDOWN has been sent
 		return;
+
 	_noMoreNotification = notification->nmhdr.code == NPPN_SHUTDOWN;
 
 	for (size_t i = 0, len = _pluginInfos.size() ; i < len ; ++i)
 	{
 		notify(i, notification);
 	}
+
+
+#if 0
+	int ModifyType = notification->modificationType;
+	if ((notification->nmhdr.code == SCN_MODIFIED))
+	{
+		cc++;
+		if(cc>=85) {
+			//::MessageBox(NULL, TEXT("notify"), TEXT("  notify "), MB_OK);
+
+			TCHAR buffer[128];
+
+			wsprintf(buffer,TEXT("MT=%d | NC=%d | PT=%d"), ModifyType, cc, notification);
+
+			::MessageBox(NULL, buffer, TEXT(""), MB_OK);
+		}
+
+	}
+#endif
+
 }
 
 

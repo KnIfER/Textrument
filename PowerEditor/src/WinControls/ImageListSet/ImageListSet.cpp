@@ -59,6 +59,15 @@ void IconList::addIcon(int iconID) const
 	::DestroyIcon(hIcon);
 };
 
+void IconList::addIcon(HICON hIcon) const 
+{
+	if (!hIcon) 
+		throw std::runtime_error("IconList::addIcon : LoadIcon() function return null");
+
+	ImageList_AddIcon(_hImglst, hIcon);
+	::DestroyIcon(hIcon);
+};
+
 bool IconList::changeIcon(int index, const TCHAR *iconLocation) const
 {
 	HBITMAP hBmp = (HBITMAP)::LoadImage(_hInst, iconLocation, IMAGE_ICON, _iconSize, _iconSize, LR_LOADFROMFILE | LR_LOADMAP3DCOLORS | LR_LOADTRANSPARENT);
@@ -99,6 +108,40 @@ void ToolBarIcons::reInit(int size)
 			_iconListVector[HLIST_DISABLE].addIcon(_tbiis[i]._grayIcon);
 		}
 	}
+}
+
+void ToolBarIcons::addIcon(HICON iconI)
+{
+	if (iconI)
+	{
+		_iconListVector[HLIST_DEFAULT].addIcon(iconI);
+		_iconListVector[HLIST_HOT].addIcon(iconI);
+		_iconListVector[HLIST_DISABLE].addIcon(iconI);
+	}
+}
+
+void ToolBarIcons::addIcon(tDynamicList iconI)
+{
+	auto iconII = iconI.ORH;
+	if (iconII && iconII->HRO && iconII->magicNum==0x666)
+	{
+		auto HRO = (HINSTANCE)iconII->HRO;
+		HICON hIcon = ::LoadIcon(HRO, MAKEINTRESOURCE(iconII->resIcon));
+		if(hIcon) {
+			_iconListVector[HLIST_DEFAULT].addIcon(hIcon);
+			HICON hotcool = ::LoadIcon(HRO, MAKEINTRESOURCE(iconII->resIconHot));
+			_iconListVector[HLIST_HOT].addIcon(hotcool==nullptr?hIcon:hotcool);
+			hotcool = ::LoadIcon(HRO, MAKEINTRESOURCE(iconII->resIconGray));
+			_iconListVector[HLIST_DISABLE].addIcon(hotcool==nullptr?hIcon:hotcool);
+		}
+	} else {
+		addIcon(iconI.hIcon);
+	}
+}
+
+int ToolBarIcons::size()
+{
+	return _iconListVector.size();
 }
 
 void ToolBarIcons::create(HINSTANCE hInst, int iconSize)

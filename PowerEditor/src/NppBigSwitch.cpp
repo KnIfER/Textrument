@@ -1113,6 +1113,9 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 			return TRUE;
 		}
 
+		case NPPM_GETNOTMADVERSION: {
+			return 0x666;
+		} break;
 		case NPPM_GETNPPVERSION:
 		{
 			const TCHAR * verStr = VERSION_VALUE;

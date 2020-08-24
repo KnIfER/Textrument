@@ -30,6 +30,7 @@
 #include "shortcut.h"
 #include "Parameters.h"
 #include "FindReplaceDlg_rc.h"
+#include "Notepad_plus.h"
 
 const int WS_TOOLBARSTYLE = WS_CHILD | WS_VISIBLE | WS_CLIPCHILDREN | WS_CLIPSIBLINGS | TBSTYLE_TOOLTIPS |TBSTYLE_FLAT | CCS_TOP | BTNS_AUTOSIZE | CCS_NOPARENTALIGN | CCS_NORESIZE | CCS_NODIVIDER;
 
@@ -110,7 +111,9 @@ bool ToolBar::init( HINSTANCE hInst, HWND hPere, toolBarStatusType type, ToolBar
 
 	_toolBarIcons.init(buttonUnitArray, arraySize);
 	_toolBarIcons.create(_hInst, iconSize);
-	
+
+	_nbDynButtons = _vDynBtnReg.size();
+
 	INITCOMMONCONTROLSEX icex;
 	icex.dwSize = sizeof(INITCOMMONCONTROLSEX);
 	icex.dwICC  = ICC_WIN95_CLASSES|ICC_COOL_CLASSES|ICC_BAR_CLASSES|ICC_USEREX_CLASSES;
@@ -118,7 +121,6 @@ bool ToolBar::init( HINSTANCE hInst, HWND hPere, toolBarStatusType type, ToolBar
 
 	//Create the list of buttons
 	_nbButtons    = arraySize;
-	_nbDynButtons = _vDynBtnReg.size();
 	_nbTotalButtons = _nbButtons + (_nbDynButtons ? _nbDynButtons + 1 : 0);
 	_pTBB = new TBBUTTON[_nbTotalButtons];	//add one for the extra separator
 
@@ -253,7 +255,7 @@ void ToolBar::reset(bool create)
 	{
 		//Store current button state information
 		TBBUTTON tempBtn;
-		for (size_t i = 0; i < _nbCurrentButtons; ++i)
+		for (size_t i = 0; i < _nbTotalButtons; ++i)
 		{
 			::SendMessage(_hSelf, TB_GETBUTTON, i, reinterpret_cast<LPARAM>(&tempBtn));
 			_pTBB[i].fsState = tempBtn.fsState;
@@ -286,9 +288,24 @@ void ToolBar::reset(bool create)
 		throw std::runtime_error("ToolBar::reset : CreateWindowEx() function return null");
 	}
 
+	if (create) {
+		if(_nbDynButtons > 0 && _toolBarIcons.size()<_nbTotalButtons) {
+			for (size_t j = 0; j < _nbDynButtons; ++j)
+			{
+				auto dynIconI = _vDynBtnReg.at(j);
+				if(dynIconI.hIcon==0 && dynIconI.ORH->magicNum!=0x666) {
+					if(PLUGIN_ICO==0) PLUGIN_ICO = ::LoadIcon(_hInst, MAKEINTRESOURCE(IDR_PLUGIN_ICO));
+					dynIconI.hIcon = PLUGIN_ICO;
+				}
+				_toolBarIcons.addIcon(dynIconI);
+			}
+		}
+	}
+
 	if (_state != TB_STANDARD)
 	{
 		//If non standard icons, use custom imagelists
+
 		setDefaultImageList();
 		setHotImageList();
 		setDisableImageList();
@@ -315,15 +332,22 @@ void ToolBar::reset(bool create)
 		{
 			for (size_t j = 0; j < _nbDynButtons; ++j)
 			{
-				addbmpdyn.nID = reinterpret_cast<UINT_PTR>(_vDynBtnReg.at(j).hBmp);
-				::SendMessage(_hSelf, TB_ADDBITMAP, 1, reinterpret_cast<LPARAM>(&addbmpdyn));
+				auto atat = _vDynBtnReg.at(j);
+				HBITMAP hBmp = atat.hBmp;
+				if(!hBmp && atat.ORH->magicNum==0x666) {
+					hBmp = static_cast<HBITMAP>(::LoadImage((HINSTANCE)(atat.ORH->HRO), MAKEINTRESOURCE(atat.ORH->resBmp), IMAGE_BITMAP, 0, 0, LR_DEFAULTSIZE | LR_LOADMAP3DCOLORS));
+				}
+				if(hBmp) {
+					addbmpdyn.nID = reinterpret_cast<UINT_PTR>(hBmp);
+					::SendMessage(_hSelf, TB_ADDBITMAP, 1, reinterpret_cast<LPARAM>(&addbmpdyn));
+				}
 			}
 		}
 	}
 
 	if (create)
 	{	//if the toolbar has been recreated, readd the buttons
-		size_t nbBtnToAdd = (_state == TB_STANDARD?_nbTotalButtons:_nbButtons);
+		size_t nbBtnToAdd = _nbTotalButtons;//(_state == TB_STANDARD?_nbTotalButtons:_nbButtons);
 		_nbCurrentButtons = nbBtnToAdd;
 		WORD btnSize = (_state == TB_LARGE?32:16);
 		::SendMessage(_hSelf, TB_SETBUTTONSIZE , 0, MAKELONG(btnSize, btnSize));
@@ -346,12 +370,15 @@ void ToolBar::reset(bool create)
 void ToolBar::registerDynBtn(UINT messageID, toolbarIcons* tIcon)
 {
 	// Note: Register of buttons only possible before init!
-	if ((_hSelf == NULL) && (messageID != 0) && (tIcon->hToolbarBmp != NULL))
+	if ((_hSelf == NULL) && (messageID != 0) && (tIcon->hToolbarBmp != NULL || tIcon->magicNum==0x666))
 	{
-		tDynamicList		dynList;
-		dynList.message		= messageID;
-		dynList.hBmp		= tIcon->hToolbarBmp;
-		dynList.hIcon		= tIcon->hToolbarIcon;
+		tDynamicList dynList;
+		dynList.message = messageID;
+		dynList.hBmp = tIcon->hToolbarBmp;
+		dynList.hIcon = tIcon->hToolbarIcon;
+		//dynList.hIconHot = tIcon->hToolbarIconHot;
+		//dynList.hIconGray = tIcon->hToolbarIconGray;
+		dynList.ORH = tIcon;
 		_vDynBtnReg.push_back(dynList);
 	}
 }

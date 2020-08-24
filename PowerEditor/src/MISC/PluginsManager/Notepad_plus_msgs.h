@@ -161,6 +161,14 @@ enum Platform { PF_UNKNOWN, PF_X86, PF_X64, PF_IA64 };
 		struct toolbarIcons {
 			HBITMAP	hToolbarBmp;
 			HICON	hToolbarIcon;
+			//HICON	hToolbarIconHot;
+			//HICON	hToolbarIconGray;
+			short magicNum;
+			HANDLE HRO;
+			int	resIcon;
+			int	resIconHot;
+			int	resIconGray;
+			int	resBmp;
 		};
 
 	#define NPPM_GETWINDOWSVERSION (NPPMSG + 42)
@@ -428,6 +436,8 @@ enum Platform { PF_UNKNOWN, PF_X86, PF_X64, PF_IA64 };
 	// Returns the number of TCHAR copied/to copy.
 	// Users should call it with pluginRootPath be NULL to get the required number of TCHAR (not including the terminating nul character),
 	// allocate pluginRootPath buffer with the return value + 1, then call it again to get the path.
+
+	#define NPPM_GETNOTMADVERSION (NPPMSG + 666)
 
 #define	RUNCOMMAND_USER    (WM_USER + 3000)
 	#define NPPM_GETFULLCURRENTPATH		(RUNCOMMAND_USER + FULL_CURRENT_PATH)

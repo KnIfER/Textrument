@@ -43,13 +43,6 @@
 
 enum toolBarStatusType {TB_SMALL, TB_LARGE, TB_STANDARD};
 
-
-typedef struct {
-	UINT		message;		// identification of icon in tool bar (menu ID)
-	HBITMAP		hBmp;			// bitmap for toolbar
-	HICON		hIcon;			// icon for toolbar
-} tDynamicList;
-
 struct iconLocator {
 	int listIndex;
 	int iconIndex;
@@ -116,6 +109,7 @@ public :
 	void addToRebar(ReBar * rebar);
 
 private :
+	HICON PLUGIN_ICO = 0;
 	TBBUTTON *_pTBB = nullptr;
 	ToolBarIcons _toolBarIcons;
 	toolBarStatusType _state = TB_SMALL;
