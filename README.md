@@ -2,7 +2,7 @@ What is Not~~ep~~Mad++ ?
 ===================
 
 [NotePad++魔改笔记](https://blog.csdn.net/sinat_27171121/article/details/108002522)
-1. 第一波质感图标 (via Material design icons) 
+1. 第一波质感图标 (via Material design icons)  [8ab4e4b017d70f97dacccac3db7780dd9e970170](../../commit/8ab4e4b017d70f97dacccac3db7780dd9e970170)
 2. ~~改进搜索~~
 3. 追加“文档列表面板”菜单项
 4. 非模态的快捷键对话框
