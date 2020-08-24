@@ -8,7 +8,7 @@ What is Not~~ep~~Mad++ ?
 4. 非模态的快捷键对话框 [b45fa12](../../commit/b45fa1246ce59e69a62b749c65cbc1b533e8a1ee)
 5. 带偏移的行跳转(line:offset) [9cd2419](../../commit/9cd24199a422d18153d7d1c0b99a3b6f285c6808)
 
-6. 支持在工具栏显示插件的大图标 (含默认图标)  [e6b867e](../../commit/e6b867e407673f7d49fd729a354812f0a8d0c012)
+6. 工具栏显示插件的大图标 (含默认图标)  [e6b867e](../../commit/e6b867e407673f7d49fd729a354812f0a8d0c012)
 
 [![GitHub release](https://img.shields.io/github/release/notepad-plus-plus/notepad-plus-plus.svg)](../../releases/latest)
 &nbsp;&nbsp;&nbsp;&nbsp;[![Appveyor build status](https://ci.appveyor.com/api/projects/status/github/notepad-plus-plus/notepad-plus-plus?branch=master&svg=true)](https://ci.appveyor.com/project/donho/notepad-plus-plus)
