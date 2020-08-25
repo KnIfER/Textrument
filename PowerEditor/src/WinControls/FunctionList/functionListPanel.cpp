@@ -497,7 +497,7 @@ void FunctionListPanel::init(HINSTANCE hInst, HWND hPere, ScintillaEditView **pp
 	}
 	else
 	{
-		generic_string funcListDefaultXmlPath = (NppParameters::getInstance()).getNppPath();
+		generic_string funcListDefaultXmlPath = (NppParameters::getInstance()).getUserPath();
 		PathAppend(funcListDefaultXmlPath, TEXT("functionList.xml"));
 		if (PathFileExists(funcListDefaultXmlPath.c_str()))
 		{

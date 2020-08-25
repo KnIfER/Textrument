@@ -1020,7 +1020,21 @@ bool NppParameters::load()
 	generic_string nppPluginRootParent;
 	if (_isLocal)
 	{
-		_userPath = nppPluginRootParent = _nppPath;
+		_userPath = _nppPath;
+		_userPath.append(TEXT(""));
+		generic_string localUserPath(TEXT("User"));
+		PathAppend(_userPath, localUserPath);
+
+		if (PathFileExists(_userPath.c_str())) {
+			if (!PathIsDirectory(_userPath.c_str())) {
+				_userPath = _nppPath;
+			}
+		} else {
+			::CreateDirectory(_userPath.c_str(), NULL);
+		}
+
+
+		nppPluginRootParent = _nppPath;
 		_userPluginConfDir = _pluginRootDir;
 		PathAppend(_userPluginConfDir, TEXT("Config"));
 	}
@@ -1053,6 +1067,12 @@ bool NppParameters::load()
 		::CreateDirectory(_pluginRootDir.c_str(), NULL);
 
 	_sessionPath = _userPath; // Session stock the absolute file path, it should never be on cloud
+
+#if 0
+	TCHAR buffer[200]={0};
+	wsprintf(buffer,TEXT("_sessionPath=%s"), _sessionPath.c_str());
+	::MessageBox(NULL, buffer, TEXT(""), MB_OK);
+#endif
 
 	// Detection cloud settings
 	generic_string cloudChoicePath{_userPath};

@@ -365,12 +365,6 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE, PWSTR pCmdLine, int)
 
 	MiniDumper mdump;	//for debugging purposes.
 
-	bool TheFirstOne = true;
-	::SetLastError(NO_ERROR);
-	::CreateMutex(NULL, false, TEXT("nppInstance"));
-	if (::GetLastError() == ERROR_ALREADY_EXISTS)
-		TheFirstOne = false;
-
 	// Convert commandline to notepad-compatible format, if applicable
 	if ( isInList(FLAG_NOTEPAD_COMPATIBILITY, params) )
 	{
@@ -419,6 +413,31 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE, PWSTR pCmdLine, int)
 	}
 
 	nppParameters.load();
+
+	bool TheFirstOne = true;
+	::SetLastError(NO_ERROR);
+
+	auto npppath = nppParameters.getNppPath();
+	size_t tokenLen = npppath.length();
+	size_t tokenST = 0;
+	if(tokenLen>=MAX_PATH) {
+		tokenLen = MAX_PATH;
+		tokenST = tokenLen-MAX_PATH;
+	}
+	TCHAR npppathtoken[MAX_PATH];
+	//memset(npppathtoken, 0, MAX_PATH*sizeof(TCHAR));
+	PathCanonicalize(npppathtoken, npppath.data());
+
+	for(int i=0;i<tokenLen;i++) {
+		if(npppathtoken[i]=='\\') {
+			npppathtoken[i]=' ';
+		}
+	}
+	//npppathtoken[tokenLen-1]='\0';
+	::CreateMutex(NULL, false, npppathtoken);
+	if (::GetLastError() == ERROR_ALREADY_EXISTS)
+		TheFirstOne = false;
+
 	NppGUI & nppGui = const_cast<NppGUI &>(nppParameters.getNppGUI());
 
 	bool doUpdateNpp = nppGui._autoUpdateOpt._doAutoUpdate;
