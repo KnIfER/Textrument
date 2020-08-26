@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ImportGroup Label="PropertySheets">
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros">
+    <scintilla>D:\Code\FigureOut\notepad-plus-plus\scintilla</scintilla>
+    <PowerEditor>D:\Code\FigureOut\notepad-plus-plus\PowerEditor</PowerEditor>
+    <DLLOU>$(PowerEditor)\bin64\plugins\$(TargetName)\$(TargetName)$(TargetExt)</DLLOU>
+    <DLLOU_>D:\Downloads\npp.7.7.1.bin\plugins\$(TargetName)\$(TargetName)$(TargetExt)</DLLOU_>
+    <PW>$(PowerEditor)</PW>
+  </PropertyGroup>
+  <PropertyGroup>
+    <_ProjectFileVersion>16.0.28916.169</_ProjectFileVersion>
+    <_PropertySheetDisplayName>plugin_dev</_PropertySheetDisplayName>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(PowerEditor)\src\WinControls\AboutDlg;$(scintilla)\include;$(PowerEditor)\include;$(PowerEditor)\src\WinControls;$(PowerEditor)\src\WinControls\ImageListSet;$(PowerEditor)\src\WinControls\OpenSaveFileDialog;$(PowerEditor)\src\WinControls\SplitterContainer;$(PowerEditor)\src\WinControls\StaticDialog;$(PowerEditor)\src\WinControls\TabBar;$(PowerEditor)\src\WinControls\ToolBar;$(PowerEditor)\src\MISC\Process;$(PowerEditor)\src\ScitillaComponent;$(PowerEditor)\src\MISC;$(PowerEditor)\src\MISC\SysMsg;$(PowerEditor)\src\WinControls\StatusBar;$(PowerEditor)\src;$(PowerEditor)\src\WinControls\StaticDialog\RunDlg;$(PowerEditor)\src\tinyxml;$(PowerEditor)\src\WinControls\ColourPicker;$(PowerEditor)\src\Win32Explr;$(PowerEditor)\src\MISC\RegExt;$(PowerEditor)\src\WinControls\TrayIcon;$(PowerEditor)\src\WinControls\shortcut;$(PowerEditor)\src\WinControls\Grid;$(PowerEditor)\src\WinControls\ContextMenu;$(PowerEditor)\src\MISC\PluginsManager;$(PowerEditor)\src\WinControls\Preference;$(PowerEditor)\src\WinControls\WindowsDlg;$(PowerEditor)\src\WinControls\TaskList;$(PowerEditor)\src\WinControls\DockingWnd;$(PowerEditor)\src\WinControls\ToolTip;$(PowerEditor)\src\MISC\Exception;$(PowerEditor)\src\MISC\Common;$(PowerEditor)\src\tinyxml\tinyXmlA;$(PowerEditor)\src\WinControls\AnsiCharPanel;$(PowerEditor)\src\WinControls\ClipboardHistory;$(PowerEditor)\src\WinControls\FindCharsInRange;$(PowerEditor)\src\WinControls\VerticalFileSwitcher;$(PowerEditor)\src\WinControls\ProjectPanel;$(PowerEditor)\src\WinControls\DocumentMap;$(PowerEditor)\src\WinControls\FunctionList;$(PowerEditor)\src\uchardet;$(PowerEditor)\src\WinControls\FileBrowser;$(PowerEditor)\src\WinControls\ReadDirectoryChanges;$(PowerEditor)\src\MISC\md5;$(PowerEditor)\src\WinControls\PluginsAdmin;$(PowerEditor)\src\json;$(PowerEditor)\src\MISC\sha2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <BuildMacro Include="scintilla">
+      <Value>$(scintilla)</Value>
+    </BuildMacro>
+    <BuildMacro Include="PowerEditor">
+      <Value>$(PowerEditor)</Value>
+    </BuildMacro>
+    <BuildMacro Include="DLLOU">
+      <Value>$(DLLOU)</Value>
+    </BuildMacro>
+    <BuildMacro Include="DLLOU_">
+      <Value>$(DLLOU_)</Value>
+    </BuildMacro>
+    <BuildMacro Include="PW">
+      <Value>$(PW)</Value>
+    </BuildMacro>
+  </ItemGroup>
+</Project>

@@ -37,8 +37,9 @@ struct DlgInfo
     Window *_dlg;
     generic_string _name;
 	generic_string _internalName;
+	int _res;
 
-	DlgInfo(Window *dlg, const TCHAR *name, const TCHAR *internalName = TEXT("")): _dlg(dlg), _name(name), _internalName(internalName) {};
+	DlgInfo(Window *dlg, const TCHAR *name, const TCHAR *internalName = TEXT(""), int res=0): _dlg(dlg), _name(name), _internalName(internalName), _res(res) {};
 };
 
 typedef std::vector<DlgInfo> WindowVector;

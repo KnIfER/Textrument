@@ -400,8 +400,8 @@ enum Platform { PF_UNKNOWN, PF_X86, PF_X64, PF_IA64 };
 	// INT NPPM_GETCURRENTVIEW(0, 0)
 	// Return: current edit view of Notepad++. Only 2 possible values: 0 = Main, 1 = Secondary
 
-	#define NPPM_DOCSWITCHERDISABLECOLUMN    (NPPMSG + 89)
-	// VOID NPPM_DOCSWITCHERDISABLECOLUMN(0, BOOL disableOrNot)
+	#define NPPM_DOCSWITCHERENABLECOLUMN    (NPPMSG + 89)
+	// VOID NPPM_DOCSWITCHERENABLECOLUMN(0, BOOL disableOrNot)
 	// Disable or enable extension column of doc switcher
 
 	#define NPPM_GETEDITORDEFAULTFOREGROUNDCOLOR    (NPPMSG + 90)
@@ -438,6 +438,10 @@ enum Platform { PF_UNKNOWN, PF_X86, PF_X64, PF_IA64 };
 	// allocate pluginRootPath buffer with the return value + 1, then call it again to get the path.
 
 	#define NPPM_GETNOTMADVERSION (NPPMSG + 666)
+	#define NPPM_SHOWBIGGERFONTS (NPPMSG + 667)
+	#define NPPM_SETTTINGSTO (NPPMSG + 668)
+	#define NPPM_GETENLARGETEXT (NPPMSG + 669)
+	#define NPPM_GETFONTSTACK (NPPMSG + 670)
 
 #define	RUNCOMMAND_USER    (WM_USER + 3000)
 	#define NPPM_GETFULLCURRENTPATH		(RUNCOMMAND_USER + FULL_CURRENT_PATH)

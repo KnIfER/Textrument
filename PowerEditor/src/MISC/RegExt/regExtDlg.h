@@ -28,7 +28,7 @@
 
 #pragma once
 
-#include "regExtDlgRc.h"
+#include "preference_rc.h"
 #include "StaticDialog.h"
 
 const int extNameLen = 32;

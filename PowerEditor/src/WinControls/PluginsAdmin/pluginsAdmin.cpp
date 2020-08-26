@@ -331,7 +331,7 @@ void PluginsAdminDlg::create(int dialogID, bool isRTL, bool msgDestParent)
 
 	long actionZoneHeight = 50;
 	rect.top += actionZoneHeight;
-	rect.bottom -= actionZoneHeight;
+	//rect.bottom += actionZoneHeight;
 
 	RECT listRect = rect;
 	RECT descRect = rect;
@@ -380,6 +380,15 @@ void PluginsAdminDlg::create(int dialogID, bool isRTL, bool msgDestParent)
 	_installedList.reSizeView(listRect);
 
 	HWND hDesc = ::GetDlgItem(_hSelf, IDC_PLUGINADM_EDIT);
+
+	LOGFONT logfont{}; //改变输出字体bai
+	//ZeroMemory(&logfont, sizeof(LOGFONT));
+	logfont.lfCharSet = GB2312_CHARSET;
+	logfont.lfHeight = -26;
+	//logfont.lfWeight = 550;
+	HFONT hFont = CreateFontIndirect(&logfont);
+	SendMessage(hDesc,WM_SETFONT,(WPARAM)hFont,0);
+
 	::MoveWindow(hDesc, descRect.left, descRect.top, descRect.right, descRect.bottom, TRUE);
 	::InvalidateRect(hDesc, nullptr, TRUE);
 
@@ -716,6 +725,8 @@ bool PluginsAdminDlg::isValide()
 	{
 		return false;
 	}
+
+	if(1) return 1;
 
 	if (!::PathFileExists(_updaterFullPath.c_str()))
 	{

@@ -261,13 +261,16 @@ public :
 	void showDialogByName(const TCHAR *name) const;
 	bool setListSelection(size_t currentSel) const;
 
+	void initAllPanels() const;
+	void refresh() const;
+
 	virtual void destroy();
 
 private :
 	INT_PTR CALLBACK run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam);
 	void makeCategoryList();
 	int32_t getIndexFromName(const TCHAR *name) const;
-	void showDialogByIndex(size_t index) const;
+	void showDialogByIndex(size_t index, bool init=false) const;
 	WindowVector _wVector;
 	BarsDlg _barsDlg;
 	MarginsDlg _marginsDlg;

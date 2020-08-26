@@ -4284,6 +4284,34 @@ void NppParameters::feedGUIParameters(TiXmlNode *node)
 				}
 			}
 		}
+		else if (!lstrcmp(nm, TEXT("UseBigFonts")))
+		{
+			TiXmlNode *n = childNode->FirstChild();
+			if (n)
+			{
+				const TCHAR* val = n->Value();
+				if (val)
+				{
+					if (lstrcmp(val, TEXT("yes")) == 0)
+						_nppGUI._useBigFonts = true;
+					else
+						_nppGUI._useBigFonts = false;
+				}
+			}
+		}
+		else if (!lstrcmp(nm, TEXT("SettingsIndex")))
+		{
+			TiXmlNode *n = childNode->FirstChild();
+			if (n)
+			{
+				const TCHAR* val = n->Value();
+				if (val)
+				{
+					int var = _wtoi(val);
+					_nppGUI.currentSettingsIndex = var;
+				}
+			}
+		}
 		else if (lstrcmp(nm, TEXT("MaitainIndent")) == 0)
 		{
 			TiXmlNode *n = childNode->FirstChild();
@@ -5168,9 +5196,9 @@ void NppParameters::feedGUIParameters(TiXmlNode *node)
 		}
 		else if (!lstrcmp(nm, TEXT("MISC")))
 		{
-			const TCHAR * optName = element->Attribute(TEXT("fileSwitcherWithoutExtColumn"));
+			const TCHAR * optName = element->Attribute(TEXT("fileSwitcherWithExtColumn"));
 			if (optName)
-				_nppGUI._fileSwitcherWithoutExtColumn = (lstrcmp(optName, TEXT("yes")) == 0);
+				_nppGUI._fileSwitcherWithExtColumn = (lstrcmp(optName, TEXT("yes")) == 0);
 
 			const TCHAR * optNameBackSlashEscape = element->Attribute(TEXT("backSlashIsEscapeCharacterForSql"));
 			if (optNameBackSlashEscape && !lstrcmp(optNameBackSlashEscape, TEXT("no")))
@@ -5763,8 +5791,21 @@ void NppParameters::createXmlTreeFromGUIParams()
 	}
 
 	// <GUIConfig name = "DetectEncoding">yes< / GUIConfig>
+	if(!_nppGUI._detectEncoding)
 	{
 		insertGUIConfigBoolNode(newGUIRoot, TEXT("DetectEncoding"), _nppGUI._detectEncoding);
+	}
+
+	// <GUIConfig name = "UseBigFonts">yes< / GUIConfig>
+	if(_nppGUI._useBigFonts)
+	{
+		insertGUIConfigBoolNode(newGUIRoot, TEXT("UseBigFonts"), _nppGUI._useBigFonts);
+	}
+
+	// <GUIConfig name="SettingsIndex">9</GUIConfig>
+	if(_nppGUI.currentSettingsIndex>0)
+	{
+		insertGUIConfigIntNode(newGUIRoot, TEXT("SettingsIndex"), _nppGUI.currentSettingsIndex);
 	}
 
 	// <GUIConfig name = "NewDocDefaultSettings" format = "0" encoding = "0" lang = "3" codepage = "-1" openAnsiAsUTF8 = "no" / >
@@ -5965,12 +6006,12 @@ void NppParameters::createXmlTreeFromGUIParams()
 		GUIConfigElement->SetAttribute(TEXT("setting"), _nppGUI._multiInstSetting);
 	}
 
-	// <GUIConfig name="MISC" fileSwitcherWithoutExtColumn="no" backSlashIsEscapeCharacterForSql="yes" newStyleSaveDlg="no" isFolderDroppedOpenFiles="no" />
+	// <GUIConfig name="MISC" fileSwitcherWithExtColumn="no" backSlashIsEscapeCharacterForSql="yes" newStyleSaveDlg="no" isFolderDroppedOpenFiles="no" />
 	{
 		TiXmlElement *GUIConfigElement = (newGUIRoot->InsertEndChild(TiXmlElement(TEXT("GUIConfig"))))->ToElement();
 		GUIConfigElement->SetAttribute(TEXT("name"), TEXT("MISC"));
 
-		GUIConfigElement->SetAttribute(TEXT("fileSwitcherWithoutExtColumn"), _nppGUI._fileSwitcherWithoutExtColumn ? TEXT("yes") : TEXT("no"));
+		GUIConfigElement->SetAttribute(TEXT("fileSwitcherWithExtColumn"), _nppGUI._fileSwitcherWithExtColumn ? TEXT("yes") : TEXT("no"));
 		GUIConfigElement->SetAttribute(TEXT("backSlashIsEscapeCharacterForSql"), _nppGUI._backSlashIsEscapeCharacterForSql ? TEXT("yes") : TEXT("no"));
 		GUIConfigElement->SetAttribute(TEXT("writeTechnologyEngine"), _nppGUI._writeTechnologyEngine);
 		GUIConfigElement->SetAttribute(TEXT("newStyleSaveDlg"), _nppGUI._useNewStyleSaveDlg ? TEXT("yes") : TEXT("no"));
@@ -6262,6 +6303,21 @@ TiXmlElement * NppParameters::insertGUIConfigBoolNode(TiXmlNode *r2w, const TCHA
 	TiXmlElement *GUIConfigElement = (r2w->InsertEndChild(TiXmlElement(TEXT("GUIConfig"))))->ToElement();
 	GUIConfigElement->SetAttribute(TEXT("name"), name);
 	GUIConfigElement->InsertEndChild(TiXmlText(pStr));
+	return GUIConfigElement;
+}
+
+TCHAR * buffer_itow;
+
+TiXmlElement * NppParameters::insertGUIConfigIntNode(TiXmlNode *r2w, const TCHAR *name, int val)
+{
+	if(!buffer_itow) {
+		buffer_itow = new TCHAR[128];
+	}
+	memset(buffer_itow, 0, sizeof(TCHAR)*128);
+	_itow(val, buffer_itow, 10);
+	TiXmlElement *GUIConfigElement = (r2w->InsertEndChild(TiXmlElement(TEXT("GUIConfig"))))->ToElement();
+	GUIConfigElement->SetAttribute(TEXT("name"), name);
+	GUIConfigElement->InsertEndChild(TiXmlText(buffer_itow));
 	return GUIConfigElement;
 }
 

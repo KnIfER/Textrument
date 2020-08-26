@@ -39,11 +39,13 @@
 #include "documentMap.h"
 #include "functionListPanel.h"
 #include "fileBrowser.h"
+#include "wutils.h"
 
 using namespace std;
 
 #define WM_DPICHANGED 0x02E0
 
+std::vector<HFontWrap> HFontWraps;
 
 struct SortTaskListPred final
 {
@@ -99,6 +101,7 @@ LRESULT Notepad_plus_Window::runProc(HWND hwnd, UINT message, WPARAM wParam, LPA
 			try
 			{
 				_notepad_plus_plus_core._pPublicInterface = this;
+				setFontStack(&HFontWraps);
 				return _notepad_plus_plus_core.init(hwnd);
 			}
 			catch (std::exception& ex)
@@ -2172,6 +2175,32 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 			return (::GetMenu(hwnd) == NULL);
 		}
 
+		case NPPM_SHOWBIGGERFONTS:
+		{
+			bool show = (lParam != TRUE);
+			NppGUI & nppGUI = const_cast<NppGUI &>(nppParam.getNppGUI());
+			nppGUI._useBigFonts = show;
+			_preference.refresh();
+			return 0;
+		}
+
+		case NPPM_SETTTINGSTO:
+		{
+			NppGUI & nppGUI = const_cast<NppGUI &>(nppParam.getNppGUI());
+			nppGUI.currentSettingsIndex = lParam;
+			return 0;
+		}
+
+		case NPPM_GETENLARGETEXT:
+		{
+			return nppParam.getNppGUI()._useBigFonts;
+		}
+
+		case NPPM_GETFONTSTACK:
+		{
+			return (LRESULT)&HFontWraps;
+		}
+
 		case NPPM_HIDESTATUSBAR:
 		{
 			bool show = (lParam != TRUE);
@@ -2274,11 +2303,11 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 			return langDesc.length();
 		}
 
-		case NPPM_DOCSWITCHERDISABLECOLUMN:
+		case NPPM_DOCSWITCHERENABLECOLUMN:
 		{
 			BOOL isOff = static_cast<BOOL>(lParam);
 			NppGUI & nppGUI = const_cast<NppGUI &>(nppParam.getNppGUI());
-			nppGUI._fileSwitcherWithoutExtColumn = isOff == TRUE;
+			nppGUI._fileSwitcherWithExtColumn = isOff == TRUE;
 
 			if (_pFileSwitcherPanel)
 			{

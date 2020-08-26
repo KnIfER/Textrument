@@ -598,10 +598,13 @@ int cc=0;
 // broadcast the notification to all plugins
 void PluginsManager::notify(const SCNotification *notification)
 {
+	if(notification->nmhdr.code == NPPN_SHUTDOWN) {
+		_noMoreNotification = true;
+	}
+
 	if (_noMoreNotification) // this boolean should be enabled after NPPN_SHUTDOWN has been sent
 		return;
 
-	_noMoreNotification = notification->nmhdr.code == NPPN_SHUTDOWN;
 
 	for (size_t i = 0, len = _pluginInfos.size() ; i < len ; ++i)
 	{

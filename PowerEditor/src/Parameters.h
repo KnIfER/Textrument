@@ -818,6 +818,8 @@ struct NppGUI final
 	bool _rememberLastSession = true; // remember next session boolean will be written in the settings
 	bool _isCmdlineNosessionActivated = false; // used for if -nosession is indicated on the launch time
 	bool _detectEncoding = true;
+	bool _useBigFonts = false;
+	int currentSettingsIndex = 0;
 	bool _doTaskList = true;
 	bool _maitainIndent = true;
 	bool _enableSmartHilite = true;
@@ -896,7 +898,7 @@ struct NppGUI final
 	TCHAR _defaultDirExp[MAX_PATH];	//expanded environment variables
 	generic_string _themeName;
 	MultiInstSetting _multiInstSetting = monoInst;
-	bool _fileSwitcherWithoutExtColumn = false;
+	bool _fileSwitcherWithExtColumn = true;
 	bool isSnapshotMode() const {return _isSnapshotMode && _rememberLastSession && !_isCmdlineNosessionActivated;};
 	bool _isSnapshotMode = true;
 	size_t _snapshotBackupTiming = 7000;
@@ -1875,6 +1877,7 @@ private:
 	void insertPluginCmd(TiXmlNode *pluginCmdRoot, const PluginCmdShortcut & pluginCmd);
 	void stylerStrOp(bool op);
 	TiXmlElement * insertGUIConfigBoolNode(TiXmlNode *r2w, const TCHAR *name, bool bVal);
+	TiXmlElement * insertGUIConfigIntNode(TiXmlNode *r2w, const TCHAR *name, int val);
 	void insertDockingParamNode(TiXmlNode *GUIRoot);
 	void writeExcludedLangList(TiXmlElement *element);
 	void writePrintSetting(TiXmlElement *element);

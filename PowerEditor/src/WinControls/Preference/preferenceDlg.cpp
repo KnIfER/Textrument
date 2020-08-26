@@ -29,9 +29,11 @@
 #include <shlobj.h>
 #include <uxtheme.h>
 #include "preferenceDlg.h"
+#include "../../resource.h"
 #include "lesDlgs.h"
 #include "EncodingMapper.h"
 #include "localization.h"
+#include "wutils.h"
 
 #define MyGetGValue(rgb)      (LOBYTE((rgb)>>8))
 
@@ -44,6 +46,31 @@ const int BLINKRATE_INTERVAL = 50;
 const int BORDERWIDTH_SMALLEST = 0;
 const int BORDERWIDTH_LARGEST = 30;
 const int BORDERWIDTH_INTERVAL = 1;
+
+HFONT hFontSubPanel;
+
+HFONT hFontCategory;
+
+RECT rSubPanel;
+
+int currentSettingsIndex;
+
+bool fontReUsable=1;
+
+NppParameters* _nppParamsInst;
+
+bool CreateFonts(bool init) {
+	if(hFontSubPanel==0) {
+		//NppParameters& nppParam = NppParameters::getInstance();
+		bool bigFonts = _nppParamsInst->getNppGUI()._useBigFonts;
+		if(init && !bigFonts) {
+			return false;
+		}
+		hFontSubPanel = CreateFontIndirectly(bigFonts?-19:-16, fontReUsable);
+		hFontCategory = CreateFontIndirectly(bigFonts?-21:-15, fontReUsable);
+		return true;
+	}
+}
 
 // This int encoding array is built from "EncodingUnit encodings[]" (see EncodingMapper.cpp)
 // And DefaultNewDocDlg will use "int encoding array" to get more info from "EncodingUnit encodings[]"
@@ -102,103 +129,52 @@ INT_PTR CALLBACK PreferenceDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM 
 	{
 		case WM_INITDIALOG :
 		{
-			_barsDlg.init(_hInst, _hSelf);
-			_barsDlg.create(IDD_PREFERENCE_BAR_BOX, false, false);
-			_barsDlg.display();
-			
-			_marginsDlg.init(_hInst, _hSelf);
-			_marginsDlg.create(IDD_PREFERENCE_MARGEIN_BOX, false, false);
-			
-			_settingsDlg.init(_hInst, _hSelf);
-			_settingsDlg.create(IDD_PREFERENCE_SETTING_BOX, false, false);
-			
-			_defaultNewDocDlg.init(_hInst, _hSelf);
-			_defaultNewDocDlg.create(IDD_PREFERENCE_NEWDOCSETTING_BOX, false, false);
+			_wVector.push_back(DlgInfo(&_barsDlg, TEXT("General"), TEXT("Global"), IDD_PREFERENCE_BAR_BOX));
+			_wVector.push_back(DlgInfo(&_marginsDlg, TEXT("Editing"), TEXT("Scintillas"), IDD_PREFERENCE_MARGEIN_BOX));
+			_wVector.push_back(DlgInfo(&_defaultNewDocDlg, TEXT("New Document"), TEXT("NewDoc"), IDD_PREFERENCE_NEWDOCSETTING_BOX));
+			_wVector.push_back(DlgInfo(&_defaultDirectoryDlg, TEXT("Default Directory"), TEXT("DefaultDir"), IDD_PREFERENCE_DEFAULTDIRECTORY_BOX));
+			_wVector.push_back(DlgInfo(&_recentFilesHistoryDlg, TEXT("Recent Files History"), TEXT("RecentFilesHistory"), IDD_PREFERENCE_RECENTFILESHISTORY_BOX));
+			_wVector.push_back(DlgInfo(&_fileAssocDlg, TEXT("File Association"), TEXT("FileAssoc"), IDD_REGEXT_BOX));
+			_wVector.push_back(DlgInfo(&_langMenuDlg, TEXT("Language"), TEXT("Language"), IDD_PREFERENCE_LANG_BOX));
+			_wVector.push_back(DlgInfo(&_highlighting, TEXT("Highlighting"), TEXT("Highlighting"), IDD_PREFERENCE_HILITE_BOX));
+			_wVector.push_back(DlgInfo(&_printSettingsDlg, TEXT("Print"), TEXT("Print"), IDD_PREFERENCE_PRINT_BOX));
+			_wVector.push_back(DlgInfo(&_searchingSettingsDlg, TEXT("Searching"), TEXT("Searching"), IDD_PREFERENCE_SEARCHINGSETTINGS_BOX));
+			_wVector.push_back(DlgInfo(&_backupDlg, TEXT("Backup"), TEXT("Backup"), IDD_PREFERENCE_BACKUP_BOX));
+			_wVector.push_back(DlgInfo(&_autoCompletionDlg, TEXT("Auto-Completion"), TEXT("AutoCompletion"), IDD_PREFERENCE_AUTOCOMPLETION_BOX));
+			_wVector.push_back(DlgInfo(&_multiInstDlg, TEXT("Multi-Instance"), TEXT("MultiInstance"), IDD_PREFERENCE_MULTIINSTANCE_BOX));
+			_wVector.push_back(DlgInfo(&_delimiterSettingsDlg, TEXT("Delimiter"), TEXT("Delimiter"), IDD_PREFERENCE_DELIMITERSETTINGS_BOX));
+			_wVector.push_back(DlgInfo(&_settingsOnCloudDlg, TEXT("Cloud"), TEXT("Cloud"), IDD_PREFERENCE_SETTINGSONCLOUD_BOX));
+			_wVector.push_back(DlgInfo(&_searchEngineDlg, TEXT("Search Engine"), TEXT("SearchEngine"), IDD_PREFERENCE_SEARCHENGINE_BOX));
+			_wVector.push_back(DlgInfo(&_settingsDlg, TEXT("MISC."), TEXT("MISC"), IDD_PREFERENCE_SETTING_BOX));
 
-			_defaultDirectoryDlg.init(_hInst, _hSelf);
-			_defaultDirectoryDlg.create(IDD_PREFERENCE_DEFAULTDIRECTORY_BOX, false, false);
+			_nppParamsInst = &NppParameters::getInstance();
 
-			_recentFilesHistoryDlg.init(_hInst, _hSelf);
-			_recentFilesHistoryDlg.create(IDD_PREFERENCE_RECENTFILESHISTORY_BOX, false, false);
-
-			_fileAssocDlg.init(_hInst, _hSelf);
-			_fileAssocDlg.create(IDD_REGEXT_BOX, false, false);
-
-			_printSettingsDlg.init(_hInst, _hSelf);
-			_printSettingsDlg.create(IDD_PREFERENCE_PRINT_BOX, false, false);
-
-			_searchingSettingsDlg.init(_hInst, _hSelf);
-			_searchingSettingsDlg.create(IDD_PREFERENCE_SEARCHINGSETTINGS_BOX, false, false);
-
-			_langMenuDlg.init(_hInst, _hSelf);
-			_langMenuDlg.create(IDD_PREFERENCE_LANG_BOX, false, false);
-
-			_highlighting.init(_hInst, _hSelf);
-			_highlighting.create(IDD_PREFERENCE_HILITE_BOX, false, false);
-
-			_backupDlg.init(_hInst, _hSelf);
-			_backupDlg.create(IDD_PREFERENCE_BACKUP_BOX, false, false);
-
-			_autoCompletionDlg.init(_hInst, _hSelf);
-			_autoCompletionDlg.create(IDD_PREFERENCE_AUTOCOMPLETION_BOX, false, false);
-
-			_multiInstDlg.init(_hInst, _hSelf);
-			_multiInstDlg.create(IDD_PREFERENCE_MULTIINSTANCE_BOX, false, false);
-
-			_delimiterSettingsDlg.init(_hInst, _hSelf);
-			_delimiterSettingsDlg.create(IDD_PREFERENCE_DELIMITERSETTINGS_BOX, false, false);
-
-			_settingsOnCloudDlg.init(_hInst, _hSelf);
-			_settingsOnCloudDlg.create(IDD_PREFERENCE_SETTINGSONCLOUD_BOX, false, false);
-
-			_searchEngineDlg.init(_hInst, _hSelf);
-			_searchEngineDlg.create(IDD_PREFERENCE_SEARCHENGINE_BOX, false, false);
-
-
-			_wVector.push_back(DlgInfo(&_barsDlg, TEXT("General"), TEXT("Global")));
-			_wVector.push_back(DlgInfo(&_marginsDlg, TEXT("Editing"), TEXT("Scintillas")));
-			_wVector.push_back(DlgInfo(&_defaultNewDocDlg, TEXT("New Document"), TEXT("NewDoc")));
-			_wVector.push_back(DlgInfo(&_defaultDirectoryDlg, TEXT("Default Directory"), TEXT("DefaultDir")));
-			_wVector.push_back(DlgInfo(&_recentFilesHistoryDlg, TEXT("Recent Files History"), TEXT("RecentFilesHistory")));
-			_wVector.push_back(DlgInfo(&_fileAssocDlg, TEXT("File Association"), TEXT("FileAssoc")));
-			_wVector.push_back(DlgInfo(&_langMenuDlg, TEXT("Language"), TEXT("Language")));
-			_wVector.push_back(DlgInfo(&_highlighting, TEXT("Highlighting"), TEXT("Highlighting")));
-			_wVector.push_back(DlgInfo(&_printSettingsDlg, TEXT("Print"), TEXT("Print")));
-			_wVector.push_back(DlgInfo(&_searchingSettingsDlg, TEXT("Searching"), TEXT("Searching")));
-			_wVector.push_back(DlgInfo(&_backupDlg, TEXT("Backup"), TEXT("Backup")));
-			_wVector.push_back(DlgInfo(&_autoCompletionDlg, TEXT("Auto-Completion"), TEXT("AutoCompletion")));
-			_wVector.push_back(DlgInfo(&_multiInstDlg, TEXT("Multi-Instance"), TEXT("MultiInstance")));
-			_wVector.push_back(DlgInfo(&_delimiterSettingsDlg, TEXT("Delimiter"), TEXT("Delimiter")));
-			_wVector.push_back(DlgInfo(&_settingsOnCloudDlg, TEXT("Cloud"), TEXT("Cloud")));
-			_wVector.push_back(DlgInfo(&_searchEngineDlg, TEXT("Search Engine"), TEXT("SearchEngine")));
-			_wVector.push_back(DlgInfo(&_settingsDlg, TEXT("MISC."), TEXT("MISC")));
-
+			if(CreateFonts(true)) {
+				setWindowFont(_hSelf, hFontCategory);
+			}
 
 			makeCategoryList();
-			RECT rc;
-			getClientRect(rc);
+			getClientRect(rSubPanel);
 
-			rc.top += NppParameters::getInstance()._dpiManager.scaleY(10);
-			rc.bottom -= NppParameters::getInstance()._dpiManager.scaleY(50);
-			rc.left += NppParameters::getInstance()._dpiManager.scaleX(150);
+			rSubPanel.top += _nppParamsInst->_dpiManager.scaleY(10);
+			rSubPanel.bottom -= _nppParamsInst->_dpiManager.scaleY(43);
+			rSubPanel.left += _nppParamsInst->_dpiManager.scaleX(180);
+			rSubPanel.right -= _nppParamsInst->_dpiManager.scaleX(30);
 			
-			_barsDlg.reSizeTo(rc);
-			_marginsDlg.reSizeTo(rc);
-			_settingsDlg.reSizeTo(rc);
-			_defaultNewDocDlg.reSizeTo(rc);
-			_defaultDirectoryDlg.reSizeTo(rc);
-			_recentFilesHistoryDlg.reSizeTo(rc);
-			_fileAssocDlg.reSizeTo(rc);
-			_langMenuDlg.reSizeTo(rc);
-			_highlighting.reSizeTo(rc);
-			_printSettingsDlg.reSizeTo(rc);
-			_searchingSettingsDlg.reSizeTo(rc);
-			_backupDlg.reSizeTo(rc);
-			_autoCompletionDlg.reSizeTo(rc);
-			_multiInstDlg.reSizeTo(rc);
-			_delimiterSettingsDlg.reSizeTo(rc);
-			_settingsOnCloudDlg.reSizeTo(rc);
-			_searchEngineDlg.reSizeTo(rc);
+			currentSettingsIndex = _nppParamsInst->getNppGUI().currentSettingsIndex;
+
+			showDialogByIndex(currentSettingsIndex, true);
+
+			if(currentSettingsIndex) {
+				setListSelection(currentSettingsIndex);
+			}
+
+			initAllPanels();
+#if 1//lazyInit
+#else
+			initAllPanels();
+			_wVector[0]._dlg->display();
+#endif
 
 			NppParameters& nppParam = NppParameters::getInstance();
 			ETDTProc enableDlgTheme = (ETDTProc)nppParam.getEnableThemeDlgTexture();
@@ -229,7 +205,7 @@ INT_PTR CALLBACK PreferenceDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM 
 					case IDCANCEL :
 						display(false);
 						return TRUE;
-						
+
 					default :
 						::SendMessage(_hParent, WM_COMMAND, wParam, lParam);
 						return TRUE;
@@ -311,6 +287,49 @@ bool PreferenceDlg::renameDialogTitle(const TCHAR *internalName, const TCHAR *ne
 	return true;
 }
 
+void PreferenceDlg::initAllPanels() const
+{
+	StaticDialog* dlg;
+	for (auto vI : _wVector) {
+		dlg = (StaticDialog*) vI._dlg;
+		int* flag = &dlg->flag;
+		if(!(*flag&0x1))
+		{ 
+			dlg->init(_hInst, _hSelf);
+			dlg->create(vI._res, false, false);
+			dlg->reSizeTo(rSubPanel);
+			*flag=0x1;
+		} 
+	}
+}
+
+void PreferenceDlg::refresh() const
+{
+	if(hFontCategory!=0) {
+		if(!fontReUsable) {
+			DeleteObject(hFontCategory);
+			DeleteObject(hFontSubPanel);
+		}
+		hFontCategory=hFontSubPanel=0;
+	}
+
+	CreateFonts(false);
+
+	setWindowFont(_hSelf, hFontCategory);
+
+	auto len=_wVector.size();
+	for (size_t i = 0; i < len ; ++i)
+	{
+		if(i!=currentSettingsIndex) {
+			//int* flag=&((StaticDialog*)_wVector[i]._dlg)->flag;
+			//*flag = (*flag&~0x2)|0x4;
+			((StaticDialog*)_wVector[i]._dlg)->flag&=~0x2;
+		}
+	}
+
+	_wVector[currentSettingsIndex]._dlg->redraw();
+}
+
 void PreferenceDlg::showDialogByName(const TCHAR *name) const
 {
 	int32_t i = getIndexFromName(name);
@@ -322,14 +341,40 @@ void PreferenceDlg::showDialogByName(const TCHAR *name) const
 }
 
 
-void PreferenceDlg::showDialogByIndex(size_t index) const
+void PreferenceDlg::showDialogByIndex(size_t index, bool init) const
 {
+	currentSettingsIndex = index;
 	size_t len = _wVector.size();
-	for (size_t i = 0; i < len; ++i)
-	{
-		_wVector[i]._dlg->display(false);
+	DlgInfo dlgWrap = _wVector[index];
+	StaticDialog* dlg = (StaticDialog*) dlgWrap._dlg;
+	int* flag = &dlg->flag;
+	if(!(*flag&0x1))
+	{ 
+		//::MessageBox(NULL, TEXT("CREATE"), TEXT(""), MB_OK);
+		dlg->init(_hInst, _hSelf);
+		dlg->create(dlgWrap._res, false, false);
+		dlg->reSizeTo(rSubPanel);
+		*flag=0x1;
+	} 
+	if(!(*flag&0x2) && hFontSubPanel!=0) {
+		//::MessageBox(NULL, TEXT("SETFONT"), TEXT(""), MB_OK);
+		setWindowFont(dlg->getHSelf(), hFontSubPanel);
+		*flag|=0x2;
 	}
-	_wVector[index]._dlg->display(true);
+	if(init) {
+		_wVector[index]._dlg->display();
+	} else {
+		::SendMessage(_hParent, NPPM_SETTTINGSTO, 0, index);
+		for (size_t i = 0; i < len; ++i)
+		{
+			_wVector[i]._dlg->display(i==index);
+		}
+	}
+	//if(*flag&0x4) {
+	//	::MessageBox(NULL, TEXT("REDRAW"), TEXT(""), MB_OK);
+	//	_wVector[index]._dlg->redraw();
+	//	*flag&=~0x4;
+	//}
 }
 
 void PreferenceDlg::destroy()
@@ -350,6 +395,7 @@ void PreferenceDlg::destroy()
 	_multiInstDlg.destroy();
 	_delimiterSettingsDlg.destroy();
 }
+
 
 INT_PTR CALLBACK BarsDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM)
 {
@@ -394,12 +440,13 @@ INT_PTR CALLBACK BarsDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM)
 			
 			::SendDlgItemMessage(_hSelf, IDC_CHECK_TAB_HIDE, BM_SETCHECK, tabBarStatus & TAB_HIDE, 0);
 			::SendMessage(_hSelf, WM_COMMAND, IDC_CHECK_TAB_HIDE, 0);
+			::SendDlgItemMessage(_hSelf, IDC_CHECK_SHOWBIGGERFONTS, BM_SETCHECK, nppGUI._useBigFonts, 0);
 			::SendDlgItemMessage(_hSelf, IDC_CHECK_SHOWSTATUSBAR, BM_SETCHECK, showStatus, 0);
 			::SendDlgItemMessage(_hSelf, IDC_CHECK_HIDEMENUBAR, BM_SETCHECK, !showMenu, 0);
 
 			bool showDocSwitcher = ::SendMessage(::GetParent(_hParent), NPPM_ISDOCSWITCHERSHOWN, 0, 0) == TRUE;
 			::SendDlgItemMessage(_hSelf, IDC_CHECK_DOCSWITCH, BM_SETCHECK, showDocSwitcher, 0);
-			::SendDlgItemMessage(_hSelf, IDC_CHECK_DOCSWITCH_NOEXTCOLUMN, BM_SETCHECK, nppGUI._fileSwitcherWithoutExtColumn, 0);
+			::SendDlgItemMessage(_hSelf, IDC_CHECK_DOCSWITCH_EXTCOLUMN, BM_SETCHECK, nppGUI._fileSwitcherWithExtColumn, 0);
 
 			LocalizationSwitcher & localizationSwitcher = nppParam.getLocalizationSwitcher();
 
@@ -436,7 +483,11 @@ INT_PTR CALLBACK BarsDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM)
 					::SendMessage(::GetParent(_hParent), NPPM_HIDESTATUSBAR, 0, isChecked?FALSE:TRUE);
 				}
 				return TRUE;
-
+				case IDC_CHECK_SHOWBIGGERFONTS : 
+				{
+					bool isChecked = (BST_CHECKED == ::SendDlgItemMessage(_hSelf, IDC_CHECK_SHOWBIGGERFONTS, BM_GETCHECK, 0, 0));
+					::SendMessage(::GetParent(_hParent), NPPM_SHOWBIGGERFONTS, 0, isChecked?FALSE:TRUE);
+				} return TRUE;
 				case IDC_CHECK_HIDEMENUBAR :
 				{
 					bool isChecked = (BST_CHECKED == ::SendDlgItemMessage(_hSelf, IDC_CHECK_HIDEMENUBAR, BM_GETCHECK, 0, 0));
@@ -451,10 +502,10 @@ INT_PTR CALLBACK BarsDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM)
 					getFocus();
 				}
 				return TRUE;
-				case IDC_CHECK_DOCSWITCH_NOEXTCOLUMN :
+				case IDC_CHECK_DOCSWITCH_EXTCOLUMN :
 				{
-					bool isChecked = (BST_CHECKED == ::SendDlgItemMessage(_hSelf, IDC_CHECK_DOCSWITCH_NOEXTCOLUMN, BM_GETCHECK, 0, 0));
-					::SendMessage(::GetParent(_hParent), NPPM_DOCSWITCHERDISABLECOLUMN, 0, isChecked?TRUE:FALSE);
+					bool isChecked = (BST_CHECKED == ::SendDlgItemMessage(_hSelf, IDC_CHECK_DOCSWITCH_EXTCOLUMN, BM_GETCHECK, 0, 0));
+					::SendMessage(::GetParent(_hParent), NPPM_DOCSWITCHERENABLECOLUMN, 0, isChecked?TRUE:FALSE);
 				}
 				return TRUE;
 
