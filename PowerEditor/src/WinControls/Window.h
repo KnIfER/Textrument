@@ -36,7 +36,7 @@ public:
 	//@{
 	Window() = default;
 	Window(const Window&) = delete;
-	virtual ~Window() = default;
+	virtual ~Window() {};
 	//@}
 
 
@@ -46,7 +46,7 @@ public:
 		_hParent = parent;
 	}
 
-	virtual void destroy() = 0;
+	virtual void destroy() {};
 
 	virtual void display(bool toShow = true) const
 	{

@@ -128,11 +128,11 @@ public:
 	bool allocateMarker(int numberRequired, int *start);
 	generic_string getLoadedPluginNames() const;
 
+	std::vector<PluginInfo *> _pluginInfos;
 private:
 	NppData _nppData;
 	HMENU _hPluginsMenu = NULL;
 
-	std::vector<PluginInfo *> _pluginInfos;
 	std::vector<PluginCommand> _pluginsCommands;
 	std::vector<LoadedDllInfo> _loadedDlls;
 	bool _isDisabled = false;

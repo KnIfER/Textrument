@@ -403,6 +403,9 @@ copy ..\src\contextMenu.xml ..\bin64\contextMenu.xml
   <ItemGroup>
     <Image Include="..\src\icons\allChars_off.ico" />
     <Image Include="..\src\icons\allChars_on.ico" />
+    <Image Include="..\src\icons\asciiPanel.ico" />
+    <Image Include="..\src\icons\chameleon.ico" />
+    <Image Include="..\src\icons\clipboardPanel.ico" />
     <Image Include="..\src\icons\closeAll.bmp" />
     <Image Include="..\src\icons\closefile.bmp" />
     <Image Include="..\src\icons\closeTabButton.bmp" />
@@ -415,9 +418,24 @@ copy ..\src\contextMenu.xml ..\bin64\contextMenu.xml
     <Image Include="..\src\icons\cut_off.ico" />
     <Image Include="..\src\icons\cut_on.ico" />
     <Image Include="..\src\icons\delete.ico" />
+    <Image Include="..\src\icons\docMap.bmp" />
+    <Image Include="..\src\icons\docMap.ico" />
+    <Image Include="..\src\icons\docMap_off.ico" />
+    <Image Include="..\src\icons\docMap_on.ico" />
+    <Image Include="..\src\icons\docSwitcher.ico" />
     <Image Include="..\src\icons\dupli_dis.ico" />
     <Image Include="..\src\icons\dupli_off.ico" />
     <Image Include="..\src\icons\dupli_on.ico" />
+    <Image Include="..\src\icons\fb_expand_all.bmp" />
+    <Image Include="..\src\icons\fb_fold_all.bmp" />
+    <Image Include="..\src\icons\fb_root_close.bmp" />
+    <Image Include="..\src\icons\fb_root_open.bmp" />
+    <Image Include="..\src\icons\fb_select_current_file.bmp" />
+    <Image Include="..\src\icons\fileBrowser.bmp" />
+    <Image Include="..\src\icons\fileBrowser.ico" />
+    <Image Include="..\src\icons\fileBrowser_off.ico" />
+    <Image Include="..\src\icons\fileBrowser_on.ico" />
+    <Image Include="..\src\icons\fileMonitoring.bmp" />
     <Image Include="..\src\icons\find.bmp" />
     <Image Include="..\src\icons\find_off.ico" />
     <Image Include="..\src\icons\find_on.ico" />
@@ -425,12 +443,23 @@ copy ..\src\contextMenu.xml ..\bin64\contextMenu.xml
     <Image Include="..\src\icons\findrep_on.ico" />
     <Image Include="..\src\icons\findReplace.bmp" />
     <Image Include="..\src\icons\findResult.ico" />
+    <Image Include="..\src\icons\funcList_leaf.bmp" />
+    <Image Include="..\src\icons\funcList_node.bmp" />
+    <Image Include="..\src\icons\funcList_off.ico" />
+    <Image Include="..\src\icons\funcList_on.ico" />
+    <Image Include="..\src\icons\funclstReload.bmp" />
+    <Image Include="..\src\icons\funclstSort.bmp" />
+    <Image Include="..\src\icons\functionList.bmp" />
+    <Image Include="..\src\icons\functionList.ico" />
     <Image Include="..\src\icons\imprim_off.ico" />
     <Image Include="..\src\icons\imprim_on.ico" />
     <Image Include="..\src\icons\indentGuide.bmp" />
     <Image Include="..\src\icons\indentGuide_off.ico" />
     <Image Include="..\src\icons\indentGuide_on.ico" />
     <Image Include="..\src\icons\invisibleChar.bmp" />
+    <Image Include="..\src\icons\monitoring.ico" />
+    <Image Include="..\src\icons\monitoring_off.ico" />
+    <Image Include="..\src\icons\monitoring_on.ico" />
     <Image Include="..\src\icons\new_off.ico" />
     <Image Include="..\src\icons\new_on.ico" />
     <Image Include="..\src\icons\newFile.bmp" />
@@ -450,7 +479,16 @@ copy ..\src\contextMenu.xml ..\bin64\contextMenu.xml
     <Image Include="..\src\icons\playrecord_m_on.ico" />
     <Image Include="..\src\icons\playrecord_off.ico" />
     <Image Include="..\src\icons\playrecord_on.ico" />
+    <Image Include="..\src\icons\plugin.ico" />
     <Image Include="..\src\icons\print.bmp" />
+    <Image Include="..\src\icons\projectPanel.ico" />
+    <Image Include="..\src\icons\project_file.bmp" />
+    <Image Include="..\src\icons\project_file_invalid.bmp" />
+    <Image Include="..\src\icons\project_folder_close.bmp" />
+    <Image Include="..\src\icons\project_folder_open.bmp" />
+    <Image Include="..\src\icons\project_root.bmp" />
+    <Image Include="..\src\icons\project_work_space.bmp" />
+    <Image Include="..\src\icons\project_work_space_dirty.bmp" />
     <Image Include="..\src\icons\readonly.ico" />
     <Image Include="..\src\icons\redo.bmp" />
     <Image Include="..\src\icons\redo_dis.ico" />
@@ -537,6 +575,7 @@ copy ..\src\contextMenu.xml ..\bin64\contextMenu.xml
   <ItemGroup>
     <None Include="..\src\cursors\drag.cur" />
     <None Include="..\src\cursors\drag_interdit.cur" />
+    <None Include="..\src\cursors\drag_out.cur" />
     <None Include="..\src\cursors\drag_plus.cur" />
   </ItemGroup>
   <ItemGroup>

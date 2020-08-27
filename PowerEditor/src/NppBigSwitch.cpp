@@ -2200,6 +2200,24 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 		{
 			return (LRESULT)&HFontWraps;
 		}
+		
+		case NPPM_GETPLUGININFO:
+		{
+			TCHAR buffer[100]={0};
+			TCHAR *userLangName = reinterpret_cast<TCHAR *>(lParam);
+			wsprintf(buffer,TEXT("wParam=%s"), lParam);
+			//::MessageBox(NULL, buffer, TEXT(""), MB_OK);
+			auto pluginStack = _pluginsManager._pluginInfos;
+			for(auto psI:pluginStack) {
+				//::MessageBox(NULL, psI->_moduleName.data(), TEXT(""), MB_OK);
+				if(psI->_moduleName._Equal(userLangName)) {
+					//::MessageBox(NULL, buffer, TEXT(""), MB_OK);
+					//TrackPopupMenu(psI->_pluginMenu, TPM_RETURNCMD, 0, 0, 0, _windowsMenu., NULL);
+					return (LRESULT)psI->_pluginMenu;
+				}
+			}
+			return (LRESULT)0;
+		}
 
 		case NPPM_HIDESTATUSBAR:
 		{
