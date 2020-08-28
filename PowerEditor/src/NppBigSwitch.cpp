@@ -2201,7 +2201,7 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 			return (LRESULT)&HFontWraps;
 		}
 		
-		case NPPM_GETPLUGININFO:
+		case NPPM_GETPLUGINMENU:
 		{
 			TCHAR buffer[100]={0};
 			TCHAR *userLangName = reinterpret_cast<TCHAR *>(lParam);

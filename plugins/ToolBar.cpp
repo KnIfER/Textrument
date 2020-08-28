@@ -27,33 +27,32 @@ bool ToolBar::init( HINSTANCE hInst, HWND hPere, toolBarStatusType type,
 	Window::init(hInst, hPere);
 	_state = type;
 	int iconSize = (_state == TB_LARGE?32:16);
-	//int iconSize = NppParameters::getInstance()._dpiManager.scaleX(_state == TB_LARGE?32:16);
 
 	_toolBarIcons.init(buttonUnitArray, arraySize);
 	_toolBarIcons.create(_hInst, iconSize);
-
-	_nbDynButtons = _vDynBtnReg.size();
-
+	
 	INITCOMMONCONTROLSEX icex;
 	icex.dwSize = sizeof(INITCOMMONCONTROLSEX);
 	icex.dwICC  = ICC_WIN95_CLASSES|ICC_COOL_CLASSES|ICC_BAR_CLASSES|ICC_USEREX_CLASSES;
 	InitCommonControlsEx(&icex);
 
 	//Create the list of buttons
-	_nbButtons    = arraySize;
-	_nbTotalButtons = _nbButtons + (_nbDynButtons ? _nbDynButtons + 1 : 0);
-	_pTBB = new TBBUTTON[_nbTotalButtons];	//add one for the extra separator
+	_nrButtons    = arraySize;
+	_nrDynButtons = _vDynBtnReg.size();
+	_nrTotalButtons = _nrButtons + (_nrDynButtons ? _nrDynButtons + 1 : 0);
+	_pTBB = new TBBUTTON[_nrTotalButtons];	//add one for the extra separator
 
 	int cmd = 0;
 	int bmpIndex = -1, style;
 	size_t i = 0;
-	for (; i < _nbButtons ; ++i)
+
+	for (; i < _nrButtons ; i++)
 	{
 		cmd = buttonUnitArray[i]._cmdID;
 		if (cmd != 0)
 		{
-			++bmpIndex;
-			style = BTNS_BUTTON;
+			bmpIndex++;
+			style = BTNS_BUTTON | _toolBarIcons.getIconStyle(i);
 		}
 		else
 		{
@@ -63,13 +62,12 @@ bool ToolBar::init( HINSTANCE hInst, HWND hPere, toolBarStatusType type,
 		_pTBB[i].iBitmap = (cmd != 0?bmpIndex:0);
 		_pTBB[i].idCommand = cmd;
 		_pTBB[i].fsState = TBSTATE_ENABLED;
-		_pTBB[i].fsStyle = (BYTE)style; 
+		_pTBB[i].fsStyle = style; 
 		_pTBB[i].dwData = 0; 
 		_pTBB[i].iString = 0;
 	}
 
-	if (_nbDynButtons > 0)
-	{
+	if (_nrDynButtons > 0) {
 		//add separator
 		_pTBB[i].iBitmap = 0;
 		_pTBB[i].idCommand = 0;
@@ -77,17 +75,17 @@ bool ToolBar::init( HINSTANCE hInst, HWND hPere, toolBarStatusType type,
 		_pTBB[i].fsStyle = BTNS_SEP;
 		_pTBB[i].dwData = 0; 
 		_pTBB[i].iString = 0;
-		++i;
+		i++;
 		//add plugin buttons
-		for (size_t j = 0; j < _nbDynButtons ; ++j, ++i)
+		for (size_t j = 0; j < _nrDynButtons ; j++, i++)
 		{
 			cmd = _vDynBtnReg[j].message;
-			++bmpIndex;
+			bmpIndex++;
 
 			_pTBB[i].iBitmap = bmpIndex;
 			_pTBB[i].idCommand = cmd;
 			_pTBB[i].fsState = TBSTATE_ENABLED;
-			_pTBB[i].fsStyle = BTNS_BUTTON; 
+			_pTBB[i].fsStyle = BTNS_BUTTON | _toolBarIcons.getIconStyle(i); 
 			_pTBB[i].dwData = 0; 
 			_pTBB[i].iString = 0;
 		}
@@ -112,9 +110,8 @@ void ToolBar::destroy() {
 int ToolBar::getWidth() const {
 	RECT btnRect;
 	int totalWidth = 0;
-	for (size_t i = 0; i < _nbCurrentButtons; ++i)
-	{
-		::SendMessage(_hSelf, TB_GETITEMRECT, i, reinterpret_cast<LPARAM>(&btnRect));
+	for(size_t i = 0; i < _nrCurrentButtons; i++) {
+		::SendMessage(_hSelf, TB_GETITEMRECT, i, (LPARAM)&btnRect);
 		totalWidth += btnRect.right - btnRect.left;
 	}
 	return totalWidth;
@@ -131,62 +128,44 @@ int ToolBar::getHeight() const {
 void ToolBar::reset(bool create) 
 {
 
-
-	if (create && _hSelf)
-	{
+	if(create && _hSelf) {
 		//Store current button state information
 		TBBUTTON tempBtn;
-		for (size_t i = 0; i < _nbTotalButtons; ++i)
-		{
-			::SendMessage(_hSelf, TB_GETBUTTON, i, reinterpret_cast<LPARAM>(&tempBtn));
+		for(size_t i = 0; i < _nrCurrentButtons; i++) {
+			::SendMessage(_hSelf, TB_GETBUTTON, (WPARAM)i, (LPARAM)&tempBtn);
 			_pTBB[i].fsState = tempBtn.fsState;
 		}
 		::DestroyWindow(_hSelf);
 		_hSelf = NULL;
 	}
 
-	if (!_hSelf)
-	{
+	if(!_hSelf) {
 		_hSelf = ::CreateWindowEx(
-			WS_EX_PALETTEWINDOW,
-			TOOLBARCLASSNAME,
-			TEXT(""),
-			WS_TOOLBARSTYLE,
-			0, 0,
-			0, 0,
-			_hParent,
-			NULL,
-			_hInst,
-			0);
+					WS_EX_PALETTEWINDOW,
+					TOOLBARCLASSNAME,
+					TEXT(""),
+					WS_TOOLBARSTYLE,
+					0, 0,
+					0, 0,
+					_hParent,
+					NULL,
+					_hInst,
+					0);
 		// Send the TB_BUTTONSTRUCTSIZE message, which is required for 
 		// backward compatibility.
-		::SendMessage(_hSelf, TB_BUTTONSTRUCTSIZE, sizeof(TBBUTTON), 0);
-		::SendMessage(_hSelf, TB_SETEXTENDEDSTYLE, 0, TBSTYLE_EX_HIDECLIPPEDBUTTONS);
+		::SendMessage(_hSelf, TB_BUTTONSTRUCTSIZE, (WPARAM)sizeof(TBBUTTON), 0);
+		::SendMessage(_hSelf, TB_SETEXTENDEDSTYLE, 0, (LPARAM)TBSTYLE_EX_HIDECLIPPEDBUTTONS | TBSTYLE_EX_DRAWDDARROWS);
 	}
 
 	if (!_hSelf)
 	{
-		throw std::runtime_error("ToolBar::reset : CreateWindowEx() function return null");
-	}
-
-	if (create) {
-		if(_nbDynButtons > 0 && _toolBarIcons.size()<_nbTotalButtons) {
-			for (size_t j = 0; j < _nbDynButtons; ++j)
-			{
-				auto dynIconI = _vDynBtnReg.at(j);
-				if(dynIconI.hIcon==0 && dynIconI.ORH->magicNum!=0x666) {
-					if(PLUGIN_ICO==0) PLUGIN_ICO = ::LoadIcon(_hInst, MAKEINTRESOURCE(1542));
-					dynIconI.hIcon = PLUGIN_ICO;
-				}
-				_toolBarIcons.addIcon(dynIconI);
-			}
-		}
+		systemMessage(TEXT("System Err"));
+		throw int(9);
 	}
 
 	if (_state != TB_STANDARD)
 	{
 		//If non standard icons, use custom imagelists
-
 		setDefaultImageList();
 		setHotImageList();
 		setDisableImageList();
@@ -194,54 +173,36 @@ void ToolBar::reset(bool create)
 	else
 	{
 		//Else set the internal imagelist with standard bitmaps
-		int iconDpiDynamicalSize = 16;
-		::SendMessage(_hSelf, TB_SETBITMAPSIZE, 0, MAKELPARAM(iconDpiDynamicalSize, iconDpiDynamicalSize));
-
-		//TBADDBITMAP addbmp = {_hInst, 0};
-		TBADDBITMAP addbmp = {0, 0};
+		TBADDBITMAP addbmp = {_hInst, 0};
 		TBADDBITMAP addbmpdyn = {0, 0};
-		for (size_t i = 0 ; i < _nbButtons ; ++i)
+		for (size_t i = 0 ; i < _nrButtons ; i++)
 		{
-			int icoID = _toolBarIcons.getStdIconAt(static_cast<int32_t>(i));
-			HBITMAP hBmp = static_cast<HBITMAP>(::LoadImage(_hInst, MAKEINTRESOURCE(icoID), IMAGE_BITMAP, iconDpiDynamicalSize, iconDpiDynamicalSize, LR_LOADMAP3DCOLORS | LR_LOADTRANSPARENT));
-			addbmp.nID = reinterpret_cast<UINT_PTR>(hBmp);
-
-			//addbmp.nID = _toolBarIcons.getStdIconAt(i);
-			::SendMessage(_hSelf, TB_ADDBITMAP, 1, reinterpret_cast<LPARAM>(&addbmp));
+			addbmp.nID = _toolBarIcons.getStdIconAt(i);
+			::SendMessage(_hSelf, TB_ADDBITMAP, 1, (LPARAM)&addbmp);
 		}
-		if (_nbDynButtons > 0)
-		{
-			for (size_t j = 0; j < _nbDynButtons; ++j)
+		if (_nrDynButtons > 0) {
+			for (size_t j = 0; j < _nrDynButtons; j++)
 			{
-				auto atat = _vDynBtnReg.at(j);
-				HBITMAP hBmp = atat.hBmp;
-				if(!hBmp && atat.ORH->magicNum==0x666) {
-					hBmp = static_cast<HBITMAP>(::LoadImage((HINSTANCE)(atat.ORH->HRO), MAKEINTRESOURCE(atat.ORH->resBmp), IMAGE_BITMAP, 0, 0, LR_DEFAULTSIZE | LR_LOADMAP3DCOLORS));
-				}
-				if(hBmp) {
-					addbmpdyn.nID = reinterpret_cast<UINT_PTR>(hBmp);
-					::SendMessage(_hSelf, TB_ADDBITMAP, 1, reinterpret_cast<LPARAM>(&addbmpdyn));
-				}
+				addbmpdyn.nID = (UINT_PTR)_vDynBtnReg.at(j).hBmp;
+				::SendMessage(_hSelf, TB_ADDBITMAP, 1, (LPARAM)&addbmpdyn);
 			}
 		}
 	}
 
-	if (create)
-	{	//if the toolbar has been recreated, readd the buttons
-		size_t nbBtnToAdd = _nbTotalButtons;//(_state == TB_STANDARD?_nbTotalButtons:_nbButtons);
-		_nbCurrentButtons = nbBtnToAdd;
+	if (create) {	//if the toolbar has been recreated, readd the buttons
+		size_t nrBtnToAdd = (_state == TB_STANDARD?_nrTotalButtons:_nrButtons);
+		_nrCurrentButtons = nrBtnToAdd;
 		WORD btnSize = (_state == TB_LARGE?32:16);
-		::SendMessage(_hSelf, TB_SETBUTTONSIZE , 0, MAKELONG(btnSize, btnSize));
-		::SendMessage(_hSelf, TB_ADDBUTTONS, nbBtnToAdd, reinterpret_cast<LPARAM>(_pTBB));
+		::SendMessage(_hSelf, TB_SETBUTTONSIZE , (WPARAM)0, (LPARAM)MAKELONG (btnSize, btnSize));
+		::SendMessage(_hSelf, TB_ADDBUTTONS, (WPARAM)nrBtnToAdd, (LPARAM)_pTBB);
 	}
 	::SendMessage(_hSelf, TB_AUTOSIZE, 0, 0);
 
-	if (_pRebar)
-	{
+	if (_pRebar) {
 		_rbBand.hwndChild	= getHSelf();
 		_rbBand.cxMinChild	= 0;
 		_rbBand.cyIntegral	= 1;
-		_rbBand.cyMinChild	= _rbBand.cyMaxChild = getHeight();
+		_rbBand.cyMinChild	= _rbBand.cyMaxChild	= getHeight();
 		_rbBand.cxIdeal		= getWidth();
 
 		_pRebar->reNew(REBAR_BAR_TOOLBAR, &_rbBand);
@@ -267,18 +228,18 @@ UINT ToolBar::doPopop(POINT chevPoint) {
 
 	size_t start = 0;
 	RECT btnRect = {0,0,0,0};
-	while(start < _nbCurrentButtons) {
+	while(start < _nrCurrentButtons) {
 		::SendMessage(_hSelf, TB_GETITEMRECT, start, (LPARAM)&btnRect);
 		if(btnRect.right > width)
 			break;
 		start++;
 	}
 
-	if (start < _nbCurrentButtons) {	//some buttons are hidden
+	if (start < _nrCurrentButtons) {	//some buttons are hidden
 		UINT elements = 0;
 		TOOLTIPTEXT ttt = {0};
 		HMENU menu = ::CreatePopupMenu();
-		while (start < _nbCurrentButtons) {
+		while (start < _nrCurrentButtons) {
 
 			INT	cmd = _pTBB[start].idCommand;
 

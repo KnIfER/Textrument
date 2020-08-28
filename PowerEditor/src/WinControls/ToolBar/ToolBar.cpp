@@ -383,7 +383,7 @@ void ToolBar::registerDynBtn(UINT messageID, toolbarIcons* tIcon)
 	}
 }
 
-void ToolBar::doPopop(POINT chevPoint)
+UINT ToolBar::doPopop(POINT chevPoint)
 {
 	//first find hidden buttons
 	int width = Window::getWidth();
@@ -419,6 +419,7 @@ void ToolBar::doPopop(POINT chevPoint)
 		}
 		TrackPopupMenu(menu, 0, chevPoint.x, chevPoint.y, 0, _hSelf, NULL);
 	}
+	return 0;
 }
 
 void ToolBar::addToRebar(ReBar * rebar) 

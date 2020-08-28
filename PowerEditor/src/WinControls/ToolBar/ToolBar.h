@@ -104,7 +104,7 @@ public :
 
 	void registerDynBtn(UINT message, toolbarIcons* hBmp);
 
-	void doPopop(POINT chevPoint);	//show the popup if buttons are hidden
+	UINT doPopop(POINT chevPoint);	//show the popup if buttons are hidden
 
 	void addToRebar(ReBar * rebar);
 
