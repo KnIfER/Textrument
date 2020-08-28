@@ -782,7 +782,7 @@ struct NppGUI final
 		_defaultDirExp[0] = 0;
 	}
 
-	toolBarStatusType _toolBarStatus = TB_STANDARD;
+	toolBarStatusType _toolBarStatus = TB_LARGE;
 	bool _toolbarShow = true;
 	bool _statusBarShow = true;
 	bool _menuBarShow = true;
@@ -795,7 +795,7 @@ struct NppGUI final
 	// 6th bit : enable multiline
 
 	// 0:don't draw; 1:draw top bar 2:draw inactive tabs 3:draw both 7:draw both+drag&drop
-	int _tabStatus = (TAB_DRAWTOPBAR | TAB_DRAWINACTIVETAB | TAB_DRAGNDROP | TAB_REDUCE | TAB_CLOSEBUTTON);
+	int _tabStatus = (TAB_DRAWTOPBAR | TAB_DRAGNDROP | TAB_CLOSEBUTTON);
 
 	bool _splitterPos = POS_VERTICAL;
 	int _userDefineDlgStatus = UDD_DOCKED;
@@ -818,7 +818,7 @@ struct NppGUI final
 	bool _rememberLastSession = true; // remember next session boolean will be written in the settings
 	bool _isCmdlineNosessionActivated = false; // used for if -nosession is indicated on the launch time
 	bool _detectEncoding = true;
-	bool _useBigFonts = false;
+	bool _useBigFonts = true;
 	int currentSettingsIndex = 0;
 	bool _doTaskList = true;
 	bool _maitainIndent = true;
