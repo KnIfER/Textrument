@@ -957,6 +957,12 @@ void TabBarPlus::drawItem(DRAWITEMSTRUCT *pDrawItemStruct)
 	RECT barRect = rect;
 	if (isSelected)
 	{
+		if (_drawInactiveTab && _inactiveBgColour==0xffffff)
+		{
+			hBrush = ::CreateSolidBrush(_inactiveBgColour);
+			::FillRect(hDC, &barRect, hBrush);
+			::DeleteObject((HGDIOBJ)hBrush);
+		}
 		if (_drawTopBar)
 		{
 			int topBarHeight = NppParameters::getInstance()._dpiManager.scaleX(4);
