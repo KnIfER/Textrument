@@ -755,6 +755,8 @@ INT_PTR CALLBACK MarginsDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM lPa
 			const ScintillaViewParams & svp = nppParam.getSVP();
 			::SendMessage(::GetDlgItem(_hSelf, IDC_BORDERWIDTH_SLIDER),TBM_SETPOS, TRUE, svp._borderWidth);
 			::SetDlgItemInt(_hSelf, IDC_BORDERWIDTHVAL_STATIC, svp._borderWidth, FALSE);
+			::SendMessage(::GetDlgItem(_hSelf, IDC_BORDERXCompWIDTH_SLIDER),TBM_SETPOS, TRUE, svp._borderWidthXCompat);
+			::SetDlgItemInt(_hSelf, IDC_BORDERXCompWIDTHVAL_STATIC, svp._borderWidthXCompat, FALSE);
 
 			initScintParam();
 			
@@ -768,6 +770,7 @@ INT_PTR CALLBACK MarginsDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM lPa
 		{
 			HWND hCaretBlikRateSlider = ::GetDlgItem(_hSelf, IDC_CARETBLINKRATE_SLIDER);
 			HWND hBorderWidthSlider = ::GetDlgItem(_hSelf, IDC_BORDERWIDTH_SLIDER);
+			HWND hBorderXCompWidthSlider = ::GetDlgItem(_hSelf, IDC_BORDERXCompWIDTH_SLIDER);
 			if (reinterpret_cast<HWND>(lParam) == hCaretBlikRateSlider)
 			{
 				auto blinkRate = ::SendMessage(hCaretBlikRateSlider, TBM_GETPOS, 0, 0);
@@ -783,6 +786,14 @@ INT_PTR CALLBACK MarginsDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM lPa
 				ScintillaViewParams & svp = (ScintillaViewParams &)nppParam.getSVP();
 				svp._borderWidth = static_cast<int>(borderWidth);
 				::SetDlgItemInt(_hSelf, IDC_BORDERWIDTHVAL_STATIC, static_cast<UINT>(borderWidth), FALSE);
+				::SendMessage(::GetParent(_hParent), WM_SIZE, 0, 0);
+			}
+			else if (reinterpret_cast<HWND>(lParam) == hBorderXCompWidthSlider)
+			{
+				auto borderWidth = ::SendMessage(hBorderXCompWidthSlider, TBM_GETPOS, 0, 0);
+				ScintillaViewParams & svp = (ScintillaViewParams &)nppParam.getSVP();
+				svp._borderWidthXCompat = static_cast<int>(borderWidth);
+				::SetDlgItemInt(_hSelf, IDC_BORDERXCompWIDTHVAL_STATIC, static_cast<UINT>(borderWidth), FALSE);
 				::SendMessage(::GetParent(_hParent), WM_SIZE, 0, 0);
 			}
 			return 0;	//return zero when handled

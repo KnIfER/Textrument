@@ -5426,6 +5426,13 @@ void NppParameters::feedScintillaParam(TiXmlNode *node)
 			_svp._borderWidth = val;
 	}
 
+	nm = element->Attribute(TEXT("borderXComp"), &val);
+	if (nm)
+	{
+		if (val >= 0 && val <= 30)
+			_svp._borderWidthXCompat = val;
+	}
+
 	// Do antialiased font
 	nm = element->Attribute(TEXT("smoothFont"));
 	if (nm)
@@ -5581,6 +5588,7 @@ bool NppParameters::writeScintillaParams()
 	(scintNode->ToElement())->SetAttribute(TEXT("whiteSpaceShow"), _svp._whiteSpaceShow?TEXT("show"):TEXT("hide"));
 	(scintNode->ToElement())->SetAttribute(TEXT("eolShow"), _svp._eolShow?TEXT("show"):TEXT("hide"));
 	(scintNode->ToElement())->SetAttribute(TEXT("borderWidth"), _svp._borderWidth);
+	(scintNode->ToElement())->SetAttribute(TEXT("borderXComp"), _svp._borderWidthXCompat);
 	(scintNode->ToElement())->SetAttribute(TEXT("smoothFont"), _svp._doSmoothFont ? TEXT("yes") : TEXT("no"));
 	return true;
 }

@@ -213,6 +213,7 @@ void DocTabView::setBuffer(size_t index, BufferID id)
 void DocTabView::reSizeTo(RECT & rc)
 {
 	int borderWidth = ((NppParameters::getInstance()).getSVP())._borderWidth;
+	int borderXComp = ((NppParameters::getInstance()).getSVP())._borderWidthXCompat;
 	if (_hideTabBarStatus)
 	{
 		RECT rcTmp = rc;
@@ -224,6 +225,8 @@ void DocTabView::reSizeTo(RECT & rc)
 		TabBar::reSizeTo(rc);
 		rc.left	 += borderWidth;
 		rc.right -= borderWidth * 2;
+		rc.left	 -= borderXComp;
+		rc.right += borderXComp * 2;
 		rc.top   += borderWidth;
 		rc.bottom -= (borderWidth * 2);
 		_pView->reSizeTo(rc);

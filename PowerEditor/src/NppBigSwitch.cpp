@@ -2203,10 +2203,7 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 		
 		case NPPM_GETPLUGINMENU:
 		{
-			TCHAR buffer[100]={0};
 			TCHAR *userLangName = reinterpret_cast<TCHAR *>(lParam);
-			wsprintf(buffer,TEXT("wParam=%s"), lParam);
-			//::MessageBox(NULL, buffer, TEXT(""), MB_OK);
 			auto pluginStack = _pluginsManager._pluginInfos;
 			for(auto psI:pluginStack) {
 				//::MessageBox(NULL, psI->_moduleName.data(), TEXT(""), MB_OK);
