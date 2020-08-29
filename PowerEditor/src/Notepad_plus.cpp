@@ -58,6 +58,8 @@ enum tb_stat {tb_saved, tb_unsaved, tb_ro};
 
 extern void tweakTabBarCMShowOpenLnk(ContextMenu& tabPopupMenu, NativeLangSpeaker& nativeLangSpeaker, bool showOpenLnk);
 
+extern bool bNewTabFarRight;
+
 int docTabIconIDs[] = {IDI_SAVED_ICON, IDI_UNSAVED_ICON, IDI_READONLY_ICON, IDI_MONITORING_ICON};
 
 ToolBarButtonUnit toolBarIcons[] = {
@@ -730,6 +732,8 @@ LRESULT Notepad_plus::init(HWND hwnd)
 	activateBuffer(_subEditView.getCurrentBufferID(), SUB_VIEW);
 	//::SetFocus(_mainEditView.getHSelf());
 	_mainEditView.getFocus();
+
+	bNewTabFarRight=0;
 
 	return TRUE;
 }

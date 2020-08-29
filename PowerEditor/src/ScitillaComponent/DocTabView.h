@@ -84,6 +84,7 @@ public :
 		return _pView;
 	};
 
+	static bool _newTabFarRight;
 private :
 	ScintillaEditView *_pView;
 	static bool _hideTabBarStatus;

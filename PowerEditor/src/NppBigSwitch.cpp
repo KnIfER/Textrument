@@ -48,6 +48,8 @@ using namespace std;
 
 std::vector<HFontWrap> HFontWraps;
 
+extern bool bNewTabFarRight;
+
 struct SortTaskListPred final
 {
 	DocTabView *_views[2];
@@ -1933,6 +1935,7 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 
 		case WM_LBUTTONDBLCLK:
 		{
+			bNewTabFarRight = 1;
 			::SendMessage(hwnd, WM_COMMAND, IDM_FILE_NEW, 0);
 			return TRUE;
 		}

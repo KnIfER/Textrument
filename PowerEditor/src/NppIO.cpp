@@ -41,6 +41,8 @@
 
 using namespace std;
 
+extern bool bNewTabFarRight;
+
 DWORD WINAPI Notepad_plus::monitorFileOnChange(void * params)
 {
 	MonitorInfo *monitorInfo = static_cast<MonitorInfo *>(params);
@@ -1806,6 +1808,8 @@ void Notepad_plus::fileNew()
 
     loadBufferIntoView(newBufID, currentView(), true);	//true, because we want multiple new files if possible
     switchToFile(newBufID);
+
+	bNewTabFarRight = 0;
 }
 
 
@@ -1878,6 +1882,7 @@ void Notepad_plus::loadLastSession()
 
 bool Notepad_plus::loadSession(Session & session, bool isSnapshotMode)
 {
+	bNewTabFarRight = 1;
 	NppParameters& nppParam = NppParameters::getInstance();
 	bool allSessionFilesLoaded = true;
 	BufferID lastOpened = BUFFER_INVALID;
@@ -2124,6 +2129,7 @@ bool Notepad_plus::loadSession(Session & session, bool isSnapshotMode)
 	if (_pFileSwitcherPanel)
 		_pFileSwitcherPanel->reload();
 
+	bNewTabFarRight = 0;
 	return allSessionFilesLoaded;
 }
 

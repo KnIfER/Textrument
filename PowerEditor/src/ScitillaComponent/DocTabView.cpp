@@ -34,6 +34,7 @@
 #define _WIN32_IE	0x0600
 #endif //_WIN32_IE
 
+bool bNewTabFarRight = 1;
 
 bool DocTabView::_hideTabBarStatus = false;
 
@@ -56,7 +57,7 @@ void DocTabView::addBuffer(BufferID buffer)
 
 	size_t newTabIndex;
 
-	if (1)
+	if (!bNewTabFarRight)
 		newTabIndex = getCurrentTabIndex() + 1;
 	else
 		newTabIndex = _nbItem;
