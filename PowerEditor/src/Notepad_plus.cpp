@@ -62,6 +62,8 @@ extern bool bNewTabFarRight;
 
 extern bool Terminating;
 
+extern bool ReloadingPreventBackupDeletion;
+
 int docTabIconIDs[] = {IDI_SAVED_ICON, IDI_UNSAVED_ICON, IDI_READONLY_ICON, IDI_MONITORING_ICON};
 
 ToolBarButtonUnit toolBarIcons[] = {
@@ -5231,7 +5233,9 @@ void Notepad_plus::notifyBufferChanged(Buffer * buffer, int mask)
 				bool autoUpdate = (nppGUI._fileAutoDetection & cdAutoUpdate) ? true : false;
 				if (!autoUpdate || buffer->isDirty())
 				{
+					ReloadingPreventBackupDeletion=1;
 					prepareBufferChangedDialog(buffer);
+					ReloadingPreventBackupDeletion=0;
 
 					// Then we ask user to update
 					if (doReloadOrNot(buffer->getFullPathName(), buffer->isDirty()) != IDYES)

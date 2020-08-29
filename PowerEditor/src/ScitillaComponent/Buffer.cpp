@@ -43,6 +43,8 @@ static const int LF = 0x0A;
 
 long Buffer::_recentTagCtr = 0;
 
+bool ReloadingPreventBackupDeletion = 0;
+
 namespace // anonymous
 {
 	static EolType getEOLFormatForm(const char* const data, size_t length, EolType defvalue = EolType::osdefault)
@@ -928,7 +930,7 @@ bool FileManager::backupCurrentBuffer()
 	else // buffer not dirty, sync: delete the backup file
 	{
 		generic_string backupFilePath = buffer->getBackupFileName();
-		if (not backupFilePath.empty())
+		if (!backupFilePath.empty() && !ReloadingPreventBackupDeletion)
 		{
 			// delete backup file
 			generic_string file2Delete = buffer->getBackupFileName();
