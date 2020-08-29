@@ -50,6 +50,8 @@ std::vector<HFontWrap> HFontWraps;
 
 extern bool bNewTabFarRight;
 
+bool Terminating;
+
 struct SortTaskListPred final
 {
 	DocTabView *_views[2];
@@ -1769,6 +1771,7 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 				scnN.nmhdr.hwndFrom = hwnd;
 				scnN.nmhdr.idFrom = 0;
 				_pluginsManager.notify(&scnN);
+				Terminating=1;
 
 				if (_pTrayIco)
 					_pTrayIco->doTrayIcon(REMOVE);
@@ -1809,6 +1812,9 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 					
 					if (isSnapshotMode)
 						::LockWindowUpdate(NULL);
+
+					Terminating=0;
+
 					return FALSE;
 				}
 

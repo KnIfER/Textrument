@@ -60,6 +60,8 @@ extern void tweakTabBarCMShowOpenLnk(ContextMenu& tabPopupMenu, NativeLangSpeake
 
 extern bool bNewTabFarRight;
 
+extern bool Terminating;
+
 int docTabIconIDs[] = {IDI_SAVED_ICON, IDI_UNSAVED_ICON, IDI_READONLY_ICON, IDI_MONITORING_ICON};
 
 ToolBarButtonUnit toolBarIcons[] = {
@@ -5223,7 +5225,7 @@ void Notepad_plus::notifyBufferChanged(Buffer * buffer, int mask)
 			case DOC_MODIFIED:	//ask for reloading
 			{
 				// Since it is being monitored DOC_NEEDRELOAD is going to handle the change.
-				if (buffer->isMonitoringOn())
+				if (buffer->isMonitoringOn()||Terminating&&(!buffer->isDirty()||nppGUI.isSnapshotMode()))
 					break;
 
 				bool autoUpdate = (nppGUI._fileAutoDetection & cdAutoUpdate) ? true : false;
