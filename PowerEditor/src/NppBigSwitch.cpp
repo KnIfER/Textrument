@@ -40,6 +40,7 @@
 #include "functionListPanel.h"
 #include "fileBrowser.h"
 #include "wutils.h"
+#include "Shlobj.h"
 
 using namespace std;
 
@@ -2212,6 +2213,40 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 					//TrackPopupMenu(psI->_pluginMenu, TPM_RETURNCMD, 0, 0, 0, _windowsMenu., NULL);
 					return (LRESULT)psI->_pluginMenu;
 				}
+			}
+			return (LRESULT)0;
+		}
+
+		case NPPM_OPENINTERNALEXTERNALPATH: 
+		{
+			bool ctrldown = GetKeyState(VK_CONTROL)&0x80;
+
+			TCHAR* expandedStr = (TCHAR *)lParam;
+			if(!expandedStr && wParam) {
+				int msg = wParam;
+				TCHAR tmp[MAX_PATH];
+				::SendMessage(hwnd, RUNCOMMAND_USER + msg
+					, CURRENTWORD_MAXLENGTH, reinterpret_cast<LPARAM>(tmp));
+				expandedStr = tmp;
+			}
+
+			if(!ctrldown) {
+				CoInitialize(NULL);
+
+				ITEMIDLIST* pidl = ILCreateFromPath(expandedStr);
+				if(pidl) {
+					SHOpenFolderAndSelectItems(pidl,0,0,0); 
+				}  else {
+					ctrldown=1;
+				}
+				CoUninitialize();
+			}
+
+			if(ctrldown) {
+				wstring pathExec = _T("explorer /select,\"")
+					+wstring(expandedStr)+wstring(_T("\""));
+				Command cmd(pathExec);
+				cmd.run(_pPublicInterface->getHSelf());
 			}
 			return (LRESULT)0;
 		}

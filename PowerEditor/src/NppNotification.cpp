@@ -527,9 +527,9 @@ BOOL Notepad_plus::notify(SCNotification *notification)
 				itemUnitArray.push_back(MenuItemUnit(IDM_FILE_RENAME, TEXT("Rename")));
 				itemUnitArray.push_back(MenuItemUnit(IDM_FILE_DELETE, TEXT("Move to Recycle Bin")));
 				itemUnitArray.push_back(MenuItemUnit(IDM_FILE_RELOAD, TEXT("Reload")));
-				itemUnitArray.push_back(MenuItemUnit(IDM_FILE_PRINT, TEXT("Print")));
+				//itemUnitArray.push_back(MenuItemUnit(IDM_FILE_PRINT, TEXT("Print")));
 				itemUnitArray.push_back(MenuItemUnit(0, NULL));
-				itemUnitArray.push_back(MenuItemUnit(IDM_FILE_OPEN_FOLDER, TEXT("Open Containing Folder in Explorer")));
+				itemUnitArray.push_back(MenuItemUnit(IDM_FILE_OPEN_FOLDER, TEXT("Open Containing Folder")));
 				itemUnitArray.push_back(MenuItemUnit(IDM_FILE_OPEN_CMD, TEXT("Open Containing Folder in cmd")));
 				itemUnitArray.push_back(MenuItemUnit(0, NULL));
 				itemUnitArray.push_back(MenuItemUnit(IDM_FILE_OPEN_DEFAULT_VIEWER, TEXT("Open in Default Viewer")));
@@ -537,9 +537,9 @@ BOOL Notepad_plus::notify(SCNotification *notification)
 				itemUnitArray.push_back(MenuItemUnit(IDM_EDIT_SETREADONLY,   TEXT("Read-Only")));
 				itemUnitArray.push_back(MenuItemUnit(IDM_EDIT_CLEARREADONLY, TEXT("Clear Read-Only Flag")));
 				itemUnitArray.push_back(MenuItemUnit(0, NULL));
-				itemUnitArray.push_back(MenuItemUnit(IDM_EDIT_FULLPATHTOCLIP,   TEXT("Full File Path to Clipboard")));
 				itemUnitArray.push_back(MenuItemUnit(IDM_EDIT_FILENAMETOCLIP,   TEXT("Filename to Clipboard")));
-				itemUnitArray.push_back(MenuItemUnit(IDM_EDIT_CURRENTDIRTOCLIP, TEXT("Current Dir. Path to Clipboard")));
+				itemUnitArray.push_back(MenuItemUnit(IDM_EDIT_CURRENTDIRTOCLIP, TEXT("File Dir path to Clipboard")));
+				itemUnitArray.push_back(MenuItemUnit(IDM_EDIT_FULLPATHTOCLIP,   TEXT("Full File Path to Clipboard")));
 				itemUnitArray.push_back(MenuItemUnit(0, NULL));
 				itemUnitArray.push_back(MenuItemUnit(IDM_VIEW_GOTO_ANOTHER_VIEW, TEXT("Move to Other View")));
 				itemUnitArray.push_back(MenuItemUnit(IDM_VIEW_CLONE_TO_ANOTHER_VIEW, TEXT("Clone to Other View")));

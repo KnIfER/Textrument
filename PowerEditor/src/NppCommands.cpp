@@ -41,6 +41,7 @@
 #include "verifySignedfile.h"
 #include "md5.h"
 #include "sha-256.h"
+#include "Shlobj.h"
 
 using namespace std;
 
@@ -83,8 +84,8 @@ void Notepad_plus::command(int id)
 
 		case IDM_FILE_OPEN_FOLDER:
 		{
-			Command cmd(TEXT("explorer /select,\"$(FULL_CURRENT_PATH)\""));
-			cmd.run(_pPublicInterface->getHSelf());
+			::SendMessage(_pPublicInterface->getHSelf(), NPPM_OPENINTERNALEXTERNALPATH
+				, FULL_CURRENT_PATH, 0);
 		}
 		break;
 
