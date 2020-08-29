@@ -33,6 +33,7 @@
 const TCHAR Notepad_plus_Window::_className[32] = TEXT("Notepad++");
 HWND Notepad_plus_Window::gNppHWND = NULL;
 
+bool bSupressPrompt;
 
 
 namespace // anonymous
@@ -167,6 +168,8 @@ void Notepad_plus_Window::init(HINSTANCE hInst, HWND parent, const TCHAR *cmdLin
 
 	if (cmdLineParams->_alwaysOnTop)
 		::SendMessage(_hSelf, WM_COMMAND, IDM_VIEW_ALWAYSONTOP, 0);
+
+	bSupressPrompt=1;
 
 	nppGUI._isCmdlineNosessionActivated = cmdLineParams->_isNoSession;
 	if (nppGUI._rememberLastSession && !cmdLineParams->_isNoSession)
@@ -334,6 +337,8 @@ void Notepad_plus_Window::init(HINSTANCE hInst, HWND parent, const TCHAR *cmdLin
 
 	if (nppParams.doPrintAndExit())
 		::SendMessage(_hSelf, NPPM_INTERNAL_PRNTANDQUIT, 0, 0);
+
+	bSupressPrompt=0;
 }
 
 

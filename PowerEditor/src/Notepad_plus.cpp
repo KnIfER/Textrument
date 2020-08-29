@@ -64,6 +64,8 @@ extern bool Terminating;
 
 extern bool ReloadingPreventBackupDeletion;
 
+extern bool bSupressPrompt;
+
 int docTabIconIDs[] = {IDI_SAVED_ICON, IDI_UNSAVED_ICON, IDI_READONLY_ICON, IDI_MONITORING_ICON};
 
 ToolBarButtonUnit toolBarIcons[] = {
@@ -5230,6 +5232,10 @@ void Notepad_plus::notifyBufferChanged(Buffer * buffer, int mask)
 				if (buffer->isMonitoringOn()||Terminating&&(!buffer->isDirty()||nppGUI.isSnapshotMode()))
 					break;
 
+				if(bSupressPrompt) {
+					return;
+				}
+				
 				bool autoUpdate = (nppGUI._fileAutoDetection & cdAutoUpdate) ? true : false;
 				if (!autoUpdate || buffer->isDirty())
 				{

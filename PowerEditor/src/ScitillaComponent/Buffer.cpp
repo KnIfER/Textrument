@@ -45,6 +45,8 @@ long Buffer::_recentTagCtr = 0;
 
 bool ReloadingPreventBackupDeletion = 0;
 
+extern bool bSupressPrompt;
+
 namespace // anonymous
 {
 	static EolType getEOLFormatForm(const char* const data, size_t length, EolType defvalue = EolType::osdefault)
@@ -268,6 +270,9 @@ bool Buffer::checkFileState() // returns true if the status has been changed (it
 	}
 	else if (GetFileAttributesEx(_fullPathName.c_str(), GetFileExInfoStandard, &attributes) != 0)
 	{
+		if(bSupressPrompt) {
+			return true;
+		}
 		int mask = 0;	//status always 'changes', even if from modified to modified
 		bool isFileReadOnly = attributes.dwFileAttributes & FILE_ATTRIBUTE_READONLY;
 		if (isFileReadOnly != _isFileReadOnly)
