@@ -42,7 +42,7 @@ void tweakTabBarCMShowOpenLnk(ContextMenu& tabPopupMenu, NativeLangSpeaker& nati
 	if (tabPopupMenu.flag!=showOpenLnk) {
 		tabPopupMenu.flag=showOpenLnk;
 		if(showOpenLnk) {
-			InsertMenu( tabPopupMenu.getMenuHandle(), 13, MF_BYPOSITION,  IDM_FILE_OPEN_LINK, TEXT("Open Linked File"));
+			InsertMenu( tabPopupMenu.getMenuHandle(), 13, MF_BYPOSITION,  IDM_FILE_OPEN_LINK, TEXT("Open Linked File / Directory"));
 			nativeLangSpeaker.changeLangTabContextMenu(tabPopupMenu.getMenuHandle(), 23);
 		} else {
 			RemoveMenu(tabPopupMenu.getMenuHandle(), IDM_FILE_OPEN_LINK, MF_BYCOMMAND);
@@ -566,15 +566,6 @@ BOOL Notepad_plus::notify(SCNotification *notification)
 			int fullpathlen = lstrlen(fullpath);
 			bool isLinkFile = !lstrcmp(fullpath+fullpathlen-4, TEXT(".lnk"));
 			tweakTabBarCMShowOpenLnk(_tabPopupMenu, _nativeLangSpeaker, isLinkFile);
-			//if (_tabPopupMenu.flag!=isLinkFile) {
-			//	_tabPopupMenu.flag=isLinkFile;
-			//	if(isLinkFile) {
-			//		InsertMenu( _tabPopupMenu.getMenuHandle(), 13, MF_BYPOSITION,  IDM_FILE_OPEN_LINK, TEXT("Open Linked File"));
-			//		_nativeLangSpeaker.changeLangTabContextMenu(_tabPopupMenu.getMenuHandle(), 23);
-			//	} else {
-			//		RemoveMenu(_tabPopupMenu.getMenuHandle(), IDM_FILE_OPEN_LINK, MF_BYCOMMAND);
-			//	}
-			//}
 
 			bool isEnable = ((::GetMenuState(_mainMenuHandle, IDM_FILE_SAVE, MF_BYCOMMAND)&MF_DISABLED) == 0);
 			_tabPopupMenu.enableItem(IDM_FILE_SAVE, isEnable);
