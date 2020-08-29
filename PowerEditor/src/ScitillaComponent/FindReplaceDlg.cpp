@@ -2127,6 +2127,24 @@ int FindReplaceDlg::processRange(ProcessOperation op, FindReplaceInfo & findRepl
 				auto lineNumber = pEditView->execute(SCI_LINEFROMPOSITION, targetStart);
 				int lend = static_cast<int32_t>(pEditView->execute(SCI_GETLINEENDPOSITION, lineNumber));
 				int lstart = static_cast<int32_t>(pEditView->execute(SCI_POSITIONFROMLINE, lineNumber));
+				
+				int tLen = targetEnd - targetStart;
+
+				int TruncateLimit = 108;
+
+				if(_pFinder->_longLinesAreWrapped) {
+					TruncateLimit=512;
+					if(tLen>800) TruncateLimit=800;
+					if (targetStart > TruncateLimit + lstart) {
+						lstart = targetStart-TruncateLimit;
+					}
+				} else {
+					if (targetStart > TruncateLimit + lstart) {
+						lstart = targetStart-TruncateLimit/2;
+					}
+				}
+
+
 				int nbChar = lend - lstart;
 
 				// use the static buffer
