@@ -52,7 +52,7 @@ public:
     NativeLangSpeaker():_nativeLangA(NULL), _nativeLangEncoding(CP_ACP), _isRTL(false), _fileName(NULL){};
     void init(TiXmlDocumentA *nativeLangDocRootA, bool loadIfEnglish = false);
 	void changeConfigLang(HWND hDlg);
-	void changeLangTabContextMenu(HMENU hCM);
+	void changeLangTabContextMenu(HMENU hCM, int CMIDToChange);
 	TiXmlNodeA * searchDlgNode(TiXmlNodeA *node, const char *dlgTagName);
 	bool changeDlgLang(HWND hDlg, const char *dlgTagName, char *title = NULL, size_t titleMaxSize = 0);
 	void changeLangTabDrapContextMenu(HMENU hCM);

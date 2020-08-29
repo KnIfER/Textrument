@@ -379,9 +379,9 @@ static const int tabContextMenuItemPos[] =
     10,  // 4 : Print
     24,  // 5 : Move to Other View
     25,  // 6 : Clone to Other View
+    22,  // 9 : Current Dir. Path to Clipboard
     20,  // 7 : Full File Path to Clipboard
     21,  // 8 : Filename to Clipboard
-    22,  // 9 : Current Dir. Path to Clipboard
     7,   // 10: Rename
     8,   // 11: Move to Recycle Bin
     17,  // 12: Read-Only
@@ -395,11 +395,12 @@ static const int tabContextMenuItemPos[] =
     13,  // 20: Open Containing Folder in cmd
     15,  // 21: Open in Default Viewer
     4,   // 22: Close ALL Unchanged
+    14,   // 23: Open Linked File
     -1   //-------End
 };
 
 
-void NativeLangSpeaker::changeLangTabContextMenu(HMENU hCM)
+void NativeLangSpeaker::changeLangTabContextMenu(HMENU hCM, int CMIDToChange)
 {
 	if (nullptr != _nativeLangA)
 	{
@@ -412,6 +413,8 @@ void NativeLangSpeaker::changeLangTabContextMenu(HMENU hCM)
 				WcharMbcsConvertor& wmc = WcharMbcsConvertor::getInstance();
 				int nbCMItems = sizeof(tabContextMenuItemPos)/sizeof(int);
 
+				if(!CMIDToChange) nbCMItems--;
+
 				for (TiXmlNodeA *childNode = tabBarMenu->FirstChildElement("Item");
 					childNode ;
 					childNode = childNode->NextSibling("Item") )
@@ -421,14 +424,20 @@ void NativeLangSpeaker::changeLangTabContextMenu(HMENU hCM)
 					const char *indexStr = element->Attribute("CMID", &index);
 					if (!indexStr || (index < 0 || index >= nbCMItems-1))
 						continue;
-
-					int pos = tabContextMenuItemPos[index];
-					const char *pName = element->Attribute("name");
-					if (pName)
-					{
-						const wchar_t *pNameW = wmc.char2wchar(pName, _nativeLangEncoding);
-						int cmdID = ::GetMenuItemID(hCM, pos);
-						::ModifyMenu(hCM, pos, MF_BYPOSITION, cmdID, pNameW);
+					if(!CMIDToChange || CMIDToChange==index) {
+						int pos = tabContextMenuItemPos[index];
+						if(pos==10) {
+							continue;
+						} else if(pos>10){
+							pos--;
+						}
+						const char *pName = element->Attribute("name");
+						if (pName)
+						{
+							const wchar_t *pNameW = wmc.char2wchar(pName, _nativeLangEncoding);
+							int cmdID = ::GetMenuItemID(hCM, pos);
+							::ModifyMenu(hCM, pos, MF_BYPOSITION, cmdID, pNameW);
+						}
 					}
 				}
 			}

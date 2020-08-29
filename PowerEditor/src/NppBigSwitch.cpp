@@ -688,6 +688,9 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 			return TRUE;
 		}
 
+		case NPPM_GETRAWFULLCURRENTPATH:
+			return (LRESULT)_pEditView->getCurrentBuffer()->getFullPathName();
+
 		case NPPM_GETFULLCURRENTPATH:
 		case NPPM_GETCURRENTDIRECTORY:
 		case NPPM_GETFILENAME:

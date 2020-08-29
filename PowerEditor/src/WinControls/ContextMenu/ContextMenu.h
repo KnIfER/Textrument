@@ -46,6 +46,7 @@ class ContextMenu final
 {
 public:
 	~ContextMenu();
+	int flag = 0;
 
 	void create(HWND hParent, const std::vector<MenuItemUnit> & menuItemArray, const HMENU mainMenuHandle = NULL);
 	bool isCreated() const {return _hMenu != NULL;}

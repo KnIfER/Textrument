@@ -56,6 +56,8 @@ enum tb_stat {tb_saved, tb_unsaved, tb_ro};
 #define DIR_LEFT true
 #define DIR_RIGHT false
 
+extern void tweakTabBarCMShowOpenLnk(ContextMenu& tabPopupMenu, NativeLangSpeaker& nativeLangSpeaker, bool showOpenLnk);
+
 int docTabIconIDs[] = {IDI_SAVED_ICON, IDI_UNSAVED_ICON, IDI_READONLY_ICON, IDI_MONITORING_ICON};
 
 ToolBarButtonUnit toolBarIcons[] = {
@@ -5804,8 +5806,9 @@ bool Notepad_plus::reloadLang()
 
 
 	if (_tabPopupMenu.isCreated())
-	{
-		_nativeLangSpeaker.changeLangTabContextMenu(_tabPopupMenu.getMenuHandle());
+	{						
+		tweakTabBarCMShowOpenLnk(_tabPopupMenu, _nativeLangSpeaker, 0);
+		_nativeLangSpeaker.changeLangTabContextMenu(_tabPopupMenu.getMenuHandle(), 0);
 	}
 	if (_tabPopupDropMenu.isCreated())
 	{

@@ -282,9 +282,9 @@ BEGIN
         MENUITEM SEPARATOR
         POPUP "Copy to Clipboard"
         BEGIN
+                MENUITEM "Filename to Clipboard",          IDM_EDIT_FILENAMETOCLIP
+                MENUITEM "Current Dir Path to Clipboard",         IDM_EDIT_CURRENTDIRTOCLIP
                 MENUITEM "Current Full File path to Clipboard",    IDM_EDIT_FULLPATHTOCLIP
-                MENUITEM "Current Filename to Clipboard",          IDM_EDIT_FILENAMETOCLIP
-                MENUITEM "Current Dir. Path to Clipboard",         IDM_EDIT_CURRENTDIRTOCLIP
         END
         POPUP "Indent"
         BEGIN

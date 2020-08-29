@@ -64,7 +64,47 @@ void Notepad_plus::macroPlayback(Macro macro)
 	_playingBackMacro = false;
 }
 
+TCHAR* resolveLinkFile(HWND hwnd, TCHAR* linkFilePath)
+{
+	HRESULT hres;
+	IShellLink* psl;
+	TCHAR targetFilePath[MAX_PATH];
+	WIN32_FIND_DATA wfd;
 
+	hres = CoInitialize(NULL);
+	if (SUCCEEDED(hres))
+	{
+		hres = CoCreateInstance(CLSID_ShellLink, NULL, CLSCTX_INPROC_SERVER, IID_IShellLink, (LPVOID*)&psl);
+		if (SUCCEEDED(hres))
+		{
+			IPersistFile* ppf;
+			hres = psl->QueryInterface(IID_IPersistFile, (void**)&ppf);
+			if (SUCCEEDED(hres))
+			{
+				// Load the shortcut. 
+				hres = ppf->Load(linkFilePath, STGM_READ);
+				if (SUCCEEDED(hres))
+				{
+					// Resolve the link. 
+					hres = psl->Resolve(hwnd, 0);
+					if (SUCCEEDED(hres))
+					{
+						// Get the path to the link target. 
+						hres = psl->GetPath(targetFilePath, MAX_PATH, (WIN32_FIND_DATA*)&wfd, SLGP_SHORTPATH);
+						if (SUCCEEDED(hres))
+						{
+							return targetFilePath;
+						}
+					}
+				}
+				ppf->Release();
+			}
+			psl->Release();
+		}
+		CoUninitialize();
+	}
+	return 0;
+} 
 
 void Notepad_plus::command(int id)
 {
@@ -85,7 +125,19 @@ void Notepad_plus::command(int id)
 		case IDM_FILE_OPEN_FOLDER:
 		{
 			::SendMessage(_pPublicInterface->getHSelf(), NPPM_OPENINTERNALEXTERNALPATH
-				, FULL_CURRENT_PATH, 0);
+				, 0/*FULL_CURRENT_PATH*/, ::SendMessage(_pPublicInterface->getHSelf(), NPPM_GETRAWFULLCURRENTPATH
+					, 0, 0));
+		}
+		break;
+
+		case IDM_FILE_OPEN_LINK:
+		{
+			TCHAR* pathname = (TCHAR*)::SendMessage(_pPublicInterface->getHSelf(), NPPM_GETRAWFULLCURRENTPATH , 0, 0);
+			TCHAR* lnkTgt = resolveLinkFile(_pPublicInterface->getHSelf(), pathname);
+			if(lnkTgt) {
+				//::MessageBox(NULL, lnkTgt, TEXT(""), MB_OK);
+				::SendMessage(_pPublicInterface->getHSelf(), NPPM_DOOPEN, 0 , (LPARAM)lnkTgt);
+			}
 		}
 		break;
 
