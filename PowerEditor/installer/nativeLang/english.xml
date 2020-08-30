@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<NotepadPlus>
+<NotepadPlus>  
     <Native-Langue name="English" filename="english.xml" version="7.8.7">
         <Menu>
             <Main>
@@ -160,9 +160,9 @@
                     <Item id="42026" name="Text Direction RTL"/>
                     <Item id="42027" name="Text Direction LTR"/>
                     <Item id="42028" name="Set Read-Only"/>
-                    <Item id="42029" name="Current File Path to Clipboard"/>
-                    <Item id="42030" name="Current Filename to Clipboard"/>
-                    <Item id="42031" name="Current Dir. Path to Clipboard"/>
+                    <Item id="42029" name="Current Full File Path to Clipboard"/>
+                    <Item id="42030" name="Filename to Clipboard"/>
+                    <Item id="42031" name="Current Dir Path to Clipboard"/>
                     <Item id="42032" name="&amp;Run a Macro Multiple Times..."/>
                     <Item id="42033" name="Clear Read-Only Flag"/>
                     <Item id="42035" name="Single Line Comment"/>
@@ -343,7 +343,7 @@
                     <Item CMID="6" name="Clone to Other View"/>
                     <Item CMID="7" name="Full File Path to Clipboard"/>
                     <Item CMID="8" name="Filename to Clipboard"/>
-                    <Item CMID="9" name="Current Dir. Path to Clipboard"/>
+                    <Item CMID="9" name="File Dir Path to Clipboard"/>
                     <Item CMID="10" name="Rename"/>
                     <Item CMID="11" name="Move to Recycle Bin"/>
                     <Item CMID="12" name="Read-Only"/>
@@ -357,6 +357,7 @@
                     <Item CMID="20" name="Open Containing Folder in cmd"/>
                     <Item CMID="21" name="Open in Default Viewer"/>
                     <Item CMID="22" name="Close All Unchanged"/>
+                    <Item CMID="23" name="Open Linked File / Directory"/>
             </TabBar>
         </Menu>
 
@@ -848,6 +849,7 @@ You can define several column markers by using white space to separate the diffe
                     <Item id="6901" name="Don't fill find field in Find dialog with selected word"/>
                     <Item id="6902" name="Use monospaced font in Find dialog (Need to restart Notepad++)"/>
                     <Item id="6903" name="Find dialog remains open after search that outputs to results window"/>
+                    <Item id="6904" name="Confirm Replace All in All Opened Documents"/>
                 </Searching>
 
                 <RecentFilesHistory title="Recent Files History">

@@ -3322,6 +3322,11 @@ bool FindReplaceDlg::replaceInFilesConfirmCheck(generic_string directory, generi
 
 bool FindReplaceDlg::replaceInOpenDocsConfirmCheck(void)
 {
+	NppParameters& nppParam = NppParameters::getInstance();
+	const NppGUI& nppGui = nppParam.getNppGUI();
+	if (!nppGui._confirmReplaceInAllOpenDocs) {
+		return 1;
+	}
 	bool confirmed = false;
 
 	NativeLangSpeaker* pNativeSpeaker = (NppParameters::getInstance()).getNativeLangSpeaker();
