@@ -1139,22 +1139,47 @@ INT_PTR CALLBACK ScintillaKeyMap::run_dlgProc(UINT Message, WPARAM wParam, LPARA
 
 CommandShortcut::CommandShortcut(const Shortcut& sc, long id) :	Shortcut(sc), _id(id)
 {
-	if ( _id < IDM_EDIT) {
+	if (_id >= IDM_MACRO_STARTRECORDINGMACRO && _id <= IDM_MACRO_PLAYBACKRECORDEDMACRO
+		|| id==IDM_MACRO_RUNMULTIMACRODLG || id==IDM_MACRO_SAVECURRENTMACRO) {
+		_category = TEXT("Macro");
+		_category_path=9;
+	} else if ( _id < IDM_EDIT) {
 		_category = TEXT("File");
 		_category_path=1;
+		if(1) {
+			//_category_path|=(4l<<13);
+		}
 	} else if ( _id < IDM_SEARCH) {
 		_category = TEXT("Edit");
 		_category_path=2;
-	} else if (_id >= IDM_EDIT_AUTOCOMPLETE and _id <= IDM_EDIT_AUTOCOMPLETE_PATH) {
+	} else if (_id >= IDM_EDIT_AUTOCOMPLETE && _id <= IDM_EDIT_AUTOCOMPLETE_PATH) {
 		_category = TEXT("Edit");
 		_category_path=2;
 	} else if ( _id < IDM_VIEW) {
 		_category = TEXT("Search");
 		_category_path=3;
+		if(id>=IDM_SEARCH_MARKALLEXT1 && id<=IDM_SEARCH_UNMARKALLEXT5) { //MARK UNMARK
+			_category_path|=(((id-IDM_SEARCH_MARKALLEXT1)%2?20l:19l)<<13);
+		} else if(id>=IDM_SEARCH_GOPREVMARKER1 && id<=IDM_SEARCH_GOPREVMARKER_DEF) { // Jump Prev
+			_category_path|=(21l<<13);
+		} else if(id>=IDM_SEARCH_GONEXTMARKER1 && id<=IDM_SEARCH_GONEXTMARKER_DEF) { // Jump Next
+			_category_path|=(22l<<13);
+		}
 	} else if ( _id < IDM_FORMAT) {
 		_category = TEXT("View");
 		_category_path=4;
-	} else if ( _id >= IDM_VIEW_GOTO_ANOTHER_VIEW and _id <= IDM_VIEW_LOAD_IN_NEW_INSTANCE) {
+		if(id>IDM_VIEW_FOLD && id<IDM_VIEW_FOLD+9) { // Collapse
+			_category_path|=(19l<<13);
+		} else if(id>IDM_VIEW_UNFOLD && id<IDM_VIEW_UNFOLD+9) { // Uncollapse
+			_category_path|=(20l<<13);
+		} else if(id>=IDM_VIEW_PROJECT_PANEL_1 && id<=IDM_VIEW_PROJECT_PANEL_3) { //Project Panel
+			if(id!=IDM_VIEW_MONITORING) _category_path|=(24l<<13);
+		} else if(id>=IDM_VIEW_TAB1 && id<=IDM_VIEW_TAB_MOVEBACKWARD) { //TAB
+			if(id!=IDM_VIEW_MONITORING) _category_path|=(10l<<13);
+		} else if(id>=IDM_VIEW_IN_FIREFOX && id<=IDM_VIEW_IN_IE) { //Browser
+			_category_path|=(5l<<13);
+		} 
+	} else if ( _id >= IDM_VIEW_GOTO_ANOTHER_VIEW && _id <= IDM_VIEW_LOAD_IN_NEW_INSTANCE) {
 		_category = TEXT("View");
 		_category_path=4;
 	} else if ( _id < IDM_LANG) {
@@ -1165,13 +1190,13 @@ CommandShortcut::CommandShortcut(const Shortcut& sc, long id) :	Shortcut(sc), _i
 		_category_path=6;
 	} else if ( _id < IDM_SETTING) {
 		_category = TEXT("About");
-		_category_path=7;
+		_category_path=0;
 	} else if ( _id < IDM_TOOL) {
 		_category = TEXT("Setting");
-		_category_path=8;
+		_category_path=7;
 	} else if ( _id < IDM_EXECUTE) {
 		_category = TEXT("Tool");
-		_category_path=9;
+		_category_path=8;
 	} else {
 		_category = TEXT("Execute");
 		_category_path=10;

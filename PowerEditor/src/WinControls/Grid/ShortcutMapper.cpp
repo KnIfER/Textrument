@@ -250,8 +250,11 @@ void ShortcutMapper::fillOutBabyGrid()
 	{
 		case STATE_MENU:
 		{
+			const int itemSize = 250;
+			TCHAR itemName[itemSize+6];
 			vector<CommandShortcut> & cshortcuts = nppParam.getUserShortcuts();
 			cs_index = 1;
+			int LastNPPs=0;
 			for (size_t i = 0; i < nbItems; ++i)
 			{
 				if (isFilterValid(cshortcuts[i]))
@@ -262,16 +265,52 @@ void ShortcutMapper::fillOutBabyGrid()
 					_babygrid.setText(cs_index, 1, cshortcuts[i].getName());
 					if (cshortcuts[i].isEnabled()) //avoid empty strings for better performance
 						_babygrid.setText(cs_index, 2, cshortcuts[i].toString().c_str());
-					
 
-					const int itemSize = 256;
-					TCHAR itemName[itemSize];
-					//::GetMenuString(_notepad_plus_plus_Kore->_mainMenuHandle, cshortcuts[i].getID(), itemName, itemSize, MF_BYCOMMAND);
-					::GetMenuString(_notepad_plus_plus_Kore->_mainMenuHandle, cshortcuts[i]._category_path, itemName, itemSize, MF_BYPOSITION);
-					
-					_babygrid.setText(cs_index, 3, itemName);
+					int NPPs = cshortcuts[i]._category_path;
+					if(NPPs) {
+						if(LastNPPs!=NPPs) { // Name Parts (Menu Idx): 0x1000 0x2000 0x2000 0x2000 0x2000
+							TCHAR* nameWrtAddr = itemName;
+							int nameWrtAddrOff = 0;
+							int lastNameIdx=0;
+							auto MenuHandle = _notepad_plus_plus_Kore->_mainMenuHandle;
+							for(int i=0;i<5;i++) {
+								int namePathPart = NPPs&(i==4?0xFFF:0x1FFF);
+								if(namePathPart) {
+									if(i>0) {
+										MenuHandle = GetSubMenu(MenuHandle, lastNameIdx);
+										if(!MenuHandle) break;
+										auto PathSep = _T(" >> ");
+										lstrcpy(nameWrtAddr+nameWrtAddrOff, PathSep);
+										nameWrtAddrOff+=lstrlen(PathSep);
+									}
+									int namePathLen = ::GetMenuString(MenuHandle, lastNameIdx=namePathPart-1, 
+										nameWrtAddr+nameWrtAddrOff, itemSize-nameWrtAddrOff, MF_BYPOSITION);
 
-					//_babygrid.setText(cs_index, 3, cshortcuts[i].getCategory());
+									TCHAR* currWrtAddr = nameWrtAddr+nameWrtAddrOff;
+									for(int i=0;i<namePathLen;i++) {
+										if(currWrtAddr[i]=='(') {
+											namePathLen=i;
+											break;
+										}
+										if(currWrtAddr[i]=='&') {
+											//replace redundant '&' with zero-width space character (hex UTF-16 200b)
+											currWrtAddr[i]=0x200b;
+										}
+									}
+									nameWrtAddrOff+=namePathLen;
+									NPPs>>=13;
+								} 
+								else {
+									break;
+								}
+							}
+							itemName[nameWrtAddrOff] = '\0';
+							LastNPPs=NPPs;
+						}
+						_babygrid.setText(cs_index, 3, itemName);
+					} else {
+						_babygrid.setText(cs_index, 3, cshortcuts[i].getCategory());
+					}
 
 					if (isMarker)
 						isMarker = _babygrid.setMarker(false);
