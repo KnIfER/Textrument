@@ -199,6 +199,7 @@ public:
 	void setID(unsigned long id) { _id = id;};
 	const TCHAR * getCategory() const { return _category.c_str(); };
 
+	int _category_path;
 private :
 	unsigned long _id;
 	generic_string _category;

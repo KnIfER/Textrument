@@ -35,6 +35,7 @@ HWND Notepad_plus_Window::gNppHWND = NULL;
 
 bool bSupressPrompt;
 
+Notepad_plus* _notepad_plus_plus_Kore;
 
 namespace // anonymous
 {
@@ -69,6 +70,7 @@ namespace // anonymous
 
 void Notepad_plus_Window::init(HINSTANCE hInst, HWND parent, const TCHAR *cmdLine, CmdLineParams *cmdLineParams)
 {
+	_notepad_plus_plus_Kore = &_notepad_plus_plus_core;
 	time_t timestampBegin = 0;
 	if (cmdLineParams->_showLoadingTime)
 		timestampBegin = time(NULL);

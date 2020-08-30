@@ -32,6 +32,8 @@
 
 using namespace std;
 
+extern Notepad_plus* _notepad_plus_plus_Kore;
+
 void ShortcutMapper::initTabs()
 {
 	HWND hTab = _hTabCtrl = ::GetDlgItem(_hSelf, IDC_BABYGRID_TABBAR);
@@ -260,7 +262,17 @@ void ShortcutMapper::fillOutBabyGrid()
 					_babygrid.setText(cs_index, 1, cshortcuts[i].getName());
 					if (cshortcuts[i].isEnabled()) //avoid empty strings for better performance
 						_babygrid.setText(cs_index, 2, cshortcuts[i].toString().c_str());
-					_babygrid.setText(cs_index, 3, cshortcuts[i].getCategory());
+					
+
+					const int itemSize = 256;
+					TCHAR itemName[itemSize];
+					//::GetMenuString(_notepad_plus_plus_Kore->_mainMenuHandle, cshortcuts[i].getID(), itemName, itemSize, MF_BYCOMMAND);
+					::GetMenuString(_notepad_plus_plus_Kore->_mainMenuHandle, cshortcuts[i]._category_path, itemName, itemSize, MF_BYPOSITION);
+					
+					_babygrid.setText(cs_index, 3, itemName);
+
+					//_babygrid.setText(cs_index, 3, cshortcuts[i].getCategory());
+
 					if (isMarker)
 						isMarker = _babygrid.setMarker(false);
 					_shortcutIndex.push_back(i);

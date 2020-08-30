@@ -261,6 +261,8 @@ public:
 		return _pluginsAdminDlg.getPluginListVerStr();
 	};
 
+	WindowsMenu _windowsMenu;
+	HMENU _mainMenuHandle = NULL;
 private:
 	Notepad_plus_Window *_pPublicInterface = nullptr;
     Window *_pMainWindow = nullptr;
@@ -326,8 +328,6 @@ private:
 
 	//vector<iconLocator> _customIconVect;
 
-	WindowsMenu _windowsMenu;
-	HMENU _mainMenuHandle = NULL;
 
 	bool _sysMenuEntering = false;
 
