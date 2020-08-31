@@ -47,6 +47,12 @@ using namespace std;
 
 std::mutex command_mutex;
 
+bool isWindowMessaging;
+
+bool ClosePanelRequested;
+
+extern HWND StatusBarHWND;
+
 void Notepad_plus::macroPlayback(Macro macro)
 {
 	_playingBackMacro = true;
@@ -231,9 +237,28 @@ void Notepad_plus::command(int id)
 			break;
 
 		case IDM_FILE_CLOSE:
+		{
+			if(isWindowMessaging) {
+				bool done=0;
+				ClosePanelRequested=1;
+				auto dockContainer = DockingCont::AllDockers;
+				for (size_t i = 0, len = DockingCont::AllDockerLen; i < len ; ++i)
+				{
+					//if(i==4) continue;
+					if(dockContainer[i]->_isActive) {
+						done=1;
+						dockContainer[i]->doCloseOneTab();
+						break;
+					}
+				}
+				ClosePanelRequested=0;
+				if(done) break;
+			}
+
 			if (fileClose())
-                checkDocState();
+				checkDocState();
 			break;
+		}
 
 		case IDM_FILE_DELETE:
 			if (fileDelete())
@@ -746,13 +771,8 @@ void Notepad_plus::command(int id)
 		{
 			ProjectPanel** pp [] = {&_pProjectPanel_1, &_pProjectPanel_2, &_pProjectPanel_3};
 			int idx = id - IDM_VIEW_PROJECT_PANEL_1;
-			if (*pp [idx] == nullptr)
-			{
-				launchProjectPanel(id, pp [idx], idx);
-			}
-			else
-			{
-				if (not (*pp[idx])->isClosed())
+			if(ClosePanelRequested) {
+				if (! (*pp[idx])->isClosed())
 				{
 					if ((*pp[idx])->checkIfNeedSave())
 					{
@@ -764,9 +784,33 @@ void Notepad_plus::command(int id)
 						checkProjectMenuItem();
 					}
 				}
-				else
+				break;
+			}
+			if(1) {
+				launchProjectPanel(idx + IDM_VIEW_PROJECT_PANEL_1, pp [idx], idx);
+			} else {
+				if (*pp [idx] == nullptr)
 				{
 					launchProjectPanel(id, pp [idx], idx);
+				}
+				else
+				{
+					if (not (*pp[idx])->isClosed())
+					{
+						if ((*pp[idx])->checkIfNeedSave())
+						{
+							if (::IsChild((*pp[idx])->getHSelf(), ::GetFocus()))
+								::SetFocus(_pEditView->getHSelf());
+							(*pp[idx])->display(false);
+							(*pp[idx])->setClosed(true);
+							checkMenuItem(id, false);
+							checkProjectMenuItem();
+						}
+					}
+					else
+					{
+						launchProjectPanel(id, pp [idx], idx);
+					}
 				}
 			}
 		}

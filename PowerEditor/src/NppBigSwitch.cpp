@@ -50,6 +50,8 @@ std::vector<HFontWrap> HFontWraps;
 
 extern bool bNewTabFarRight;
 
+extern bool isWindowMessaging;
+
 bool Terminating;
 
 struct SortTaskListPred final
@@ -628,7 +630,9 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 			}
 			else
 			{
+				isWindowMessaging=1;
 				command(LOWORD(wParam));
+				isWindowMessaging=0;
 			}
 			return TRUE;
 		}

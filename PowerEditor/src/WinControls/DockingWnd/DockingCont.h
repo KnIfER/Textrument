@@ -53,10 +53,15 @@ enum eMousePos {
 #define CLOSEBTN_POS_LEFT	3
 #define CLOSEBTN_POS_TOP	3
 
-
 class DockingCont : public StaticDialog
 {
 public:
+	static int AllDockerLen;
+	static int AllDockerCapacity;
+	static DockingCont** AllDockers;
+	static void putDocker(DockingCont* DI);
+	static void removeDocker(DockingCont* DI);
+
 	DockingCont();
 	~DockingCont();
 
@@ -141,6 +146,9 @@ public:
 		::DestroyWindow(_hSelf);
 	};
 
+	BOOL					_isActive;
+
+	void doCloseOneTab();
 protected :
 
 	// Subclassing caption
@@ -181,9 +189,9 @@ protected :
 	bool updateCaption();
 	LPARAM NotifyParent(UINT message);
 
+
 private:
 	// handles
-	BOOL					_isActive;
 	bool					_isFloating;
 	HWND					_hCaption;
 	HWND					_hContTab;

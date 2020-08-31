@@ -64,6 +64,8 @@ extern bool Terminating;
 
 extern bool ReloadingPreventBackupDeletion;
 
+HWND StatusBarHWND;
+
 int docTabIconIDs[] = {IDI_SAVED_ICON, IDI_UNSAVED_ICON, IDI_READONLY_ICON, IDI_MONITORING_ICON};
 
 ToolBarButtonUnit toolBarIcons[] = {
@@ -381,6 +383,8 @@ LRESULT Notepad_plus::init(HWND hwnd)
 	_statusBar.setPartWidth(STATUSBAR_UNICODE_TYPE, nppParam._dpiManager.scaleX(120));
 	_statusBar.setPartWidth(STATUSBAR_TYPING_MODE, nppParam._dpiManager.scaleX(30));
     _statusBar.display(willBeShown);
+
+	StatusBarHWND = _statusBar.getHSelf();
 
     _pMainWindow = &_mainDocTab;
 

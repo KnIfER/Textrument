@@ -41,6 +41,8 @@ using namespace std;
 static HWND		hWndServer		= NULL;
 static HHOOK	hookMouse		= NULL;
 
+extern bool ClosePanelRequested;
+
 static LRESULT CALLBACK hookProcMouse(int nCode, WPARAM wParam, LPARAM lParam)
 {
 	if (nCode >= 0)
@@ -65,6 +67,14 @@ static LRESULT CALLBACK hookProcMouse(int nCode, WPARAM wParam, LPARAM lParam)
 	return ::CallNextHookEx(hookMouse, nCode, wParam, lParam);
 }
 
+
+int DockingCont::AllDockerLen=0;
+int DockingCont::AllDockerCapacity=2;
+DockingCont** DockingCont::AllDockers=new DockingCont*[8]; // 八块腹肌
+
+extern HWND StatusBarHWND;
+
+extern bool Terminating;
 
 DockingCont::DockingCont()
 {
@@ -93,10 +103,48 @@ DockingCont::DockingCont()
 
 	_closeButtonWidth = NppParameters::getInstance()._dpiManager.scaleX(12); // bitmap image is 12x12
 	_closeButtonHeight = NppParameters::getInstance()._dpiManager.scaleY(12);
+
+	putDocker(this);
+}
+
+void DockingCont::putDocker(DockingCont* item) {
+	if(!AllDockers) { // sanity check
+		AllDockers = new DockingCont*[AllDockerCapacity=8];
+		AllDockerLen=0;
+	}
+	if(AllDockerLen+1>AllDockerCapacity) {
+		int newCap = 2*(AllDockerLen+1);
+		DockingCont** buff = new DockingCont*[newCap];
+		memset(buff, 0, newCap*sizeof(DockingCont*));
+		memcpy(buff, AllDockers, AllDockerLen*sizeof(DockingCont*));
+		AllDockers = buff;
+		AllDockerCapacity = newCap;
+	}
+	AllDockers[AllDockerLen++]=item;
+
+	TCHAR buffer[100]={0};
+	wsprintf(buffer,TEXT("dockercc=%d"), AllDockerLen);
+	SetWindowText(StatusBarHWND, buffer);
+}
+
+void DockingCont::removeDocker(DockingCont* item){
+	for(int i=0; i<AllDockerLen; i++) {
+		if(AllDockers[i]==item) {
+			memcpy(AllDockers[i], AllDockers[i+1], (AllDockerLen-i)*sizeof(DockingCont*));
+			AllDockers[AllDockerLen--]=0;
+			break;
+		}
+	}
+	TCHAR buffer[100]={0};
+	wsprintf(buffer,TEXT("docker--=%d"), AllDockerLen);
+	SetWindowText(StatusBarHWND, buffer);
 }
 
 DockingCont::~DockingCont()
 {
+	if(!Terminating) {
+		removeDocker(this);
+	}
 	::DeleteObject(_hFont);
 }
 
@@ -320,6 +368,7 @@ LRESULT DockingCont::runProcCaption(HWND hwnd, UINT Message, WPARAM wParam, LPAR
 			_isMouseDown = FALSE;
 			if (_isMouseClose == TRUE)
 			{
+				ClosePanelRequested=1;
 				// end hooking
 				::UnhookWindowsHookEx(hookMouse);
 
@@ -329,6 +378,7 @@ LRESULT DockingCont::runProcCaption(HWND hwnd, UINT Message, WPARAM wParam, LPAR
 				}
 				_isMouseClose	= FALSE;
 				_isMouseOver	= FALSE;
+				ClosePanelRequested=0;
 			}
 			
 			focusClient();
@@ -1131,6 +1181,34 @@ void DockingCont::onSize()
 			::SendMessage(((tTbData*)tcItem.lParam)->hClient, WM_NOTIFY, nmhdr.idFrom, reinterpret_cast<LPARAM>(&nmhdr));
 			
 		}
+	}
+}
+
+void DockingCont::doCloseOneTab()
+{
+	int	iItemCnt = static_cast<int32_t>(::SendMessage(_hContTab, TCM_GETITEMCOUNT, 0, 0));
+	int iItemCur = getActiveTb();
+
+	TCITEM		tcItem		= {0};
+
+	tcItem.mask	= TCIF_PARAM;
+	::SendMessage(_hContTab, TCM_GETITEM, iItemCur, reinterpret_cast<LPARAM>(&tcItem));
+	if (tcItem.lParam)
+	{
+		// notify child windows
+		if (NotifyParent(DMM_CLOSE) == 0)
+		{
+			// delete tab
+			hideToolbar((tTbData*)tcItem.lParam);
+		}
+	}
+
+	iItemCnt = static_cast<int32_t>(::SendMessage(_hContTab, TCM_GETITEMCOUNT, 0, 0));
+	if (iItemCnt == 0)
+	{
+		// hide dialog first
+		this->doDialog(false);
+		::SendMessage(_hParent, WM_SIZE, 0, 0);
 	}
 }
 

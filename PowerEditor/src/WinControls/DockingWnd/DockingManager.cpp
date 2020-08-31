@@ -38,12 +38,14 @@ using namespace std;
 
 BOOL DockingManager::_isRegistered = FALSE;
 
+extern HWND StatusBarHWND;
+
 //Window of event handling DockingManager (can only be one)
 static	HWND			hWndServer	= NULL;
 //Next hook in line
 static	HHOOK			gWinCallHook = NULL;
 LRESULT CALLBACK focusWndProc(int nCode, WPARAM wParam, LPARAM lParam);
-
+int cccc;
 // Callback function that handles messages (to test focus)
 LRESULT CALLBACK focusWndProc(int nCode, WPARAM wParam, LPARAM lParam)
 {
@@ -56,16 +58,16 @@ LRESULT CALLBACK focusWndProc(int nCode, WPARAM wParam, LPARAM lParam)
 			CWPSTRUCT * pCwp = (CWPSTRUCT*)lParam;
 			if (pCwp->message == WM_KILLFOCUS)
 			{
-				for (int i = 0; i < DOCKCONT_MAX; ++i)
+				for (int i = 0; i < DockingCont::AllDockerLen; ++i) //DOCKCONT_MAX
 				{
-					vcontainer[i]->SetActive(FALSE);	//deactivate all containers
+					DockingCont::AllDockers[i]->SetActive(FALSE);
 				}
 			}
 			else if (pCwp->message == WM_SETFOCUS)
 			{
-				for (int i = 0; i < DOCKCONT_MAX; ++i)
+				for (int i = 0; i < DockingCont::AllDockerLen; ++i)
 				{
-					vcontainer[i]->SetActive(IsChild(vcontainer[i]->getHSelf(), pCwp->hwnd));	//activate the container that contains the window with focus, this can be none
+					DockingCont::AllDockers[i]->SetActive(IsChild(DockingCont::AllDockers[i]->getHSelf(), pCwp->hwnd));	//activate the container that contains the window with focus, this can be none
 				}
 			}
 		}
