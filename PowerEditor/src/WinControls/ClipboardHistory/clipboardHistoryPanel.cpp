@@ -29,6 +29,11 @@
 #include "clipboardHistoryPanel.h"
 #include "ScintillaEditView.h"
 #include "clipboardFormats.h"
+#include "Notepad_plus.h"
+
+
+extern Notepad_plus *nppApp;
+
 
 
 #define CLIPBOARD_TEXTFORMAT CF_UNICODETEXT
@@ -232,6 +237,11 @@ INT_PTR CALLBACK ClipboardHistoryPanel::run_dlgProc(UINT message, WPARAM wParam,
 		{
 			switch (LOWORD(wParam))
             {
+				case DMN_CLOSE:
+				{
+					setClosed(1);
+					return TRUE;
+				}
                 case IDC_LIST_CLIPBOARD:
 				{
 					if (HIWORD(wParam) == LBN_DBLCLK)
@@ -300,3 +310,8 @@ INT_PTR CALLBACK ClipboardHistoryPanel::run_dlgProc(UINT message, WPARAM wParam,
 	return DockingDlgInterface::run_dlgProc(message, wParam, lParam);
 }
 
+void ClipboardHistoryPanel::setClosed(bool toClose)
+{
+	DockingDlgInterface::setClosed(toClose);
+	nppApp->checkMenuItem(IDM_EDIT_CLIPBOARDHISTORY_PANEL, !toClose);
+}

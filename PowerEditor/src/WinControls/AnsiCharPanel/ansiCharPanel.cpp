@@ -48,7 +48,7 @@ INT_PTR CALLBACK AnsiCharPanel::run_dlgProc(UINT message, WPARAM wParam, LPARAM 
     {
         case WM_INITDIALOG :
         {
-			NppParameters& nppParam = NppParameters::getInstance();
+			NppParameters& nppParam = *nppParms;
 			NativeLangSpeaker *pNativeSpeaker = nppParam.getNativeLangSpeaker();
 			generic_string valStr = pNativeSpeaker->getAttrNameStr(TEXT("Value"), "AsciiInsertion", "ColumnVal");
 			generic_string hexStr = pNativeSpeaker->getAttrNameStr(TEXT("Hex"), "AsciiInsertion", "ColumnHex");

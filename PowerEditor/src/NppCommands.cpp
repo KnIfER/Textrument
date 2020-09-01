@@ -32,6 +32,7 @@
 #include "ShortcutMapper.h"
 #include "TaskListDlg.h"
 #include "clipboardFormats.h"
+#include "clipboardHistoryPanel.h"
 #include "ansiCharPanel.h"
 #include "VerticalFileSwitcher.h"
 #include "documentMap.h"
@@ -768,7 +769,16 @@ void Notepad_plus::command(int id)
 
 		case IDM_EDIT_CLIPBOARDHISTORY_PANEL:
 		{
-			launchClipboardHistoryPanel();
+			bool action = !ClosePanelRequested
+				&&(nppUIParms->_swiggle||_pClipboardHistoryPanel == nullptr||_pClipboardHistoryPanel->isClosed());
+			if(action) {
+				launchClipboardHistoryPanel();
+			} else {
+				_pClipboardHistoryPanel->display(false);
+			}
+			if(_pClipboardHistoryPanel) {
+				_pClipboardHistoryPanel->setClosed(!action);
+			}
 		}
 		break;
 

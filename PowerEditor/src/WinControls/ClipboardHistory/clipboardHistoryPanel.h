@@ -73,6 +73,8 @@ public:
         _hParent = parent2set;
     };
 
+	virtual void setClosed(bool toClose);
+
 	ClipboardData getClipboadData();
 	void addToClipboadHistory(ClipboardData cbd);
 	int getClipboardDataIndex(ClipboardData cbd);
