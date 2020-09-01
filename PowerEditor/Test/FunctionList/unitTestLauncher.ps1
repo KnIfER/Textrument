@@ -1,46 +1,56 @@
-..\..\bin\notepad++.exe -export=functionList -lasm .\asm\unitTest | Out-Null
-..\..\bin\notepad++.exe -export=functionList -lautoit .\autoit\unitTest | Out-Null
-..\..\bin\notepad++.exe -export=functionList -lbash .\bash\unitTest | Out-Null
-..\..\bin\notepad++.exe -export=functionList -lbatch .\batch\unitTest | Out-Null
-..\..\bin\notepad++.exe -export=functionList -lc .\c\unitTest | Out-Null
-..\..\bin\notepad++.exe -export=functionList -lcpp .\cpp\unitTest | Out-Null
-..\..\bin\notepad++.exe -export=functionList -lcs .\cs\unitTest | Out-Null
-..\..\bin\notepad++.exe -export=functionList -lini .\ini\unitTest | Out-Null
-..\..\bin\notepad++.exe -export=functionList -linno .\inno\unitTest | Out-Null
-..\..\bin\notepad++.exe -export=functionList -ljava .\java\unitTest | Out-Null
-..\..\bin\notepad++.exe -export=functionList -ljavascript .\javascript\unitTest | Out-Null
-..\..\bin\notepad++.exe -export=functionList -lnsis .\nsis\unitTest | Out-Null
-..\..\bin\notepad++.exe -export=functionList -lperl .\perl\unitTest | Out-Null
-..\..\bin\notepad++.exe -export=functionList -lphp .\php\unitTest | Out-Null
-..\..\bin\notepad++.exe -export=functionList -lpowershell .\powershell\unitTest | Out-Null
-..\..\bin\notepad++.exe -export=functionList -lpython .\python\unitTest | Out-Null
-..\..\bin\notepad++.exe -export=functionList -lruby .\ruby\unitTest | Out-Null
-..\..\bin\notepad++.exe -export=functionList -lxml .\xml\unitTest | Out-Null
-
-
 $testRoot = ".\"
 
 Get-ChildItem $testRoot -Filter *.* | 
 Foreach-Object {
     if ((Get-Item $testRoot$_) -is [System.IO.DirectoryInfo])
-    {        
-        $expectedRes = Get-Content $testRoot$_\unitTest.expected.result
-        $generatedRes = Get-Content $testRoot$_\unitTest.result.json
-        
-        if ($generatedRes -eq $expectedRes)
-        {
-           Remove-Item $testRoot$_\unitTest.result.json
-           ""
-           "OK"
-        }
+    {
+        $dirName = (Get-Item $testRoot$_).Name
+		$langName = $dirName
+        $result = &.\unitTest.ps1 $dirName $langName
+		
+        if ($result -eq 0)
+		{
+			"$dirName ... OK"
+		}
+        elseif ($result -eq 1)
+		{		
+			"$dirName ... unitTest file not found. Test skipt."
+		}
         else
         {
-            "$generatedRes"
+			"$dirName ... KO"
+			""
+			"There are some problems in your functionList.xml"
             exit -1
         }
-        
+		
+		# Check all Sub-directories for other unit-tests
+		Get-ChildItem $testRoot$dirName -Filter *.* | 
+		Foreach-Object {
+		    if ((Get-Item $testRoot$dirName\$_) -is [System.IO.DirectoryInfo])
+			{
+				$subDirName = (Get-Item $testRoot$dirName\$_).Name
+				$subResult = &.\unitTest.ps1 $langName\$subDirName $langName
+				
+				if ($subResult -eq 0)
+				{
+					"$dirName-$subDirName ... OK"
+				}
+				elseif ($subResult -eq 1)
+				{		
+					"$dirName-$subDirName ... unitTest file not found. Test skipt."
+				}
+				else
+				{
+					"$dirName-$subDirName ... KO"
+					""
+					"There are some problems in your functionList.xml"
+					exit -1
+				}
+			}
+		}
     }
 }
-
+""
+"All tests are passed."
 exit 0
-

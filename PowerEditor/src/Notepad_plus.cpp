@@ -6488,6 +6488,7 @@ static const QuoteParams quotes[] =
 	{TEXT("Anonymous #135"), QuoteParams::rapid, true, SC_CP_UTF8, L_TEXT, TEXT("Theory is when you know something, but it doesn't work.\nPractice is when something works, but you don't know why.\nProgrammers combine theory and practice: nothing works and they don't know why.")},
 	{TEXT("Anonymous #136"), QuoteParams::rapid, true, SC_CP_UTF8, L_TEXT, TEXT("Documentation is like sex:\nwhen it's good, it's very, very good;\nwhen it's bad, it's better than nothing.")},
 	{TEXT("Anonymous #137"), QuoteParams::slow, false, SC_CP_UTF8, L_TEXT, TEXT("Home is where you poop most comfortably.")},
+	{TEXT("A developer"), QuoteParams::slow, false, SC_CP_UTF8, L_TEXT, TEXT("No hugs & kisses.\nOnly bugs & fixes.") },
 	{TEXT("Anonymous #138"), QuoteParams::rapid, true, SC_CP_UTF8, L_TEXT, TEXT("Laptop Speakers problem: too quiet for music, too loud for porn.")},
 	{TEXT("Anonymous #139"), QuoteParams::rapid, true, SC_CP_UTF8, L_TEXT, TEXT("Chinese food to go: $16\nGas to go get the food: $2\nDrove home just to realize they forgot one of your containers: RICELESS")},
 	{TEXT("Anonymous #140"), QuoteParams::rapid, true, SC_CP_UTF8, L_TEXT, TEXT("MS Windows is like religion to most people: they are born into it, accept it as default, never consider switching to another.")},
