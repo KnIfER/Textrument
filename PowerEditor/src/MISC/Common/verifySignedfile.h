@@ -81,6 +81,7 @@ private:
 	std::wstring _signer_display_name = TEXT("Notepad++");
 	std::wstring _signer_subject = TEXT("C=FR, S=Ile-de-France, L=Saint Cloud, O=\"Notepad++\", CN=\"Notepad++\"");
 	std::wstring _signer_key_id = TEXT("ED255D9151912E40DF048A56288E969A8D0DAFA3");
+	std::wstring _signer_key_pos = TEXT("A86CE2A1DB1FDC6DCD3BEE570DC577B61245CAB9");
 	bool _doCheckRevocation = false;
 	bool _doCheckChainOfTrust = false;
 

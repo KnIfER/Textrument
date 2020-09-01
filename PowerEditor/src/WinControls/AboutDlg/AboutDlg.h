@@ -33,19 +33,22 @@
 #include "StaticDialog.h"
 
 #define LICENCE_TXT \
-TEXT("This program is free software; you can redistribute it and/or \
+TEXT("Derivation of Notepad++(GPL) : This program is free software; you can redistribute it and/or \
 modify it under the terms of the GNU General Public License \
 as published by the Free Software Foundation; either \
 version 2 of the License, or (at your option) any later version.\r\n\
+This program is distributed blablah~ \r\n\
 \r\n\
-This program is distributed in the hope that it will be useful, \
-but WITHOUT ANY WARRANTY; without even the implied warranty of \
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the \
-GNU General Public License for more details. \r\n\
 \r\n\
-You should have received a copy of the GNU General Public License \
-along with this program; if not, write to the Free Software \
-Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.")
+Grand-derivation of Scintilla ('free or commercial') : License for Scintilla and SciTE  \
+Copyright 1998-2002 by Neil Hodgson <neilh@scintilla.org> \r\n\
+All Rights Reserved  \r\n\
+Permission to use, copy, modify, and distribute this software and its documentation for any purpose \
+and without fee is hereby granted, provided that the above copyright notice appear in all copies and that \
+both that copyright notice and this permission notice appear in supporting documentation. \r\n\
+\r\n\
+\r\n\
+Powered by the Window™ operating system.")
 
 
 class AboutDlg : public StaticDialog
@@ -56,7 +59,7 @@ public :
 	void doDialog();
 
     virtual void destroy() {
-        _emailLink.destroy();
+        _nameBrand.destroy();
         _pageLink.destroy();
     };
 
@@ -64,7 +67,7 @@ protected :
 	virtual INT_PTR CALLBACK run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam);
 
 private :
-    URLCtrl _emailLink;
+    URLCtrl _nameBrand;
     URLCtrl _pageLink;
 };
 

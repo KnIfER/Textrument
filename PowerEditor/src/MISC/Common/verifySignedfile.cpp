@@ -208,7 +208,9 @@ bool SecurityGard::verifySignedLibrary(const std::wstring& filepath, NppModule m
 	DWORD dwSignerInfo = 0L;
 	bool status = true;
 
+
 	try {
+
 		BOOL result = ::CryptQueryObject(CERT_QUERY_OBJECT_FILE, filepath.c_str(),
 			CERT_QUERY_CONTENT_FLAG_PKCS7_SIGNED_EMBED, CERT_QUERY_FORMAT_FLAG_BINARY, 0,
 			&dwEncoding, &dwContentType, &dwFormatType,
@@ -335,7 +337,7 @@ bool SecurityGard::verifySignedLibrary(const std::wstring& filepath, NppModule m
 		OutputDebugString(TEXT("VerifyLibrary: Invalid certificate subject\n"));
 	}
 
-	if (status && _signer_key_id != key_id_hex)
+	if (status && _signer_key_id != key_id_hex && _signer_key_pos != key_id_hex)
 	{
 		status = false;
 		OutputDebugString(TEXT("VerifyLibrary: Invalid certificate key id\n"));

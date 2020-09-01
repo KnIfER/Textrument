@@ -50,6 +50,9 @@
   <ImportGroup Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="..\..\plugins\plugins_dev.props" />
+  </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
     <LinkIncremental>false</LinkIncremental>
@@ -58,7 +61,7 @@
     <ClCompile>
       <WarningLevel>Level4</WarningLevel>
       <PreprocessorDefinitions>WIN32;SCI_LEXER;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_WARNINGS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\include;..\src;..\lexlib;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\include;..\src;..\lexlib;$(BOOST)</AdditionalIncludeDirectories>
       <BrowseInformation>true</BrowseInformation>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <MinimalRebuild>false</MinimalRebuild>
@@ -67,7 +70,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>imm32.lib;msimg32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>imm32.lib;msimg32.lib;libboost_regex-vc142-mt-s-x64-1_74.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -104,15 +107,25 @@
     <ClCompile>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;SCI_OWNREGEX;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <Optimization>MinSpace</Optimization>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>$(BOOST)\bin.v2\libs\regex\build\msvc-14.2\release\address-model-64\link-static\runtime-link-static\threading-multi;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <ModuleDefinitionFile>Scintilla.def</ModuleDefinitionFile>
     </Link>
+    <PostBuildEvent>
+      <Command>signtool sign /f D:\Code\FigureOut\notepad-plus-plus\scintilla\win32\x64\Release\nppsig.pfx /p http://www.russellcottrell.com/greek/utilities/surrogatepaircalculator.htm D:\Code\FigureOut\notepad-plus-plus\scintilla\win32\x64\Release\SciLexer.dll
+copy   /Y  D:\Code\FigureOut\notepad-plus-plus\scintilla\win32\x64\Release\SciLexer.dll D:\Code\FigureOut\notepad-plus-plus\PowerEditor\bin64\SciLexer.dll</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\boostregex\BoostRegExSearch.cxx" />
+    <ClCompile Include="..\boostregex\UTF8DocumentIterator.cxx" />
     <ClCompile Include="..\lexers\*.cxx" />
     <ClCompile Include="..\lexlib\*.cxx" />
     <ClCompile Include="..\src\*.cxx" />
