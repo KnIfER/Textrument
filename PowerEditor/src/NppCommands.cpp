@@ -47,11 +47,15 @@ using namespace std;
 
 std::mutex command_mutex;
 
-bool isWindowMessaging;
+int isWindowMessaging;
 
 bool ClosePanelRequested;
 
 extern HWND StatusBarHWND;
+
+extern NppParameters* nppParms;
+
+extern NppGUI* nppUIParms;
 
 void Notepad_plus::macroPlayback(Macro macro)
 {
@@ -238,7 +242,7 @@ void Notepad_plus::command(int id)
 
 		case IDM_FILE_CLOSE:
 		{
-			if(isWindowMessaging) {
+			if(isWindowMessaging==1) {
 				bool done=0;
 				ClosePanelRequested=1;
 				auto dockContainer = DockingCont::AllDockers;
@@ -759,9 +763,16 @@ void Notepad_plus::command(int id)
 		}
 		break;
 
-		case IDM_VIEW_FILESWITCHER_PANEL:
+		case IDM_VIEW_TABLIST_PANEL:
 		{
-			launchFileSwitcherPanel();
+			if(ClosePanelRequested || !nppUIParms->_swiggle
+				&&( _pFileSwitcherPanel && ! _pFileSwitcherPanel->isClosed())) {
+				_pFileSwitcherPanel->display(false);
+				_pFileSwitcherPanel->setClosed(true);
+			} else {
+				launchFileSwitcherPanel();
+			}
+			_preference.refreshCurrentDlg(0);
 		}
 		break;
 
@@ -769,62 +780,27 @@ void Notepad_plus::command(int id)
 		case IDM_VIEW_PROJECT_PANEL_2:
 		case IDM_VIEW_PROJECT_PANEL_3:
 		{
-			ProjectPanel** pp [] = {&_pProjectPanel_1, &_pProjectPanel_2, &_pProjectPanel_3};
 			int idx = id - IDM_VIEW_PROJECT_PANEL_1;
-			if(ClosePanelRequested) {
-				if (! (*pp[idx])->isClosed())
-				{
-					if ((*pp[idx])->checkIfNeedSave())
-					{
-						if (::IsChild((*pp[idx])->getHSelf(), ::GetFocus()))
-							::SetFocus(_pEditView->getHSelf());
-						(*pp[idx])->display(false);
-						(*pp[idx])->setClosed(true);
-						checkMenuItem(id, false);
-						checkProjectMenuItem();
-					}
-				}
-				break;
-			}
-			if(1) {
-				launchProjectPanel(idx + IDM_VIEW_PROJECT_PANEL_1, pp [idx], idx);
+			ProjectPanel** pI = idx==0?&_pProjectPanel_1:idx==1?&_pProjectPanel_2:&_pProjectPanel_3;
+			if(!ClosePanelRequested
+				&&(nppUIParms->_swiggle||*pI == nullptr||(*pI)->isClosed())) {
+				launchProjectPanel(id, pI, idx);
 			} else {
-				if (*pp [idx] == nullptr)
+				if ((*pI)->checkIfNeedSave())
 				{
-					launchProjectPanel(id, pp [idx], idx);
-				}
-				else
-				{
-					if (not (*pp[idx])->isClosed())
-					{
-						if ((*pp[idx])->checkIfNeedSave())
-						{
-							if (::IsChild((*pp[idx])->getHSelf(), ::GetFocus()))
-								::SetFocus(_pEditView->getHSelf());
-							(*pp[idx])->display(false);
-							(*pp[idx])->setClosed(true);
-							checkMenuItem(id, false);
-							checkProjectMenuItem();
-						}
-					}
-					else
-					{
-						launchProjectPanel(id, pp [idx], idx);
-					}
+					if (::IsChild((*pI)->getHSelf(), ::GetFocus()))
+						::SetFocus(_pEditView->getHSelf());
+					(*pI)->display(false);
+					(*pI)->setClosed(true);
+					checkMenuItem(id, false);
+					checkProjectMenuItem();
 				}
 			}
 		}
 		break;
-		case IDM_VIEW_TABLIST:
+		case IDM_VIEW_SWOGGLE:
 		{
-			boolean showing=_pFileSwitcherPanel && not _pFileSwitcherPanel->isClosed();
-			if(showing) {
-				_pFileSwitcherPanel->display(false);
-				_pFileSwitcherPanel->setClosed(true);
-				checkMenuItem(IDM_VIEW_TABLIST, false);
-			} else {
-				launchFileSwitcherPanel();
-			}
+			checkMenuItem(IDM_VIEW_SWOGGLE, nppUIParms->_swiggle=!nppUIParms->_swiggle);
 		}
 		break;
 		case IDM_VIEW_FILEBROWSER:

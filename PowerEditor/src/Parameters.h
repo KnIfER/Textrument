@@ -818,8 +818,6 @@ struct NppGUI final
 	bool _rememberLastSession = true; // remember next session boolean will be written in the settings
 	bool _isCmdlineNosessionActivated = false; // used for if -nosession is indicated on the launch time
 	bool _detectEncoding = true;
-	bool _useBigFonts = true;
-	int currentSettingsIndex = 0;
 	bool _doTaskList = true;
 	bool _maitainIndent = true;
 	bool _enableSmartHilite = true;
@@ -915,6 +913,10 @@ struct NppGUI final
 
 	bool _isDocPeekOnTab = false;
 	bool _isDocPeekOnMap = false;
+
+	bool _useBigFonts = true;
+	bool _swiggle = true;
+	int currentSettingsIndex = 0;
 };
 
 struct ScintillaViewParams

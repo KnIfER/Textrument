@@ -50,7 +50,11 @@ std::vector<HFontWrap> HFontWraps;
 
 extern bool bNewTabFarRight;
 
-extern bool isWindowMessaging;
+extern int isWindowMessaging;
+
+extern NppParameters* nppParms;
+
+extern NppGUI* nppUIParms;
 
 bool Terminating;
 
@@ -630,7 +634,7 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 			}
 			else
 			{
-				isWindowMessaging=1;
+				isWindowMessaging=HIWORD(wParam);
 				command(LOWORD(wParam));
 				isWindowMessaging=0;
 			}
@@ -2195,8 +2199,7 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 		case NPPM_SHOWBIGGERFONTS:
 		{
 			bool show = (lParam != TRUE);
-			NppGUI & nppGUI = const_cast<NppGUI &>(nppParam.getNppGUI());
-			nppGUI._useBigFonts = show;
+			nppUIParms->_useBigFonts = show;
 			_preference.refresh();
 			return 0;
 		}
@@ -2391,21 +2394,7 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 					:(NppParameters::getInstance()).getCurrentDefaultBgColor());
 		}
 
-		case NPPM_SHOWDOCSWITCHER:
-		{
-			BOOL toShow = static_cast<BOOL>(lParam);
-			if (toShow)
-			{
-				if (!_pFileSwitcherPanel || !_pFileSwitcherPanel->isVisible())
-					launchFileSwitcherPanel();
-			}
-			else
-			{
-				if (_pFileSwitcherPanel)
-					_pFileSwitcherPanel->display(false);
-			}
-			return TRUE;
-		}
+		//deprecated case NPPM_SHOWDOCSWITCHER:
 
 		case NPPM_ISDOCSWITCHERSHOWN:
 		{

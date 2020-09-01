@@ -263,6 +263,10 @@ public:
 
 	WindowsMenu _windowsMenu;
 	HMENU _mainMenuHandle = NULL;
+
+	void checkMenuItem(int itemID, bool willBeChecked) const {
+		::CheckMenuItem(_mainMenuHandle, itemID, MF_BYCOMMAND | (willBeChecked?MF_CHECKED:MF_UNCHECKED));
+	}
 private:
 	Notepad_plus_Window *_pPublicInterface = nullptr;
     Window *_pMainWindow = nullptr;
@@ -486,10 +490,6 @@ private:
 
 	BOOL processIncrFindAccel(MSG *msg) const;
 	BOOL processFindAccel(MSG *msg) const;
-
-	void checkMenuItem(int itemID, bool willBeChecked) const {
-		::CheckMenuItem(_mainMenuHandle, itemID, MF_BYCOMMAND | (willBeChecked?MF_CHECKED:MF_UNCHECKED));
-	}
 
 	bool isConditionExprLine(int lineNumber);
 	int findMachedBracePos(size_t startPos, size_t endPos, char targetSymbol, char matchedSymbol);

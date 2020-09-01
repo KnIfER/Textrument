@@ -59,6 +59,12 @@ bool fontReUsable=1;
 
 NppParameters* _nppParamsInst;
 
+extern NppGUI* nppUIParms;
+
+extern bool ClosePanelRequested;
+
+PreferenceDlg* _preferenceDlg;
+
 bool CreateFonts(bool init) {
 	if(hFontSubPanel==0) {
 		//NppParameters& nppParam = NppParameters::getInstance();
@@ -129,6 +135,7 @@ INT_PTR CALLBACK PreferenceDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM 
 	{
 		case WM_INITDIALOG :
 		{
+			_preferenceDlg = this;
 			_wVector.push_back(DlgInfo(&_barsDlg, TEXT("General"), TEXT("Global"), IDD_PREFERENCE_BAR_BOX));
 			_wVector.push_back(DlgInfo(&_marginsDlg, TEXT("Editing"), TEXT("Scintillas"), IDD_PREFERENCE_MARGEIN_BOX));
 			_wVector.push_back(DlgInfo(&_defaultNewDocDlg, TEXT("New Document"), TEXT("NewDoc"), IDD_PREFERENCE_NEWDOCSETTING_BOX));
@@ -377,6 +384,15 @@ void PreferenceDlg::showDialogByIndex(size_t index, bool init) const
 	//}
 }
 
+void PreferenceDlg::refreshCurrentDlg(int index) const
+{
+	if(isCreated()&&_wVector[index]._dlg)
+	if(index==0) {
+		bool showDocSwitcher = ::SendMessage(_hParent, NPPM_ISDOCSWITCHERSHOWN, 0, 0) == TRUE;
+		::SendDlgItemMessage(_wVector[index]._dlg->getHSelf(), IDC_CHECK_DOCSWITCH, BM_SETCHECK, showDocSwitcher, 0);
+	}
+}
+
 void PreferenceDlg::destroy()
 {
 	_barsDlg.destroy();
@@ -444,8 +460,6 @@ INT_PTR CALLBACK BarsDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM)
 			::SendDlgItemMessage(_hSelf, IDC_CHECK_SHOWSTATUSBAR, BM_SETCHECK, showStatus, 0);
 			::SendDlgItemMessage(_hSelf, IDC_CHECK_HIDEMENUBAR, BM_SETCHECK, !showMenu, 0);
 
-			bool showDocSwitcher = ::SendMessage(::GetParent(_hParent), NPPM_ISDOCSWITCHERSHOWN, 0, 0) == TRUE;
-			::SendDlgItemMessage(_hSelf, IDC_CHECK_DOCSWITCH, BM_SETCHECK, showDocSwitcher, 0);
 			::SendDlgItemMessage(_hSelf, IDC_CHECK_DOCSWITCH_EXTCOLUMN, BM_SETCHECK, nppGUI._fileSwitcherWithExtColumn, 0);
 
 			LocalizationSwitcher & localizationSwitcher = nppParam.getLocalizationSwitcher();
@@ -469,6 +483,8 @@ INT_PTR CALLBACK BarsDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM)
 			ETDTProc enableDlgTheme = reinterpret_cast<ETDTProc>(nppParam.getEnableThemeDlgTexture());
 			if (enableDlgTheme)
 				enableDlgTheme(_hSelf, ETDT_ENABLETAB);
+
+			_preferenceDlg->refreshCurrentDlg(0);
 
 			return TRUE;
 		}
@@ -498,7 +514,9 @@ INT_PTR CALLBACK BarsDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM)
 				case IDC_CHECK_DOCSWITCH :
 				{
 					bool isChecked = (BST_CHECKED == ::SendDlgItemMessage(_hSelf, IDC_CHECK_DOCSWITCH, BM_GETCHECK, 0, 0));
-					::SendMessage(::GetParent(_hParent), NPPM_SHOWDOCSWITCHER, 0, isChecked?TRUE:FALSE);
+					ClosePanelRequested=!isChecked;
+					::SendMessage(::GetParent(_hParent), WM_COMMAND, IDM_VIEW_TABLIST_PANEL, 0);
+					ClosePanelRequested=0;
 					getFocus();
 				}
 				return TRUE;

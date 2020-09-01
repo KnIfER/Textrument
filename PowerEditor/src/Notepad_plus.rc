@@ -550,6 +550,7 @@ BEGIN
 
         MENUITEM SEPARATOR
             MENUITEM "Summary...",  IDM_VIEW_SUMMARY
+			MENUITEM "Switch To Instead Of Toggle Panels",   IDM_VIEW_SWOGGLE
         MENUITEM SEPARATOR
             POPUP "Project Panels"
             BEGIN
@@ -558,7 +559,7 @@ BEGIN
                 MENUITEM "Project Panel 3",          IDM_VIEW_PROJECT_PANEL_3
             END
         MENUITEM "Folder as Workspace",   IDM_VIEW_FILEBROWSER
-        MENUITEM "Tab List",   IDM_VIEW_TABLIST
+        MENUITEM "Tab List",   IDM_VIEW_TABLIST_PANEL
         MENUITEM "Document Map",          IDM_VIEW_DOC_MAP
         MENUITEM "Function List",         IDM_VIEW_FUNC_LIST
         MENUITEM SEPARATOR

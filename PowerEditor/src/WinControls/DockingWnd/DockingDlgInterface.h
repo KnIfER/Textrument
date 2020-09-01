@@ -88,7 +88,7 @@ public:
 		return _isClosed;
 	}
 
-	void setClosed(bool toClose) {
+	virtual void setClosed(bool toClose) {
 		_isClosed = toClose;
 	}
 

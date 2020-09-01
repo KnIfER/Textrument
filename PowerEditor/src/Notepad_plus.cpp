@@ -135,7 +135,9 @@ ToolBarButtonUnit toolBarIcons[] = {
 };
 
 
-
+NppParameters* nppParms;
+NppGUI* nppUIParms;
+Notepad_plus* nppApp;
 
 Notepad_plus::Notepad_plus()
 	: _autoCompleteMain(&_mainEditView)
@@ -144,7 +146,12 @@ Notepad_plus::Notepad_plus()
 {
 	ZeroMemory(&_prevSelectedRange, sizeof(_prevSelectedRange));
 
-	NppParameters& nppParam = NppParameters::getInstance();
+	NppParameters & nppParam = NppParameters::getInstance();
+	NppGUI & nppGUI = const_cast<NppGUI &>(nppParam.getNppGUI());
+	nppParms = &nppParam;
+	nppUIParms = &nppGUI;
+	nppApp = this;
+
 	TiXmlDocumentA *nativeLangDocRootA = nppParam.getNativeLangA();
     _nativeLangSpeaker.init(nativeLangDocRootA);
 
@@ -166,7 +173,7 @@ Notepad_plus::Notepad_plus()
 
 	// Determine if user is administrator.
 	BOOL is_admin;
-	winVer ver = NppParameters::getInstance().getWinVersion();
+	winVer ver = nppParam.getWinVersion();
 	if (ver >= WV_VISTA || ver == WV_UNKNOWN)
 	{
 		SID_IDENTIFIER_AUTHORITY NtAuthority = SECURITY_NT_AUTHORITY;
@@ -209,9 +216,8 @@ Notepad_plus::~Notepad_plus()
 
 LRESULT Notepad_plus::init(HWND hwnd)
 {
-	NppParameters& nppParam = NppParameters::getInstance();
-	NppGUI & nppGUI = const_cast<NppGUI &>(nppParam.getNppGUI());
-
+	auto & nppParam = *nppParms;
+	auto & nppGUI = *nppUIParms;
 	// Menu
 	_mainMenuHandle = ::GetMenu(hwnd);
 	int langPos2BeRemoved = MENUINDEX_LANGUAGE+1;
@@ -743,6 +749,7 @@ LRESULT Notepad_plus::init(HWND hwnd)
 
 	bNewTabFarRight=0;
 
+	checkMenuItem(IDM_VIEW_SWOGGLE, nppGUI._swiggle);
 	return TRUE;
 }
 
@@ -5970,7 +5977,7 @@ void Notepad_plus::launchFileSwitcherPanel()
 		// the dlgDlg should be the index of funcItem where the current function pointer is
 		// in this case is DOCKABLE_DEMO_INDEX
 		// In the case of Notepad++ internal function, it'll be the command ID which triggers this dialog
-		data.dlgID = IDM_VIEW_FILESWITCHER_PANEL;
+		data.dlgID = IDM_VIEW_TABLIST_PANEL;
 
 		NativeLangSpeaker *pNativeSpeaker = (NppParameters::getInstance()).getNativeLangSpeaker();
 		generic_string title_temp = pNativeSpeaker->getAttrNameStr(FS_PROJECTPANELTITLE, "DocSwitcher", "PanelTitle");
@@ -5990,8 +5997,8 @@ void Notepad_plus::launchFileSwitcherPanel()
 
 	}
 	_pFileSwitcherPanel->display();
-	checkMenuItem(IDM_VIEW_TABLIST, true);
 	_pFileSwitcherPanel->setClosed(false);
+	::SendDlgItemMessage(_preference.getHSelf(), IDC_CHECK_DOCSWITCH, BM_SETCHECK, BST_CHECKED, 0);
 }
 
 

@@ -30,6 +30,9 @@
 #include "VerticalFileSwitcher.h"
 #include "menuCmdID.h"
 #include "Parameters.h"
+#include "Notepad_plus.h"
+
+extern Notepad_plus* nppApp;
 
 int CALLBACK ListViewCompareProc(LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort)
 {
@@ -85,6 +88,11 @@ INT_PTR CALLBACK VerticalFileSwitcher::run_dlgProc(UINT message, WPARAM wParam, 
 		{
 			switch (((LPNMHDR)lParam)->code)
 			{
+				case DMN_CLOSE:
+				{
+					setClosed(1);
+					return TRUE;
+				}
 				case NM_DBLCLK:
 				{
 					LPNMITEMACTIVATE lpnmitem = (LPNMITEMACTIVATE) lParam;
@@ -231,6 +239,11 @@ INT_PTR CALLBACK VerticalFileSwitcher::run_dlgProc(UINT message, WPARAM wParam, 
 	return DockingDlgInterface::run_dlgProc(message, wParam, lParam);
 }
 
+void VerticalFileSwitcher::setClosed(bool toClose)
+{
+	DockingDlgInterface::setClosed(toClose);
+	nppApp->checkMenuItem(IDM_VIEW_TABLIST_PANEL, !toClose);
+}
 
 void VerticalFileSwitcher::activateDoc(TaskLstFnStatus *tlfs) const
 {

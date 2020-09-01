@@ -326,7 +326,7 @@
         #define    IDM_VIEW_UNFOLD_7    (IDM_VIEW_UNFOLD + 7)
         #define    IDM_VIEW_UNFOLD_8    (IDM_VIEW_UNFOLD + 8)
     
-	#define    IDM_VIEW_FILESWITCHER_PANEL        (IDM_VIEW + 70)
+	#define    IDM_VIEW_TABLIST_PANEL        (IDM_VIEW + 70)
 	#define    IDM_VIEW_SWITCHTO_OTHER_VIEW       (IDM_VIEW + 72)
 	#define    IDM_EXPORT_FUNC_LIST_AND_QUIT      (IDM_VIEW + 73)
 
@@ -338,7 +338,6 @@
 
 	#define    IDM_VIEW_FUNC_LIST                 (IDM_VIEW + 84)
 	#define    IDM_VIEW_FILEBROWSER               (IDM_VIEW + 85)
-	#define    IDM_VIEW_TABLIST               (IDM_VIEW + 104)
 
 	#define	   IDM_VIEW_TAB1					  (IDM_VIEW + 86)
 	#define	   IDM_VIEW_TAB2					  (IDM_VIEW + 87)
@@ -358,6 +357,7 @@
 	#define	   IDM_VIEW_IN_CHROME                 (IDM_VIEW + 101)
 	#define	   IDM_VIEW_IN_EDGE	                  (IDM_VIEW + 102)
 	#define	   IDM_VIEW_IN_IE                     (IDM_VIEW + 103)
+	#define    IDM_VIEW_SWOGGLE               (IDM_VIEW + 105)
 
     #define    IDM_VIEW_GOTO_ANOTHER_VIEW        10001
     #define    IDM_VIEW_CLONE_TO_ANOTHER_VIEW    10002

@@ -300,6 +300,7 @@ static const WinMenuKeyDefinition winKeyDefs[] =
 	{ VK_NULL,    IDM_VIEW_PROJECT_PANEL_2,                     false, false, false, nullptr },
 	{ VK_NULL,    IDM_VIEW_PROJECT_PANEL_3,                     false, false, false, nullptr },
 	{ VK_NULL,    IDM_VIEW_FILEBROWSER,                         false, false, false, nullptr },
+	{ VK_NULL,    IDM_VIEW_TABLIST_PANEL,                             false, false, false, nullptr },
 	{ VK_NULL,    IDM_VIEW_DOC_MAP,                             false, false, false, nullptr },
 	{ VK_NULL,    IDM_VIEW_FUNC_LIST,                           false, false, false, nullptr },
 	{ VK_NULL,    IDM_VIEW_SYNSCROLLV,                          false, false, false, nullptr },
@@ -4299,6 +4300,21 @@ void NppParameters::feedGUIParameters(TiXmlNode *node)
 				}
 			}
 		}
+		else if (!lstrcmp(nm, TEXT("SWOGGLE")))
+		{
+			TiXmlNode *n = childNode->FirstChild();
+			if (n)
+			{
+				const TCHAR* val = n->Value();
+				if (val)
+				{
+					if (lstrcmp(val, TEXT("yes")) == 0)
+						_nppGUI._swiggle = true;
+					else
+						_nppGUI._swiggle = false;
+				}
+			}
+		}
 		else if (!lstrcmp(nm, TEXT("SettingsIndex")))
 		{
 			TiXmlNode *n = childNode->FirstChild();
@@ -5809,9 +5825,15 @@ void NppParameters::createXmlTreeFromGUIParams()
 	}
 
 	// <GUIConfig name = "UseBigFonts">yes< / GUIConfig>
-	if(_nppGUI._useBigFonts)
+	if(!_nppGUI._useBigFonts)
 	{
 		insertGUIConfigBoolNode(newGUIRoot, TEXT("UseBigFonts"), _nppGUI._useBigFonts);
+	}
+
+	// <GUIConfig name = "SWOGGLE">yes< / GUIConfig>
+	if(!_nppGUI._swiggle)
+	{
+		insertGUIConfigBoolNode(newGUIRoot, TEXT("SWOGGLE"), _nppGUI._swiggle);
 	}
 
 	// <GUIConfig name="SettingsIndex">9</GUIConfig>

@@ -56,7 +56,9 @@ public:
     void setParent(HWND parent2set){
         _hParent = parent2set;
     };
-	
+
+	virtual void setClosed(bool toClose);
+
 	//Activate document in scintilla by using the internal index
 	void activateDoc(TaskLstFnStatus *tlfs) const;
 

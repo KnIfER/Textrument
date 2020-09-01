@@ -263,6 +263,7 @@ public :
 
 	void initAllPanels() const;
 	void refresh() const;
+	void refreshCurrentDlg(int index) const;
 
 	virtual void destroy();
 
