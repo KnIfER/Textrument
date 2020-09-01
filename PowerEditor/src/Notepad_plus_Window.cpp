@@ -177,7 +177,11 @@ void Notepad_plus_Window::init(HINSTANCE hInst, HWND parent, const TCHAR *cmdLin
 	if (nppGUI._rememberLastSession && !cmdLineParams->_isNoSession)
 		_notepad_plus_plus_core.loadLastSession();
 
-	if (not cmdLineParams->_isPreLaunch)
+	if (nppParams.doFunctionListExport() || nppParams.doPrintAndExit())
+	{
+		::ShowWindow(_hSelf, SW_HIDE);
+	}
+	else if (not cmdLineParams->_isPreLaunch)
 	{
 		if (cmdLineParams->isPointValid())
 			::ShowWindow(_hSelf, SW_SHOW);
