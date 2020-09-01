@@ -634,7 +634,8 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 			}
 			else
 			{
-				isWindowMessaging=HIWORD(wParam);
+				// see https://docs.microsoft.com/en-us/windows/win32/menurc/wm-command#remarks
+				isWindowMessaging=lParam?2:HIWORD(wParam);
 				command(LOWORD(wParam));
 				isWindowMessaging=0;
 			}

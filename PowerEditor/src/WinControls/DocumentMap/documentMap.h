@@ -116,6 +116,8 @@ public:
         _hParent = parent2set;
     };
 
+	virtual void setClosed(bool toClose);
+
 	void vzDlgDisplay(bool toShow = true) {
 		_vzDlg.display(toShow);
 	}

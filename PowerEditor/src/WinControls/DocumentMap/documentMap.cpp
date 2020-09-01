@@ -28,7 +28,12 @@
 
 #include "documentMap.h"
 #include "ScintillaEditView.h"
+#include "Notepad_plus.h"
 
+
+extern NppParameters *nppParms;
+
+extern Notepad_plus *nppApp;
 
 void DocumentMap::reloadMap()
 {
@@ -352,7 +357,7 @@ INT_PTR CALLBACK DocumentMap::run_dlgProc(UINT message, WPARAM wParam, LPARAM lP
 
 			_vzDlg.init(::GetModuleHandle(NULL), _hSelf);
 			_vzDlg.doDialog();
-			(NppParameters::getInstance()).SetTransparent(_vzDlg.getHSelf(), 50); // 0 <= transparancy < 256
+			nppParms->SetTransparent(_vzDlg.getHSelf(), 50); // 0 <= transparancy < 256
 			BringWindowToTop (_vzDlg.getHSelf());
 
 			setSyntaxHiliting();
@@ -458,6 +463,13 @@ INT_PTR CALLBACK DocumentMap::run_dlgProc(UINT message, WPARAM wParam, LPARAM lP
 	return DockingDlgInterface::run_dlgProc(message, wParam, lParam);
 }
 
+void DocumentMap::setClosed(bool toClose)
+{
+	DockingDlgInterface::setClosed(toClose);
+	nppApp->checkMenuItem(IDM_VIEW_DOC_MAP, !toClose);
+	nppApp->_toolBar.setCheck(IDM_VIEW_DOC_MAP, !toClose);
+}
+
 void ViewZoneDlg::drawPreviewZone(DRAWITEMSTRUCT *pdis)
 {
 	RECT rc = pdis->rcItem;
@@ -480,7 +492,7 @@ void ViewZoneDlg::doDialog()
 {
 	if (!isCreated())
 	{
-		bool win10 = (NppParameters::getInstance()).getWinVersion() >= WV_WIN10;
+		bool win10 = nppParms->getWinVersion() >= WV_WIN10;
 		create(win10 ? IDD_VIEWZONE : IDD_VIEWZONE_CLASSIC);
 	}
 	display();

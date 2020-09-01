@@ -797,14 +797,16 @@ void Notepad_plus::command(int id)
 			}
 		}
 		break;
+
 		case IDM_VIEW_SWOGGLE:
 		{
 			checkMenuItem(IDM_VIEW_SWOGGLE, nppUIParms->_swiggle=!nppUIParms->_swiggle);
 		}
 		break;
+
 		case IDM_VIEW_FILEBROWSER:
 		{
-			bool doSwitch=nppUIParms->_swiggle&&!isWindowMessaging==IDM_VIEW_FILEBROWSER;
+			bool doSwitch=nppUIParms->_swiggle&&isWindowMessaging!=2;
 			bool action = !ClosePanelRequested
 				&&(doSwitch||_pFileBrowser == nullptr||_pFileBrowser->isClosed());
 			if(action) {
@@ -826,23 +828,17 @@ void Notepad_plus::command(int id)
 
 		case IDM_VIEW_DOC_MAP:
 		{
-			if (_pDocMap && (not _pDocMap->isClosed()))
-			{
+			bool doSwitch=nppUIParms->_swiggle&&isWindowMessaging!=2;
+			bool action = !ClosePanelRequested
+				&&(doSwitch||_pDocMap == nullptr||_pDocMap->isClosed());
+			if(action) {
+				launchDocMap();
+			} else {
 				_pDocMap->display(false);
 				_pDocMap->vzDlgDisplay(false);
-				_pDocMap->setClosed(true);
-				checkMenuItem(IDM_VIEW_DOC_MAP, false);
-				_toolBar.setCheck(IDM_VIEW_DOC_MAP, false);
 			}
-			else
-			{
-				launchDocMap();
-				if (_pDocMap)
-				{
-					checkMenuItem(IDM_VIEW_DOC_MAP, true);
-					_toolBar.setCheck(IDM_VIEW_DOC_MAP, true);
-					_pDocMap->setClosed(false);
-				}
+			if(_pDocMap) {
+				_pDocMap->setClosed(!action);
 			}
 		}
 		break;
