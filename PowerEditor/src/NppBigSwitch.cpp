@@ -491,9 +491,7 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 
 		case NPPM_INTERNAL_EXPORTFUNCLISTANDQUIT:
 		{
-			checkMenuItem(IDM_VIEW_FUNC_LIST, true);
-			_toolBar.setCheck(IDM_VIEW_FUNC_LIST, true);
-			launchFunctionList();
+			launchFunctionList(true);
 			_pFuncList->setClosed(false);
 			_pFuncList->serialize();
 

@@ -105,7 +105,9 @@ public:
     void setParent(HWND parent2set){
         _hParent = parent2set;
     };
-	
+
+	virtual void setClosed(bool toClose);
+
 	// functionalities
 	void sortOrUnsort();
 	void reload();

@@ -606,7 +606,7 @@ private:
 	void checkProjectMenuItem();
 	void launchProjectPanel(int cmdID, ProjectPanel ** pProjPanel, int panelID);
 	void launchDocMap();
-	void launchFunctionList();
+	void launchFunctionList(bool coldLaunch);
 	void launchFileBrowser(const std::vector<generic_string> * folders, bool fromScratch = false);
 	void showAllQuotes() const;
 	static DWORD WINAPI threadTextPlayer(void *text2display);

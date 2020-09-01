@@ -29,6 +29,7 @@
 #include "functionListPanel.h"
 #include "ScintillaEditView.h"
 #include "localization.h"
+#include "Notepad_plus.h"
 #include <fstream>
 
 using nlohmann::json;
@@ -40,6 +41,10 @@ using namespace std;
 #define INDEX_ROOT        0
 #define INDEX_NODE        1
 #define INDEX_LEAF        2
+
+extern NppParameters *nppParms;
+
+extern Notepad_plus *nppApp;
 
 FunctionListPanel::~FunctionListPanel()
 {
@@ -869,4 +874,12 @@ INT_PTR CALLBACK FunctionListPanel::run_dlgProc(UINT message, WPARAM wParam, LPA
 			return DockingDlgInterface::run_dlgProc(message, wParam, lParam);
 	}
 	return DockingDlgInterface::run_dlgProc(message, wParam, lParam);
+}
+
+
+void FunctionListPanel::setClosed(bool toClose)
+{
+	DockingDlgInterface::setClosed(toClose);
+	nppApp->checkMenuItem(IDM_VIEW_FUNC_LIST, !toClose);
+	nppApp->_toolBar.setCheck(IDM_VIEW_FUNC_LIST, !toClose);
 }

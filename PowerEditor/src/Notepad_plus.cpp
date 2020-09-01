@@ -6242,7 +6242,7 @@ void Notepad_plus::launchDocMap()
 }
 
 
-void Notepad_plus::launchFunctionList()
+void Notepad_plus::launchFunctionList(bool coldLaunch)
 {
 	if (!_pFuncList)
 	{
@@ -6282,7 +6282,10 @@ void Notepad_plus::launchFunctionList()
 	}
 
 	_pFuncList->display();
-	_pFuncList->reload();
+
+	if(coldLaunch) {
+		_pFuncList->reload();
+	}
 
 	_pEditView->getFocus();
 }

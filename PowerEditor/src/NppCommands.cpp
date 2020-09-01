@@ -845,19 +845,17 @@ void Notepad_plus::command(int id)
 
 		case IDM_VIEW_FUNC_LIST:
 		{
-			if (_pFuncList && (not _pFuncList->isClosed()))
-			{
+			bool doSwitch=nppUIParms->_swiggle&&isWindowMessaging!=2;
+			bool coldLaunch=_pFuncList == nullptr||_pFuncList->isClosed();
+			bool action = !ClosePanelRequested
+				&&(doSwitch||coldLaunch);
+			if(action) {
+				launchFunctionList(coldLaunch);
+			} else {
 				_pFuncList->display(false);
-				_pFuncList->setClosed(true);
-				checkMenuItem(IDM_VIEW_FUNC_LIST, false);
-				_toolBar.setCheck(IDM_VIEW_FUNC_LIST, false);
 			}
-			else
-			{
-				checkMenuItem(IDM_VIEW_FUNC_LIST, true);
-				_toolBar.setCheck(IDM_VIEW_FUNC_LIST, true);
-				launchFunctionList();
-				_pFuncList->setClosed(false);
+			if(_pFuncList) {
+				_pFuncList->setClosed(!action);
 			}
 		}
 		break;
