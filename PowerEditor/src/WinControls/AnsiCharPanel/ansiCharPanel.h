@@ -53,6 +53,8 @@ public:
         _hParent = parent2set;
     };
 
+	virtual void setClosed(bool toClose);
+
 	void switchEncoding();
 	void insertChar(unsigned char char2insert) const;
 	void insertString(LPWSTR string2insert) const;

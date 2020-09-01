@@ -32,6 +32,7 @@
 #include "ShortcutMapper.h"
 #include "TaskListDlg.h"
 #include "clipboardFormats.h"
+#include "ansiCharPanel.h"
 #include "VerticalFileSwitcher.h"
 #include "documentMap.h"
 #include "functionListPanel.h"
@@ -752,7 +753,16 @@ void Notepad_plus::command(int id)
 
 		case IDM_EDIT_CHAR_PANEL:
 		{
-			launchAnsiCharPanel();
+			bool action = !ClosePanelRequested
+				&&(nppUIParms->_swiggle||_pAnsiCharPanel == nullptr||_pAnsiCharPanel->isClosed());
+			if(action) {
+				launchAnsiCharPanel();
+			} else {
+				_pAnsiCharPanel->display(false);
+			}
+			if(_pAnsiCharPanel) {
+				_pAnsiCharPanel->setClosed(!action);
+			}
 		}
 		break;
 
@@ -816,12 +826,6 @@ void Notepad_plus::command(int id)
 			} else {
 				_pFileBrowser->display(false);
 				_pFileBrowser->setClosed(true);
-				checkMenuItem(IDM_VIEW_FILEBROWSER, false);
-				_toolBar.setCheck(IDM_VIEW_FILEBROWSER, false);
-			}
-			if (_pFileBrowser != nullptr)
-			{
-				_pFileBrowser->setClosed(!action);
 			}
 		}
 		break;

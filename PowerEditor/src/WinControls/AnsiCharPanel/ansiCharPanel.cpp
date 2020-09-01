@@ -29,6 +29,12 @@
 #include "ansiCharPanel.h"
 #include "ScintillaEditView.h"
 #include "localization.h"
+#include "Notepad_plus.h"
+
+
+extern NppParameters *nppParms;
+
+extern Notepad_plus *nppApp;
 
 void AnsiCharPanel::switchEncoding()
 {
@@ -68,6 +74,11 @@ INT_PTR CALLBACK AnsiCharPanel::run_dlgProc(UINT message, WPARAM wParam, LPARAM 
 		{
 			switch (((LPNMHDR)lParam)->code)
 			{
+				case DMN_CLOSE:
+				{
+					setClosed(1);
+					return TRUE;
+				}
 				case NM_DBLCLK:
 				{
 					LPNMITEMACTIVATE lpnmitem = (LPNMITEMACTIVATE) lParam;
@@ -135,6 +146,12 @@ INT_PTR CALLBACK AnsiCharPanel::run_dlgProc(UINT message, WPARAM wParam, LPARAM 
             return DockingDlgInterface::run_dlgProc(message, wParam, lParam);
     }
 	return DockingDlgInterface::run_dlgProc(message, wParam, lParam);
+}
+
+void AnsiCharPanel::setClosed(bool toClose)
+{
+	DockingDlgInterface::setClosed(toClose);
+	nppApp->checkMenuItem(IDM_EDIT_CHAR_PANEL, !toClose);
 }
 
 void AnsiCharPanel::insertChar(unsigned char char2insert) const
