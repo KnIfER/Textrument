@@ -267,6 +267,7 @@ public:
 	void checkMenuItem(int itemID, bool willBeChecked) const {
 		::CheckMenuItem(_mainMenuHandle, itemID, MF_BYCOMMAND | (willBeChecked?MF_CHECKED:MF_UNCHECKED));
 	}
+	ToolBar	_toolBar;
 private:
 	Notepad_plus_Window *_pPublicInterface = nullptr;
     Window *_pMainWindow = nullptr;
@@ -297,7 +298,6 @@ private:
 	ContextMenu _tabPopupDropMenu;
 	ContextMenu _fileSwitcherMultiFilePopupMenu;
 
-	ToolBar	_toolBar;
 	IconList _docTabIconList;
 
     StatusBar _statusBar;
@@ -607,7 +607,7 @@ private:
 	void launchProjectPanel(int cmdID, ProjectPanel ** pProjPanel, int panelID);
 	void launchDocMap();
 	void launchFunctionList();
-	void launchFileBrowser(const std::vector<generic_string> & folders, bool fromScratch = false);
+	void launchFileBrowser(const std::vector<generic_string> * folders, bool fromScratch = false);
 	void showAllQuotes() const;
 	static DWORD WINAPI threadTextPlayer(void *text2display);
 	static DWORD WINAPI threadTextTroller(void *params);

@@ -137,6 +137,8 @@ public:
         _hParent = parent2set;
     };
 
+	virtual void setClosed(bool toClose);
+
 	virtual void setBackgroundColor(COLORREF bgColour) {
 		TreeView_SetBkColor(_treeView.getHSelf(), bgColour);
     };

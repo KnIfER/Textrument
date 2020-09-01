@@ -3369,7 +3369,7 @@ void Notepad_plus::dropFiles(HDROP hdrop)
 		else if (not isOldMode && (folderPaths.size() != 0 && filePaths.size() == 0)) // new mode && only folders
 		{
 			// process new mode
-			launchFileBrowser(folderPaths);
+			launchFileBrowser(&folderPaths);
 		}
 
 		::DragFinish(hdrop);
@@ -6043,7 +6043,7 @@ void Notepad_plus::launchAnsiCharPanel()
 	_pAnsiCharPanel->display();
 }
 
-void Notepad_plus::launchFileBrowser(const vector<generic_string> & folders, bool fromScratch)
+void Notepad_plus::launchFileBrowser(const vector<generic_string> * folders, bool fromScratch)
 {
 	if (!_pFileBrowser)
 	{
@@ -6089,9 +6089,10 @@ void Notepad_plus::launchFileBrowser(const vector<generic_string> & folders, boo
 		_pFileBrowser->deleteAllFromTree();
 	}
 
-	for (size_t i = 0; i <folders.size(); ++i)
+	if(folders)
+	for (size_t i = 0; i <folders->size(); ++i)
 	{
-		_pFileBrowser->addRootFolder(folders[i]);
+		_pFileBrowser->addRootFolder(folders->at(i));
 	}
 
 	_pFileBrowser->display();

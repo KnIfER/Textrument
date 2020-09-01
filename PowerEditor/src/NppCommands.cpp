@@ -47,7 +47,7 @@ using namespace std;
 
 std::mutex command_mutex;
 
-int isWindowMessaging;
+int isWindowMessaging; //menu=0 keyboard=1 Control=cid
 
 bool ClosePanelRequested;
 
@@ -193,8 +193,7 @@ void Notepad_plus::command(int id)
 			{
 				if (_pFileBrowser == nullptr) // first launch, check in params to open folders
 				{
-					vector<generic_string> dummy;
-					launchFileBrowser(dummy);
+					launchFileBrowser(nullptr);
 					if (_pFileBrowser != nullptr)
 					{
 						checkMenuItem(IDM_VIEW_FILEBROWSER, true);
@@ -805,34 +804,22 @@ void Notepad_plus::command(int id)
 		break;
 		case IDM_VIEW_FILEBROWSER:
 		{
-			if (_pFileBrowser == nullptr) // first launch, check in params to open folders
-			{
-				NppParameters& nppParam = NppParameters::getInstance();
-				launchFileBrowser(nppParam.getFileBrowserRoots());
-				if (_pFileBrowser != nullptr)
-				{
-					checkMenuItem(IDM_VIEW_FILEBROWSER, true);
-					_toolBar.setCheck(IDM_VIEW_FILEBROWSER, true);
-					_pFileBrowser->setClosed(false);
-				}
+			bool doSwitch=nppUIParms->_swiggle&&!isWindowMessaging==IDM_VIEW_FILEBROWSER;
+			bool action = !ClosePanelRequested
+				&&(doSwitch||_pFileBrowser == nullptr||_pFileBrowser->isClosed());
+			if(action) {
+				launchFileBrowser(_pFileBrowser == nullptr?
+					// first launch, check in params to open folders
+					&nppParms->getFileBrowserRoots() : nullptr);
+			} else {
+				_pFileBrowser->display(false);
+				_pFileBrowser->setClosed(true);
+				checkMenuItem(IDM_VIEW_FILEBROWSER, false);
+				_toolBar.setCheck(IDM_VIEW_FILEBROWSER, false);
 			}
-			else
+			if (_pFileBrowser != nullptr)
 			{
-				if (not _pFileBrowser->isClosed())
-				{
-					_pFileBrowser->display(false);
-					_pFileBrowser->setClosed(true);
-					checkMenuItem(IDM_VIEW_FILEBROWSER, false);
-					_toolBar.setCheck(IDM_VIEW_FILEBROWSER, false);
-				}
-				else
-				{
-					vector<generic_string> dummy;
-					launchFileBrowser(dummy);
-					checkMenuItem(IDM_VIEW_FILEBROWSER, true);
-					_toolBar.setCheck(IDM_VIEW_FILEBROWSER, true);
-					_pFileBrowser->setClosed(false);
-				}
+				_pFileBrowser->setClosed(!action);
 			}
 		}
 		break;
