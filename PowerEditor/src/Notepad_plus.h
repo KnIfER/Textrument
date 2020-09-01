@@ -267,10 +267,10 @@ public:
 	void checkMenuItem(int itemID, bool willBeChecked) const {
 		::CheckMenuItem(_mainMenuHandle, itemID, MF_BYCOMMAND | (willBeChecked?MF_CHECKED:MF_UNCHECKED));
 	}
+	Notepad_plus_Window *_pPublicInterface = nullptr;
+	Window *_pMainWindow = nullptr;
 	ToolBar	_toolBar;
 private:
-	Notepad_plus_Window *_pPublicInterface = nullptr;
-    Window *_pMainWindow = nullptr;
 	DockingManager _dockingManager;
 	std::vector<int> _internalFuncIDs;
 
