@@ -59,6 +59,8 @@ extern NppParameters* nppParms;
 
 extern NppGUI* nppUIParms;
 
+bool bSupressingMacroRecording;
+
 void Notepad_plus::macroPlayback(Macro macro)
 {
 	_playingBackMacro = true;
@@ -2506,6 +2508,7 @@ void Notepad_plus::command(int id)
 		case IDM_FORMAT_CONV2_UCS_2BE:
 		case IDM_FORMAT_CONV2_UCS_2LE:
 		{
+			bSupressingMacroRecording=1;
 			int idEncoding = -1;
 			Buffer *buf = _pEditView->getCurrentBuffer();
             UniMode um = buf->getUnicodeMode();
@@ -2518,12 +2521,12 @@ void Notepad_plus::command(int id)
                     if (encoding != -1)
                     {
                         // do nothing
-                        return;
+                        goto HoLala;
                     }
                     else
                     {
 					    if (um == uni8Bit)
-						    return;
+							goto HoLala;
 
                         // set scintilla to ANSI
 					    idEncoding = IDM_FORMAT_ANSI;
@@ -2537,18 +2540,18 @@ void Notepad_plus::command(int id)
                         buf->setDirty(true);
                         buf->setUnicodeMode(uniCookie);
                         buf->setEncoding(-1);
-                        return;
+						goto HoLala;
                     }
 
 					idEncoding = IDM_FORMAT_AS_UTF_8;
 					if (um == uniCookie)
-						return;
+						goto HoLala;
 
 					if (um != uni8Bit)
 					{
 						::SendMessage(_pPublicInterface->getHSelf(), WM_COMMAND, idEncoding, 0);
 						_pEditView->execute(SCI_EMPTYUNDOBUFFER);
-						return;
+						goto HoLala;
 					}
 
 					break;
@@ -2560,18 +2563,18 @@ void Notepad_plus::command(int id)
                         buf->setDirty(true);
                         buf->setUnicodeMode(uniUTF8);
                         buf->setEncoding(-1);
-                        return;
+						goto HoLala;
                     }
 
 					idEncoding = IDM_FORMAT_UTF_8;
 					if (um == uniUTF8)
-						return;
+						goto HoLala;
 
 					if (um != uni8Bit)
 					{
 						::SendMessage(_pPublicInterface->getHSelf(), WM_COMMAND, idEncoding, 0);
 						_pEditView->execute(SCI_EMPTYUNDOBUFFER);
-						return;
+						goto HoLala;
 					}
 					break;
 				}
@@ -2583,18 +2586,18 @@ void Notepad_plus::command(int id)
                         buf->setDirty(true);
                         buf->setUnicodeMode(uni16BE);
                         buf->setEncoding(-1);
-                        return;
+						goto HoLala;
                     }
 
 					idEncoding = IDM_FORMAT_UCS_2BE;
 					if (um == uni16BE)
-						return;
+						goto HoLala;
 
 					if (um != uni8Bit)
 					{
 						::SendMessage(_pPublicInterface->getHSelf(), WM_COMMAND, idEncoding, 0);
 						_pEditView->execute(SCI_EMPTYUNDOBUFFER);
-						return;
+						goto HoLala;
 					}
 					break;
 				}
@@ -2606,17 +2609,17 @@ void Notepad_plus::command(int id)
                         buf->setDirty(true);
                         buf->setUnicodeMode(uni16LE);
                         buf->setEncoding(-1);
-                        return;
+						goto HoLala;
                     }
 
 					idEncoding = IDM_FORMAT_UCS_2LE;
 					if (um == uni16LE)
-						return;
+						goto HoLala;
 					if (um != uni8Bit)
 					{
 						::SendMessage(_pPublicInterface->getHSelf(), WM_COMMAND, idEncoding, 0);
 						_pEditView->execute(SCI_EMPTYUNDOBUFFER);
-						return;
+						goto HoLala;
 					}
 					break;
 				}
@@ -2662,6 +2665,9 @@ void Notepad_plus::command(int id)
 				//Do not free anything, EmptyClipboard does that
 				_pEditView->execute(SCI_EMPTYUNDOBUFFER);
 			}
+
+			HoLala:
+			bSupressingMacroRecording=0;
 			break;
 		}
 
@@ -3495,7 +3501,7 @@ void Notepad_plus::command(int id)
 			}
 	}
 
-	if (_recordingMacro)
+	if (_recordingMacro && !bSupressingMacroRecording) {
 		switch (id)
 		{
 			case IDM_FILE_NEW :
@@ -3647,9 +3653,6 @@ void Notepad_plus::command(int id)
 			case IDM_SEARCH_MARKALLEXT5      :
 			case IDM_SEARCH_UNMARKALLEXT5    :
 			case IDM_SEARCH_CLEARALLMARKS    :
-			case IDM_FORMAT_TODOS  :
-			case IDM_FORMAT_TOUNIX :
-			case IDM_FORMAT_TOMAC  :
 			case IDM_VIEW_IN_FIREFOX :
 			case IDM_VIEW_IN_CHROME  :
 			case IDM_VIEW_IN_EDGE    :
@@ -3657,4 +3660,8 @@ void Notepad_plus::command(int id)
 				_macro.push_back(recordedMacroStep(id));
 				break;
 		}
+		if(id>=IDM_FORMAT_TODOS&&id<=IDM_FORMAT_ENCODE_END) {
+			_macro.push_back(recordedMacroStep(id));
+		}
+	}
 }
