@@ -270,7 +270,7 @@ public:
 	Notepad_plus_Window *_pPublicInterface = nullptr;
 	Window *_pMainWindow = nullptr;
 	ToolBar	_toolBar;
-private:
+//private:
 	DockingManager _dockingManager;
 	std::vector<int> _internalFuncIDs;
 

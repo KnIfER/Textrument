@@ -32,6 +32,12 @@
 #include "Notepad_plus_msgs.h"
 #include "UniConversion.h"
 #include "localization.h"
+#include "Notepad_plus.h"
+
+
+extern NppParameters *nppParms;
+
+extern Notepad_plus *nppApp;
 
 using namespace std;
 
@@ -278,7 +284,7 @@ void FindReplaceDlg::create(int dialogID, bool isRTL, bool msgDestParent)
 	//::GetWindowRect(_hSelf, &rect);
 	getClientRect(rect);
 	_tab.init(_hInst, _hSelf, false, true);
-	int tabDpiDynamicalHeight = NppParameters::getInstance()._dpiManager.scaleY(13);
+	int tabDpiDynamicalHeight = nppParms->_dpiManager.scaleY(13);
 	_tab.setFont(TEXT("Tahoma"), tabDpiDynamicalHeight);
 	
 	const TCHAR *find = TEXT("Find");
@@ -307,8 +313,7 @@ void FindReplaceDlg::create(int dialogID, bool isRTL, bool msgDestParent)
 	if (enableDlgTheme)
 		enableDlgTheme(_hSelf, ETDT_ENABLETAB);
 
-	NppParameters& nppParam = NppParameters::getInstance();
-	NppGUI& nppGUI = const_cast<NppGUI&>(nppParam.getNppGUI());
+	NppGUI nppGUI = nppParms->getNppGUI();
 	if (nppGUI._findWindowPos.bottom - nppGUI._findWindowPos.top != 0)  // check height against 0 as a test of valid data from config
 	{
 		RECT rc = getViewablePositionRect(nppGUI._findWindowPos);
@@ -322,8 +327,7 @@ void FindReplaceDlg::create(int dialogID, bool isRTL, bool msgDestParent)
 
 void FindReplaceDlg::fillFindHistory()
 {
-	NppParameters& nppParams = NppParameters::getInstance();
-	FindHistory & findHistory = nppParams.getFindHistory();
+	FindHistory & findHistory = nppParms->getFindHistory();
 
 	fillComboHistory(IDFINDWHAT, findHistory._findHistoryFinds);
 	fillComboHistory(IDREPLACEWITH, findHistory._findHistoryReplaces);
@@ -362,7 +366,7 @@ void FindReplaceDlg::fillFindHistory()
 		::EnableWindow(GetDlgItem(_hSelf, IDREDOTMATCHNL), true);
 	}
 	
-	if (nppParams.isTransparentAvailable())
+	if (nppParms->isTransparentAvailable())
 	{
 		::ShowWindow(::GetDlgItem(_hSelf, IDC_TRANSPARENT_CHECK), SW_SHOW);
 		::ShowWindow(::GetDlgItem(_hSelf, IDC_TRANSPARENT_GRPBOX), SW_SHOW);
@@ -392,7 +396,7 @@ void FindReplaceDlg::fillFindHistory()
 			else
 			{
 				id = IDC_TRANSPARENT_ALWAYS_RADIO;
-				(NppParameters::getInstance()).SetTransparent(_hSelf, findHistory._transparency);
+				nppParms->SetTransparent(_hSelf, findHistory._transparency);
 
 			}
 			::SendDlgItemMessage(_hSelf, id, BM_SETCHECK, TRUE, 0);
@@ -423,7 +427,7 @@ void FindReplaceDlg::fillComboHistory(int id, const vector<generic_string> & str
 void FindReplaceDlg::saveFindHistory()
 {
 	if (! isCreated()) return;
-	FindHistory& findHistory = (NppParameters::getInstance()).getFindHistory();
+	FindHistory& findHistory = nppParms->getFindHistory();
 
 	saveComboHistory(IDD_FINDINFILES_DIR_COMBO, findHistory._nbMaxFindHistoryPath, findHistory._findHistoryPaths, false);
 	saveComboHistory(IDD_FINDINFILES_FILTERS_COMBO, findHistory._nbMaxFindHistoryFilter, findHistory._findHistoryFilters, true);
@@ -716,7 +720,7 @@ INT_PTR CALLBACK FindInFinderDlg::run_dlgProc(UINT message, WPARAM wParam, LPARA
 	{
 		case WM_INITDIALOG:
 		{
-			NativeLangSpeaker *pNativeSpeaker = (NppParameters::getInstance()).getNativeLangSpeaker();
+			NativeLangSpeaker *pNativeSpeaker = nppParms->getNativeLangSpeaker();
 			pNativeSpeaker->changeDlgLang(_hSelf, "FindInFinder");
 			initFromOptions();
 		}
@@ -808,6 +812,7 @@ std::mutex findOps_mutex;
 
 INT_PTR CALLBACK FindReplaceDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam)
 {
+	auto& nppParamInst = *nppParms;
 	switch (message) 
 	{
 		case WM_GETMINMAXINFO:
@@ -843,7 +848,7 @@ INT_PTR CALLBACK FindReplaceDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 			GetComboBoxInfo(hDirCombo, &cbinfo);
 			SetWindowLongPtr(cbinfo.hwndItem, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(comboEditProc));
 
-			if ((NppParameters::getInstance()).getNppGUI()._monospacedFontFindDlg)
+			if (nppParms->getNppGUI()._monospacedFontFindDlg)
 			{
 				const TCHAR* fontName = _T("Courier New");
 				const long nFontSize = 8;
@@ -908,12 +913,12 @@ INT_PTR CALLBACK FindReplaceDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 			 _countInSelFramePos.left = _replaceInSelFramePos.left = p.x;
 			 _countInSelFramePos.top = _replaceInSelFramePos.top = p.y;
 
-			 DPIManager* pDpiMgr = &(NppParameters::getInstance()._dpiManager);
+			 DPIManager* pDpiMgr = &(nppParms->_dpiManager);
 
 			 _countInSelFramePos.top = countP.y - pDpiMgr->scaleY(10);
 			 _countInSelFramePos.bottom = pDpiMgr->scaleY(80 - 3);
 
-			 NativeLangSpeaker *pNativeSpeaker = (NppParameters::getInstance()).getNativeLangSpeaker();
+			 NativeLangSpeaker *pNativeSpeaker = nppParms->getNativeLangSpeaker();
 
 			 generic_string searchButtonTip = pNativeSpeaker->getLocalizedStrFromID("shift-change-direction-tip", TEXT("Use Shift+Enter to search in the opposite direction."));
 			 _shiftTrickUpTip = CreateToolTip(IDOK, _hSelf, _hInst, const_cast<PTSTR>(searchButtonTip.c_str()));
@@ -942,11 +947,11 @@ INT_PTR CALLBACK FindReplaceDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 			if (reinterpret_cast<HWND>(lParam) == ::GetDlgItem(_hSelf, IDC_PERCENTAGE_SLIDER))
 			{
 				int percent = static_cast<int32_t>(::SendDlgItemMessage(_hSelf, IDC_PERCENTAGE_SLIDER, TBM_GETPOS, 0, 0));
-				FindHistory & findHistory = (NppParameters::getInstance()).getFindHistory();
+				FindHistory & findHistory = nppParms->getFindHistory();
 				findHistory._transparency = percent;
 				if (isCheckedOrNot(IDC_TRANSPARENT_ALWAYS_RADIO))
 				{
-					(NppParameters::getInstance()).SetTransparent(_hSelf, percent);
+					nppParms->SetTransparent(_hSelf, percent);
 				}
 			}
 			return TRUE;
@@ -1013,11 +1018,11 @@ INT_PTR CALLBACK FindReplaceDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 				if (LOWORD(wParam) == WA_INACTIVE && isVisible())
 				{
 					int percent = static_cast<int32_t>(::SendDlgItemMessage(_hSelf, IDC_PERCENTAGE_SLIDER, TBM_GETPOS, 0, 0));
-					(NppParameters::getInstance()).SetTransparent(_hSelf, percent);
+					nppParms->SetTransparent(_hSelf, percent);
 				}
 				else
 				{
-					(NppParameters::getInstance()).removeTransparent(_hSelf);
+					nppParms->removeTransparent(_hSelf);
 				}
 			}
 
@@ -1040,8 +1045,7 @@ INT_PTR CALLBACK FindReplaceDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 		case WM_COMMAND : 
 		{
 			bool isMacroRecording = (::SendMessage(_hParent, WM_GETCURRENTMACROSTATUS,0,0) == MACRO_RECORDING_IN_PROGRESS);
-			NppParameters& nppParamInst = NppParameters::getInstance();
-			FindHistory & findHistory = nppParamInst.getFindHistory();
+			FindHistory & findHistory = nppParms->getFindHistory();
 			switch (LOWORD(wParam))
 			{
 //Single actions
@@ -1109,7 +1113,7 @@ INT_PTR CALLBACK FindReplaceDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 						FindStatus findStatus = FSFound;
 						processFindNext(_options._str2Search.c_str(), _env, &findStatus);
 
-						NativeLangSpeaker *pNativeSpeaker = (NppParameters::getInstance()).getNativeLangSpeaker();
+						NativeLangSpeaker *pNativeSpeaker = nppParamInst.getNativeLangSpeaker();
 						if (findStatus == FSEndReached)
 						{
 							generic_string msg = pNativeSpeaker->getLocalizedStrFromID("find-status-end-reached", TEXT("Find: Found the 1st occurrence from the top. The end of the document has been reached."));
@@ -1286,7 +1290,7 @@ INT_PTR CALLBACK FindReplaceDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 						setStatusbarMessage(TEXT(""), FSNoMessage);
 						if ((*_ppEditView)->getCurrentBuffer()->isReadOnly())
 						{
-							NativeLangSpeaker *pNativeSpeaker = (NppParameters::getInstance()).getNativeLangSpeaker();
+							NativeLangSpeaker *pNativeSpeaker = nppParamInst.getNativeLangSpeaker();
 							generic_string msg = pNativeSpeaker->getLocalizedStrFromID("find-status-replace-readonly", TEXT("Replace: Cannot replace text. The current document is read only."));
 							setStatusbarMessage(msg, FSNotFound);
 							return TRUE;
@@ -1306,7 +1310,7 @@ INT_PTR CALLBACK FindReplaceDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 						nppParamInst._isFindReplacing = false;
 
 						generic_string result;
-						NativeLangSpeaker *pNativeSpeaker = (NppParameters::getInstance()).getNativeLangSpeaker();
+						NativeLangSpeaker *pNativeSpeaker = nppParamInst.getNativeLangSpeaker();
 						if (nbReplaced < 0)
 						{
 							result = pNativeSpeaker->getLocalizedStrFromID("find-status-replaceall-re-malformed", TEXT("Replace All: The regular expression is malformed."));
@@ -1343,7 +1347,7 @@ INT_PTR CALLBACK FindReplaceDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 						int nbCounted = processAll(ProcessCountAll, &_options);
 
 						generic_string result;
-						NativeLangSpeaker *pNativeSpeaker = (NppParameters::getInstance()).getNativeLangSpeaker();
+						NativeLangSpeaker *pNativeSpeaker = nppParamInst.getNativeLangSpeaker();
 						if (nbCounted < 0)
 						{
 							result = pNativeSpeaker->getLocalizedStrFromID("find-status-count-re-malformed", TEXT("Count: The regular expression to search is malformed."));
@@ -1385,7 +1389,7 @@ INT_PTR CALLBACK FindReplaceDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 						nppParamInst._isFindReplacing = false;
 						
 						generic_string result;
-						NativeLangSpeaker *pNativeSpeaker = (NppParameters::getInstance()).getNativeLangSpeaker();
+						NativeLangSpeaker *pNativeSpeaker = nppParamInst.getNativeLangSpeaker();
 						if (nbMarked < 0)
 						{
 							result = pNativeSpeaker->getLocalizedStrFromID("find-status-mark-re-malformed", TEXT("Mark: The regular expression to search is malformed."));
@@ -1531,7 +1535,7 @@ INT_PTR CALLBACK FindReplaceDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 					{
 						::SendDlgItemMessage(_hSelf, IDC_TRANSPARENT_LOSSFOCUS_RADIO, BM_SETCHECK, BST_UNCHECKED, 0);
 						::SendDlgItemMessage(_hSelf, IDC_TRANSPARENT_ALWAYS_RADIO, BM_SETCHECK, BST_UNCHECKED, 0);
-						(NppParameters::getInstance()).removeTransparent(_hSelf);
+						nppParamInst.removeTransparent(_hSelf);
 						findHistory._transparencyMode = FindHistory::none;
 					}
 
@@ -1541,14 +1545,14 @@ INT_PTR CALLBACK FindReplaceDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 				case IDC_TRANSPARENT_ALWAYS_RADIO :
 				{
 					int percent = static_cast<int32_t>(::SendDlgItemMessage(_hSelf, IDC_PERCENTAGE_SLIDER, TBM_GETPOS, 0, 0));
-					(NppParameters::getInstance()).SetTransparent(_hSelf, percent);
+					nppParamInst.SetTransparent(_hSelf, percent);
 					findHistory._transparencyMode = FindHistory::persistant;
 				}
 				return TRUE;
 
 				case IDC_TRANSPARENT_LOSSFOCUS_RADIO :
 				{
-					(NppParameters::getInstance()).removeTransparent(_hSelf);
+					nppParamInst.removeTransparent(_hSelf);
 					findHistory._transparencyMode = FindHistory::onLossingFocus;
 				}
 				return TRUE;
@@ -1579,8 +1583,7 @@ INT_PTR CALLBACK FindReplaceDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 
                     if (findHistory._isFolderFollowDoc)
                     {
-                        NppParameters& nppParam = NppParameters::getInstance();
-                        const TCHAR * dir = nppParam.getWorkingDir();
+                        const TCHAR * dir = nppParamInst.getWorkingDir();
                         ::SetDlgItemText(_hSelf, IDD_FINDINFILES_DIR_COMBO, dir);
                     }
 					
@@ -1751,7 +1754,7 @@ bool FindReplaceDlg::processFindNext(const TCHAR *txt2find, const FindOption *op
 			if (NotIncremental == pOptions->_incrementalType) //incremental search doesnt trigger messages
 			{	
 				generic_string newTxt2find = stringReplace(txt2find, TEXT("&"), TEXT("&&"));
-				NativeLangSpeaker *pNativeSpeaker = (NppParameters::getInstance()).getNativeLangSpeaker();
+				NativeLangSpeaker *pNativeSpeaker = nppParms->getNativeLangSpeaker();
 				generic_string msg = pNativeSpeaker->getLocalizedStrFromID("find-status-cannot-find", TEXT("Find: Can't find the text \"$STR_REPLACE$\""));
 				msg = stringReplace(msg, TEXT("$STR_REPLACE$"), newTxt2find);
 				setStatusbarMessage(msg, FSNotFound);
@@ -1772,7 +1775,7 @@ bool FindReplaceDlg::processFindNext(const TCHAR *txt2find, const FindOption *op
 	}
 	else if (posFind == -2) // Invalid Regular expression
 	{
-		NativeLangSpeaker *pNativeSpeaker = (NppParameters::getInstance()).getNativeLangSpeaker();
+		NativeLangSpeaker *pNativeSpeaker = nppParms->getNativeLangSpeaker();
 		generic_string msg = pNativeSpeaker->getLocalizedStrFromID("find-status-invalid-re", TEXT("Find: Invalid regular expression"));
 		setStatusbarMessage(msg, FSNotFound);
 		return false;
@@ -1790,7 +1793,7 @@ bool FindReplaceDlg::processFindNext(const TCHAR *txt2find, const FindOption *op
 	// Show a calltip for a zero length match
 	if (start == end) 
 	{
-		NativeLangSpeaker* pNativeSpeaker = (NppParameters::getInstance()).getNativeLangSpeaker();
+		NativeLangSpeaker* pNativeSpeaker = nppParms->getNativeLangSpeaker();
 		generic_string msg = pNativeSpeaker->getLocalizedStrFromID("find-regex-zero-length-match", TEXT("zero length match"));
 		msg = TEXT("^ ") + msg;
 		(*_ppEditView)->showCallTip(start, msg.c_str());
@@ -1816,7 +1819,7 @@ bool FindReplaceDlg::processReplace(const TCHAR *txt2find, const TCHAR *txt2repl
 
 	if ((*_ppEditView)->getCurrentBuffer()->isReadOnly())
 	{
-		NativeLangSpeaker *pNativeSpeaker = (NppParameters::getInstance()).getNativeLangSpeaker();
+		NativeLangSpeaker *pNativeSpeaker = nppParms->getNativeLangSpeaker();
 		generic_string msg = pNativeSpeaker->getLocalizedStrFromID("find-status-replace-readonly", TEXT("Replace: Cannot replace text. The current document is read only."));
 		setStatusbarMessage(msg, FSNotFound);
 		return false;
@@ -1863,7 +1866,7 @@ bool FindReplaceDlg::processReplace(const TCHAR *txt2find, const TCHAR *txt2repl
 			}
 			(*_ppEditView)->execute(SCI_SETSEL, start + replacedLen, start + replacedLen);
 
-			NativeLangSpeaker *pNativeSpeaker = (NppParameters::getInstance()).getNativeLangSpeaker();
+			NativeLangSpeaker *pNativeSpeaker = nppParms->getNativeLangSpeaker();
 			// Do the next find
 			moreMatches = processFindNext(txt2find, &replaceOptions, &status, FINDNEXTTYPE_REPLACENEXT);
 
@@ -1891,7 +1894,7 @@ bool FindReplaceDlg::processReplace(const TCHAR *txt2find, const TCHAR *txt2repl
 	}
 	else
 	{
-		NativeLangSpeaker *pNativeSpeaker = (NppParameters::getInstance()).getNativeLangSpeaker();
+		NativeLangSpeaker *pNativeSpeaker = nppParms->getNativeLangSpeaker();
 		generic_string msg = pNativeSpeaker->getLocalizedStrFromID("find-status-replace-not-found", TEXT("Replace: no occurrence was found."));
 		setStatusbarMessage(msg, FSNotFound);
 	}
@@ -1925,7 +1928,7 @@ int FindReplaceDlg::processAll(ProcessOperation op, const FindOption *opt, bool 
 {
 	if (op == ProcessReplaceAll && (*_ppEditView)->getCurrentBuffer()->isReadOnly())
 	{
-		NativeLangSpeaker *pNativeSpeaker = (NppParameters::getInstance()).getNativeLangSpeaker();
+		NativeLangSpeaker *pNativeSpeaker = nppParms->getNativeLangSpeaker();
 		generic_string msg = pNativeSpeaker->getLocalizedStrFromID("find-status-replaceall-readonly", TEXT("Replace All: Cannot replace text. The current document is read only."));
 		setStatusbarMessage(msg, FSNotFound);
 		return 0;
@@ -2359,7 +2362,7 @@ void FindReplaceDlg::findAllIn(InWhat op)
 		// in this case is DOCKABLE_DEMO_INDEX
 		data.dlgID = 0;
 		
-		NativeLangSpeaker *pNativeSpeaker = (NppParameters::getInstance()).getNativeLangSpeaker();
+		NativeLangSpeaker *pNativeSpeaker = nppParms->getNativeLangSpeaker();
 		generic_string text = pNativeSpeaker->getLocalizedStrFromID("find-result-caption", TEXT(""));
 		if (!text.empty())
 		{
@@ -2386,8 +2389,7 @@ void FindReplaceDlg::findAllIn(InWhat op)
 		_pFinder->_scintView.execute(SCI_SETUSETABS, true);
 		_pFinder->_scintView.execute(SCI_SETTABWIDTH, 4);
 
-		NppParameters& nppParam = NppParameters::getInstance();
-		NppGUI& nppGUI = const_cast<NppGUI&>(nppParam.getNppGUI());
+		NppGUI& nppGUI = const_cast<NppGUI&>(nppParms->getNppGUI());
 		_pFinder->_longLinesAreWrapped = nppGUI._finderLinesAreCurrentlyWrapped;
 		_pFinder->_scintView.wrap(_pFinder->_longLinesAreWrapped);
 		_pFinder->_scintView.setWrapMode(LINEWRAP_INDENT);
@@ -2474,7 +2476,7 @@ Finder * FindReplaceDlg::createFinder()
 	// in this case is DOCKABLE_DEMO_INDEX
 	data.dlgID = 0;
 
-	NativeLangSpeaker *pNativeSpeaker = (NppParameters::getInstance()).getNativeLangSpeaker();
+	NativeLangSpeaker *pNativeSpeaker = nppParms->getNativeLangSpeaker();
 	generic_string text = pNativeSpeaker->getLocalizedStrFromID("find-result-caption", TEXT(""));
 	if (!text.empty())
 	{
@@ -2765,7 +2767,7 @@ generic_string FindReplaceDlg::getScopeInfoForStatusBar(FindOption const *pFindO
 {
 	generic_string scope;
 
-	NativeLangSpeaker* pNativeSpeaker = (NppParameters::getInstance()).getNativeLangSpeaker();
+	NativeLangSpeaker* pNativeSpeaker = nppParms->getNativeLangSpeaker();
 
 	if (pFindOpt->_isInSelection)
 	{
@@ -2825,7 +2827,7 @@ void FindReplaceDlg::execSavedCommand(int cmd, uptr_t intValue, const generic_st
 				break;
 			case IDC_FRCOMMAND_EXEC:
 			{
-				NppParameters& nppParamInst = NppParameters::getInstance();
+				NppParameters& nppParamInst = *nppParms;
 				switch (intValue)
 				{
 					case IDOK:
@@ -2927,7 +2929,7 @@ void FindReplaceDlg::execSavedCommand(int cmd, uptr_t intValue, const generic_st
 						nppParamInst._isFindReplacing = false;
 
 						generic_string result;
-						NativeLangSpeaker *pNativeSpeaker = (NppParameters::getInstance()).getNativeLangSpeaker();
+						NativeLangSpeaker *pNativeSpeaker = nppParms->getNativeLangSpeaker();
 						if (nbReplaced < 0)
 						{
 							result = pNativeSpeaker->getLocalizedStrFromID("find-status-replaceall-re-malformed", TEXT("Replace All: The regular expression is malformed."));
@@ -2955,7 +2957,7 @@ void FindReplaceDlg::execSavedCommand(int cmd, uptr_t intValue, const generic_st
 					{
 						int nbCounted = processAll(ProcessCountAll, _env);
 						generic_string result;
-						NativeLangSpeaker *pNativeSpeaker = (NppParameters::getInstance()).getNativeLangSpeaker();
+						NativeLangSpeaker *pNativeSpeaker = nppParms->getNativeLangSpeaker();
 						if (nbCounted < 0)
 						{
 							result = pNativeSpeaker->getLocalizedStrFromID("find-status-count-re-malformed", TEXT("Count: The regular expression to search is malformed."));
@@ -2985,7 +2987,7 @@ void FindReplaceDlg::execSavedCommand(int cmd, uptr_t intValue, const generic_st
 						nppParamInst._isFindReplacing = false;
 						generic_string result;
 
-						NativeLangSpeaker *pNativeSpeaker = (NppParameters::getInstance()).getNativeLangSpeaker();
+						NativeLangSpeaker *pNativeSpeaker = nppParms->getNativeLangSpeaker();
 						if (nbMarked < 0)
 						{
 							result = pNativeSpeaker->getLocalizedStrFromID("find-status-mark-re-malformed", TEXT("Mark: The regular expression to search is malformed."));
@@ -3294,7 +3296,7 @@ bool FindReplaceDlg::replaceInFilesConfirmCheck(generic_string directory, generi
 {
 	bool confirmed = false;
 
-	NativeLangSpeaker* pNativeSpeaker = (NppParameters::getInstance()).getNativeLangSpeaker();
+	NativeLangSpeaker* pNativeSpeaker = nppParms->getNativeLangSpeaker();
 
 	generic_string title = pNativeSpeaker->getLocalizedStrFromID("replace-in-files-confirm-title", TEXT("Are you sure?"));
 
@@ -3322,14 +3324,12 @@ bool FindReplaceDlg::replaceInFilesConfirmCheck(generic_string directory, generi
 
 bool FindReplaceDlg::replaceInOpenDocsConfirmCheck(void)
 {
-	NppParameters& nppParam = NppParameters::getInstance();
-	const NppGUI& nppGui = nppParam.getNppGUI();
-	if (!nppGui._confirmReplaceInAllOpenDocs) {
+	if (nppApp->_playingBackMacro||!nppParms->getNppGUI()._confirmReplaceInAllOpenDocs) {
 		return 1;
 	}
 	bool confirmed = false;
 
-	NativeLangSpeaker* pNativeSpeaker = (NppParameters::getInstance()).getNativeLangSpeaker();
+	NativeLangSpeaker* pNativeSpeaker = nppParms->getNativeLangSpeaker();
 	generic_string title = pNativeSpeaker->getLocalizedStrFromID("replace-in-open-docs-confirm-title", TEXT("Are you sure?"));
 	generic_string msg = pNativeSpeaker->getLocalizedStrFromID("replace-in-open-docs-confirm-message", TEXT("Are you sure you want to replace all occurrences in all open documents?"));
 
@@ -3345,7 +3345,7 @@ bool FindReplaceDlg::replaceInOpenDocsConfirmCheck(void)
 
 generic_string Finder::getHitsString(int count) const
 {
-	NativeLangSpeaker *pNativeSpeaker = (NppParameters::getInstance()).getNativeLangSpeaker();
+	NativeLangSpeaker *pNativeSpeaker = nppParms->getNativeLangSpeaker();
 	generic_string text = pNativeSpeaker->getLocalizedStrFromID("find-result-hits", TEXT(""));
 
 	if (text.empty())
@@ -3371,7 +3371,7 @@ generic_string Finder::getHitsString(int count) const
 
 void Finder::addSearchLine(const TCHAR *searchName)
 {
-	NativeLangSpeaker *pNativeSpeaker = (NppParameters::getInstance()).getNativeLangSpeaker();
+	NativeLangSpeaker *pNativeSpeaker = nppParms->getNativeLangSpeaker();
 	generic_string str = pNativeSpeaker->getLocalizedStrFromID("find-result-title", TEXT("Search"));
 	str += TEXT(" \"");
 	str += searchName;
@@ -3417,7 +3417,7 @@ void Finder::addSearchHitCount(int count, int countSearched, bool isMatchLines, 
 	generic_string nbFoundFilesStr = std::to_wstring(_nbFoundFiles);
 	generic_string nbSearchedFilesStr = std::to_wstring(countSearched);
 
-	NativeLangSpeaker* pNativeSpeaker = (NppParameters::getInstance()).getNativeLangSpeaker();
+	NativeLangSpeaker* pNativeSpeaker = nppParms->getNativeLangSpeaker();
 
 	generic_string text = pNativeSpeaker->getLocalizedStrFromID(
 		searchedEntireNotSelection ? "find-result-title-info" : "find-result-title-info-selections",
@@ -3513,8 +3513,7 @@ void Finder::wrapLongLinesToggle()
 	if (!_canBeVolatiled)
 	{
 		// only remember this setting from the original finder
-		NppParameters& nppParam = NppParameters::getInstance();
-		NppGUI& nppGUI = const_cast<NppGUI&>(nppParam.getNppGUI());
+		NppGUI& nppGUI = const_cast<NppGUI&>(nppParms->getNppGUI());
 		nppGUI._finderLinesAreCurrentlyWrapped = _longLinesAreWrapped;
 	}
 }
@@ -3641,7 +3640,7 @@ void Finder::setFinderStyle()
 	
 	// Set current line background color for the finder
 	const TCHAR * lexerName = ScintillaEditView::langNames[L_SEARCHRESULT].lexerName;
-	LexerStyler *pStyler = (NppParameters::getInstance().getLStylerArray()).getLexerStylerByName(lexerName);
+	LexerStyler *pStyler = nppParms->getLStylerArray().getLexerStylerByName(lexerName);
 	if (pStyler)
 	{
 		int i = pStyler->getStylerIndexByID(SCE_SEARCHRESULT_CURRENT_LINE);
@@ -3654,14 +3653,14 @@ void Finder::setFinderStyle()
 	_scintView.setSearchResultLexer();
 	
 	// Override foreground & background colour by default foreground & background coulour
-	StyleArray & stylers = NppParameters::getInstance().getMiscStylerArray();
+	StyleArray & stylers = nppParms->getMiscStylerArray();
     int iStyleDefault = stylers.getStylerIndexByID(STYLE_DEFAULT);
     if (iStyleDefault != -1)
     {
         Style & styleDefault = stylers.getStyler(iStyleDefault);
 	    _scintView.setStyle(styleDefault);
 
-		GlobalOverride & go = NppParameters::getInstance().getGlobalOverrideStyle();
+		GlobalOverride & go = nppParms->getGlobalOverrideStyle();
 		if (go.isEnable())
 		{
 			int iGlobalOverride = stylers.getStylerIndexByName(TEXT("Global override"));
@@ -3686,7 +3685,7 @@ void Finder::setFinderStyle()
 	_scintView.execute(SCI_COLOURISE, 0, -1);
 
 	// finder fold style follows user preference but use box when user selects none
-	ScintillaViewParams& svp = (ScintillaViewParams&)NppParameters::getInstance().getSVP();
+	ScintillaViewParams& svp = (ScintillaViewParams&)nppParms->getSVP();
 	_scintView.setMakerStyle(svp._folderStyle == FOLDER_STYLE_NONE ? FOLDER_STYLE_BOX : svp._folderStyle);
 }
 
@@ -3772,7 +3771,7 @@ INT_PTR CALLBACK Finder::run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam)
 				ContextMenu scintillaContextmenu;
 				vector<MenuItemUnit> tmp;
 
-				NativeLangSpeaker *pNativeSpeaker = (NppParameters::getInstance()).getNativeLangSpeaker();
+				NativeLangSpeaker *pNativeSpeaker = nppParms->getNativeLangSpeaker();
 
 				generic_string findInFinder = pNativeSpeaker->getLocalizedStrFromID("finder-find-in-finder", TEXT("Find in these found results..."));
 				generic_string closeThis = pNativeSpeaker->getLocalizedStrFromID("finder-close-this", TEXT("Close this finder"));
