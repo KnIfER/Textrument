@@ -2,7 +2,7 @@ What is Textrument ?
 ===================
 TEXT + INSTRUMENT = TEXTRUMENT
 
-It's derivation of Notepad++, and grand-derivation of scintilla. 
+It's a derivation of Notepad++, and also a derivation of scintilla. 
 
 What is Not~~ep~~Mad++ ?
 ===================
