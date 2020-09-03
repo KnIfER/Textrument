@@ -5,6 +5,14 @@ There are two components that need to be built separately:
 
  - `Textrument.exe`:  ( Main Application )
  - `SciLexer.dll` : ( Runtime dependency )
+ 
+ I build them with both Visual Studio Community 2019.
+ 
+ Two vital additions:
+----------------------
+
+ - `doLocalConf.xml`:  ( Indicates store user-configurations in the installation path )
+ - `User` : ( Folder for user-configurations )
 
 
 ## Build `Textrument.exe`:
@@ -29,9 +37,9 @@ Before you build, make sure that the macro $(BOOST) is defined correctly in `plu
 ----------------------
 You need to copy the [property file](plugins/plugins_dev_sample.props) as `Project_Root/plugins/plugins_dev.props`.  
 
-A bunch of marco definitions need to be modified to correct path.   
+A bunch of marco definitions need to be modified according to you environment.   
 
-To modify the props  properties, go to View->Property Manager, just right click and edit the Macros. dont forget to save them.  
+To modify the props properties, go to View->Property Manager, just right click and edit the Macros. dont forget to save them.  
 
 - scintilla : path to the scintilla module
 
