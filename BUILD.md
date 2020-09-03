@@ -11,7 +11,7 @@ There are two components that need to be built separately:
  Two vital additions:
 ----------------------
 
- - `doLocalConf.xml`:  ( Indicates store user-configurations in the installation path )
+ - `doLocalConf.xml`:  ( Indicates that user configuration should be stored in the installation path )
  - `User` : ( Folder for user-configurations )
 
 
