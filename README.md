@@ -1,6 +1,6 @@
 What is Textrument ?
 ===================
-## TEXT + INSTRUMENT = TEXTRUMENT
+TEXT + INSTRUMENT = TEXTRUMENT
 
 It's derivation of Notepad++, and grand-derivation of scintilla. 
 
