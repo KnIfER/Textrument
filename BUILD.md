@@ -30,7 +30,7 @@ Follow the original instructions to build boost first:
 
 Then  Open [`PowerEditor\visual.net\notepadPlus.vcxproj`](scintilla/win32/SciLexer.vcxproj). 
 
-Before you build, make sure that the macro $(BOOST) is defined correctly in `plugins/plugins_dev.props`. 
+Before build, make sure that the macro $(BOOST) is defined correctly in `plugins/plugins_dev.props`. 
 
 If you are lazy, just copy the `SciLexer.dll` kernel from the distribution package of Textrument or Notepad++.  
 
