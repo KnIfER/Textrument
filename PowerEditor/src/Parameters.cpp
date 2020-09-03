@@ -4028,6 +4028,14 @@ extern "C" {
 typedef DWORD (WINAPI * EESFUNC) (LPCTSTR, LPTSTR, DWORD);
 }
 
+
+void watchBooleanField(TiXmlElement* element, const TCHAR* Name, bool & val) 
+{
+	const TCHAR* filedFound = element->Attribute(Name);
+	if (filedFound)
+		val = (lstrcmp(filedFound, TEXT("yes")) == 0);
+}
+
 void NppParameters::feedGUIParameters(TiXmlNode *node)
 {
 	TiXmlNode *GUIRoot = node->FirstChildElement(TEXT("GUIConfigs"));
@@ -5195,21 +5203,12 @@ void NppParameters::feedGUIParameters(TiXmlNode *node)
 		}
 		else if (!lstrcmp(nm, TEXT("Searching")))
 		{
-			const TCHAR* optNameMonoFont = element->Attribute(TEXT("monospacedFontFindDlg"));
-			if (optNameMonoFont)
-				_nppGUI._monospacedFontFindDlg = (lstrcmp(optNameMonoFont, TEXT("yes")) == 0);
-
-			const TCHAR* optStopFillingFindField = element->Attribute(TEXT("stopFillingFindField"));
-			if (optStopFillingFindField)
-				_nppGUI._stopFillingFindField = (lstrcmp(optStopFillingFindField, TEXT("yes")) == 0);
-
-			const TCHAR* optFindDlgAlwaysVisible = element->Attribute(TEXT("findDlgAlwaysVisible"));
-			if (optFindDlgAlwaysVisible)
-				_nppGUI._findDlgAlwaysVisible = (lstrcmp(optFindDlgAlwaysVisible, TEXT("yes")) == 0);
-
-			const TCHAR* optConfirmReplaceOpenDocs = element->Attribute(TEXT("confirmReplaceInAllOpenDocs"));
-			if (optConfirmReplaceOpenDocs)
-				_nppGUI._confirmReplaceInAllOpenDocs = (lstrcmp(optConfirmReplaceOpenDocs, TEXT("yes")) == 0);
+			watchBooleanField(element, TEXT("monospacedFontFindDlg"), _nppGUI._monospacedFontFindDlg);
+			watchBooleanField(element, TEXT("enlargeFontFindDlg"), _nppGUI._enlargedFontFindDlg);
+			watchBooleanField(element, TEXT("fillFindField"), _nppGUI._fillFindFieldTS);
+			watchBooleanField(element, TEXT("fillFindField1"), _nppGUI._fillFindFieldNS);
+			watchBooleanField(element, TEXT("findDlgAlwaysVisible"), _nppGUI._findDlgAlwaysVisible);
+			watchBooleanField(element, TEXT("confirmReplaceInAllOpenDocs"), _nppGUI._confirmReplaceInAllOpenDocs);
 		}
 		else if (!lstrcmp(nm, TEXT("MISC")))
 		{
@@ -6094,7 +6093,9 @@ void NppParameters::createXmlTreeFromGUIParams()
 		GUIConfigElement->SetAttribute(TEXT("name"), TEXT("Searching"));
 
 		GUIConfigElement->SetAttribute(TEXT("monospacedFontFindDlg"), _nppGUI._monospacedFontFindDlg ? TEXT("yes") : TEXT("no"));
-		GUIConfigElement->SetAttribute(TEXT("stopFillingFindField"), _nppGUI._stopFillingFindField ? TEXT("yes") : TEXT("no"));
+		GUIConfigElement->SetAttribute(TEXT("enlargeFontFindDlg"), _nppGUI._enlargedFontFindDlg ? TEXT("yes") : TEXT("no"));
+		GUIConfigElement->SetAttribute(TEXT("fillFindField"), _nppGUI._fillFindFieldTS ? TEXT("yes") : TEXT("no"));
+		GUIConfigElement->SetAttribute(TEXT("fillFindField1"), _nppGUI._fillFindFieldNS ? TEXT("yes") : TEXT("no"));
 		GUIConfigElement->SetAttribute(TEXT("findDlgAlwaysVisible"), _nppGUI._findDlgAlwaysVisible ? TEXT("yes") : TEXT("no"));
 		GUIConfigElement->SetAttribute(TEXT("confirmReplaceInAllOpenDocs"), _nppGUI._confirmReplaceInAllOpenDocs ? TEXT("yes") : TEXT("no"));
 	}

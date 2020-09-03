@@ -261,18 +261,9 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 		case NPPM_LAUNCHFINDINFILESDLG:
 		{
 			// Find in files function code should be here due to the number of parameters (2) cannot be passed via WM_COMMAND
-			const int strSize = FINDREPLACE_MAXLENGTH;
-			TCHAR str[strSize];
-
 			bool isFirstTime = not _findReplaceDlg.isCreated();
 			_findReplaceDlg.doDialog(FIND_DLG, _nativeLangSpeaker.isRTL());
-			
-			const NppGUI & nppGui = nppParam.getNppGUI();
-			if (!nppGui._stopFillingFindField)
-			{
-				_pEditView->getGenericSelectedText(str, strSize);
-				_findReplaceDlg.setSearchText(str);
-			}
+			_findReplaceDlg.fetchSelectedWord();
 
 			if (isFirstTime)
 				_nativeLangSpeaker.changeFindReplaceDlgLang(_findReplaceDlg);

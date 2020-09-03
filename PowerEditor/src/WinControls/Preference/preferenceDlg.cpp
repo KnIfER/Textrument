@@ -34,6 +34,7 @@
 #include "EncodingMapper.h"
 #include "localization.h"
 #include "wutils.h"
+#include "Notepad_plus.h"
 
 #define MyGetGValue(rgb)      (LOBYTE((rgb)>>8))
 
@@ -70,6 +71,8 @@ extern generic_string getTextFromCombo(HWND hCombo);
 extern NppParameters* nppParms;
 
 extern NppGUI* nppUIParms;
+
+extern Notepad_plus* nppApp;
 
 bool CreateFonts(bool init) {
 	if(hFontSubPanel==0) {
@@ -2655,7 +2658,7 @@ INT_PTR CALLBACK BackupDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM)
 			::SendDlgItemMessage(_hSelf, IDC_BACKUPDIR_RESTORESESSION_CHECK, BM_SETCHECK, snapshotCheck?BST_CHECKED:BST_UNCHECKED, 0);
 			auto periodicBackupInSec = static_cast<UINT>(nppGUI._snapshotBackupTiming / 1000);
 			::SetDlgItemInt(_hSelf, IDC_BACKUPDIR_RESTORESESSION_EDIT,periodicBackupInSec, FALSE);
-			generic_string backupFilePath = NppParameters::getInstance().getUserPath();
+			generic_string backupFilePath = nppParms->getUserPath();
 			backupFilePath += TEXT("\\backup\\");
 			::SetDlgItemText(_hSelf, IDD_BACKUPDIR_RESTORESESSION_PATH_EDIT, backupFilePath.c_str());
 
@@ -3138,7 +3141,7 @@ INT_PTR CALLBACK AutoCompletionDlg::run_dlgProc(UINT message, WPARAM wParam, LPA
 
 INT_PTR CALLBACK MultiInstDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM)
 {
-	NppGUI & nppGUI = const_cast<NppGUI &>((NppParameters::getInstance()).getNppGUI());
+	NppGUI & nppGUI = *nppUIParms;
 	switch (message) 
 	{
 		case WM_INITDIALOG :
@@ -3197,7 +3200,7 @@ void DelimiterSettingsDlg::detectSpace(const char *text2Check, int & nbSp, int &
 
 generic_string DelimiterSettingsDlg::getWarningText(size_t nbSp, size_t nbTab) const
 {
-	NativeLangSpeaker *pNativeSpeaker = (NppParameters::getInstance()).getNativeLangSpeaker();
+	NativeLangSpeaker *pNativeSpeaker = nppParms->getNativeLangSpeaker();
 
 	generic_string msg;
 	if (nbSp && nbTab)
@@ -3284,7 +3287,7 @@ generic_string DelimiterSettingsDlg::getWarningText(size_t nbSp, size_t nbTab) c
 void DelimiterSettingsDlg::setWarningIfNeed() const
 {
 	generic_string msg;
-	NppGUI & nppGUI = const_cast<NppGUI &>((NppParameters::getInstance()).getNppGUI());
+	NppGUI & nppGUI = *nppUIParms;
 	if (not nppGUI._isWordCharDefault)
 	{
 		int nbSp = 0;
@@ -3297,7 +3300,7 @@ void DelimiterSettingsDlg::setWarningIfNeed() const
 
 INT_PTR CALLBACK DelimiterSettingsDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam)
 {
-	NppGUI & nppGUI = const_cast<NppGUI &>((NppParameters::getInstance()).getNppGUI());
+	NppGUI & nppGUI = *nppUIParms;
 	switch (message) 
 	{
 		case WM_INITDIALOG :
@@ -3353,7 +3356,7 @@ INT_PTR CALLBACK DelimiterSettingsDlg::run_dlgProc(UINT message, WPARAM wParam, 
 
 			setWarningIfNeed();
 
-			NativeLangSpeaker *pNativeSpeaker = (NppParameters::getInstance()).getNativeLangSpeaker();
+			NativeLangSpeaker *pNativeSpeaker = nppParms->getNativeLangSpeaker();
 			generic_string tip2show = pNativeSpeaker->getLocalizedStrFromID("word-chars-list-tip", TEXT("This allows you to include additional character into current word characters while double clicking for selection or searching with \"Match whole word only\" option checked."));
 
 			_tip = CreateToolTip(IDD_WORDCHAR_QUESTION_BUTTON, _hSelf, _hInst, const_cast<PTSTR>(tip2show.c_str()));
@@ -3470,8 +3473,8 @@ INT_PTR CALLBACK DelimiterSettingsDlg::run_dlgProc(UINT message, WPARAM wParam, 
 
 INT_PTR CALLBACK SettingsOnCloudDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM)
 {
-	NppParameters& nppParams = NppParameters::getInstance();
-	NppGUI & nppGUI = const_cast<NppGUI &>(nppParams.getNppGUI());
+	NppParameters& nppParams = *nppParms;
+	NppGUI& nppGUI = *nppUIParms;
 
 	if (HIWORD(wParam) == EN_CHANGE)
 	{
@@ -3483,7 +3486,7 @@ INT_PTR CALLBACK SettingsOnCloudDlg::run_dlgProc(UINT message, WPARAM wParam, LP
 				TCHAR inputDirExpanded[MAX_PATH] = {'\0'};
 				::SendDlgItemMessage(_hSelf, IDC_CLOUDPATH_EDIT, WM_GETTEXT, MAX_PATH, reinterpret_cast<LPARAM>(inputDir));
 				::ExpandEnvironmentStrings(inputDir, inputDirExpanded, MAX_PATH);
-				NativeLangSpeaker *pNativeSpeaker = (NppParameters::getInstance()).getNativeLangSpeaker();
+				NativeLangSpeaker *pNativeSpeaker = nppParms->getNativeLangSpeaker();
 				if (::PathFileExists(inputDirExpanded))
 				{
 					nppGUI._cloudPath = inputDirExpanded;
@@ -3538,7 +3541,7 @@ INT_PTR CALLBACK SettingsOnCloudDlg::run_dlgProc(UINT message, WPARAM wParam, LP
 
 		case WM_COMMAND:
 		{
-			NativeLangSpeaker *pNativeSpeaker = (NppParameters::getInstance()).getNativeLangSpeaker();
+			NativeLangSpeaker *pNativeSpeaker = nppParms->getNativeLangSpeaker();
 			switch (wParam)
 			{
 				case IDC_NOCLOUD_RADIO:
@@ -3588,8 +3591,8 @@ INT_PTR CALLBACK SettingsOnCloudDlg::run_dlgProc(UINT message, WPARAM wParam, LP
 
 INT_PTR CALLBACK SearchEngineChoiceDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM)
 {
-	NppParameters& nppParams = NppParameters::getInstance();
-	NppGUI & nppGUI = const_cast<NppGUI &>(nppParams.getNppGUI());
+	NppParameters& nppParams = *nppParms;
+	NppGUI& nppGUI = *nppUIParms;
 
 	if (HIWORD(wParam) == EN_CHANGE)
 	{
@@ -3692,15 +3695,17 @@ INT_PTR CALLBACK SearchEngineChoiceDlg::run_dlgProc(UINT message, WPARAM wParam,
 
 INT_PTR CALLBACK SearchingSettingsDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM)
 {
-	NppParameters& nppParams = NppParameters::getInstance();
-	NppGUI& nppGUI = const_cast<NppGUI&>(nppParams.getNppGUI());
+	NppParameters& nppParams = *nppParms;
+	NppGUI& nppGUI = *nppUIParms;
 
 	switch (message)
 	{
 		case WM_INITDIALOG:
 		{
-			::SendDlgItemMessage(_hSelf, IDC_CHECK_STOPFILLINGFINDFIELD, BM_SETCHECK, nppGUI._stopFillingFindField, 0);
+			::SendDlgItemMessage(_hSelf, IDC_CHECK_STOPFILLINGFINDFIELD, BM_SETCHECK, nppGUI._fillFindFieldTS, 0);
+			::SendDlgItemMessage(_hSelf, IDC_CHECK_FILLCARETFINDFIELD, BM_SETCHECK, nppGUI._fillFindFieldNS, 0);
 			::SendDlgItemMessage(_hSelf, IDC_CHECK_MONOSPACEDFONT_FINDDLG, BM_SETCHECK, nppGUI._monospacedFontFindDlg, 0);
+			::SendDlgItemMessage(_hSelf, IDC_CHECK_ENLARGED_FINDDLG, BM_SETCHECK, nppGUI._enlargedFontFindDlg, 0);
 			::SendDlgItemMessage(_hSelf, IDC_CHECK_FINDDLG_ALWAYS_VISIBLE, BM_SETCHECK, nppGUI._findDlgAlwaysVisible, 0);
 			::SendDlgItemMessage(_hSelf, IDC_CHECK_CONFIRMREPLOPENDOCS, BM_SETCHECK, nppGUI._confirmReplaceInAllOpenDocs, 0);
 		}
@@ -3712,14 +3717,24 @@ INT_PTR CALLBACK SearchingSettingsDlg::run_dlgProc(UINT message, WPARAM wParam, 
 			{
 				case IDC_CHECK_STOPFILLINGFINDFIELD:
 				{
-					nppGUI._stopFillingFindField = isCheckedOrNot(IDC_CHECK_STOPFILLINGFINDFIELD);
+					nppGUI._fillFindFieldTS = isCheckedOrNot(IDC_CHECK_STOPFILLINGFINDFIELD);
+					return TRUE;
+				}
+				break;
+
+				case IDC_CHECK_FILLCARETFINDFIELD:
+				{
+					nppGUI._fillFindFieldNS = isCheckedOrNot(IDC_CHECK_FILLCARETFINDFIELD);
 					return TRUE;
 				}
 				break;
 
 				case IDC_CHECK_MONOSPACEDFONT_FINDDLG:
+				case IDC_CHECK_ENLARGED_FINDDLG:
 				{
 					nppGUI._monospacedFontFindDlg = isCheckedOrNot(IDC_CHECK_MONOSPACEDFONT_FINDDLG);
+					nppGUI._enlargedFontFindDlg = isCheckedOrNot(IDC_CHECK_ENLARGED_FINDDLG);
+					nppApp->_findReplaceDlg.RefreshComboFonts(0);
 					return TRUE;
 				}
 				break;

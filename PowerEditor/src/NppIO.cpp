@@ -399,6 +399,7 @@ BufferID Notepad_plus::doOpen(const generic_string& fileName, bool isRecursive, 
 						_preference.buildDropFilters(patterns);
 					}
 					recursively = nppParam.getNppGUI()._dragOpenRecursive;
+					DropFilterRequested=0;
 				}
 				if(!patterns.size()) {
 					patterns.push_back(TEXT("*"));

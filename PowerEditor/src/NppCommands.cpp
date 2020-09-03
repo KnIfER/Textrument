@@ -1077,9 +1077,6 @@ void Notepad_plus::command(int id)
 		case IDM_SEARCH_REPLACE :
 		case IDM_SEARCH_MARK :
 		{
-			const int strSize = FINDREPLACE_MAXLENGTH;
-			TCHAR str[strSize];
-
 			bool isFirstTime = !_findReplaceDlg.isCreated();
 
 			DIALOG_TYPE dlgID = FIND_DLG;
@@ -1088,14 +1085,7 @@ void Notepad_plus::command(int id)
 			else if (id == IDM_SEARCH_MARK)
 				dlgID = MARK_DLG;
 			_findReplaceDlg.doDialog(dlgID, _nativeLangSpeaker.isRTL());
-
-			const NppGUI & nppGui = (NppParameters::getInstance()).getNppGUI();
-			if (!nppGui._stopFillingFindField)
-			{
-				_pEditView->getGenericSelectedText(str, strSize);
-				_findReplaceDlg.setSearchText(str);
-			}
-
+			_findReplaceDlg.fetchSelectedWord();
 			setFindReplaceFolderFilter(NULL, NULL);
 
 			if (isFirstTime)

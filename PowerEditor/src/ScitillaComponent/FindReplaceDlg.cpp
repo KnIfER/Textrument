@@ -833,42 +833,7 @@ INT_PTR CALLBACK FindReplaceDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 
 		case WM_INITDIALOG :
 		{
-			HWND hFindCombo = ::GetDlgItem(_hSelf, IDFINDWHAT);
-			HWND hReplaceCombo = ::GetDlgItem(_hSelf, IDREPLACEWITH);
-			HWND hFiltersCombo = ::GetDlgItem(_hSelf, IDD_FINDINFILES_FILTERS_COMBO);
-			HWND hDirCombo = ::GetDlgItem(_hSelf, IDD_FINDINFILES_DIR_COMBO);
-
-			// Change handler of edit element in the comboboxes to support Ctrl+Backspace
-			COMBOBOXINFO cbinfo = { sizeof(COMBOBOXINFO) };
-			GetComboBoxInfo(hFindCombo, &cbinfo);
-			originalComboEditProc = SetWindowLongPtr(cbinfo.hwndItem, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(comboEditProc));
-			GetComboBoxInfo(hReplaceCombo, &cbinfo);
-			SetWindowLongPtr(cbinfo.hwndItem, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(comboEditProc));
-			GetComboBoxInfo(hFiltersCombo, &cbinfo);
-			SetWindowLongPtr(cbinfo.hwndItem, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(comboEditProc));
-			GetComboBoxInfo(hDirCombo, &cbinfo);
-			SetWindowLongPtr(cbinfo.hwndItem, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(comboEditProc));
-
-			if (nppParms->getNppGUI()._monospacedFontFindDlg)
-			{
-				const TCHAR* fontName = _T("Courier New");
-				const long nFontSize = 8;
-
-				HDC hdc = GetDC(_hSelf);
-
-				LOGFONT logFont = { 0 };
-				logFont.lfHeight = -MulDiv(nFontSize, GetDeviceCaps(hdc, LOGPIXELSY), 72);
-				_tcscpy_s(logFont.lfFaceName, fontName);
-
-				_hMonospaceFont = CreateFontIndirect(&logFont);
-
-				ReleaseDC(_hSelf, hdc);
-
-				SendMessage(hFindCombo, WM_SETFONT, (WPARAM)_hMonospaceFont, MAKELPARAM(true, 0));
-				SendMessage(hReplaceCombo, WM_SETFONT, (WPARAM)_hMonospaceFont, MAKELPARAM(true, 0));
-				SendMessage(hFiltersCombo, WM_SETFONT, (WPARAM)_hMonospaceFont, MAKELPARAM(true, 0));
-				SendMessage(hDirCombo, WM_SETFONT, (WPARAM)_hMonospaceFont, MAKELPARAM(true, 0));
-			}
+			RefreshComboFonts(1);
 
 			RECT arc;
 			::GetWindowRect(::GetDlgItem(_hSelf, IDCANCEL), &arc);
@@ -3119,6 +3084,71 @@ void FindInFinderDlg::doDialog(Finder *launcher, bool isRTL)
 	else
 		::DialogBoxParam(_hInst, MAKEINTRESOURCE(IDD_FINDINFINDER_DLG), _hParent, dlgProc, reinterpret_cast<LPARAM>(this));
 	
+}
+
+void FindReplaceDlg::RefreshComboFonts(bool init)
+{
+	HWND hFindCombo = ::GetDlgItem(_hSelf, IDFINDWHAT);
+	HWND hReplaceCombo = ::GetDlgItem(_hSelf, IDREPLACEWITH);
+	HWND hFiltersCombo = ::GetDlgItem(_hSelf, IDD_FINDINFILES_FILTERS_COMBO);
+	HWND hDirCombo = ::GetDlgItem(_hSelf, IDD_FINDINFILES_DIR_COMBO);
+
+	if(init) {
+		// Change handler of edit element in the comboboxes to support Ctrl+Backspace
+		COMBOBOXINFO cbinfo = { sizeof(COMBOBOXINFO) };
+		GetComboBoxInfo(hFindCombo, &cbinfo);
+		originalComboEditProc = SetWindowLongPtr(cbinfo.hwndItem, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(comboEditProc));
+		GetComboBoxInfo(hReplaceCombo, &cbinfo);
+		SetWindowLongPtr(cbinfo.hwndItem, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(comboEditProc));
+		GetComboBoxInfo(hFiltersCombo, &cbinfo);
+		SetWindowLongPtr(cbinfo.hwndItem, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(comboEditProc));
+		GetComboBoxInfo(hDirCombo, &cbinfo);
+		SetWindowLongPtr(cbinfo.hwndItem, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(comboEditProc));
+	} else if(!isCreated()) {
+		return;
+	}
+
+	const NppGUI & nppGui = nppParms->getNppGUI();
+	if (nppGui._monospacedFontFindDlg||nppGui._enlargedFontFindDlg||!init)
+	{
+		const TCHAR* fontName = _T("Courier New");
+		const long nFontSize = nppGui._enlargedFontFindDlg?10:8;
+
+		LOGFONT logFont = { 0 };
+		HDC hdc = GetDC(_hSelf);
+		logFont.lfHeight = -MulDiv(nFontSize, GetDeviceCaps(hdc, LOGPIXELSY), 72);
+		ReleaseDC(_hSelf, hdc);
+		if(nppGui._monospacedFontFindDlg) {
+			_tcscpy_s(logFont.lfFaceName, fontName);
+		}
+		if(_hMonospaceFont) {
+			::DeleteObject(_hMonospaceFont);
+		}
+		_hMonospaceFont = CreateFontIndirect(&logFont);
+
+		SendMessage(hFindCombo, WM_SETFONT, (WPARAM)_hMonospaceFont, MAKELPARAM(true, 0));
+		SendMessage(hReplaceCombo, WM_SETFONT, (WPARAM)_hMonospaceFont, MAKELPARAM(true, 0));
+		SendMessage(hFiltersCombo, WM_SETFONT, (WPARAM)_hMonospaceFont, MAKELPARAM(true, 0));
+		SendMessage(hDirCombo, WM_SETFONT, (WPARAM)_hMonospaceFont, MAKELPARAM(true, 0));
+	}
+}
+
+void FindReplaceDlg::fetchSelectedWord()
+{
+	const NppGUI & nppGui = nppParms->getNppGUI();
+	bool fillWithTrueSelection=nppGui._fillFindFieldTS;
+	bool fillWithNearSelection=nppGui._fillFindFieldNS;
+
+	const auto & sel = nppApp->_pEditView->getSelection();
+	bool hasSel=sel.cpMax>sel.cpMin;
+
+	if(!fillWithTrueSelection&&fillWithNearSelection
+		||fillWithTrueSelection&&hasSel||fillWithNearSelection&&!hasSel) {
+		const int strSize = FINDREPLACE_MAXLENGTH;
+		TCHAR str[strSize];
+		nppApp->_pEditView->getGenericSelectedText(str, strSize);
+		setSearchText(str);
+	}
 }
 
 void FindReplaceDlg::doDialog(DIALOG_TYPE whichType, bool isRTL, bool toShow)
