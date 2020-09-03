@@ -52,6 +52,6 @@ To modify the props properties, go to View->Property Manager, just right click a
 
 - DLLOU : default plugin output path. (`Project_Root/PowerEditor\bin64\plugins\PluginName\PluginName.dll`)
 
-- DLLOU_ : another plugin output path to test x32 builds.
+- DLLOU_ : another plugin output path to test x32 output.
 
 
