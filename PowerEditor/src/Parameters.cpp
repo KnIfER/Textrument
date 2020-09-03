@@ -4671,10 +4671,8 @@ void NppParameters::feedGUIParameters(TiXmlNode *node)
 
 			if (element->Attribute(TEXT("codepage"), &i))
 				_nppGUI._newDocDefaultSettings._codepage = (LangType)i;
-
-			const TCHAR* val = element->Attribute(TEXT("openAnsiAsUTF8"));
-			if (val)
-				_nppGUI._newDocDefaultSettings._openAnsiAsUtf8 = (lstrcmp(val, TEXT("yes")) == 0);
+			 
+			watchBooleanField(element, TEXT("openAnsiAsUTF8"), _nppGUI._newDocDefaultSettings._openAnsiAsUtf8);
 
 		}
 		else if (!lstrcmp(nm, TEXT("langsExcluded")))
@@ -4979,33 +4977,13 @@ void NppParameters::feedGUIParameters(TiXmlNode *node)
 
 		else if (!lstrcmp(nm, TEXT("globalOverride")))
 		{
-			const TCHAR *bDir = element->Attribute(TEXT("fg"));
-			if (bDir)
-				_nppGUI._globalOverride.enableFg = (lstrcmp(bDir, TEXT("yes")) == 0);
-
-			bDir = element->Attribute(TEXT("bg"));
-			if (bDir)
-				_nppGUI._globalOverride.enableBg = (lstrcmp(bDir, TEXT("yes")) == 0);
-
-			bDir = element->Attribute(TEXT("font"));
-			if (bDir)
-				_nppGUI._globalOverride.enableFont = (lstrcmp(bDir, TEXT("yes")) == 0);
-
-			bDir = element->Attribute(TEXT("fontSize"));
-			if (bDir)
-				_nppGUI._globalOverride.enableFontSize = (lstrcmp(bDir, TEXT("yes")) == 0);
-
-			bDir = element->Attribute(TEXT("bold"));
-			if (bDir)
-				_nppGUI._globalOverride.enableBold = (lstrcmp(bDir, TEXT("yes")) == 0);
-
-			bDir = element->Attribute(TEXT("italic"));
-			if (bDir)
-				_nppGUI._globalOverride.enableItalic = (lstrcmp(bDir, TEXT("yes")) == 0);
-
-			bDir = element->Attribute(TEXT("underline"));
-			if (bDir)
-				_nppGUI._globalOverride.enableUnderLine = (lstrcmp(bDir, TEXT("yes")) == 0);
+			watchBooleanField(element, TEXT("fg"), _nppGUI._globalOverride.enableFg);
+			watchBooleanField(element, TEXT("bg"), _nppGUI._globalOverride.enableBg);
+			watchBooleanField(element, TEXT("font"), _nppGUI._globalOverride.enableFont);
+			watchBooleanField(element, TEXT("fontSize"), _nppGUI._globalOverride.enableFontSize);
+			watchBooleanField(element, TEXT("bold"), _nppGUI._globalOverride.enableBold);
+			watchBooleanField(element, TEXT("italic"), _nppGUI._globalOverride.enableItalic);
+			watchBooleanField(element, TEXT("underline"), _nppGUI._globalOverride.enableUnderLine);
 		}
 		else if (!lstrcmp(nm, TEXT("auto-completion")))
 		{
@@ -5016,40 +4994,17 @@ void NppParameters::feedGUIParameters(TiXmlNode *node)
 			if (element->Attribute(TEXT("triggerFromNbChar"), &i))
 				_nppGUI._autocFromLen = i;
 
-			const TCHAR * optName = element->Attribute(TEXT("autoCIgnoreNumbers"));
-			if (optName)
-				_nppGUI._autocIgnoreNumbers = (lstrcmp(optName, TEXT("yes")) == 0);
-
-			optName = element->Attribute(TEXT("funcParams"));
-			if (optName)
-				_nppGUI._funcParams = (lstrcmp(optName, TEXT("yes")) == 0);
+			watchBooleanField(element, TEXT("autoCIgnoreNumbers"), _nppGUI._autocIgnoreNumbers);
+			watchBooleanField(element, TEXT("funcParams"), _nppGUI._funcParams);
 		}
 		else if (!lstrcmp(nm, TEXT("auto-insert")))
 		{
-			const TCHAR * optName = element->Attribute(TEXT("htmlXmlTag"));
-			if (optName)
-				_nppGUI._matchedPairConf._doHtmlXmlTag = (lstrcmp(optName, TEXT("yes")) == 0);
-
-			optName = element->Attribute(TEXT("parentheses"));
-			if (optName)
-				_nppGUI._matchedPairConf._doParentheses = (lstrcmp(optName, TEXT("yes")) == 0);
-
-			optName = element->Attribute(TEXT("brackets"));
-			if (optName)
-				_nppGUI._matchedPairConf._doBrackets = (lstrcmp(optName, TEXT("yes")) == 0);
-
-			optName = element->Attribute(TEXT("curlyBrackets"));
-			if (optName)
-				_nppGUI._matchedPairConf._doCurlyBrackets = (lstrcmp(optName, TEXT("yes")) == 0);
-
-			optName = element->Attribute(TEXT("quotes"));
-			if (optName)
-				_nppGUI._matchedPairConf._doQuotes = (lstrcmp(optName, TEXT("yes")) == 0);
-
-			optName = element->Attribute(TEXT("doubleQuotes"));
-			if (optName)
-				_nppGUI._matchedPairConf._doDoubleQuotes = (lstrcmp(optName, TEXT("yes")) == 0);
-
+			watchBooleanField(element, TEXT("htmlXmlTag"), _nppGUI._matchedPairConf._doHtmlXmlTag);
+			watchBooleanField(element, TEXT("parentheses"), _nppGUI._matchedPairConf._doParentheses);
+			watchBooleanField(element, TEXT("brackets"), _nppGUI._matchedPairConf._doBrackets);
+			watchBooleanField(element, TEXT("curlyBrackets"), _nppGUI._matchedPairConf._doCurlyBrackets);
+			watchBooleanField(element, TEXT("quotes"), _nppGUI._matchedPairConf._doQuotes);
+			watchBooleanField(element, TEXT("doubleQuotes"), _nppGUI._matchedPairConf._doDoubleQuotes);
 			for (TiXmlNode *subChildNode = childNode->FirstChildElement(TEXT("UserDefinePair"));
 				 subChildNode;
 				 subChildNode = subChildNode->NextSibling(TEXT("UserDefinePair")) )
@@ -5224,29 +5179,12 @@ void NppParameters::feedGUIParameters(TiXmlNode *node)
 			if (optNameWriteTechnologyEngine)
 				_nppGUI._writeTechnologyEngine = (lstrcmp(optNameWriteTechnologyEngine, TEXT("1")) == 0) ? directWriteTechnology : defaultTechnology;
 
-			const TCHAR * optNameNewStyleSaveDlg = element->Attribute(TEXT("newStyleSaveDlg"));
-			if (optNameNewStyleSaveDlg)
-				_nppGUI._useNewStyleSaveDlg = (lstrcmp(optNameNewStyleSaveDlg, TEXT("yes")) == 0);
-
-			const TCHAR * filterDrag = element->Attribute(TEXT("filterDrag"));
-			if (filterDrag)
-				_nppGUI._dragOpenUseFilter = (lstrcmp(filterDrag, TEXT("yes")) == 0);
-
-			const TCHAR * recurseDrag = element->Attribute(TEXT("recurseDrag"));
-			if (recurseDrag)
-				_nppGUI._dragOpenRecursive = (lstrcmp(recurseDrag, TEXT("yes")) == 0);
-
-			const TCHAR * optNameFolderDroppedOpenFiles = element->Attribute(TEXT("isFolderDroppedOpenFiles"));
-			if (optNameFolderDroppedOpenFiles)
-				_nppGUI._isFolderDroppedOpenFiles = (lstrcmp(optNameFolderDroppedOpenFiles, TEXT("yes")) == 0);
-
-			const TCHAR * optDocPeekOnTab = element->Attribute(TEXT("docPeekOnTab"));
-			if (optDocPeekOnTab)
-				_nppGUI._isDocPeekOnTab = (lstrcmp(optDocPeekOnTab, TEXT("yes")) == 0);
-
-			const TCHAR * optDocPeekOnMap = element->Attribute(TEXT("docPeekOnMap"));
-			if (optDocPeekOnMap)
-				_nppGUI._isDocPeekOnMap = (lstrcmp(optDocPeekOnMap, TEXT("yes")) == 0);
+			watchBooleanField(element, TEXT("newStyleSaveDlg"), _nppGUI._useNewStyleSaveDlg);
+			watchBooleanField(element, TEXT("filterDrag"), _nppGUI._dragOpenUseFilter);
+			watchBooleanField(element, TEXT("recurseDrag"), _nppGUI._dragOpenRecursive);
+			watchBooleanField(element, TEXT("isFolderDroppedOpenFiles"), _nppGUI._isFolderDroppedOpenFiles);
+			watchBooleanField(element, TEXT("docPeekOnTab"), _nppGUI._isDocPeekOnTab);
+			watchBooleanField(element, TEXT("docPeekOnMap"), _nppGUI._isDocPeekOnMap);
 		}
 		else if (!lstrcmp(nm, TEXT("commandLineInterpreter")))
 		{
