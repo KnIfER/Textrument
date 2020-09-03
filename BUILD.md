@@ -32,9 +32,10 @@ Then  Open [`PowerEditor\visual.net\notepadPlus.vcxproj`](scintilla/win32/SciLex
 
 Before you build, make sure that the macro $(BOOST) is defined correctly in `plugins/plugins_dev.props`. 
 
+If you are lazy, just copy the `SciLexer.dll` kernel from the distribution package of Textrument or Notepad++.  
 
-### How to build bundled plugins 
-----------------------
+## Build bundled plugins :
+
 You need to copy the [property file](plugins/plugins_dev_sample.props) as `Project_Root/plugins/plugins_dev.props`.  
 
 A bunch of marco definitions need to be modified according to you environment.   
