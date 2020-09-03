@@ -35,11 +35,13 @@
 #include "localization.h"
 #include "localizationString.h"
 #include "UserDefineDialog.h"
+#include "Notepad_plus.h"
 
 #pragma warning(disable : 4996) // for GetVersionEx()
 
 using namespace std;
 
+extern Notepad_plus* nppApp;
 
 namespace // anonymous namespace
 {
@@ -4029,9 +4031,7 @@ typedef DWORD (WINAPI * EESFUNC) (LPCTSTR, LPTSTR, DWORD);
 void NppParameters::feedGUIParameters(TiXmlNode *node)
 {
 	TiXmlNode *GUIRoot = node->FirstChildElement(TEXT("GUIConfigs"));
-	if (nullptr == GUIRoot)
-		return;
-
+	if (GUIRoot)
 	for (TiXmlNode *childNode = GUIRoot->FirstChildElement(TEXT("GUIConfig"));
 		childNode ;
 		childNode = childNode->NextSibling(TEXT("GUIConfig")) )
@@ -5229,6 +5229,14 @@ void NppParameters::feedGUIParameters(TiXmlNode *node)
 			if (optNameNewStyleSaveDlg)
 				_nppGUI._useNewStyleSaveDlg = (lstrcmp(optNameNewStyleSaveDlg, TEXT("yes")) == 0);
 
+			const TCHAR * filterDrag = element->Attribute(TEXT("filterDrag"));
+			if (filterDrag)
+				_nppGUI._dragOpenUseFilter = (lstrcmp(filterDrag, TEXT("yes")) == 0);
+
+			const TCHAR * recurseDrag = element->Attribute(TEXT("recurseDrag"));
+			if (recurseDrag)
+				_nppGUI._dragOpenRecursive = (lstrcmp(recurseDrag, TEXT("yes")) == 0);
+
 			const TCHAR * optNameFolderDroppedOpenFiles = element->Attribute(TEXT("isFolderDroppedOpenFiles"));
 			if (optNameFolderDroppedOpenFiles)
 				_nppGUI._isFolderDroppedOpenFiles = (lstrcmp(optNameFolderDroppedOpenFiles, TEXT("yes")) == 0);
@@ -5249,6 +5257,22 @@ void NppParameters::feedGUIParameters(TiXmlNode *node)
 				const TCHAR *cli = node->Value();
 				if (cli && cli[0])
 					_nppGUI._commandLineInterpreter.assign(cli);
+			}
+		}
+	}
+
+	TiXmlNode *historyNode = node->FirstChildElement(TEXT("DropFilters"));
+	if (historyNode)
+	{
+		(historyNode->ToElement())->Attribute(TEXT("Idx"), &_dropFiltersHistoryIdx);
+		for (TiXmlNode *childNode = historyNode->FirstChildElement(TEXT("I"));
+			childNode;
+			childNode = childNode->NextSibling(TEXT("I")) )
+		{
+			const TCHAR *filePath = (childNode->ToElement())->Attribute(TEXT("V"));
+			if (filePath)
+			{
+				_dropFiltersHistory.push_back(generic_string(filePath));
 			}
 		}
 	}
@@ -6036,6 +6060,20 @@ void NppParameters::createXmlTreeFromGUIParams()
 
 	// <GUIConfig name="MISC" fileSwitcherWithExtColumn="no" backSlashIsEscapeCharacterForSql="yes" newStyleSaveDlg="no" isFolderDroppedOpenFiles="no" />
 	{
+		TiXmlNode *historyNode = nppRoot->FirstChildElement(TEXT("DropFilters"));
+		if (not historyNode)
+		{
+			historyNode = nppRoot->InsertEndChild(TiXmlElement(TEXT("DropFilters")));
+		} else {
+			historyNode->Clear();
+		}
+		for(auto filterpath:nppApp->_preference.getDropFiltersHistory()){
+			TiXmlElement recentFilterNode(TEXT("I"));
+			(recentFilterNode.ToElement())->SetAttribute(TEXT("V"), filterpath);
+			(historyNode->ToElement())->InsertEndChild(recentFilterNode);
+		}
+		(historyNode->ToElement())->SetAttribute(TEXT("Idx"), _dropFiltersHistoryIdx);
+
 		TiXmlElement *GUIConfigElement = (newGUIRoot->InsertEndChild(TiXmlElement(TEXT("GUIConfig"))))->ToElement();
 		GUIConfigElement->SetAttribute(TEXT("name"), TEXT("MISC"));
 
@@ -6043,6 +6081,8 @@ void NppParameters::createXmlTreeFromGUIParams()
 		GUIConfigElement->SetAttribute(TEXT("backSlashIsEscapeCharacterForSql"), _nppGUI._backSlashIsEscapeCharacterForSql ? TEXT("yes") : TEXT("no"));
 		GUIConfigElement->SetAttribute(TEXT("writeTechnologyEngine"), _nppGUI._writeTechnologyEngine);
 		GUIConfigElement->SetAttribute(TEXT("newStyleSaveDlg"), _nppGUI._useNewStyleSaveDlg ? TEXT("yes") : TEXT("no"));
+		GUIConfigElement->SetAttribute(TEXT("recurseDrag"), _nppGUI._dragOpenRecursive ? TEXT("yes") : TEXT("no"));
+		GUIConfigElement->SetAttribute(TEXT("filterDrag"), _nppGUI._dragOpenUseFilter ? TEXT("yes") : TEXT("no"));
 		GUIConfigElement->SetAttribute(TEXT("isFolderDroppedOpenFiles"), _nppGUI._isFolderDroppedOpenFiles ? TEXT("yes") : TEXT("no"));
 		GUIConfigElement->SetAttribute(TEXT("docPeekOnTab"), _nppGUI._isDocPeekOnTab ? TEXT("yes") : TEXT("no"));
 		GUIConfigElement->SetAttribute(TEXT("docPeekOnMap"), _nppGUI._isDocPeekOnMap ? TEXT("yes") : TEXT("no"));

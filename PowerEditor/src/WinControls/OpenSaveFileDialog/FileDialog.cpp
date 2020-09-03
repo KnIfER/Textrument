@@ -211,11 +211,11 @@ stringVector * FileDialog::doOpenMultiFilesDlg()
 	NppParameters& params = NppParameters::getInstance();
 	_ofn.lpstrInitialDir = params.getWorkingDir();
 
-	_ofn.Flags |= OFN_FILEMUSTEXIST | OFN_ALLOWMULTISELECT | OFN_ENABLESIZING;
+	_ofn.Flags |= OFN_FILEMUSTEXIST | OFN_ALLOWMULTISELECT | OFN_ENABLESIZING | OFN_NOVALIDATE;
 
 	if (!params.useNewStyleSaveDlg())
 	{
-		_ofn.Flags |= OFN_ENABLEHOOK | OFN_NOVALIDATE;
+		_ofn.Flags |= OFN_ENABLEHOOK;
 		_ofn.lpfnHook = OFNHookProc;
 	}
 
@@ -232,6 +232,8 @@ stringVector * FileDialog::doOpenMultiFilesDlg()
 		TCHAR* pFn = _fileName + lstrlen(_fileName) + 1;
 		TCHAR fn[MAX_PATH*8];
 		memset(fn, 0x0, sizeof(fn));
+
+		for(int i=0, len=lstrlen(_fileName);i<len;i++) if(_fileName[i]=='/')_fileName[i]='\\';
 
 		if (!(*pFn))
 		{

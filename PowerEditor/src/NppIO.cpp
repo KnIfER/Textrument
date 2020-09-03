@@ -43,6 +43,8 @@ using namespace std;
 
 extern bool bNewTabFarRight;
 
+bool DropFilterRequested;
+
 DWORD WINAPI Notepad_plus::monitorFileOnChange(void * params)
 {
 	MonitorInfo *monitorInfo = static_cast<MonitorInfo *>(params);
@@ -391,9 +393,20 @@ BufferID Notepad_plus::doOpen(const generic_string& fileName, bool isRecursive, 
                 generic_string fileNameStr = fileName;
                 if (fileName[fileName.size() - 1] != '\\')
                     fileNameStr += TEXT("\\");
-
-                patterns.push_back(TEXT("*"));
-                getMatchedFileNames(fileNameStr.c_str(), patterns, fileNames, true, false);
+				bool recursively=1;
+				if(DropFilterRequested) {
+					if(nppParam.getNppGUI()._dragOpenUseFilter) {
+						_preference.buildDropFilters(patterns);
+					}
+					recursively = nppParam.getNppGUI()._dragOpenRecursive;
+				}
+				if(!patterns.size()) {
+					patterns.push_back(TEXT("*"));
+				}
+				//patterns.clear();
+				//patterns.push_back(TEXT("*.html"));
+				//patterns.push_back(TEXT("*.xml"));
+                getMatchedFileNames(fileNameStr.c_str(), patterns, fileNames, recursively, false);
             }
 
             bool ok2Open = true;

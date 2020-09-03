@@ -64,6 +64,8 @@ extern bool Terminating;
 
 extern bool ReloadingPreventBackupDeletion;
 
+extern bool DropFilterRequested;
+
 HWND StatusBarHWND;
 
 int docTabIconIDs[] = {IDI_SAVED_ICON, IDI_UNSAVED_ICON, IDI_READONLY_ICON, IDI_MONITORING_ICON};
@@ -3354,7 +3356,9 @@ void Notepad_plus::dropFiles(HDROP hdrop)
 			{
 				TCHAR pathDropped[MAX_PATH];
 				::DragQueryFile(hdrop, i, pathDropped, MAX_PATH);
+				DropFilterRequested = 1;
 				BufferID test = doOpen(pathDropped);
+				DropFilterRequested = 0;
 				if (test != BUFFER_INVALID)
 					lastOpened = test;
 			}

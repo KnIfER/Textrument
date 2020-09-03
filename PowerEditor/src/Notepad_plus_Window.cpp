@@ -358,8 +358,15 @@ bool Notepad_plus_Window::isDlgsMsg(MSG *msg) const
 		if (_notepad_plus_plus_core.processFindAccel(msg))
 			return true;
 
-		if (::IsDialogMessageW(_notepad_plus_plus_core._hModelessDlgs[i], msg))
+		if (::IsDialogMessageW(_notepad_plus_plus_core._hModelessDlgs[i], msg)) {
+			if(msg->wParam==VK_RETURN&&msg->message==WM_KEYDOWN&&_notepad_plus_plus_Kore->_preference.isVisible()) {
+				if(::IsDialogMessageW(_notepad_plus_plus_Kore->_preference.getHSelf(), msg))
+				//if(_notepad_plus_plus_core._hModelessDlgs[i]==_notepad_plus_plus_Kore->_preference.getHSelf())
+				//	return false;
+					_notepad_plus_plus_Kore->_preference.NotifyReturnPressed();
+			}
 			return true;
+		}
 	}
 	return false;
 }

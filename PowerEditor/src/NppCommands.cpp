@@ -2758,6 +2758,7 @@ void Notepad_plus::command(int id)
 		case IDM_SETTING_PREFERENCE:
 		{
 			bool isFirstTime = !_preference.isCreated();
+
 			_preference.doDialog(_nativeLangSpeaker.isRTL());
 
 			if (isFirstTime)

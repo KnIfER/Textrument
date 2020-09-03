@@ -68,8 +68,9 @@ generic_string getTextFromCombo(HWND hCombo)
 	return generic_string(str);
 };
 
-void delLeftWordInEdit(HWND hEdit)
+void delLeftWordInEdit(HWND hEdit, bool tabSep)
 {
+	char SecondChar = tabSep?'\\':'\t';
 	TCHAR str[FINDREPLACE_MAXLENGTH];
 	::SendMessage(hEdit, WM_GETTEXT, FINDREPLACE_MAXLENGTH - 1, reinterpret_cast<LPARAM>(str));
 	WORD cursor;
@@ -77,13 +78,13 @@ void delLeftWordInEdit(HWND hEdit)
 	WORD wordstart = cursor;
 	while (wordstart > 0) {
 		TCHAR c = str[wordstart - 1];
-		if (c != ' ' && c != '\t')
+		if (c != ' ' && c != SecondChar)
 			break;
 		--wordstart;
 	}
 	while (wordstart > 0) {
 		TCHAR c = str[wordstart - 1];
-		if (c == ' ' || c == '\t')
+		if (c == ' ' || c == SecondChar)
 			break;
 		--wordstart;
 	}
@@ -423,29 +424,17 @@ void FindReplaceDlg::fillComboHistory(int id, const vector<generic_string> & str
 	::SendMessage(hCombo, CB_SETCURSEL, 0, 0); // select first item
 }
 
-
-void FindReplaceDlg::saveFindHistory()
-{
-	if (! isCreated()) return;
-	FindHistory& findHistory = nppParms->getFindHistory();
-
-	saveComboHistory(IDD_FINDINFILES_DIR_COMBO, findHistory._nbMaxFindHistoryPath, findHistory._findHistoryPaths, false);
-	saveComboHistory(IDD_FINDINFILES_FILTERS_COMBO, findHistory._nbMaxFindHistoryFilter, findHistory._findHistoryFilters, true);
-	saveComboHistory(IDFINDWHAT,                    findHistory._nbMaxFindHistoryFind, findHistory._findHistoryFinds, false);
-	saveComboHistory(IDREPLACEWITH,                 findHistory._nbMaxFindHistoryReplace, findHistory._findHistoryReplaces, true);
-}
-
-int FindReplaceDlg::saveComboHistory(int id, int maxcount, vector<generic_string> & strings, bool saveEmpty)
+int saveComboHistory(HWND _hSelf, int id, int maxcount, vector<generic_string> & strings, bool saveEmpty)
 {
 	TCHAR text[FINDREPLACE_MAXLENGTH];
 	HWND hCombo = ::GetDlgItem(_hSelf, id);
 	int count = static_cast<int32_t>(::SendMessage(hCombo, CB_GETCOUNT, 0, 0));
 	count = min(count, maxcount);
 
-    if (count == CB_ERR) return 0;
+	if (count == CB_ERR) return 0;
 
-    if (count)
-        strings.clear();
+	if (count)
+		strings.clear();
 
 	if (saveEmpty)
 	{
@@ -455,7 +444,7 @@ int FindReplaceDlg::saveComboHistory(int id, int maxcount, vector<generic_string
 		}
 	}
 
-    for (int i = 0 ; i < count ; ++i)
+	for (int i = 0 ; i < count ; ++i)
 	{
 		auto cbTextLen = ::SendMessage(hCombo, CB_GETLBTEXTLEN, i, 0);
 		if (cbTextLen <= FINDREPLACE_MAXLENGTH - 1)
@@ -464,8 +453,20 @@ int FindReplaceDlg::saveComboHistory(int id, int maxcount, vector<generic_string
 			strings.push_back(generic_string(text));
 		}
 	}
-    return count;
+	return count;
 }
+
+void FindReplaceDlg::saveFindHistory()
+{
+	if (! isCreated()) return;
+	FindHistory& findHistory = nppParms->getFindHistory();
+
+	saveComboHistory(_hSelf, IDD_FINDINFILES_DIR_COMBO, findHistory._nbMaxFindHistoryPath, findHistory._findHistoryPaths, false);
+	saveComboHistory(_hSelf, IDD_FINDINFILES_FILTERS_COMBO, findHistory._nbMaxFindHistoryFilter, findHistory._findHistoryFilters, true);
+	saveComboHistory(_hSelf, IDFINDWHAT,                    findHistory._nbMaxFindHistoryFind, findHistory._findHistoryFinds, false);
+	saveComboHistory(_hSelf, IDREPLACEWITH,                 findHistory._nbMaxFindHistoryReplace, findHistory._findHistoryReplaces, true);
+}
+
 
 void FindReplaceDlg::updateCombos()
 {
@@ -3160,7 +3161,7 @@ LRESULT FAR PASCAL FindReplaceDlg::comboEditProc(HWND hwnd, UINT message, WPARAM
 {
 	if (message == WM_CHAR && wParam == 0x7F) // ASCII "DEL" (Ctrl+Backspace)
 	{
-		delLeftWordInEdit(hwnd);
+		delLeftWordInEdit(hwnd, 0);
 		return 0;
 	}
 	return CallWindowProc((WNDPROC)originalComboEditProc, hwnd, message, wParam, lParam);

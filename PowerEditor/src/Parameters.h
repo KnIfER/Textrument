@@ -917,6 +917,9 @@ struct NppGUI final
 	bool _useBigFonts = true;
 	bool _swiggle = true;
 	int currentSettingsIndex = 0;
+
+	bool _dragOpenUseFilter = false;
+	bool _dragOpenRecursive = true;
 };
 
 struct ScintillaViewParams
@@ -1687,6 +1690,8 @@ public:
 	void setUdlXmlDirtyFromXmlDoc(const TiXmlDocument* xmlDoc);
 	void removeIndexFromXmlUdls(size_t i);
 
+	std::vector<generic_string> _dropFiltersHistory;
+	int _dropFiltersHistoryIdx=0;
 private:
 	NppParameters();
 	~NppParameters();

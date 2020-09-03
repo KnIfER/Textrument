@@ -93,7 +93,9 @@ class DefaultDirectoryDlg : public StaticDialog
 {
 public :
 	DefaultDirectoryDlg() = default;
-
+	static LONG_PTR originalComboEditProc;
+	// Window procedure for the filter
+	static LRESULT FAR PASCAL comboEditProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam);
 private :
 	INT_PTR CALLBACK run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam);
 };
@@ -243,6 +245,12 @@ public :
     void init(HINSTANCE hInst, HWND parent)	{
         Window::init(hInst, parent);
 	};
+
+	void NotifyReturnPressed();
+
+	std::vector<generic_string> getDropFiltersHistory();
+
+	void buildDropFilters(std::vector<generic_string> & pattern);
 
     void doDialog(bool isRTL = false) {
     	if (!isCreated())
