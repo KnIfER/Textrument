@@ -26,8 +26,6 @@ editor and Notepad replacement that supports several programming languages and
 natural languages. Running in the MS Windows environment, its use is governed by
 [GPL License](LICENSE).
 
-See the [Notepad++ official site](https://notepad-plus-plus.org/) for more information.
-
 
 How To Build Textrument
 ---------------
