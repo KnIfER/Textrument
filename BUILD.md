@@ -6,7 +6,7 @@ There are two components that need to be built separately:
  - `Textrument.exe`:  ( Main Application )
  - `SciLexer.dll` : ( Runtime dependency )
  
- I build them with both Visual Studio Community 2019.
+ I build them both with Visual Studio Community 2019.
  
  Two vital additions:
 ----------------------
