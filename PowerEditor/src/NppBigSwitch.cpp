@@ -567,11 +567,7 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 				{
 					int sw = 0;
 
-					HWND window = _pMainWindow->getHSelf();
-	
-					while(GetParent(window)) {
-						window=GetParent(window);
-					}
+					HWND window = Notepad_plus_Window::gNppHWND;
 
 					if (::IsZoomed(window))
 						sw = SW_MAXIMIZE;

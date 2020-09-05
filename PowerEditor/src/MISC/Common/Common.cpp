@@ -674,7 +674,7 @@ generic_string BuildMenuFileName(int filenameLen, unsigned int pos, const generi
 }
 
 
-generic_string PathRemoveFileSpec(generic_string& path)
+void PathRemoveFileSpec(generic_string& path)
 {
     generic_string::size_type lastBackslash = path.find_last_of(TEXT('\\'));
     if (lastBackslash == generic_string::npos)
@@ -693,43 +693,41 @@ generic_string PathRemoveFileSpec(generic_string& path)
         else
             path.erase(lastBackslash);
     }
-	return path;
+	return;
 }
 
 
-generic_string PathAppend(generic_string& strDest, const generic_string& str2append)
+void PathAppend(generic_string& strDest, const generic_string& str2append)
 {
 	if (strDest.empty() && str2append.empty()) // "" + ""
 	{
 		strDest = TEXT("\\");
-		return strDest;
+		return;
 	}
 
 	if (strDest.empty() && not str2append.empty()) // "" + titi
 	{
 		strDest = str2append;
-		return strDest;
+		return;
 	}
 
 	if (strDest[strDest.length() - 1] == '\\' && (not str2append.empty() && str2append[0] == '\\')) // toto\ + \titi
 	{
 		strDest.erase(strDest.length() - 1, 1);
 		strDest += str2append;
-		return strDest;
+		return;
 	}
 
 	if ((strDest[strDest.length() - 1] == '\\' && (not str2append.empty() && str2append[0] != '\\')) // toto\ + titi
 		|| (strDest[strDest.length() - 1] != '\\' && (not str2append.empty() && str2append[0] == '\\'))) // toto + \titi
 	{
 		strDest += str2append;
-		return strDest;
+		return;
 	}
 
 	// toto + titi
 	strDest += TEXT("\\");
 	strDest += str2append;
-
-	return strDest;
 }
 
 
