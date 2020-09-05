@@ -1,6 +1,8 @@
-What is Textrument ?
+![](../master/PowerEditor/src/icons/npp.ico)What is Textrument ?
 ===================
 TEXT + INSTRUMENT = TEXTRUMENT
+
+
 
 It's a derivation of Notepad++, and also a derivation of scintilla. 
 
