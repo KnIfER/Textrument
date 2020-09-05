@@ -846,15 +846,24 @@ NppParameters::NppParameters()
 
 	// Prepare for default path
 	TCHAR nppPath[MAX_PATH];
-	::GetModuleFileName(NULL, nppPath, MAX_PATH);
 
-	PathRemoveFileSpec(nppPath);
+	TCHAR tmp[MAX_PATH];
+	::GetModuleFileName(NULL, tmp, MAX_PATH);
+	
+	PathCanonicalize(nppPath, tmp);
+	//_nppModulePath = nppPath;
+
 	_nppPath = nppPath;
+	//_nppModulePath = (TCHAR*)_nppPath.data();
+	auto len = _nppPath.length();
+	_nppModulePath = new TCHAR[len+1];
+	lstrcpy(_nppModulePath, nppPath);
+
+	PathRemoveFileSpec(_nppPath);
 
 	//Initialize current directory to startup directory
-	TCHAR curDir[MAX_PATH];
-	::GetCurrentDirectory(MAX_PATH, curDir);
-	_currentDirectory = curDir;
+	::GetCurrentDirectory(MAX_PATH, tmp);
+	_currentDirectory = tmp;
 
 	_appdataNppDir.clear();
 	generic_string notepadStylePath(_nppPath);
@@ -1024,9 +1033,7 @@ bool NppParameters::load()
 	if (_isLocal)
 	{
 		_userPath = _nppPath;
-		_userPath.append(TEXT(""));
-		generic_string localUserPath(TEXT("User"));
-		PathAppend(_userPath, localUserPath);
+		PathAppend(_userPath, TEXT("User"));
 
 		if (PathFileExists(_userPath.c_str())) {
 			if (!PathIsDirectory(_userPath.c_str())) {

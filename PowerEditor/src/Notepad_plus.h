@@ -635,6 +635,10 @@ public:
 	};
 
 	void monitoringStartOrStopAndUpdateUI(Buffer* pBuf, bool isStarting);
+
+	HINSTANCE getHinst();
+
+	TCHAR* getModuleFileName() const;
 };
 
 

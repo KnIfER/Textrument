@@ -69,6 +69,10 @@ public:
 	STDMETHODIMP LockServer(BOOL);
 };
 
+TCHAR m_szFilePath[MAX_PATH];
+TCHAR m_szModule[MAX_PATH];
+TCHAR m_szCustomPath[MAX_PATH];
+
 class CShellExt : public IContextMenu3, IShellExtInit, IPersistFile, IExtractIcon {
 private:
 	//
@@ -84,9 +88,6 @@ private:
 	HMENU m_hMenu;
 	bool m_showIcon;
 	// Icon variables
-	TCHAR m_szFilePath[MAX_PATH];
-	TCHAR m_szModule[MAX_PATH];
-	TCHAR m_szCustomPath[MAX_PATH];
 	bool m_useCustom;
 	int m_nameLength;
 	int m_nameMaxLength;

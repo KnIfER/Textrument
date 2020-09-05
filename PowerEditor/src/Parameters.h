@@ -1769,6 +1769,8 @@ public:
 	void setAdminMode(bool isAdmin) { _isAdminMode = isAdmin; }
 	bool isAdmin() const { return _isAdminMode; }
 	bool regexBackward4PowerUser() const { return _findHistory._regexBackward4PowerUser; }
+	TCHAR* _nppModulePath;
+	generic_string _nppPath;
 
 private:
 	bool _isAnyShortcutModified = false;
@@ -1797,7 +1799,6 @@ private:
 	generic_string _contextMenuPath;
 	generic_string _sessionPath;
 	generic_string _blacklistPath;
-	generic_string _nppPath;
 	generic_string _userPath;
 	generic_string _stylerPath;
 	generic_string _appdataNppDir; // sentinel of the absence of "doLocalConf.xml" : (_appdataNppDir == TEXT(""))?"doLocalConf.xml present":"doLocalConf.xml absent"

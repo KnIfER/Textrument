@@ -35,6 +35,17 @@
 #include "localization.h"
 #include "wutils.h"
 #include "Notepad_plus.h"
+#include <windowsx.h>
+
+struct DOREGSTRUCT {
+	HKEY	hRootKey;
+	LPCTSTR	szSubKey;
+	LPCTSTR	lpszValueName;
+	DWORD	type;
+	LPCTSTR	szData;
+};
+
+TCHAR szGUID[] = TEXT("{B298D29A-A6ED-11DE-BA8C-A68E55D89593}");
 
 #define MyGetGValue(rgb)      (LOBYTE((rgb)>>8))
 
@@ -3752,5 +3763,224 @@ INT_PTR CALLBACK SearchingSettingsDlg::run_dlgProc(UINT message, WPARAM wParam, 
 		}
 		break;
 	}
+	return FALSE;
+}
+
+INT_PTR CALLBACK PreferenceDlg::DlgProcShellSettings(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam) {
+	#define GUID_SIZE			128
+	#define GUID_STRING_SIZE	40
+	#define TITLE_SIZE			64
+	static DWORD isDynamic = 1;
+	static DWORD isDynamIconShow = 2; //0 off, 1 on, 2 unknown
+
+	static TCHAR cmdArgs[MAX_PATH] = {0};
+	static TCHAR szKeyTemp[MAX_PATH + GUID_STRING_SIZE];
+
+	static TCHAR menuText[TITLE_SIZE] = TEXT("Edit with &Textrument");
+	static DWORD menuShow = 0;	//0 off, 1 on
+	static DWORD menuIconShow = 2;	// 0 off, otherwise on
+
+	HKEY hKey;
+	LRESULT lResult;
+	DWORD size = 0;
+	//---------------------------------------------------------------------------
+	// RegisterServer
+	// Create registry entries and setup the shell extension
+	//---------------------------------------------------------------------------
+	switch(uMsg) {
+		// 获取已经存在的数值，并显示对话框。
+		case 0: {
+			wsprintf(szKeyTemp, TEXT("CLSID\\%s\\InprocServer32"), szGUID);
+			lResult = RegOpenKeyEx(HKEY_CLASSES_ROOT, szKeyTemp, 0, KEY_READ, &hKey);
+			if (lResult == ERROR_SUCCESS) {
+				size = sizeof(TCHAR)*MAX_PATH;
+				if(RegQueryValueEx(hKey, TEXT("ThreadingModel"), NULL, NULL, (LPBYTE)(cmdArgs), &size)==ERROR_SUCCESS) {
+					menuShow = lstrcmp(cmdArgs, TEXT("Apartment"))==0;
+				}
+				RegCloseKey(hKey);
+			}
+
+			cmdArgs[0]='\0';
+
+			wsprintf(szKeyTemp, TEXT("CLSID\\%s\\Settings"), szGUID);
+			lResult = RegOpenKeyEx(HKEY_CLASSES_ROOT, szKeyTemp, 0, KEY_READ, &hKey);
+			
+			if (lResult == ERROR_SUCCESS) {
+				size = sizeof(TCHAR)*TITLE_SIZE;
+				RegQueryValueEx(hKey, TEXT("Title"), NULL, NULL, (LPBYTE)(menuText), &size);
+
+				size = sizeof(TCHAR)*MAX_PATH;
+				RegQueryValueEx(hKey, TEXT("Custom"), NULL, NULL, (LPBYTE)(cmdArgs), &size);
+
+				size = sizeof(DWORD);
+				RegQueryValueEx(hKey, TEXT("Dynamic"), NULL, NULL, (BYTE*)(&isDynamic), &size);
+
+				size = sizeof(DWORD);
+				RegQueryValueEx(hKey, TEXT("ShowIcon"), NULL, NULL, (BYTE*)(&menuIconShow), &size);
+
+				RegCloseKey(hKey);
+			}
+
+			//DlgProcSettings(NULL,1,0,0);
+			DialogBox(nppApp->getHinst()
+				, MAKEINTRESOURCE(IDD_DIALOG_SHELLSETTINGS)
+				, hwndDlg, (DLGPROC)DlgProcShellSettings);
+		} break;
+		// 卸载
+		case 1: {
+			if(IDYES==::MessageBox(hwndDlg, TEXT("确认卸载注册信息？"), TEXT(""), MB_YESNO | MB_DEFBUTTON2 | MB_TASKMODAL)) {
+#ifdef WIN64
+				TCHAR szShellExtensionKey[] = TEXT("*\\shellex\\ContextMenuHandlers\\ATextrument64");
+#else
+				TCHAR szShellExtensionKey[] = TEXT("*\\shellex\\ContextMenuHandlers\\ATextrument");
+#endif
+				RegDeleteKey(HKEY_CLASSES_ROOT, szShellExtensionKey);
+				RegDeleteKey(HKEY_CLASSES_ROOT, TEXT("Notepad++_file\\shellex\\IconHandler"));
+				RegDeleteKey(HKEY_CLASSES_ROOT, TEXT("Notepad++_file\\shellex"));
+				wsprintf(szKeyTemp, TEXT("CLSID\\%s\\InprocServer32"), szGUID);
+				RegDeleteKey(HKEY_CLASSES_ROOT, szKeyTemp);
+				wsprintf(szKeyTemp, TEXT("CLSID\\%s\\Settings"), szGUID);
+				RegDeleteKey(HKEY_CLASSES_ROOT, szKeyTemp);
+				wsprintf(szKeyTemp, TEXT("CLSID\\%s"), szGUID);
+				RegDeleteKey(HKEY_CLASSES_ROOT, szKeyTemp);
+			}
+		} return TRUE;
+		case WM_INITDIALOG: {
+			//初始化UI
+			Button_SetCheck(GetDlgItem(hwndDlg, IDC_CHECK_USECONTEXT), menuShow?BST_CHECKED:BST_UNCHECKED);
+			Button_SetCheck(GetDlgItem(hwndDlg, IDC_CHECK_CONTEXTICON), menuIconShow?BST_CHECKED:BST_UNCHECKED);
+
+			Button_SetCheck(GetDlgItem(hwndDlg, IDC_CHECK_ISDYNAMIC), isDynamic?BST_CHECKED:BST_UNCHECKED);
+			Button_SetCheck(GetDlgItem(hwndDlg, IDC_CHECK_USEICON), isDynamIconShow?(isDynamIconShow==1?BST_CHECKED:BST_INDETERMINATE):BST_UNCHECKED);
+
+			SetDlgItemText(hwndDlg, IDC_EDIT_MENU, menuText);
+			SetDlgItemText(hwndDlg, IDC_EDIT_COMMAND, cmdArgs);
+
+			_preferenceDlg->goToCenter(hwndDlg);
+		} return TRUE; 
+		case WM_COMMAND: {
+			switch(LOWORD(wParam)) {
+				case IDOK: {
+					TCHAR szSubKey[MAX_PATH];
+					TCHAR szDefaultCustomcommand[] = TEXT("");
+#ifdef WIN64
+					TCHAR szShellExtensionTitle[] = TEXT("ATextrument64");
+					TCHAR szShellExtensionKey[] = TEXT("*\\shellex\\ContextMenuHandlers\\ATextrument64");
+					TCHAR ShellDllName[] = TEXT("NppShell64.dll");
+#else
+					TCHAR szShellExtensionTitle[] = TEXT("ATextrument");
+					TCHAR szShellExtensionKey[] = TEXT("*\\shellex\\ContextMenuHandlers\\ATextrument");
+					TCHAR ShellDllName[] = TEXT("NppShell.dll");
+#endif
+					const TCHAR* szModule = nppApp->getModuleFileName();
+
+					//todo fuck path append
+
+					//todo fuck path remove acrom
+
+					auto shellPath = nppParms->_nppPath;
+					PathAppend(shellPath, ShellDllName);
+
+					auto shellDir = shellPath.data();
+					bool checkShell=false;
+					static DOREGSTRUCT ClsidEntries[] = {
+						{HKEY_CLASSES_ROOT,	TEXT("CLSID\\%s"), NULL,  REG_SZ, szShellExtensionTitle},
+						{HKEY_CLASSES_ROOT,	TEXT("CLSID\\%s\\InprocServer32"), NULL, REG_SZ, shellDir},
+						{HKEY_CLASSES_ROOT,	TEXT("CLSID\\%s\\InprocServer32"), TEXT("ThreadingModel"), REG_SZ, TEXT("Apartment")},
+						{HKEY_CLASSES_ROOT,	szShellExtensionKey, NULL, REG_SZ, szGUID},
+					};
+					// Register the CLSID entries
+					for(int i = 0; i<4; i++) {
+						auto & regInfoI = ClsidEntries[i];
+						wsprintf(szSubKey, regInfoI.szSubKey, szGUID); // 填入ID
+						hKey=0;
+						bool doit=i==2||RegOpenKeyEx(regInfoI.hRootKey, szSubKey, 0, KEY_READ, &hKey);
+						if(i==1 && !doit && hKey) {
+							checkShell=1;
+							size = MAX_PATH*sizeof(TCHAR);
+							lResult = RegQueryValueEx(hKey, NULL, NULL, NULL, (LPBYTE)(szSubKey), &size);
+							if (NOERROR == lResult) {
+								if(lstrcmp(szSubKey, shellDir)) {
+									if(szSubKey[0]==0||IDYES==::MessageBox(hwndDlg, TEXT("Do you wish to overwrite the path of NppShell.dll?"), TEXT(""), MB_YESNO | MB_DEFBUTTON2 | MB_TASKMODAL)) {
+										if(!PathFileExists(shellDir)) { //todo zip dll in exe
+											::MessageBox(hwndDlg, TEXT("NppShell.dll not found : Ignore!"), TEXT(""), MB_OK | MB_TASKMODAL);
+										} else {
+											doit=1;
+										}
+									}
+								}
+							}
+						}
+						if(i==4 && !menuShow) {
+							if(!doit) {
+								RegDeleteKey(HKEY_CLASSES_ROOT, szShellExtensionKey);
+							}
+							doit=0;
+						}
+						if(doit) {
+							auto szData = i==2&&!menuShow?_T("x"):regInfoI.szData; // 是否抹除 Apartment 使服务失效
+							lResult = RegCreateKeyEx(regInfoI.hRootKey, szSubKey, 0, NULL, REG_OPTION_NON_VOLATILE, KEY_WRITE, NULL, &hKey, NULL);
+							if (lResult == ERROR_SUCCESS) {
+								lResult = RegSetValueEx(hKey, regInfoI.lpszValueName, 0, regInfoI.type, (LPBYTE)szData, regInfoI.type==REG_SZ?(lstrlen(szData)+1) * sizeof(TCHAR):sizeof(DWORD));
+							}
+						}
+						RegCloseKey(hKey);
+					}
+
+					//Register settings
+					GetDlgItemText(hwndDlg, IDC_EDIT_MENU, menuText, TITLE_SIZE);
+					GetDlgItemText(hwndDlg, IDC_EDIT_COMMAND, cmdArgs, MAX_PATH);
+
+					wsprintf(szKeyTemp, TEXT("CLSID\\%s\\Settings"), szGUID);
+					lResult = RegCreateKeyEx(HKEY_CLASSES_ROOT, szKeyTemp, 0, NULL, REG_OPTION_NON_VOLATILE, KEY_WRITE, NULL, &hKey, NULL);
+					if (lResult == ERROR_SUCCESS) {
+						RegSetValueEx(hKey, TEXT("Title"), 0,REG_SZ, (LPBYTE)menuText, (lstrlen(menuText)+1)*sizeof(TCHAR));
+						RegSetValueEx(hKey, TEXT("Custom"), 0,REG_SZ, (LPBYTE)cmdArgs, (lstrlen(cmdArgs)+1)*sizeof(TCHAR));
+						RegSetValueEx(hKey, TEXT("Path"), 0,REG_SZ, (LPBYTE)szModule, (lstrlen(szModule)+1)*sizeof(TCHAR));				
+						RegSetValueEx(hKey, TEXT("Dynamic"), 0, REG_DWORD, (LPBYTE)&isDynamic, sizeof(DWORD));
+						RegSetValueEx(hKey, TEXT("ShowIcon"), 0, REG_DWORD, (LPBYTE)&menuIconShow, sizeof(DWORD));
+						RegCloseKey(hKey);
+					}
+
+					if (isDynamIconShow == 1) {
+						lResult = RegCreateKeyEx(HKEY_CLASSES_ROOT, TEXT("Notepad++_file\\shellex\\IconHandler"), 0, NULL, REG_OPTION_NON_VOLATILE, KEY_WRITE, NULL, &hKey, NULL);
+						if (lResult == ERROR_SUCCESS) {
+							lResult = RegSetValueEx(hKey, NULL, 0,REG_SZ, (LPBYTE)szGUID, (lstrlen(szGUID)+1)*sizeof(TCHAR));
+							RegCloseKey(hKey);
+						}
+					} else if (isDynamIconShow == 0) {
+						RegDeleteKey(HKEY_CLASSES_ROOT, TEXT("Notepad++_file\\shellex\\IconHandler"));
+						RegDeleteKey(HKEY_CLASSES_ROOT, TEXT("Notepad++_file\\shellex"));
+					}
+
+					PostMessage(hwndDlg, WM_CLOSE, 0, 0);
+				} break; 
+				case IDC_CHECK_USECONTEXT: {
+					menuShow = Button_GetCheck((HWND)lParam)==BST_CHECKED;
+				} break; 
+				case IDC_CHECK_USEICON: {
+					int state = Button_GetCheck((HWND)lParam);
+					if (state == BST_CHECKED)
+						isDynamIconShow = 1;
+					else if (state == BST_UNCHECKED)
+						isDynamIconShow = 0;
+					else
+						isDynamIconShow = 2;
+				} break; 
+				case IDC_CHECK_CONTEXTICON: {
+					menuIconShow = Button_GetCheck((HWND)lParam)==BST_CHECKED;
+				} break; 
+				case IDC_CHECK_ISDYNAMIC: {
+					isDynamic = Button_GetCheck((HWND)lParam)==BST_CHECKED;
+				} break;
+			}
+			return TRUE;
+		} break; 
+		case WM_CLOSE: {
+			EndDialog(hwndDlg, 0);
+			return TRUE;
+		} break; 
+	}
+
 	return FALSE;
 }

@@ -34,6 +34,8 @@
 
 extern Notepad_plus* nppApp;
 
+extern bool bNewTabFarRight;
+
 int CALLBACK ListViewCompareProc(LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort)
 {
 	sortCompareData* sortData = (sortCompareData*)lParamSort;
@@ -95,6 +97,7 @@ INT_PTR CALLBACK VerticalFileSwitcher::run_dlgProc(UINT message, WPARAM wParam, 
 				}
 				case NM_DBLCLK:
 				{
+					bNewTabFarRight = 1;
 					LPNMITEMACTIVATE lpnmitem = (LPNMITEMACTIVATE) lParam;
 					int i = lpnmitem->iItem;
 					if (i == -1)

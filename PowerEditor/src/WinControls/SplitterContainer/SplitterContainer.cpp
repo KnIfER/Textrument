@@ -34,6 +34,7 @@
 
 bool SplitterContainer::_isRegistered = false;
 
+extern bool bNewTabFarRight;
 
 
 void SplitterContainer::create(Window *pWin0, Window *pWin1, int splitterSize, SplitterMode mode, int ratio, bool isVertical)
@@ -305,6 +306,7 @@ LRESULT SplitterContainer::runProc(UINT message, WPARAM wParam, LPARAM lParam)
 
 		case WM_LBUTTONDBLCLK:
 		{
+			bNewTabFarRight = 1;
 			POINT pt;
 			::GetCursorPos(&pt);
 			::ScreenToClient(_splitter.getHSelf(), &pt);

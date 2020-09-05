@@ -7165,3 +7165,11 @@ void Notepad_plus::monitoringStartOrStopAndUpdateUI(Buffer* pBuf, bool isStartin
 		pBuf->setUserReadOnly(isStarting);
 	}
 }
+
+HINSTANCE Notepad_plus::getHinst() {
+	return _pPublicInterface->getHinst();
+}
+
+TCHAR* Notepad_plus::getModuleFileName() const{
+	return nppParms->_nppModulePath;
+}

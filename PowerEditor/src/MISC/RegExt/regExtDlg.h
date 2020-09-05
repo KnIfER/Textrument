@@ -30,6 +30,7 @@
 
 #include "preference_rc.h"
 #include "StaticDialog.h"
+#include "URLCtrl.h"
 
 const int extNameLen = 32;
 
@@ -63,4 +64,6 @@ private :
 		long result = ::RegQueryInfoKey(hKey, NULL, NULL, NULL, NULL, NULL, NULL, (LPDWORD)&nbSubValue, NULL, NULL, NULL, NULL);
 		return (result == ERROR_SUCCESS)?nbSubValue:0;
 	}
+
+	URLCtrl cmRgster;
 };

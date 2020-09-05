@@ -58,7 +58,7 @@ public :
 		return (_hSelf != NULL);
 	}
 
-	void goToCenter();
+	void goToCenter(HWND daughter=NULL);
 
 	void display(bool toShow = true, bool enhancedPositioningCheckWhenShowing = false) const;
 

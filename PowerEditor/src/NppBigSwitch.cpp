@@ -565,6 +565,23 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 			{
 				case COPYDATA_PARAMS:
 				{
+					int sw = 0;
+
+					HWND window = _pMainWindow->getHSelf();
+	
+					while(GetParent(window)) {
+						window=GetParent(window);
+					}
+
+					if (::IsZoomed(window))
+						sw = SW_MAXIMIZE;
+					else if (::IsIconic(window))
+						sw = SW_RESTORE;
+
+					if (sw) ::ShowWindow(window, sw);
+
+					::SetForegroundWindow(window);
+
 					const CmdLineParamsDTO *cmdLineParam = static_cast<const CmdLineParamsDTO *>(pCopyData->lpData); // CmdLineParams object from another instance
 					const DWORD cmdLineParamsSize = pCopyData->cbData;  // CmdLineParams size from another instance
 					if (sizeof(CmdLineParamsDTO) == cmdLineParamsSize) // make sure the structure is the same

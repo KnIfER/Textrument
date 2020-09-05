@@ -727,21 +727,23 @@ void Notepad_plus::doClose(BufferID id, int whichOne, bool doDeleteBackup)
 		scnN.nmhdr.code = NPPN_FILECLOSED;
 		_pluginsManager.notify(&scnN);
 
-		// The document could be clonned.
-		// if the same buffer ID is not found then remove the entry from File Switcher Panel
-		if (_pFileSwitcherPanel)
-		{
-			_pFileSwitcherPanel->closeItem(id, whichOne);
-
-			if (hiddenBufferID != BUFFER_INVALID)
-				_pFileSwitcherPanel->closeItem(hiddenBufferID, whichOne);
-		}
 
 		// Add to recent file only if file is removed and does not exist in any of the views
 		BufferID buffID = MainFileManager.getBufferFromName(fileFullPath.c_str());
 		if (buffID == BUFFER_INVALID && fileFullPath.length() > 0)
 			_lastRecentFileList.add(fileFullPath.c_str());
 	}
+
+	// The document could be clonned.
+	// if the same buffer ID is not found then remove the entry from File Switcher Panel
+	if (_pFileSwitcherPanel)
+	{
+		_pFileSwitcherPanel->closeItem(id, whichOne);
+
+		if (hiddenBufferID != BUFFER_INVALID)
+			_pFileSwitcherPanel->closeItem(hiddenBufferID, whichOne);
+	}
+
 	command(IDM_VIEW_REFRESHTABAR);
 
 	if (NppParameters::getInstance().getNppGUI()._tabStatus & TAB_QUITONEMPTY)

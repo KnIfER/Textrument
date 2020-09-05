@@ -64,7 +64,7 @@ POINT StaticDialog::getTopPoint(HWND hwnd, bool isLeft) const
 	return p;
 }
 
-void StaticDialog::goToCenter()
+void StaticDialog::goToCenter(HWND daughter)
 {
 	RECT rc;
 	::GetClientRect(_hParent, &rc);
@@ -72,11 +72,18 @@ void StaticDialog::goToCenter()
 	center.x = rc.left + (rc.right - rc.left)/2;
 	center.y = rc.top + (rc.bottom - rc.top)/2;
 	::ClientToScreen(_hParent, &center);
+	
+	RECT * rcrc = &_rc;
+	if(daughter) {
+		::GetWindowRect(daughter, rcrc = &rc);
+	}
 
-	int x = center.x - (_rc.right - _rc.left)/2;
-	int y = center.y - (_rc.bottom - _rc.top)/2;
+	int w=rcrc->right - rcrc->left,h=rcrc->bottom - rcrc->top;
 
-	::SetWindowPos(_hSelf, HWND_TOP, x, y, _rc.right - _rc.left, _rc.bottom - _rc.top, SWP_SHOWWINDOW);
+	int x = center.x - w/2;
+	int y = center.y - h/2;
+
+	::SetWindowPos(daughter?daughter:_hSelf, HWND_TOP, x, y, w, h, SWP_SHOWWINDOW);
 }
 
 void StaticDialog::display(bool toShow, bool enhancedPositioningCheckWhenShowing) const

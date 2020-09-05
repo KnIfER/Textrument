@@ -62,8 +62,11 @@ void allowWmCopydataMessages(Notepad_plus_Window& notepad_plus_plus, const NppPa
 
 				MESSAGEFILTERFUNC func = (MESSAGEFILTERFUNC)::GetProcAddress( hDll, "ChangeWindowMessageFilter" );
 
-				if (func)
+				if (func) {
 					func(WM_COPYDATA, MSGFLT_ADD);
+					func(WM_DROPFILES, MSGFLT_ADD);
+					func(0x0049, MSGFLT_ADD);
+				}
 			}
 			else
 			{
@@ -72,7 +75,11 @@ void allowWmCopydataMessages(Notepad_plus_Window& notepad_plus_plus, const NppPa
 				MESSAGEFILTERFUNCEX func = (MESSAGEFILTERFUNCEX)::GetProcAddress( hDll, "ChangeWindowMessageFilterEx" );
 
 				if (func)
-					func(notepad_plus_plus.getHSelf(), WM_COPYDATA, MSGFLT_ALLOW, NULL );
+				{
+					func(notepad_plus_plus.getHSelf(), WM_COPYDATA, MSGFLT_ALLOW, NULL);
+					func(notepad_plus_plus.getHSelf(), WM_DROPFILES, MSGFLT_ALLOW, NULL);
+					func(notepad_plus_plus.getHSelf(), 0x0049, MSGFLT_ALLOW, NULL);
+				}
 			}
 		}
 	}
@@ -427,7 +434,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE, PWSTR pCmdLine, int)
 	}
 	TCHAR npppathtoken[MAX_PATH];
 	//memset(npppathtoken, 0, MAX_PATH*sizeof(TCHAR));
-	PathCanonicalize(npppathtoken, npppath.data());
+	PathCanonicalize(npppathtoken, (TCHAR *)&npppath[0]);
 
 	for(int i=0;i<tokenLen;i++) {
 		if(npppathtoken[i]=='\\') {
@@ -505,18 +512,6 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE, PWSTR pCmdLine, int)
         {
 			// First of all, destroy static object NppParameters
 			nppParameters.destroyInstance();
-
-			int sw = 0;
-
-			if (::IsZoomed(hNotepad_plus))
-				sw = SW_MAXIMIZE;
-			else if (::IsIconic(hNotepad_plus))
-				sw = SW_RESTORE;
-
-			if (sw != 0)
-				::ShowWindow(hNotepad_plus, sw);
-
-			::SetForegroundWindow(hNotepad_plus);
 
 			if (params.size() > 0)	//if there are files to open, use the WM_COPYDATA system
 			{

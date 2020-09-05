@@ -19,19 +19,10 @@ HINSTANCE _hModule = NULL; // DLL Module.
 //Some global default values for registering the DLL
 
 //Menu
-TCHAR szNppName[] = TEXT("notepad++.exe");
-TCHAR szDefaultMenutext[] = TEXT("Edit with &Notepad++");
+TCHAR szDefaultMenutext[] = TEXT("Edit with &Textrument");
 
-#ifdef WIN64
-TCHAR szShellExtensionTitle[] = TEXT("ANotepad++64");
-TCHAR szShellExtensionKey[] = TEXT("*\\shellex\\ContextMenuHandlers\\ANotepad++64");
-#else
-TCHAR szShellExtensionTitle[] = TEXT("ANotepad++");
-TCHAR szShellExtensionKey[] = TEXT("*\\shellex\\ContextMenuHandlers\\ANotepad++");
-#endif
-
-#define szHelpTextA "Edits the selected file(s) with Notepad++"
-#define szHelpTextW L"Edits the selected file(s) with Notepad++"
+#define szHelpTextA "Edits the selected file(s) with Textrument"
+#define szHelpTextW L"Edits the selected file(s) with Textrument"
 TCHAR szMenuTitle[TITLE_SIZE];
 TCHAR szDefaultCustomcommand[] = TEXT("");
 //Icon
@@ -41,14 +32,10 @@ DWORD showIcon = 1;
 
 //Forward function declarations
 extern "C" int APIENTRY DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID lpReserved);
-STDAPI DllRegisterServer(void);
-STDAPI DllUnregisterServer(void);
+STDAPI DllRegisterServer(void){ return S_OK; };
+STDAPI DllUnregisterServer(void){ return S_OK; };
+STDAPI DllInstall(BOOL bInstall, LPCWSTR pszCmdLine){ return S_OK; };
 
-BOOL RegisterServer();
-BOOL UnregisterServer();
-void MsgBox(LPCTSTR lpszMsg);
-void MsgBoxError(LPCTSTR lpszMsg);
-BOOL CheckNpp(LPCTSTR path);
 INT_PTR CALLBACK DlgProcSettings(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam);
 void InvalidateIcon(HICON * iconSmall, HICON * iconLarge);
 
@@ -58,16 +45,6 @@ void InvalidateIcon(HICON * iconSmall, HICON * iconLarge);
 #define _ttoi atoi
 #endif
 
-
-
-//Types
-struct DOREGSTRUCT {
-	HKEY	hRootKey;
-	LPCTSTR	szSubKey;
-	LPCTSTR	lpszValueName;
-	DWORD	type;
-	LPCTSTR	szData;
-};
 
 //---------------------------------------------------------------------------
 // DllMain
@@ -99,313 +76,14 @@ STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID *ppvOut) {
 }
 
 //---------------------------------------------------------------------------
-// DllRegisterServer
-//---------------------------------------------------------------------------
-STDAPI DllRegisterServer(void) {
-	return (RegisterServer() ? S_OK : E_FAIL);
-}
-
-//---------------------------------------------------------------------------
-// DllUnregisterServer
-//---------------------------------------------------------------------------
-STDAPI DllUnregisterServer(void) {
-	return (UnregisterServer() ? S_OK : E_FAIL);
-}
-
-STDAPI DllInstall(BOOL bInstall, LPCWSTR /*pszCmdLine*/) {
-	if (bInstall) {
-		DialogBox(_hModule, MAKEINTRESOURCE(IDD_DIALOG_SETTINGS), NULL, (DLGPROC)&DlgProcSettings);
-		return S_OK;
-	} else {
-		MsgBoxError(TEXT("Uninstalling not supported, use DllUnregisterServer instead"));
-		return E_NOTIMPL;
-	}
-}
-
-//---------------------------------------------------------------------------
-// RegisterServer
-// Create registry entries and setup the shell extension
-//---------------------------------------------------------------------------
-BOOL RegisterServer() {
-	int      i;
-	HKEY     hKey;
-	LRESULT  lResult;
-	DWORD    dwDisp;
-	TCHAR    szSubKey[MAX_PATH];
-	TCHAR    szModule[MAX_PATH];
-	TCHAR    szDefaultPath[MAX_PATH];
-
-	GetModuleFileName(_hModule, szDefaultPath, MAX_PATH);
-	TCHAR* pDest = StrRChr(szDefaultPath, NULL, TEXT('\\'));
-	pDest++;
-	pDest[0] = 0;
-	lstrcat(szDefaultPath, szNppName);
-
-	if (!CheckNpp(szDefaultPath)) {
-		MsgBoxError(TEXT("To register the Notepad++ shell extension properly,\r\nplace NppShell.dll in the same directory as the Notepad++ executable."));
-		//return FALSE;
-	}
-
-	//get this app's path and file name
-	GetModuleFileName(_hModule, szModule, MAX_PATH);
-
-	static DOREGSTRUCT ClsidEntries[] = {
-		{HKEY_CLASSES_ROOT,	TEXT("CLSID\\%s"),									NULL,					REG_SZ,		szShellExtensionTitle},
-		{HKEY_CLASSES_ROOT,	TEXT("CLSID\\%s\\InprocServer32"),					NULL,					REG_SZ,		szModule},
-		{HKEY_CLASSES_ROOT,	TEXT("CLSID\\%s\\InprocServer32"),					TEXT("ThreadingModel"),	REG_SZ,		TEXT("Apartment")},
-
-		//Settings
-		// Context menu
-		{HKEY_CLASSES_ROOT,	TEXT("CLSID\\%s\\Settings"),						TEXT("Title"),			REG_SZ,		szDefaultMenutext},
-		{HKEY_CLASSES_ROOT,	TEXT("CLSID\\%s\\Settings"),						TEXT("Path"),			REG_SZ,		szDefaultPath},
-		{HKEY_CLASSES_ROOT,	TEXT("CLSID\\%s\\Settings"),						TEXT("Custom"),			REG_SZ,		szDefaultCustomcommand},
-		{HKEY_CLASSES_ROOT,	TEXT("CLSID\\%s\\Settings"),						TEXT("ShowIcon"),		REG_DWORD,	(LPTSTR)&showIcon},
-		// Icon
-		{HKEY_CLASSES_ROOT,	TEXT("CLSID\\%s\\Settings"),						TEXT("Dynamic"),		REG_DWORD,	(LPTSTR)&isDynamic},
-		{HKEY_CLASSES_ROOT,	TEXT("CLSID\\%s\\Settings"),						TEXT("Maxtext"),		REG_DWORD,	(LPTSTR)&maxText},
-
-		//Registration
-		// Context menu
-		{HKEY_CLASSES_ROOT,	szShellExtensionKey,	NULL,					REG_SZ,		szGUID},
-		// Icon
-		//{HKEY_CLASSES_ROOT,	TEXT("Notepad++_file\\shellex\\IconHandler"),		NULL,					REG_SZ,		szGUID},
-
-		{NULL,				NULL,												NULL,					REG_SZ,		NULL}
-	};
-
-	// First clear any old entries
-	UnregisterServer();
-
-	// Register the CLSID entries
-	for(i = 0; ClsidEntries[i].hRootKey; i++) {
-		wsprintf(szSubKey, ClsidEntries[i].szSubKey, szGUID);
-		lResult = RegCreateKeyEx(ClsidEntries[i].hRootKey, szSubKey, 0, NULL, REG_OPTION_NON_VOLATILE, KEY_WRITE, NULL, &hKey, &dwDisp);
-		if (NOERROR == lResult) {
-			TCHAR szData[MAX_PATH];
-			// If necessary, create the value string
-			if (ClsidEntries[i].type == REG_SZ) {
-				wsprintf(szData, ClsidEntries[i].szData, szModule);
-				lResult = RegSetValueEx(hKey, ClsidEntries[i].lpszValueName, 0, ClsidEntries[i].type, (LPBYTE)szData, (lstrlen(szData) + 1) * sizeof(TCHAR));
-			} else {
-				lResult = RegSetValueEx(hKey, ClsidEntries[i].lpszValueName, 0, ClsidEntries[i].type, (LPBYTE)ClsidEntries[i].szData, sizeof(DWORD));
-			}
-			RegCloseKey(hKey);
-		}
-		else
-			return FALSE;
-	}
-	return TRUE;
-}
-
-//---------------------------------------------------------------------------
-// UnregisterServer
-//---------------------------------------------------------------------------
-BOOL UnregisterServer() {
-	TCHAR szKeyTemp[MAX_PATH + GUID_STRING_SIZE];
-
-	RegDeleteKey(HKEY_CLASSES_ROOT, szShellExtensionKey);
-
-	wsprintf(szKeyTemp, TEXT("Notepad++_file\\shellex\\IconHandler"));
-	RegDeleteKey(HKEY_CLASSES_ROOT, szKeyTemp);
-	wsprintf(szKeyTemp, TEXT("Notepad++_file\\shellex"));
-	RegDeleteKey(HKEY_CLASSES_ROOT, szKeyTemp);
-
-	wsprintf(szKeyTemp, TEXT("CLSID\\%s\\InprocServer32"), szGUID);
-	RegDeleteKey(HKEY_CLASSES_ROOT, szKeyTemp);
-	wsprintf(szKeyTemp, TEXT("CLSID\\%s\\Settings"), szGUID);
-	RegDeleteKey(HKEY_CLASSES_ROOT, szKeyTemp);
-	wsprintf(szKeyTemp, TEXT("CLSID\\%s"), szGUID);
-	RegDeleteKey(HKEY_CLASSES_ROOT, szKeyTemp);
-
-	return TRUE;
-}
-
-//---------------------------------------------------------------------------
-// MsgBox
-//---------------------------------------------------------------------------
-void MsgBox(LPCTSTR lpszMsg) {
-	MessageBox(NULL,
-		lpszMsg,
-		TEXT("Notepad++ Extension"),
-		MB_OK);
-}
-
-//---------------------------------------------------------------------------
 // MsgBoxError
 //---------------------------------------------------------------------------
 void MsgBoxError(LPCTSTR lpszMsg) {
 	MessageBox(NULL,
 		lpszMsg,
-		TEXT("Notepad++ Extension: Error"),
+		TEXT("Textrument Error:"),
 		MB_OK | MB_ICONWARNING);
 }
-
-//---------------------------------------------------------------------------
-// CheckNpp
-// Check if the shell handler resides in the same directory as notepad++
-//---------------------------------------------------------------------------
-BOOL CheckNpp(LPCTSTR path) {
-	WIN32_FIND_DATA fd;
-	HANDLE findHandle;
-
-	findHandle = FindFirstFile(path, &fd);
-	if (findHandle == INVALID_HANDLE_VALUE) {
-		return FALSE;
-	} else {
-		FindClose(findHandle);
-	}
-	return TRUE;
-}
-
-INT_PTR CALLBACK DlgProcSettings(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam) {
-	static TCHAR customCommand[MAX_PATH] = {0};
-	static TCHAR customText[TITLE_SIZE] = {0};
-	static TCHAR szKeyTemp[MAX_PATH + GUID_STRING_SIZE];
-
-	static DWORD showMenu = 2;	//0 off, 1 on, 2 unknown
-	static DWORD useMenuIcon = 1;	// 0 off, otherwise on
-
-	HKEY settingKey;
-	LONG result;
-	DWORD size = 0;
-
-	switch(uMsg) {
-		case WM_INITDIALOG: {
-			wsprintf(szKeyTemp, TEXT("CLSID\\%s\\Settings"), szGUID);
-			result = RegOpenKeyEx(HKEY_CLASSES_ROOT, szKeyTemp, 0, KEY_READ, &settingKey);
-			if (result == ERROR_SUCCESS) {
-				size = sizeof(TCHAR)*TITLE_SIZE;
-				result = RegQueryValueEx(settingKey, TEXT("Title"), NULL, NULL, (LPBYTE)(customText), &size);
-				if (result != ERROR_SUCCESS) {
-					lstrcpyn(customText, szDefaultMenutext, TITLE_SIZE);
-				}
-
-				size = sizeof(TCHAR)*MAX_PATH;
-				result = RegQueryValueEx(settingKey, TEXT("Custom"), NULL, NULL, (LPBYTE)(customCommand), &size);
-				if (result != ERROR_SUCCESS) {
-					lstrcpyn(customCommand, TEXT(""), MAX_PATH);
-				}
-
-				size = sizeof(DWORD);
-				result = RegQueryValueEx(settingKey, TEXT("Dynamic"), NULL, NULL, (BYTE*)(&isDynamic), &size);
-				if (result != ERROR_SUCCESS) {
-					isDynamic = 1;
-				}
-
-				size = sizeof(DWORD);
-				result = RegQueryValueEx(settingKey, TEXT("ShowIcon"), NULL, NULL, (BYTE*)(&useMenuIcon), &size);
-				if (result != ERROR_SUCCESS) {
-					useMenuIcon = 1;
-				}
-
-				RegCloseKey(settingKey);
-			}
-
-			Button_SetCheck(GetDlgItem(hwndDlg, IDC_CHECK_USECONTEXT), BST_INDETERMINATE);
-			Button_SetCheck(GetDlgItem(hwndDlg, IDC_CHECK_USEICON), BST_INDETERMINATE);
-
-			Button_SetCheck(GetDlgItem(hwndDlg, IDC_CHECK_CONTEXTICON), useMenuIcon?BST_CHECKED:BST_UNCHECKED);
-			Button_SetCheck(GetDlgItem(hwndDlg, IDC_CHECK_ISDYNAMIC), isDynamic?BST_CHECKED:BST_UNCHECKED);
-
-			SetDlgItemText(hwndDlg, IDC_EDIT_MENU, customText);
-			SetDlgItemText(hwndDlg, IDC_EDIT_COMMAND, customCommand);
-
-			return TRUE;
-			break; }
-		case WM_COMMAND: {
-			switch(LOWORD(wParam)) {
-				case IDOK: {
-					//Store settings
-					GetDlgItemText(hwndDlg, IDC_EDIT_MENU, customText, TITLE_SIZE);
-					GetDlgItemText(hwndDlg, IDC_EDIT_COMMAND, customCommand, MAX_PATH);
-					int textLen = lstrlen(customText);
-					int commandLen = lstrlen(customCommand);
-
-					wsprintf(szKeyTemp, TEXT("CLSID\\%s\\Settings"), szGUID);
-					result = RegCreateKeyEx(HKEY_CLASSES_ROOT, szKeyTemp, 0, NULL, REG_OPTION_NON_VOLATILE, KEY_WRITE, NULL, &settingKey, NULL);
-					if (result == ERROR_SUCCESS) {
-
-						result = RegSetValueEx(settingKey, TEXT("Title"), 0,REG_SZ, (LPBYTE)customText, (textLen+1)*sizeof(TCHAR));
-						result = RegSetValueEx(settingKey, TEXT("Custom"), 0,REG_SZ, (LPBYTE)customCommand, (commandLen+1)*sizeof(TCHAR));
-
-						result = RegSetValueEx(settingKey, TEXT("Dynamic"), 0, REG_DWORD, (LPBYTE)&isDynamic, sizeof(DWORD));
-						result = RegSetValueEx(settingKey, TEXT("ShowIcon"), 0, REG_DWORD, (LPBYTE)&useMenuIcon, sizeof(DWORD));
-
-						RegCloseKey(settingKey);
-					}
-
-					if (showMenu == 1) {
-						result = RegCreateKeyEx(HKEY_CLASSES_ROOT, szShellExtensionKey, 0, NULL, REG_OPTION_NON_VOLATILE, KEY_WRITE, NULL, &settingKey, NULL);
-						if (result == ERROR_SUCCESS) {
-							result = RegSetValueEx(settingKey, NULL, 0,REG_SZ, (LPBYTE)szGUID, (lstrlen(szGUID)+1)*sizeof(TCHAR));
-							RegCloseKey(settingKey);
-						}
-					} else if (showMenu == 0) {
-						RegDeleteKey(HKEY_CLASSES_ROOT, szShellExtensionKey);
-					}
-
-					if (showIcon == 1) {
-						result = RegCreateKeyEx(HKEY_CLASSES_ROOT, TEXT("Notepad++_file\\shellex\\IconHandler"), 0, NULL, REG_OPTION_NON_VOLATILE, KEY_WRITE, NULL, &settingKey, NULL);
-						if (result == ERROR_SUCCESS) {
-							result = RegSetValueEx(settingKey, NULL, 0,REG_SZ, (LPBYTE)szGUID, (lstrlen(szGUID)+1)*sizeof(TCHAR));
-							RegCloseKey(settingKey);
-						}
-					} else if (showIcon == 0) {
-						RegDeleteKey(HKEY_CLASSES_ROOT, TEXT("Notepad++_file\\shellex\\IconHandler"));
-						RegDeleteKey(HKEY_CLASSES_ROOT, TEXT("Notepad++_file\\shellex"));
-					}
-
-					PostMessage(hwndDlg, WM_CLOSE, 0, 0);
-					break; }
-				case IDC_CHECK_USECONTEXT: {
-					int state = Button_GetCheck((HWND)lParam);
-					if (state == BST_CHECKED)
-						showMenu = 1;
-					else if (state == BST_UNCHECKED)
-						showMenu = 0;
-					else
-						showMenu = 2;
-					break; }
-				case IDC_CHECK_USEICON: {
-					int state = Button_GetCheck((HWND)lParam);
-					if (state == BST_CHECKED)
-						showIcon = 1;
-					else if (state == BST_UNCHECKED)
-						showIcon = 0;
-					else
-						showIcon = 2;
-					break; }
-				case IDC_CHECK_CONTEXTICON: {
-					int state = Button_GetCheck((HWND)lParam);
-					if (state == BST_CHECKED)
-						useMenuIcon = 1;
-					else
-						useMenuIcon = 0;
-					break; }
-				case IDC_CHECK_ISDYNAMIC: {
-					int state = Button_GetCheck((HWND)lParam);
-					if (state == BST_CHECKED)
-						isDynamic = 1;
-					else
-						isDynamic = 0;
-					break; }
-				default:
-					break;
-			}
-
-			return TRUE;
-			break; }
-		case WM_CLOSE: {
-			EndDialog(hwndDlg, 0);
-			return TRUE;
-			break; }
-		default:
-			break;
-	}
-
-	return FALSE;
-}
-
 // --- CShellExtClassFactory ---
 CShellExtClassFactory::CShellExtClassFactory() :
 	m_cRef(0L)
@@ -758,6 +436,7 @@ HRESULT STDMETHODCALLTYPE CShellExt::Load(LPCOLESTR pszFileName, DWORD /*dwMode*
 	lstrcpyn(m_szFilePath, ext, copySize);
 	m_nameLength = lstrlen(m_szFilePath);
 	CharUpperBuff(m_szFilePath, m_nameLength);
+
 	return S_OK;
 }
 
@@ -803,145 +482,6 @@ STDMETHODIMP CShellExt::Extract(LPCTSTR /*pszFile*/, UINT /*nIconIndex*/, HICON 
 		return S_FALSE;
 	}
 
-	if (!m_isDynamic || !phiconLarge || sizeLarge < 32)	//No modifications required
-		return S_OK;
-
-	HDC dcEditColor, dcEditMask, dcEditTemp;
-	HFONT font;
-	HBRUSH brush;
-	HPEN pen;
-	BITMAPINFO bmi;
-    HBITMAP hbm;
-    LPDWORD pPix;
-
-	res = GetIconInfo(*phiconLarge, &iconinfo);
-	if (!res)
-		return S_OK;	//abort, the icon is still valid
-
-	res = DestroyIcon(*phiconLarge);
-	if (!res)
-		return S_OK;
-	else
-		*phiconLarge = NULL;
-
-	dcEditColor = CreateCompatibleDC(GetDC(0));
-	dcEditMask = CreateCompatibleDC(GetDC(0));
-	dcEditTemp = CreateCompatibleDC(GetDC(0));
-
-    // Create temp bitmap to render rectangle to
-    ZeroMemory(&bmi, sizeof(bmi));
-    bmi.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
-    bmi.bmiHeader.biWidth = sizeLarge;
-    bmi.bmiHeader.biHeight = sizeLarge;
-    bmi.bmiHeader.biPlanes = 1;
-    bmi.bmiHeader.biBitCount = 32;
-    bmi.bmiHeader.biCompression = BI_RGB;
-    hbm = CreateDIBSection(dcEditTemp, &bmi, DIB_RGB_COLORS, (VOID**)&pPix, NULL, 0);
-    memset(pPix, 0x00FFFFFF, sizeof(DWORD)*sizeLarge*sizeLarge);	//initialize to white pixels, no alpha
-
-	SelectObject(dcEditColor, iconinfo.hbmColor);
-	SelectObject(dcEditMask, iconinfo.hbmMask);
-	SelectObject(dcEditTemp, hbm);
-
-	LONG calSize = (LONG)(sizeLarge*2/5);
-
-	LOGFONT lf = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {0}};
-	lf.lfHeight = calSize;
-	lf.lfWeight = FW_NORMAL;
-	lf.lfCharSet = DEFAULT_CHARSET;
-	lstrcpyn(lf.lfFaceName, TEXT("Courier New"), LF_FACESIZE);
-	RECT rectText = {0, 0, 0, 0};
-	RECT rectBox = {0, 0, 0, 0};
-	COLORREF backGround = RGB(1, 1, 60);
-	COLORREF textColor = RGB(250,250,250);
-
-	font = CreateFontIndirect(&lf);
-	brush = CreateSolidBrush(backGround);
-	pen = CreatePen(PS_NULL, 0, backGround);
-	SelectObject(dcEditTemp, font);
-	SelectObject(dcEditTemp, brush);
-	SelectObject(dcEditTemp, pen);
-	SetBkMode(dcEditTemp, TRANSPARENT);	//dont clear background when drawing text
-	SetBkColor(dcEditTemp,  backGround);
-	SetTextColor(dcEditTemp, textColor);
-
-	//Calculate size of the displayed string
-	SIZE stringSize;
-	GetTextExtentPoint32(dcEditTemp, m_szFilePath, m_nameLength, &stringSize);
-	stringSize.cx = std::min(stringSize.cx, (LONG)sizeLarge-2);
-	stringSize.cy = std::min(stringSize.cy, (LONG)sizeLarge-2);
-
-	rectText.top = sizeLarge - stringSize.cy - 1;
-	rectText.left = sizeLarge - stringSize.cx - 1;
-	rectText.bottom = sizeLarge - 1;
-	rectText.right = sizeLarge - 1;
-
-	rectBox.top = sizeLarge - stringSize.cy - 2;
-	rectBox.left = sizeLarge - stringSize.cx - 2;
-	rectBox.bottom = sizeLarge;
-	rectBox.right = sizeLarge;
-
-	//Draw the background (rounded) rectangle
-	int elipsSize = calSize/3;
-	RoundRect(dcEditTemp, rectBox.left, rectBox.top, rectBox.right, rectBox.bottom, elipsSize, elipsSize);
-	//Draw text in the rectangle
-	DrawText(dcEditTemp, m_szFilePath, m_nameLength, &rectText, DT_BOTTOM|DT_SINGLELINE|DT_LEFT);
-
-	//set alpha of non white pixels back to 255
-	//premultiply alpha
-	//Fill in the mask bitmap (anything not 100% alpha is transparent)
-	int red, green, blue, alpha;
-	for(int y = 0; y < sizeLarge; y++) {
-		for(int x = 0; x < sizeLarge; x++) {
-			DWORD * pix = pPix+(y*sizeLarge+x);
-			red = *pix & 0xFF;
-			green = *pix >> 8 & 0xFF;
-			blue = *pix >> 16 & 0xFF;
-			alpha = *pix >> 24 & 0xFF;
-			if ((*pix << 8) == 0xFFFFFF00)
-				alpha = 0x00;
-			else
-				alpha = 0xFF;
-			red = (red*alpha)/0xFF;
-			green = (green*alpha)/0xFF;
-			blue = (blue*alpha)/0xFF;
-			*pix = RGBA(red, green, blue, alpha);
-		}
-	}
-
-	BLENDFUNCTION ftn = { AC_SRC_OVER, 0, 0xFF, AC_SRC_ALPHA };
-	int width = rectBox.right - rectBox.left;
-	int height = rectBox.bottom - rectBox.top;
-	AlphaBlend(dcEditColor, rectBox.left, rectBox.top, stringSize.cx, stringSize.cy, dcEditTemp, rectBox.left, rectBox.top, width, height, ftn);
-
-	//Adjust the mask image: simply draw the rectangle to it
-	backGround = RGB(0, 0, 0);
-	DeleteBrush(brush);
-	DeletePen(pen);
-	brush = CreateSolidBrush(backGround);
-	pen = CreatePen(PS_NULL, 0, backGround);
-	SelectObject(dcEditMask, brush);
-	SelectObject(dcEditMask, pen);
-	RoundRect(dcEditMask, rectBox.left, rectBox.top, rectBox.right, rectBox.bottom, elipsSize, elipsSize);
-
-
-	DeleteDC(dcEditColor);
-	DeleteDC(dcEditMask);
-	DeleteDC(dcEditTemp);
-	DeleteBrush(brush);
-	DeletePen(pen);
-	DeleteFont(font);
-	DeleteBitmap(hbm);
-
-	*phiconLarge = CreateIconIndirect(&iconinfo);
-	DeleteBitmap(iconinfo.hbmColor);
-	DeleteBitmap(iconinfo.hbmMask);
-
-	if (*phiconLarge == NULL) {
-		InvalidateIcon(phiconSmall, phiconLarge);
-		return S_FALSE;
-	}
-
 	return S_OK;
 }
 
@@ -958,6 +498,7 @@ void InvalidateIcon(HICON * iconSmall, HICON * iconLarge) {
 
 // *** Private methods ***
 STDMETHODIMP CShellExt::InvokeNPP(HWND /*hParent*/, LPCSTR /*pszWorkingDir*/, LPCSTR /*pszCmd*/, LPCSTR /*pszParam*/, int iShowCmd) {
+
 	TCHAR szFilename[MAX_PATH];
 	TCHAR szCustom[MAX_PATH];
 	TCHAR szNotepadExecutableFilename[3 * MAX_PATH]; // Should be able to contain szFilename plus szCustom plus some additional characters.

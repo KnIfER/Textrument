@@ -36,14 +36,14 @@ BEGIN
     BEGIN
         BLOCK "040904b0"
         BEGIN
-            VALUE "CompanyName", "Don HO don.h@free.fr"
-            VALUE "FileDescription", "Notepad++ : a free (GNU) source code editor"
-            VALUE "FileVersion", "7.89"
-            VALUE "InternalName", "npp.exe"
-            VALUE "LegalCopyright", "Copyleft 1998-2016 by Don HO"
-            VALUE "OriginalFilename", "Notepad++.exe"
-            VALUE "ProductName", "Notepad++"
-            VALUE "ProductVersion", "7.89"
+            VALUE "CompanyName", "knziha@gmail.com"
+            VALUE "FileDescription", "Textrument : a free (GNU) text editor"
+            VALUE "FileVersion", "v0.1.1"
+            VALUE "InternalName", "n1pd.exe"
+            VALUE "LegalCopyright", "Copymiddle 1998-2020 by knziha"
+            VALUE "OriginalFilename", "Textrument.exe"
+            VALUE "ProductName", "Textrument"
+            VALUE "ProductVersion", "v0.1.1"
         END
     END
 END
