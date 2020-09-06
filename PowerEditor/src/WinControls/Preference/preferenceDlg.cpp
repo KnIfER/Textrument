@@ -1006,12 +1006,12 @@ INT_PTR CALLBACK SettingsDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM)
 
 			::SendDlgItemMessage(_hSelf, IDC_CHECK_MIN2SYSTRAY, BM_SETCHECK, nppGUI._isMinimizedToTray, 0);
 			::SendDlgItemMessage(_hSelf, IDC_CHECK_DETECTENCODING, BM_SETCHECK, nppGUI._detectEncoding, 0);
-            ::SendDlgItemMessage(_hSelf, IDC_CHECK_AUTOUPDATE, BM_SETCHECK, nppGUI._autoUpdateOpt._doAutoUpdate, 0);
+            ::SendDlgItemMessage(_hSelf, IDC_CHECK_AUTOUPDATE, BM_SETCHECK, 0, 0);
 			::SendDlgItemMessage(_hSelf, IDC_CHECK_DIRECTWRITE_ENABLE, BM_SETCHECK, nppGUI._writeTechnologyEngine == directWriteTechnology, 0);
 			::SendDlgItemMessage(_hSelf, IDC_CHECK_ENABLEDOCPEEKER, BM_SETCHECK, nppGUI._isDocPeekOnTab ? BST_CHECKED : BST_UNCHECKED, 0);
 			::SendDlgItemMessage(_hSelf, IDC_CHECK_ENABLEDOCPEEKONMAP, BM_SETCHECK, nppGUI._isDocPeekOnMap ? BST_CHECKED : BST_UNCHECKED, 0);
 
-			::ShowWindow(::GetDlgItem(_hSelf, IDC_CHECK_AUTOUPDATE), nppGUI._doesExistUpdater?SW_SHOW:SW_HIDE);
+			::ShowWindow(::GetDlgItem(_hSelf, IDC_CHECK_AUTOUPDATE), 0?SW_SHOW:SW_HIDE);
 			
 			BOOL linkEnable =  nppGUI._styleURL != urlDisable;
 			BOOL dontUnderline = (nppGUI._styleURL == urlNoUnderLineFg) || (nppGUI._styleURL == urlNoUnderLineBg);
@@ -1122,7 +1122,6 @@ INT_PTR CALLBACK SettingsDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM)
 				return TRUE;
 
 				case IDC_CHECK_AUTOUPDATE:
-					nppGUI._autoUpdateOpt._doAutoUpdate = isCheckedOrNot(static_cast<int32_t>(wParam));
 					return TRUE;
 
 				case IDC_CHECK_MIN2SYSTRAY:
@@ -3776,7 +3775,7 @@ INT_PTR CALLBACK PreferenceDlg::DlgProcShellSettings(HWND hwndDlg, UINT uMsg, WP
 	static TCHAR cmdArgs[MAX_PATH] = {0};
 	static TCHAR szKeyTemp[MAX_PATH + GUID_STRING_SIZE];
 
-	static TCHAR menuText[TITLE_SIZE] = TEXT("Edit with &Textrument");
+	static TCHAR menuText[TITLE_SIZE] = TEXT("Edit with &Textrument"); 
 	static DWORD menuShow = 0;	//0 off, 1 on
 	static DWORD menuIconShow = 2;	// 0 off, otherwise on
 
@@ -3878,10 +3877,10 @@ INT_PTR CALLBACK PreferenceDlg::DlgProcShellSettings(HWND hwndDlg, UINT uMsg, WP
 
 					//todo fuck path remove acrom
 
-					auto shellPath = nppParms->_nppPath;
-					PathAppend(shellPath, ShellDllName);
+					TCHAR shellDir[MAX_PATH];
+					lstrcpy(shellDir, nppParms->_nppPath);
+					PathAppend(shellDir, ShellDllName);
 
-					auto shellDir = shellPath.data();
 					bool checkShell=false;
 					static DOREGSTRUCT ClsidEntries[] = {
 						{HKEY_CLASSES_ROOT,	TEXT("CLSID\\%s"), NULL,  REG_SZ, szShellExtensionTitle},

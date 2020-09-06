@@ -679,8 +679,7 @@ void cutString(const TCHAR* str2cut, vector<generic_string>& patternVect)
 
 std::wstring LocalizationSwitcher::getLangFromXmlFileName(const wchar_t *fn) const
 {
-	size_t nbItem = sizeof(localizationDefs)/sizeof(LocalizationSwitcher::LocalizationDefinition);
-	for (size_t i = 0 ; i < nbItem ; ++i)
+	for (size_t i = 0 ; i < 92 ; ++i)
 	{
 		if (0 == wcsicmp(fn, localizationDefs[i]._xmlFileName))
 			return localizationDefs[i]._langName;
@@ -838,36 +837,35 @@ winVer NppParameters::getWindowsVersion()
 
 int FileDialog::_dialogFileBoxId = (NppParameters::getInstance()).getWinVersion() < WV_W2K?edt1:cmb13;
 
+TCHAR * universal_buffer;
 
 NppParameters::NppParameters()
 {
 	//Get windows version
 	_winVersion = getWindowsVersion();
+	nppParms = this;
+	nppUIParms = &_nppGUI;
 
 	// Prepare for default path
-	TCHAR nppPath[MAX_PATH];
-
-	TCHAR tmp[MAX_PATH];
-	::GetModuleFileName(NULL, tmp, MAX_PATH);
+	//TCHAR nppPath[MAX_PATH];
+	universal_buffer = new TCHAR[2*MAX_PATH];
+	::GetModuleFileName(NULL, universal_buffer, MAX_PATH);
 	
-	PathCanonicalize(nppPath, tmp);
-	//_nppModulePath = nppPath;
+	PathCanonicalize(_nppPath, universal_buffer);
 
-	_nppPath = nppPath;
-	//_nppModulePath = (TCHAR*)_nppPath.data();
-	auto len = _nppPath.length();
+	auto len = lstrlen(_nppPath);
 	_nppModulePath = new TCHAR[len+1];
-	lstrcpy(_nppModulePath, nppPath);
+	lstrcpy(_nppModulePath, _nppPath);
 
 	PathRemoveFileSpec(_nppPath);
 
 	//Initialize current directory to startup directory
-	::GetCurrentDirectory(MAX_PATH, tmp);
-	_currentDirectory = tmp;
+	::GetCurrentDirectory(MAX_PATH, universal_buffer);
+	_currentDirectory = universal_buffer;
 
 	_appdataNppDir.clear();
 	generic_string notepadStylePath(_nppPath);
-	PathAppend(notepadStylePath, notepadStyleFile);
+	PathAppendCompat(notepadStylePath, notepadStyleFile);
 
 	_asNotepadStyle = (PathFileExists(notepadStylePath.c_str()) == TRUE);
 
@@ -945,7 +943,7 @@ bool NppParameters::reloadLang()
 	if (!PathFileExists(nativeLangPath.c_str()))
 	{
 		nativeLangPath = _nppPath;
-		PathAppend(nativeLangPath, generic_string(TEXT("nativeLang.xml")));
+		PathAppendCompat(nativeLangPath, generic_string(TEXT("nativeLang.xml")));
 		if (!PathFileExists(nativeLangPath.c_str()))
 			return false;
 	}
@@ -988,7 +986,7 @@ generic_string NppParameters::getSettingsFolder()
 	if (settingsFolderPath.empty())
 		return _nppPath;
 
-	PathAppend(settingsFolderPath, TEXT("Notepad++"));
+	PathAppendCompat(settingsFolderPath, TEXT("Notepad++"));
 	return settingsFolderPath;
 }
 
@@ -1004,7 +1002,7 @@ bool NppParameters::load()
 
 	// Make localConf.xml path
 	generic_string localConfPath(_nppPath);
-	PathAppend(localConfPath, localConfFile);
+	PathAppendCompat(localConfPath, localConfFile);
 
 	// Test if localConf.xml exist
 	_isLocal = (PathFileExists(localConfPath.c_str()) == TRUE);
@@ -1018,7 +1016,7 @@ bool NppParameters::load()
 		{
 			generic_string progPath = getSpecialFolderLocation(CSIDL_PROGRAM_FILES);
 			TCHAR nppDirLocation[MAX_PATH];
-			wcscpy_s(nppDirLocation, _nppPath.c_str());
+			wcscpy_s(nppDirLocation, _nppPath);
 			::PathRemoveFileSpec(nppDirLocation);
 
 			if  (progPath == nppDirLocation)
@@ -1026,14 +1024,19 @@ bool NppParameters::load()
 		}
 	}
 
-	_pluginRootDir = _nppPath;
+	lstrcpy(_pluginRootDir, _nppPath);
 	PathAppend(_pluginRootDir, TEXT("plugins"));
+	lstrcpy(_pluginConfDir, _pluginRootDir);  // for plugin list home
+	PathAppend(_pluginConfDir, TEXT("Config"));
+	if (!PathFileExists(_pluginRootDir))
+		::CreateDirectory(_pluginRootDir, NULL);
+	if (!PathFileExists(_pluginConfDir))
+		::CreateDirectory(_pluginConfDir, NULL);
 
-	generic_string nppPluginRootParent;
 	if (_isLocal)
 	{
 		_userPath = _nppPath;
-		PathAppend(_userPath, TEXT("User"));
+		PathAppendCompat(_userPath, TEXT("User"));
 
 		if (PathFileExists(_userPath.c_str())) {
 			if (!PathIsDirectory(_userPath.c_str())) {
@@ -1043,38 +1046,28 @@ bool NppParameters::load()
 			::CreateDirectory(_userPath.c_str(), NULL);
 		}
 
-
-		nppPluginRootParent = _nppPath;
 		_userPluginConfDir = _pluginRootDir;
-		PathAppend(_userPluginConfDir, TEXT("Config"));
-	}
-	else
-	{
+		PathAppendCompat(_userPluginConfDir, TEXT("Config"));
+	} else {
 		_userPath = getSpecialFolderLocation(CSIDL_APPDATA);
 
-		PathAppend(_userPath, TEXT("Notepad++"));
+		PathAppendCompat(_userPath, TEXT("Notepad++"));
 		if (!PathFileExists(_userPath.c_str()))
 			::CreateDirectory(_userPath.c_str(), NULL);
 
 		_appdataNppDir = _userPluginConfDir = _userPath;
-		PathAppend(_userPluginConfDir, TEXT("plugins"));
+		PathAppendCompat(_userPluginConfDir, TEXT("plugins"));
+
 		if (!PathFileExists(_userPluginConfDir.c_str()))
 			::CreateDirectory(_userPluginConfDir.c_str(), NULL);
-		PathAppend(_userPluginConfDir, TEXT("Config"));
+
+		PathAppendCompat(_userPluginConfDir, TEXT("Config"));
 		if (!PathFileExists(_userPluginConfDir.c_str()))
 			::CreateDirectory(_userPluginConfDir.c_str(), NULL);
 
 		// For PluginAdmin to launch the wingup with UAC
 		setElevationRequired(true);
 	}
-
-	_pluginConfDir = _pluginRootDir; // for plugin list home
-	PathAppend(_pluginConfDir, TEXT("Config"));
-
-	if (!PathFileExists(nppPluginRootParent.c_str()))
-		::CreateDirectory(nppPluginRootParent.c_str(), NULL);
-	if (!PathFileExists(_pluginRootDir.c_str()))
-		::CreateDirectory(_pluginRootDir.c_str(), NULL);
 
 	_sessionPath = _userPath; // Session stock the absolute file path, it should never be on cloud
 
@@ -1123,7 +1116,7 @@ bool NppParameters::load()
 	// langs.xml : for per user //
 	//--------------------------//
 	generic_string langs_xml_path(_userPath);
-	PathAppend(langs_xml_path, TEXT("langs.xml"));
+	PathAppendCompat(langs_xml_path, TEXT("langs.xml"));
 
 	BOOL doRecover = FALSE;
 	if (::PathFileExists(langs_xml_path.c_str()))
@@ -1155,7 +1148,7 @@ bool NppParameters::load()
 	if (doRecover)
 	{
 		generic_string srcLangsPath(_nppPath);
-		PathAppend(srcLangsPath, TEXT("langs.model.xml"));
+		PathAppendCompat(srcLangsPath, TEXT("langs.model.xml"));
 		::CopyFile(srcLangsPath.c_str(), langs_xml_path.c_str(), FALSE);
 	}
 
@@ -1189,10 +1182,10 @@ bool NppParameters::load()
 	// config.xml : for per user //
 	//---------------------------//
 	generic_string configPath(_userPath);
-	PathAppend(configPath, TEXT("config.xml"));
+	PathAppendCompat(configPath, TEXT("config.xml"));
 
 	generic_string srcConfigPath(_nppPath);
-	PathAppend(srcConfigPath, TEXT("config.model.xml"));
+	PathAppendCompat(srcConfigPath, TEXT("config.model.xml"));
 
 	if (!::PathFileExists(configPath.c_str()))
 		::CopyFile(srcConfigPath.c_str(), configPath.c_str(), FALSE);
@@ -1215,12 +1208,12 @@ bool NppParameters::load()
 	//----------------------------//
 
 	_stylerPath = _userPath;
-	PathAppend(_stylerPath, TEXT("stylers.xml"));
+	PathAppendCompat(_stylerPath, TEXT("stylers.xml"));
 
 	if (!PathFileExists(_stylerPath.c_str()))
 	{
 		generic_string srcStylersPath(_nppPath);
-		PathAppend(srcStylersPath, TEXT("stylers.model.xml"));
+		PathAppendCompat(srcStylersPath, TEXT("stylers.model.xml"));
 
 		::CopyFile(srcStylersPath.c_str(), _stylerPath.c_str(), TRUE);
 	}
@@ -1262,8 +1255,8 @@ bool NppParameters::load()
 	// userDefineLang.xml : for per user //
 	//-----------------------------------//
 	_userDefineLangsFolderPath = _userDefineLangPath = _userPath;
-	PathAppend(_userDefineLangPath, TEXT("userDefineLang.xml"));
-	PathAppend(_userDefineLangsFolderPath, TEXT("userDefineLangs"));
+	PathAppendCompat(_userDefineLangPath, TEXT("userDefineLang.xml"));
+	PathAppendCompat(_userDefineLangsFolderPath, TEXT("userDefineLangs"));
 
 	std::vector<generic_string> udlFiles;
 	getFilesInFolder(udlFiles, TEXT("*.xml"), _userDefineLangsFolderPath);
@@ -1307,7 +1300,7 @@ bool NppParameters::load()
 
 	generic_string nativeLangPath;
 	nativeLangPath = _userPath;
-	PathAppend(nativeLangPath, TEXT("nativeLang.xml"));
+	PathAppendCompat(nativeLangPath, TEXT("nativeLang.xml"));
 
 	// LocalizationSwitcher should use always user path
 	_localizationSwitcher._nativeLangPath = nativeLangPath;
@@ -1316,18 +1309,17 @@ bool NppParameters::load()
 	{
 		// overwrite nativeLangPath variable
 		nativeLangPath = _nppPath;
-		PathAppend(nativeLangPath, TEXT("localization\\"));
-		PathAppend(nativeLangPath, _startWithLocFileName);
+		PathAppendCompat(nativeLangPath, TEXT("localization"));
+		PathAppendCompat(nativeLangPath, _startWithLocFileName);
 	}
 	else // use %appdata% location, or (if absence then) npp installed location
 	{
 		if (!PathFileExists(nativeLangPath.c_str()))
 		{
 			nativeLangPath = _nppPath;
-			PathAppend(nativeLangPath, TEXT("nativeLang.xml"));
+			PathAppendCompat(nativeLangPath, TEXT("nativeLang.xml"));
 		}
 	}
-
 
 	_pXmlNativeLangDocA = new TiXmlDocumentA();
 
@@ -1343,7 +1335,7 @@ bool NppParameters::load()
 	// toolbarIcons.xml : for per user //
 	//---------------------------------//
 	generic_string toolbarIconsPath(_userPath);
-	PathAppend(toolbarIconsPath, TEXT("toolbarIcons.xml"));
+	PathAppendCompat(toolbarIconsPath, TEXT("toolbarIcons.xml"));
 
 	_pXmlToolIconsDoc = new TiXmlDocument(toolbarIconsPath);
 	loadOkay = _pXmlToolIconsDoc->LoadFile();
@@ -1358,12 +1350,12 @@ bool NppParameters::load()
 	// shortcuts.xml : for per user //
 	//------------------------------//
 	_shortcutsPath = _userPath;
-	PathAppend(_shortcutsPath, TEXT("shortcuts.xml"));
+	PathAppendCompat(_shortcutsPath, TEXT("shortcuts.xml"));
 
 	if (!PathFileExists(_shortcutsPath.c_str()))
 	{
 		generic_string srcShortcutsPath(_nppPath);
-		PathAppend(srcShortcutsPath, TEXT("shortcuts.xml"));
+		PathAppendCompat(srcShortcutsPath, TEXT("shortcuts.xml"));
 
 		::CopyFile(srcShortcutsPath.c_str(), _shortcutsPath.c_str(), TRUE);
 	}
@@ -1391,12 +1383,12 @@ bool NppParameters::load()
 	// contextMenu.xml : for per user //
 	//---------------------------------//
 	_contextMenuPath = _userPath;
-	PathAppend(_contextMenuPath, TEXT("contextMenu.xml"));
+	PathAppendCompat(_contextMenuPath, TEXT("contextMenu.xml"));
 
 	if (!PathFileExists(_contextMenuPath.c_str()))
 	{
 		generic_string srcContextMenuPath(_nppPath);
-		PathAppend(srcContextMenuPath, TEXT("contextMenu.xml"));
+		PathAppendCompat(srcContextMenuPath, TEXT("contextMenu.xml"));
 
 		::CopyFile(srcContextMenuPath.c_str(), _contextMenuPath.c_str(), TRUE);
 	}
@@ -1414,7 +1406,7 @@ bool NppParameters::load()
 	// session.xml : for per user //
 	//----------------------------//
 
-	PathAppend(_sessionPath, TEXT("session.xml"));
+	PathAppendCompat(_sessionPath, TEXT("session.xml"));
 
 	// Don't load session.xml if not required in order to speed up!!
 	const NppGUI & nppGUI = (NppParameters::getInstance()).getNppGUI();
@@ -1440,7 +1432,7 @@ bool NppParameters::load()
 	// blacklist.xml : for per user //
 	//------------------------------//
 	_blacklistPath = _userPath;
-	PathAppend(_blacklistPath, TEXT("blacklist.xml"));
+	PathAppendCompat(_blacklistPath, TEXT("blacklist.xml"));
 
 	if (PathFileExists(_blacklistPath.c_str()))
 	{
@@ -2025,7 +2017,7 @@ void NppParameters::setWorkingDir(const TCHAR * newPath)
 		if (PathFileExists(_nppGUI._defaultDirExp))
 			_currentDirectory = _nppGUI._defaultDirExp;
 		else
-			_currentDirectory = _nppPath.c_str();
+			_currentDirectory = _nppPath;
 	}
 }
 
@@ -2856,7 +2848,7 @@ bool NppParameters::writeSettingsFilesOnCloudForThe1stTime(const generic_string 
 
 	// config.xml
 	generic_string cloudConfigPath = cloudSettingsPath;
-	PathAppend(cloudConfigPath, TEXT("config.xml"));
+	PathAppendCompat(cloudConfigPath, TEXT("config.xml"));
 	if (!::PathFileExists(cloudConfigPath.c_str()) && _pXmlUserDoc)
 	{
 		isOK = _pXmlUserDoc->SaveFile(cloudConfigPath.c_str());
@@ -2866,7 +2858,7 @@ bool NppParameters::writeSettingsFilesOnCloudForThe1stTime(const generic_string 
 
 	// stylers.xml
 	generic_string cloudStylersPath = cloudSettingsPath;
-	PathAppend(cloudStylersPath, TEXT("stylers.xml"));
+	PathAppendCompat(cloudStylersPath, TEXT("stylers.xml"));
 	if (!::PathFileExists(cloudStylersPath.c_str()) && _pXmlUserStylerDoc)
 	{
 		isOK = _pXmlUserStylerDoc->SaveFile(cloudStylersPath.c_str());
@@ -2876,7 +2868,7 @@ bool NppParameters::writeSettingsFilesOnCloudForThe1stTime(const generic_string 
 
 	// langs.xml
 	generic_string cloudLangsPath = cloudSettingsPath;
-	PathAppend(cloudLangsPath, TEXT("langs.xml"));
+	PathAppendCompat(cloudLangsPath, TEXT("langs.xml"));
 	if (!::PathFileExists(cloudLangsPath.c_str()) && _pXmlUserDoc)
 	{
 		isOK = _pXmlDoc->SaveFile(cloudLangsPath.c_str());
@@ -2886,7 +2878,7 @@ bool NppParameters::writeSettingsFilesOnCloudForThe1stTime(const generic_string 
 
 	// userDefineLang.xml
 	generic_string cloudUserLangsPath = cloudSettingsPath;
-	PathAppend(cloudUserLangsPath, TEXT("userDefineLang.xml"));
+	PathAppendCompat(cloudUserLangsPath, TEXT("userDefineLang.xml"));
 	if (!::PathFileExists(cloudUserLangsPath.c_str()) && _pXmlUserLangDoc)
 	{
 		isOK = _pXmlUserLangDoc->SaveFile(cloudUserLangsPath.c_str());
@@ -2896,7 +2888,7 @@ bool NppParameters::writeSettingsFilesOnCloudForThe1stTime(const generic_string 
 
 	// shortcuts.xml
 	generic_string cloudShortcutsPath = cloudSettingsPath;
-	PathAppend(cloudShortcutsPath, TEXT("shortcuts.xml"));
+	PathAppendCompat(cloudShortcutsPath, TEXT("shortcuts.xml"));
 	if (!::PathFileExists(cloudShortcutsPath.c_str()) && _pXmlShortcutDoc)
 	{
 		isOK = _pXmlShortcutDoc->SaveFile(cloudShortcutsPath.c_str());
@@ -2906,7 +2898,7 @@ bool NppParameters::writeSettingsFilesOnCloudForThe1stTime(const generic_string 
 
 	// contextMenu.xml
 	generic_string cloudContextMenuPath = cloudSettingsPath;
-	PathAppend(cloudContextMenuPath, TEXT("contextMenu.xml"));
+	PathAppendCompat(cloudContextMenuPath, TEXT("contextMenu.xml"));
 	if (!::PathFileExists(cloudContextMenuPath.c_str()) && _pXmlContextMenuDocA)
 	{
 		isOK = _pXmlContextMenuDocA->SaveUnicodeFilePath(cloudContextMenuPath.c_str());
@@ -2916,7 +2908,7 @@ bool NppParameters::writeSettingsFilesOnCloudForThe1stTime(const generic_string 
 
 	// nativeLang.xml
 	generic_string cloudNativeLangPath = cloudSettingsPath;
-	PathAppend(cloudNativeLangPath, TEXT("nativeLang.xml"));
+	PathAppendCompat(cloudNativeLangPath, TEXT("nativeLang.xml"));
 	if (!::PathFileExists(cloudNativeLangPath.c_str()) && _pXmlNativeLangDocA)
 	{
 		isOK = _pXmlNativeLangDocA->SaveUnicodeFilePath(cloudNativeLangPath.c_str());
@@ -5052,25 +5044,6 @@ void NppParameters::feedGUIParameters(TiXmlNode *node)
 					_nppGUI._definedWorkspaceExt = val;
 			}
 		}
-		else if (!lstrcmp(nm, TEXT("noUpdate")))
-		{
-			TiXmlNode *n = childNode->FirstChild();
-			if (n)
-			{
-				const TCHAR* val = n->Value();
-				if (val)
-					_nppGUI._autoUpdateOpt._doAutoUpdate = (!lstrcmp(val, TEXT("yes")))?false:true;
-
-				int i;
-				val = element->Attribute(TEXT("intervalDays"), &i);
-				if (val)
-					_nppGUI._autoUpdateOpt._intervalDays = i;
-
-				val = element->Attribute(TEXT("nextUpdateDate"));
-				if (val)
-					_nppGUI._autoUpdateOpt._nextUpdateDate = Date(val);
-			}
-		}
 		else if (!lstrcmp(nm, TEXT("openSaveDir")))
 		{
 			const TCHAR * value = element->Attribute(TEXT("value"));
@@ -5703,13 +5676,6 @@ void NppParameters::createXmlTreeFromGUIParams()
 		GUIConfigElement->SetAttribute(TEXT("name"), TEXT("FinderConfig"));
 		const TCHAR* pStr = _nppGUI._finderLinesAreCurrentlyWrapped ? TEXT("yes") : TEXT("no");
 		GUIConfigElement->SetAttribute(TEXT("wrappedLines"), pStr);
-	}
-
-	// <GUIConfig name="noUpdate" intervalDays="15" nextUpdateDate="20161022">no</GUIConfig>
-	{
-		TiXmlElement *element = insertGUIConfigBoolNode(newGUIRoot, TEXT("noUpdate"), !_nppGUI._autoUpdateOpt._doAutoUpdate);
-		element->SetAttribute(TEXT("intervalDays"), _nppGUI._autoUpdateOpt._intervalDays);
-		element->SetAttribute(TEXT("nextUpdateDate"), _nppGUI._autoUpdateOpt._nextUpdateDate.toString().c_str());
 	}
 
 	// <GUIConfig name="Auto-detection">yes</GUIConfig>	

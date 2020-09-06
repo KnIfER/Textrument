@@ -205,8 +205,8 @@ TCHAR* FileDialog::doOpenSingleFileDlg()
 
 stringVector * FileDialog::doOpenMultiFilesDlg()
 {
-	TCHAR dir[MAX_PATH];
-	::GetCurrentDirectory(MAX_PATH, dir);
+	TCHAR dir[MAX_FILE_PATH];
+	::GetCurrentDirectory(MAX_FILE_PATH, dir);
 
 	NppParameters& params = NppParameters::getInstance();
 	_ofn.lpstrInitialDir = params.getWorkingDir();
@@ -222,26 +222,34 @@ stringVector * FileDialog::doOpenMultiFilesDlg()
 	BOOL res = ::GetOpenFileName(&_ofn);
 	if (params.getNppGUI()._openSaveDir == dir_last)
 	{
-		::GetCurrentDirectory(MAX_PATH, dir);
+		::GetCurrentDirectory(2*MAX_PATH, dir);
 		params.setWorkingDir(dir);
 	}
 	::SetCurrentDirectory(dir);
 
+	auto dataAddr = _fileName;
+	if(dataAddr[0]=='\\'
+		&&dataAddr[1]=='?'
+		&&dataAddr[3]==':'
+		) {
+		dataAddr+=2;
+	}
+
 	if (res)
 	{
-		TCHAR* pFn = _fileName + lstrlen(_fileName) + 1;
-		TCHAR fn[MAX_PATH*8];
+		TCHAR* pFn = dataAddr + lstrlen(dataAddr) + 1;
+		TCHAR fn[MAX_FILE_PATH*8];
 		memset(fn, 0x0, sizeof(fn));
 
-		for(int i=0, len=lstrlen(_fileName);i<len;i++) if(_fileName[i]=='/')_fileName[i]='\\';
+		for(int i=0, len=lstrlen(dataAddr);i<len;i++) if(dataAddr[i]=='/')dataAddr[i]='\\';
 
 		if (!(*pFn))
 		{
-			_fileNames.push_back(generic_string(_fileName));
+			_fileNames.push_back(generic_string(dataAddr));
 		}
 		else
 		{
-			wcscpy_s(fn, _fileName);
+			wcscpy_s(fn, dataAddr);
 			if (fn[lstrlen(fn) - 1] != '\\')
 				wcscat_s(fn, TEXT("\\"));
 		}

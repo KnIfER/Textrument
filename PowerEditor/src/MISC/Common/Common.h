@@ -173,8 +173,8 @@ protected:
 
 #define REBARBAND_SIZE sizeof(REBARBANDINFO)
 
-void PathRemoveFileSpec(generic_string & path);
-void PathAppend(generic_string &strDest, const generic_string & str2append);
+generic_string PathRemoveFileSpecCommpat(generic_string & path);
+void PathAppendCompat(generic_string &strDest, const generic_string & str2append);
 COLORREF getCtrlBgColor(HWND hWnd);
 generic_string stringToUpper(generic_string strToConvert);
 generic_string stringToLower(generic_string strToConvert);

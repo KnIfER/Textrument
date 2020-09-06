@@ -156,7 +156,7 @@ bool FunctionParsersManager::getUnitPaserParameters(TiXmlNode *functionParser, g
 void FunctionParsersManager::writeFunctionListXml(const TCHAR *destFoder) const 
 {
 	generic_string dest = destFoder;
-	PathAppend(dest, TEXT("functionList.xml"));
+	PathAppendCompat(dest, TEXT("functionList.xml"));
 	if (_pXmlFuncListDoc)
 		_pXmlFuncListDoc->SaveFile(dest.c_str());
 }

@@ -609,17 +609,17 @@ BufferID FileManager::loadFile(const TCHAR * filename, Document doc, int encodin
 		ownDoc = true;
 	}
 
-	TCHAR fullpath[MAX_PATH];
-	::GetFullPathName(filename, MAX_PATH, fullpath, NULL);
+	TCHAR fullpath[MAX_FILE_PATH];
+	::GetFullPathName(filename, MAX_FILE_PATH, fullpath, NULL);
 	if (_tcschr(fullpath, '~'))
 	{
-		::GetLongPathName(fullpath, fullpath, MAX_PATH);
+		::GetLongPathName(fullpath, fullpath, MAX_FILE_PATH);
 	}
 
 	bool isSnapshotMode = backupFileName != NULL && PathFileExists(backupFileName);
 	if (isSnapshotMode && !PathFileExists(fullpath)) // if backup mode and fullpath doesn't exist, we guess is UNTITLED
 	{
-		wcscpy_s(fullpath, MAX_PATH, filename); // we restore fullpath with filename, in our case is "new  #"
+		wcscpy_s(fullpath, MAX_FILE_PATH, filename); // we restore fullpath with filename, in our case is "new  #"
 	}
 
 	Utf8_16_Read UnicodeConvertor;	//declare here so we can get information after loading is done
@@ -983,11 +983,11 @@ bool FileManager::saveBuffer(BufferID id, const TCHAR * filename, bool isCopy, g
 	bool isHiddenOrSys = false;
 	DWORD attrib = 0;
 
-	TCHAR fullpath[MAX_PATH];
-	::GetFullPathName(filename, MAX_PATH, fullpath, NULL);
+	TCHAR fullpath[MAX_FILE_PATH];
+	::GetFullPathName(filename, MAX_FILE_PATH, fullpath, NULL);
 	if (_tcschr(fullpath, '~'))
 	{
-		::GetLongPathName(fullpath, fullpath, MAX_PATH);
+		::GetLongPathName(fullpath, fullpath, MAX_FILE_PATH);
 	}
 
 	if (PathFileExists(fullpath))
@@ -1473,11 +1473,11 @@ bool FileManager::loadFileData(Document doc, const TCHAR * filename, char* data,
 
 BufferID FileManager::getBufferFromName(const TCHAR* name)
 {
-	TCHAR fullpath[MAX_PATH];
-	::GetFullPathName(name, MAX_PATH, fullpath, NULL);
+	TCHAR fullpath[MAX_FILE_PATH];
+	::GetFullPathName(name, MAX_FILE_PATH, fullpath, NULL);
 	if (_tcschr(fullpath, '~'))
 	{
-		::GetLongPathName(fullpath, fullpath, MAX_PATH);
+		::GetLongPathName(fullpath, fullpath, MAX_FILE_PATH);
 	}
 
 	for (size_t i = 0; i < _buffers.size(); i++)

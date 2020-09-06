@@ -66,7 +66,7 @@ class SecurityGard final
 {
 public:
 	SecurityGard();
-	bool checkModule(const std::wstring& filePath, NppModule module2check);
+	bool checkModule(const TCHAR* filePath, NppModule module2check);
 
 private:
 	// SHA256
@@ -75,7 +75,7 @@ private:
 	std::vector<std::wstring> _gupSha256;
 	std::vector<std::wstring> _pluginListSha256;
 
-	bool checkSha256(const std::wstring& filePath, NppModule module2check);
+	bool checkSha256(const TCHAR* filePath, NppModule module2check);
 
 	// Code signing certificate
 	std::wstring _signer_display_name = TEXT("Notepad++");
@@ -85,6 +85,6 @@ private:
 	bool _doCheckRevocation = false;
 	bool _doCheckChainOfTrust = false;
 
-	bool verifySignedLibrary(const std::wstring& filepath, NppModule module2check);
+	bool verifySignedLibrary(const TCHAR* filepath, NppModule module2check);
 };
 

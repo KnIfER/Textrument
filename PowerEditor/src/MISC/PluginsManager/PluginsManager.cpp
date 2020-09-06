@@ -217,9 +217,10 @@ int PluginsManager::loadPlugin(const TCHAR *pluginFilePath)
 			}
 
 			TCHAR xmlPath[MAX_PATH];
-			wcscpy_s(xmlPath, nppParams.getNppPath().c_str());
+			auto pluginModuleName = pi->_moduleName.c_str();
+			wcscpy_s(xmlPath, nppParams.getNppPath());
 			PathAppend(xmlPath, TEXT("plugins\\Config"));
-            PathAppend(xmlPath, pi->_moduleName.c_str());
+            PathAppend(xmlPath, pluginModuleName);
 			PathRemoveExtension(xmlPath);
 			PathAddExtension(xmlPath, TEXT(".xml"));
 
@@ -228,7 +229,7 @@ int PluginsManager::loadPlugin(const TCHAR *pluginFilePath)
 				lstrcpyn(xmlPath, TEXT("\0"), MAX_PATH );
 				wcscpy_s(xmlPath, nppParams.getAppDataNppDir() );
 				PathAppend(xmlPath, TEXT("plugins\\Config"));
-                PathAppend(xmlPath, pi->_moduleName.c_str());
+                PathAppend(xmlPath, pluginModuleName);
 				PathRemoveExtension( xmlPath );
 				PathAddExtension( xmlPath, TEXT(".xml") );
 
@@ -313,10 +314,10 @@ bool PluginsManager::loadPluginsV2(const TCHAR* dir)
 	else
 	{
 		pluginsFolder = nppPath;
-		PathAppend(pluginsFolder, TEXT("plugins"));
+		PathAppendCompat(pluginsFolder, TEXT("plugins"));
 	}
 	generic_string pluginsFolderFilter = pluginsFolder;
-	PathAppend(pluginsFolderFilter, TEXT("*.*"));
+	PathAppendCompat(pluginsFolderFilter, TEXT("*.*"));
 	
 	WIN32_FIND_DATA foundData;
 	HANDLE hFindFolder = ::FindFirstFile(pluginsFolderFilter.c_str(), &foundData);
@@ -329,10 +330,10 @@ bool PluginsManager::loadPluginsV2(const TCHAR* dir)
 		if (foundFileName != TEXT(".") && foundFileName != TEXT("..") && generic_stricmp(foundFileName.c_str(), TEXT("Config")) != 0)
 		{
 			generic_string pluginsFullPathFilter = pluginsFolder;
-			PathAppend(pluginsFullPathFilter, foundFileName);
+			PathAppendCompat(pluginsFullPathFilter, foundFileName);
 			generic_string  dllName = foundFileName;
 			dllName += TEXT(".dll");
-			PathAppend(pluginsFullPathFilter, dllName);
+			PathAppendCompat(pluginsFullPathFilter, dllName);
 
 			// get plugin
 			hFindDll = ::FindFirstFile(pluginsFullPathFilter.c_str(), &foundData);
@@ -351,11 +352,11 @@ bool PluginsManager::loadPluginsV2(const TCHAR* dir)
 			if (foundFileName2 != TEXT(".") && foundFileName2 != TEXT("..") && generic_stricmp(foundFileName2.c_str(), TEXT("Config")) != 0)
 			{
 				generic_string pluginsFullPathFilter2 = pluginsFolder;
-				PathAppend(pluginsFullPathFilter2, foundFileName2);
+				PathAppendCompat(pluginsFullPathFilter2, foundFileName2);
 				generic_string pluginsFolderPath2 = pluginsFullPathFilter2;
 				generic_string  dllName2 = foundFileName2;
 				dllName2 += TEXT(".dll");
-				PathAppend(pluginsFullPathFilter2, dllName2);
+				PathAppendCompat(pluginsFullPathFilter2, dllName2);
 
 				// get plugin
 				if (hFindDll)

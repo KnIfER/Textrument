@@ -40,6 +40,8 @@
 #include <assert.h>
 #include <tchar.h>
 
+#define MAX_FILE_PATH MAX_PATH
+
 class NativeLangSpeaker;
 
 const bool POS_VERTICAL = true;
@@ -63,7 +65,6 @@ const int TAB_VERTICAL = 64;       //0000 0100 0000
 const int TAB_MULTILINE = 128;     //0000 1000 0000
 const int TAB_HIDE = 256;          //0001 0000 0000
 const int TAB_QUITONEMPTY = 512;   //0010 0000 0000
-
 
 enum class EolType: std::uint8_t
 {
@@ -877,14 +878,6 @@ struct NppGUI final
 
 	generic_string _commandLineInterpreter = TEXT("cmd");
 
-	struct AutoUpdateOptions
-	{
-		bool _doAutoUpdate = true;
-		int _intervalDays = 15;
-		Date _nextUpdateDate;
-		AutoUpdateOptions(): _nextUpdateDate(Date()) {};
-	}
-	_autoUpdateOpt;
 
 	bool _doesExistUpdater = false;
 	int _caretBlinkRate = 600;
@@ -1545,11 +1538,11 @@ public:
 	void setScintillaAccelerator(ScintillaAccelerator *pScintAccel) {_pScintAccelerator = pScintAccel;};
 	ScintillaAccelerator * getScintillaAccelerator() {return _pScintAccelerator;};
 
-	generic_string getNppPath() const {return _nppPath;};
+	const TCHAR* getNppPath() {return _nppPath;};
 	generic_string getContextMenuPath() const {return _contextMenuPath;};
 	const TCHAR * getAppDataNppDir() const {return _appdataNppDir.c_str();};
-	const TCHAR * getPluginRootDir() const { return _pluginRootDir.c_str(); };
-	const TCHAR * getPluginConfDir() const { return _pluginConfDir.c_str(); };
+	const TCHAR * getPluginRootDir() const { return _pluginRootDir; };
+	const TCHAR * getPluginConfDir() const { return _pluginConfDir; };
 	const TCHAR * getUserPluginConfDir() const { return _userPluginConfDir.c_str(); };
 	const TCHAR * getWorkingDir() const {return _currentDirectory.c_str();};
 	const TCHAR * getWorkSpaceFilePath(int i) const {
@@ -1770,7 +1763,7 @@ public:
 	bool isAdmin() const { return _isAdminMode; }
 	bool regexBackward4PowerUser() const { return _findHistory._regexBackward4PowerUser; }
 	TCHAR* _nppModulePath;
-	generic_string _nppPath;
+	TCHAR _nppPath[MAX_PATH];
 
 private:
 	bool _isAnyShortcutModified = false;
@@ -1802,8 +1795,8 @@ private:
 	generic_string _userPath;
 	generic_string _stylerPath;
 	generic_string _appdataNppDir; // sentinel of the absence of "doLocalConf.xml" : (_appdataNppDir == TEXT(""))?"doLocalConf.xml present":"doLocalConf.xml absent"
-	generic_string _pluginRootDir; // plugins root where all the plugins are installed
-	generic_string _pluginConfDir; // plugins config dir where the plugin list is installed
+	TCHAR _pluginRootDir[MAX_PATH]; // plugins root where all the plugins are installed
+	TCHAR _pluginConfDir[MAX_PATH]; // plugins config dir where the plugin list is installed
 	generic_string _userPluginConfDir; // plugins config dir for per user where the plugin parameters are saved / loaded
 	generic_string _currentDirectory;
 	generic_string _workSpaceFilePathes[3];
@@ -1900,3 +1893,9 @@ private:
 	winVer getWindowsVersion();
 
 };
+
+extern TCHAR * universal_buffer;
+
+extern NppParameters * nppParms; // 除了写的爽没啥用，会增大编译体积
+
+extern NppGUI * nppUIParms; // 除了写的爽没啥用，会增大编译体积

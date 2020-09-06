@@ -499,8 +499,6 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 
 		case NPPM_DISABLEAUTOUPDATE:
 		{
-			NppGUI & nppGUI = const_cast<NppGUI &>(nppParam.getNppGUI());
-			nppGUI._autoUpdateOpt._doAutoUpdate = false;
 			return TRUE;
 		}
 
@@ -565,18 +563,17 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 			{
 				case COPYDATA_PARAMS:
 				{
-					int sw = 0;
-
 					HWND window = Notepad_plus_Window::gNppHWND;
 
-					if (::IsZoomed(window))
-						sw = SW_MAXIMIZE;
-					else if (::IsIconic(window))
-						sw = SW_RESTORE;
+					int sw = IsZoomed(window)?SW_MAXIMIZE:IsIconic(window)?SW_RESTORE:0;
 
 					if (sw) ::ShowWindow(window, sw);
 
-					::SetForegroundWindow(window);
+					SetForegroundWindow(window);
+
+					if(!pCopyData->lpData) {
+						break;
+					}
 
 					const CmdLineParamsDTO *cmdLineParam = static_cast<const CmdLineParamsDTO *>(pCopyData->lpData); // CmdLineParams object from another instance
 					const DWORD cmdLineParamsSize = pCopyData->cbData;  // CmdLineParams size from another instance
@@ -2255,15 +2252,13 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 			if(expandedStr) {
 				if(!ctrldown) {
 					CoInitialize(NULL);
-
 					ITEMIDLIST* pidl = ILCreateFromPath(expandedStr);
 					if(pidl) {
-						SHOpenFolderAndSelectItems(pidl,0,0,0); 
+						auto x=SHOpenFolderAndSelectItems(pidl,0,0,0); 
+						::ILFree(pidl);
 					}  else {
 						ctrldown=1;
 					}
-					::ILFree(pidl);
-					CoUninitialize();
 				}
 
 				if(ctrldown) {
@@ -2356,9 +2351,6 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 
 		case NPPM_INTERNAL_DISABLEAUTOUPDATE:
 		{
-			//printStr(TEXT("you've got me"));
-			NppGUI & nppGUI = const_cast<NppGUI &>(nppParam.getNppGUI());
-			nppGUI._autoUpdateOpt._doAutoUpdate = false;
 			return TRUE;
 		}
 

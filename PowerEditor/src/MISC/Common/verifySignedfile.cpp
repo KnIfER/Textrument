@@ -60,7 +60,7 @@ SecurityGard::SecurityGard()
 	_pluginListSha256.push_back(TEXT("1c404fd3578273f5ecde585af82179ff3b63c635fb4fa24be21ebde708e403e4")); // v1.0.8 64 bit (unsigned)
 }
 
-bool SecurityGard::checkModule(const std::wstring& filePath, NppModule module2check)
+bool SecurityGard::checkModule(const TCHAR* filePath, NppModule module2check)
 {
 #ifndef _DEBUG
 	if (_securityMode == sm_certif)
@@ -79,7 +79,7 @@ bool SecurityGard::checkModule(const std::wstring& filePath, NppModule module2ch
 #endif
 }
 
-bool SecurityGard::checkSha256(const std::wstring& filePath, NppModule module2check)
+bool SecurityGard::checkSha256(const TCHAR* filePath, NppModule module2check)
 {
 	// Uncomment the following code if the components are rebuilt for testing
 	// It should be stay in commenting out
@@ -89,7 +89,7 @@ bool SecurityGard::checkSha256(const std::wstring& filePath, NppModule module2ch
 		return true;
 	*/
 
-	std::string content = getFileContent(filePath.c_str());
+	std::string content = getFileContent(filePath);
 	uint8_t sha2hash[32];
 	calc_sha_256(sha2hash, reinterpret_cast<const uint8_t*>(content.c_str()), content.length());
 
@@ -111,36 +111,37 @@ bool SecurityGard::checkSha256(const std::wstring& filePath, NppModule module2ch
 	{
 		if (i == sha2hashStr)
 		{
-			//::MessageBox(NULL, filePath.c_str(), TEXT("OK"), MB_OK);
+			//::MessageBox(NULL, filePath, TEXT("OK"), MB_OK);
 			return true;
 		}
 	}
 
-	//::MessageBox(NULL, filePath.c_str(), TEXT("KO"), MB_OK);
+	//::MessageBox(NULL, filePath, TEXT("KO"), MB_OK);
 	return false;
 }
 
-bool SecurityGard::verifySignedLibrary(const std::wstring& filepath, NppModule module2check)
+bool SecurityGard::verifySignedLibrary(const TCHAR* filepath, NppModule module2check)
 {
 	wstring display_name;
 	wstring key_id_hex;
 	wstring subject;
 
+#ifdef DEBUG
 	wstring dmsg(TEXT("VerifyLibrary: "));
-	dmsg += filepath;
+	dmsg += wstring(filepath);
 	dmsg += TEXT("\n");
 
 	OutputDebugString(dmsg.c_str());
+#endif
 
 	//
 	// Signature verification
 	//
 
 	// Initialize the WINTRUST_FILE_INFO structure.
-	LPCWSTR pwszfilepath = filepath.c_str();
 	WINTRUST_FILE_INFO file_data = { 0 };
 	file_data.cbStruct = sizeof(WINTRUST_FILE_INFO);
-	file_data.pcwszFilePath = pwszfilepath;
+	file_data.pcwszFilePath = filepath;
 
 	// Initialise WinTrust data	
 	WINTRUST_DATA winTEXTrust_data = { 0 };
@@ -211,7 +212,7 @@ bool SecurityGard::verifySignedLibrary(const std::wstring& filepath, NppModule m
 
 	try {
 
-		BOOL result = ::CryptQueryObject(CERT_QUERY_OBJECT_FILE, filepath.c_str(),
+		BOOL result = ::CryptQueryObject(CERT_QUERY_OBJECT_FILE, filepath,
 			CERT_QUERY_CONTENT_FLAG_PKCS7_SIGNED_EMBED, CERT_QUERY_FORMAT_FLAG_BINARY, 0,
 			&dwEncoding, &dwContentType, &dwFormatType,
 			&hStore, &hMsg, NULL);

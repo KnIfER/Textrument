@@ -268,7 +268,6 @@ LRESULT DockingManager::runProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM l
 				_vContainer[i-1]->destroy();
 				delete _vContainer[i-1];
 			}
-			CoUninitialize();
 			break;
 		}
 		case DMM_LBUTTONUP:	//is this message still relevant?

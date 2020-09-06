@@ -30,9 +30,9 @@ LocalizationSwitcher::LocalizationDefinition localizationDefs[] =
 {
 	{TEXT("English"), TEXT("english.xml")},
 	{TEXT("English (customizable)"), TEXT("english_customizable.xml")},
-	{TEXT("Français"), TEXT("french.xml")},
-	{TEXT("台灣繁體"), TEXT("taiwaneseMandarin.xml")},
 	{TEXT("中文简体"), TEXT("chineseSimplified.xml")},
+	{TEXT("中文繁體"), TEXT("chineseTraditional.xml")},
+	{TEXT("Français"), TEXT("french.xml")},
 	{TEXT("한국어"), TEXT("korean.xml")},
 	{TEXT("日本語"), TEXT("japanese.xml")},
 	{TEXT("Deutsch"), TEXT("german.xml")},

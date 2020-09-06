@@ -149,10 +149,10 @@ Notepad_plus::Notepad_plus()
 	ZeroMemory(&_prevSelectedRange, sizeof(_prevSelectedRange));
 
 	NppParameters & nppParam = NppParameters::getInstance();
-	NppGUI & nppGUI = const_cast<NppGUI &>(nppParam.getNppGUI());
-	nppParms = &nppParam;
-	nppUIParms = &nppGUI;
+	NppGUI & nppGUI = *nppUIParms;
 	nppApp = this;
+
+	ScintillaEditView::loadSciLexerDll();
 
 	TiXmlDocumentA *nativeLangDocRootA = nppParam.getNativeLangA();
     _nativeLangSpeaker.init(nativeLangDocRootA);
@@ -202,7 +202,7 @@ Notepad_plus::~Notepad_plus()
 	// the destruction of its children windows' handles,
 	// its children windows' handles will be destroyed automatically!
 
-	(NppParameters::getInstance()).destroyInstance();
+	nppParms->destroyInstance();
 
 	delete _pTrayIco;
 	delete _pAnsiCharPanel;
@@ -532,10 +532,8 @@ LRESULT Notepad_plus::init(HWND hwnd)
 	}
 
 	//Plugin menu
-	bool enablePluginAdmin = _pluginsAdminDlg.isValide();
 	_pluginsAdminDlg.setPluginsManager(&_pluginsManager);
-	_pluginsManager.setMenu(_mainMenuHandle, NULL, enablePluginAdmin);
-
+	_pluginsManager.setMenu(_mainMenuHandle, NULL, true);
 
 	//Main menu is loaded, now load context menu items
 	nppParam.getContextMenuFromXmlTree(_mainMenuHandle, _pluginsManager.getMenuHandle());
@@ -1470,7 +1468,9 @@ void Notepad_plus::removeDuplicateLines()
 void Notepad_plus::getMatchedFileNames(const TCHAR *dir, const vector<generic_string> & patterns, vector<generic_string> & fileNames, bool isRecursive, bool isInHiddenDir)
 {
 	generic_string dirFilter(dir);
-	dirFilter += TEXT("*.*");
+	bool termSep = dir[dirFilter.length()-1]!='\\';
+	dirFilter += termSep?TEXT("\\*.*"):TEXT("*.*");
+
 	WIN32_FIND_DATA foundData;
 
 	HANDLE hFile = ::FindFirstFile(dirFilter.c_str(), &foundData);
@@ -1489,6 +1489,7 @@ void Notepad_plus::getMatchedFileNames(const TCHAR *dir, const vector<generic_st
 				if ((OrdinalIgnoreCaseCompareStrings(foundData.cFileName, TEXT(".")) != 0) && (OrdinalIgnoreCaseCompareStrings(foundData.cFileName, TEXT("..")) != 0))
 				{
 					generic_string pathDir(dir);
+					if(termSep) pathDir += TEXT("\\");
 					pathDir += foundData.cFileName;
 					pathDir += TEXT("\\");
 					getMatchedFileNames(pathDir.c_str(), patterns, fileNames, isRecursive, isInHiddenDir);
@@ -1518,6 +1519,7 @@ void Notepad_plus::getMatchedFileNames(const TCHAR *dir, const vector<generic_st
 				if ((OrdinalIgnoreCaseCompareStrings(foundData.cFileName, TEXT(".")) != 0) && (OrdinalIgnoreCaseCompareStrings(foundData.cFileName, TEXT("..")) != 0))
 				{
 					generic_string pathDir(dir);
+					if(termSep) pathDir += TEXT("\\");
 					pathDir += foundData.cFileName;
 					pathDir += TEXT("\\");
 					getMatchedFileNames(pathDir.c_str(), patterns, fileNames, isRecursive, isInHiddenDir);
@@ -1529,6 +1531,7 @@ void Notepad_plus::getMatchedFileNames(const TCHAR *dir, const vector<generic_st
 			if (matchInList(foundData.cFileName, patterns))
 			{
 				generic_string pathFile(dir);
+				if(termSep) pathFile += TEXT("\\");
 				pathFile += foundData.cFileName;
 				fileNames.push_back(pathFile.c_str());
 			}
@@ -3346,8 +3349,7 @@ void Notepad_plus::dropFiles(HDROP hdrop)
 			}
 		}
 		
-		NppParameters& nppParam = NppParameters::getInstance();
-		bool isOldMode = nppParam.getNppGUI()._isFolderDroppedOpenFiles;
+		bool isOldMode = nppUIParms->_isFolderDroppedOpenFiles;
 
 		if (isOldMode || folderPaths.size() == 0) // old mode or new mode + only files
 		{
@@ -5364,7 +5366,7 @@ void Notepad_plus::notifyBufferChanged(Buffer * buffer, int mask)
 		checkDocState();
 		setTitle();
 		generic_string dir(buffer->getFullPathName());
-		PathRemoveFileSpec(dir);
+		PathRemoveFileSpecCommpat(dir);
 		setWorkingDir(dir.c_str());
 	}
 
@@ -5421,7 +5423,7 @@ void Notepad_plus::notifyBufferActivated(BufferID bufid, int view)
 	setDisplayFormat(buf->getEolFormat());
 	enableConvertMenuItems(buf->getEolFormat());
 	generic_string dir(buf->getFullPathName());
-	PathRemoveFileSpec(dir);
+	PathRemoveFileSpecCommpat(dir);
 	setWorkingDir(dir.c_str());
 	setTitle();
 	//Make sure the colors of the tab controls match
@@ -5601,7 +5603,7 @@ vector<generic_string> Notepad_plus::addNppComponents(const TCHAR *destDir, cons
     {
         // Get plugins dir
 		generic_string destDirName = (NppParameters::getInstance()).getNppPath();
-        PathAppend(destDirName, destDir);
+        PathAppendCompat(destDirName, destDir);
 
         if (!::PathFileExists(destDirName.c_str()))
         {
@@ -5657,12 +5659,12 @@ vector<generic_string> Notepad_plus::addNppPlugins(const TCHAR *extFilterName, c
 					continue;
 
 				generic_string name = nameExt.substr(0, pos);
-				PathAppend(destName, name);
+				PathAppendCompat(destName, name);
 				if (!::PathFileExists(destName.c_str()))
 				{
 					::CreateDirectory(destName.c_str(), NULL);
 				}
-				PathAppend(destName, nameExt);
+				PathAppendCompat(destName, nameExt);
 
                 if (::CopyFile(pfns->at(i).c_str(), destName.c_str(), FALSE))
                     copiedFiles.push_back(destName.c_str());

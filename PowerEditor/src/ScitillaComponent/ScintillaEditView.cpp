@@ -37,18 +37,10 @@
 
 using namespace std;
 
+extern NppParameters * nppParms;
+
 // initialize the static variable
-
-// get full ScinLexer.dll path to avoid hijack
-TCHAR * getSciLexerFullPathName(TCHAR * moduleFileName, size_t len)
-{
-	::GetModuleFileName(NULL, moduleFileName, static_cast<int32_t>(len));
-	::PathRemoveFileSpec(moduleFileName);
-	::PathAppend(moduleFileName, TEXT("SciLexer.dll"));
-	return moduleFileName;
-};
-
-HINSTANCE ScintillaEditView::_hLib = loadSciLexerDll();
+ 
 int ScintillaEditView::_refCount = 0;
 UserDefineDialog ScintillaEditView::_userDefineDlg;
 
@@ -197,18 +189,22 @@ int getNbDigits(int aNum, int base)
 	return nbChiffre;
 }
 
-TCHAR moduleFileName[1024];
+HINSTANCE ScintillaEditView::_hLib = 0;
 
-HMODULE loadSciLexerDll()
+HMODULE ScintillaEditView::loadSciLexerDll()
 {
-	generic_string sciLexerPath = getSciLexerFullPathName(moduleFileName, 1024);
+	auto data = nppParms->getNppPath();
+	lstrcpy(universal_buffer, data);
+	::PathAppend(universal_buffer, TEXT("SciLexer.dll"));
+
+	//generic_string sciLexerPath = moduleFileName;//getSciLexerFullPathName(moduleFileName, 1024);
 
 	// Do not check dll signature if npp is running in debug mode
 	// This is helpful for developers to skip signature checking
 	// while analyzing issue or modifying the lexer dll
 #ifndef _DEBUG
 	SecurityGard securityGard;
-	bool isOK = securityGard.checkModule(sciLexerPath, nm_scilexer);
+	bool isOK = securityGard.checkModule(universal_buffer, nm_scilexer);
 
 	if (!isOK)
 	{
@@ -219,8 +215,8 @@ HMODULE loadSciLexerDll()
 		return nullptr;
 	}
 #endif // !_DEBUG
-
-	return ::LoadLibrary(sciLexerPath.c_str());
+	_hLib = ::LoadLibrary(universal_buffer);
+	return _hLib;
 }
 
 void ScintillaEditView::init(HINSTANCE hInst, HWND hPere)

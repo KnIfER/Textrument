@@ -198,15 +198,17 @@ void Notepad_plus_Window::init(HINSTANCE hInst, HWND parent, const TCHAR *cmdLin
 	std::vector<generic_string> patterns;
 	patterns.push_back(TEXT("*.xml"));
 
-	generic_string nppDir = nppParams.getNppPath();
+	auto nppDir = nppParams.getNppPath();
 
 	LocalizationSwitcher & localizationSwitcher = nppParams.getLocalizationSwitcher();
-	std::wstring localizationDir = nppDir;
-	PathAppend(localizationDir, TEXT("localization\\"));
+	lstrcpy(universal_buffer, nppDir);
+	PathAppend(universal_buffer, TEXT("localization"));
+	lstrcpy(universal_buffer, TEXT("\\"));
 
-	_notepad_plus_plus_core.getMatchedFileNames(localizationDir.c_str(), patterns, fileNames, false, false);
-	for (size_t i = 0, len = fileNames.size(); i < len; ++i)
+	_notepad_plus_plus_core.getMatchedFileNames(universal_buffer, patterns, fileNames, false, false);
+	for (size_t i = 0, len = fileNames.size(); i < len; ++i) {
 		localizationSwitcher.addLanguageFromXml(fileNames[i]);
+	}
 
 	fileNames.clear();
 	ThemeSwitcher & themeSwitcher = nppParams.getThemeSwitcher();
@@ -214,12 +216,12 @@ void Notepad_plus_Window::init(HINSTANCE hInst, HWND parent, const TCHAR *cmdLin
 	//  Get themes from both npp install themes dir and app data themes dir with the per user
 	//  overriding default themes of the same name.
 
-	generic_string themeDir;
     if (nppParams.getAppDataNppDir() && nppParams.getAppDataNppDir()[0])
     {
-        themeDir = nppParams.getAppDataNppDir();
-	    PathAppend(themeDir, TEXT("themes\\"));
-	    _notepad_plus_plus_core.getMatchedFileNames(themeDir.c_str(), patterns, fileNames, false, false);
+		lstrcpy(universal_buffer, nppParams.getAppDataNppDir());
+	    PathAppend(universal_buffer, TEXT("themes"));
+		lstrcpy(universal_buffer, TEXT("\\"));
+	    _notepad_plus_plus_core.getMatchedFileNames(universal_buffer, patterns, fileNames, false, false);
 	    for (size_t i = 0, len = fileNames.size() ; i < len ; ++i)
 	    {
 		    themeSwitcher.addThemeFromXml(fileNames[i]);
@@ -227,10 +229,11 @@ void Notepad_plus_Window::init(HINSTANCE hInst, HWND parent, const TCHAR *cmdLin
     }
 
 	fileNames.clear();
-	themeDir.clear();
-	themeDir = nppDir.c_str(); // <- should use the pointer to avoid the constructor of copy
-	PathAppend(themeDir, TEXT("themes\\"));
-	_notepad_plus_plus_core.getMatchedFileNames(themeDir.c_str(), patterns, fileNames, false, false);
+
+	lstrcpy(universal_buffer, nppDir);
+	PathAppend(universal_buffer, TEXT("themes"));
+	lstrcpy(universal_buffer, TEXT("\\"));
+	_notepad_plus_plus_core.getMatchedFileNames(universal_buffer, patterns, fileNames, false, false);
 	for (size_t i = 0, len = fileNames.size(); i < len ; ++i)
 	{
 		generic_string themeName( themeSwitcher.getThemeFromXmlFileName(fileNames[i].c_str()) );

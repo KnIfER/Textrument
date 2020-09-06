@@ -193,8 +193,6 @@ public :
 	    display();
     };
 
-	bool isValide();
-
 	void switchDialog(int indexToSwitch);
 	void setPluginsManager(PluginsManager *pluginsManager) { _pPluginsManager = pluginsManager; };
 
@@ -209,13 +207,13 @@ public :
 	void changeColumnName(COLUMN_TYPE index, const TCHAR *name2change);
 	generic_string getPluginListVerStr() const;
 
+	static TCHAR _updaterDir[MAX_PATH];
+	static TCHAR _updaterFullPath[MAX_PATH];
+	TCHAR _pluginListFullPath[MAX_PATH];
 protected:
 	virtual INT_PTR CALLBACK run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam);
 
 private :
-	generic_string _updaterDir;
-	generic_string _updaterFullPath;
-	generic_string _pluginListFullPath;
 
 	TabBar _tab;
 

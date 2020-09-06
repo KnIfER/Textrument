@@ -364,7 +364,8 @@ PWSTR stripIgnoredParams(ParamVector & params, PWSTR pCmdLine)
 } // namespace
 
 
-
+TCHAR PluginsAdminDlg::_updaterDir[MAX_PATH];
+TCHAR PluginsAdminDlg::_updaterFullPath[MAX_PATH];
 
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE, PWSTR pCmdLine, int)
 {
@@ -426,35 +427,28 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE, PWSTR pCmdLine, int)
 	::SetLastError(NO_ERROR);
 
 	auto npppath = nppParameters.getNppPath();
-	size_t tokenLen = npppath.length();
+	size_t tokenLen = lstrlen(npppath);
 	size_t tokenST = 0;
 	if(tokenLen>=MAX_PATH) {
 		tokenLen = MAX_PATH;
 		tokenST = tokenLen-MAX_PATH;
 	}
-	TCHAR npppathtoken[MAX_PATH];
-	//memset(npppathtoken, 0, MAX_PATH*sizeof(TCHAR));
-	PathCanonicalize(npppathtoken, (TCHAR *)&npppath[0]);
-
+	//TCHAR npppathtoken[MAX_PATH];
+	PathCanonicalize(universal_buffer, npppath);
 	for(int i=0;i<tokenLen;i++) {
-		if(npppathtoken[i]=='\\') {
-			npppathtoken[i]=' ';
+		if(universal_buffer[i]=='\\') {
+			universal_buffer[i]=' ';
 		}
 	}
-	//npppathtoken[tokenLen-1]='\0';
-	::CreateMutex(NULL, false, npppathtoken);
+	::CreateMutex(NULL, false, universal_buffer);
 	if (::GetLastError() == ERROR_ALREADY_EXISTS)
 		TheFirstOne = false;
 
 	NppGUI & nppGui = const_cast<NppGUI &>(nppParameters.getNppGUI());
 
-	bool doUpdateNpp = nppGui._autoUpdateOpt._doAutoUpdate;
-	bool doUpdatePluginList = nppGui._autoUpdateOpt._doAutoUpdate;
-
 	if (doFunctionListExport || doPrintAndQuit) // export functionlist feature will serialize fuctionlist on the disk, then exit Notepad++. So it's important to not launch into existing instance, and keep it silent.
 	{
 		isMultiInst = true;
-		doUpdateNpp = doUpdatePluginList = false;
 		cmdLineParams._isNoSession = true;
 	}
 
@@ -497,7 +491,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE, PWSTR pCmdLine, int)
 	}
 
 	//Only after loading all the file paths set the working directory
-	::SetCurrentDirectory(NppParameters::getInstance().getNppPath().c_str());	//force working directory to path of module, preventing lock
+	::SetCurrentDirectory(npppath);	//force working directory to path of module, preventing lock
 
 	if ((!isMultiInst) && (!TheFirstOne))
 	{
@@ -513,11 +507,24 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE, PWSTR pCmdLine, int)
 			// First of all, destroy static object NppParameters
 			nppParameters.destroyInstance();
 
+			//int sw = 0;
+			//
+			//if (::IsZoomed(hNotepad_plus))
+			//	sw = SW_MAXIMIZE;
+			//else if (::IsIconic(hNotepad_plus))
+			//	sw = SW_RESTORE;
+			//
+			//if (sw != 0)
+			//	::ShowWindow(hNotepad_plus, sw);
+			//
+			//::SetForegroundWindow(hNotepad_plus);
+
+			COPYDATASTRUCT paramData={0};
+
 			if (params.size() > 0)	//if there are files to open, use the WM_COPYDATA system
 			{
 				CmdLineParamsDTO dto = CmdLineParamsDTO::FromCmdLineParams(cmdLineParams);
 
-				COPYDATASTRUCT paramData;
 				paramData.dwData = COPYDATA_PARAMS;
 				paramData.lpData = &dto;
 				paramData.cbData = sizeof(dto);
@@ -529,6 +536,8 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE, PWSTR pCmdLine, int)
 
 				::SendMessage(hNotepad_plus, WM_COPYDATA, reinterpret_cast<WPARAM>(hInstance), reinterpret_cast<LPARAM>(&paramData));
 				::SendMessage(hNotepad_plus, WM_COPYDATA, reinterpret_cast<WPARAM>(hInstance), reinterpret_cast<LPARAM>(&fileNamesData));
+			} else {
+				::SendMessage(hNotepad_plus, WM_COPYDATA, reinterpret_cast<WPARAM>(hInstance), reinterpret_cast<LPARAM>(&paramData));
 			}
 			return 0;
         }
@@ -536,83 +545,10 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE, PWSTR pCmdLine, int)
 
 	Notepad_plus_Window notepad_plus_plus;
 
-	generic_string updaterDir = nppParameters.getNppPath();
-	updaterDir += TEXT("\\updater\\");
-
-	generic_string updaterFullPath = updaterDir + TEXT("gup.exe");
-
-	generic_string updaterParams = TEXT("-v");
-	updaterParams += VERSION_VALUE;
-
-	bool isUpExist = nppGui._doesExistUpdater = (::PathFileExists(updaterFullPath.c_str()) == TRUE);
-
-    if (doUpdateNpp) // check more detail
-    {
-        Date today(0);
-
-        if (today < nppGui._autoUpdateOpt._nextUpdateDate)
-            doUpdateNpp = false;
-    }
-
-	if (doUpdatePluginList)
-	{
-		// TODO: detect update frequency
-	}
-
-	// wingup doesn't work with the obsolet security layer (API) under xp since downloadings are secured with SSL on notepad_plus_plus.org
-	winVer ver = nppParameters.getWinVersion();
-	bool isGtXP = ver > WV_XP;
-
-	SecurityGard securityGard;
-	bool isSignatureOK = securityGard.checkModule(updaterFullPath, nm_gup);
-
-	if (TheFirstOne && isUpExist && isGtXP && isSignatureOK)
-	{
-		if (nppParameters.isx64())
-		{
-			updaterParams += TEXT(" -px64");
-		}
-
-		if (doUpdateNpp)
-		{
-			Process updater(updaterFullPath.c_str(), updaterParams.c_str(), updaterDir.c_str());
-			updater.run();
-
-			// Update next update date
-			if (nppGui._autoUpdateOpt._intervalDays < 0) // Make sure interval days value is positive
-				nppGui._autoUpdateOpt._intervalDays = 0 - nppGui._autoUpdateOpt._intervalDays;
-			nppGui._autoUpdateOpt._nextUpdateDate = Date(nppGui._autoUpdateOpt._intervalDays);
-		}
-
-		// to be removed
-		doUpdatePluginList = false;
-
-		if (doUpdatePluginList)
-		{
-			// Update Plugin List
-			generic_string upPlParams = TEXT("-v"); 
-			upPlParams += notepad_plus_plus.getPluginListVerStr();
-
-			if (nppParameters.isx64())
-			{
-				upPlParams += TEXT(" -px64");
-			}
-
-			upPlParams += TEXT(" -upZip");
-
-			// overrided "InfoUrl" in gup.xml
-			upPlParams += TEXT(" https://notepad-plus-plus.org/update/pluginListDownloadUrl.php");
-
-			// indicate the pluginList installation location
-			upPlParams += nppParameters.getPluginConfDir();
-
-			Process updater(updaterFullPath.c_str(), upPlParams.c_str(), updaterDir.c_str());
-			updater.run();
-
-			// TODO: Update next update date
-
-		}
-	}
+	wcscpy_s(PluginsAdminDlg::_updaterDir, nppParms->getNppPath());
+	PathAppend(PluginsAdminDlg::_updaterDir, TEXT("updater"));
+	wcscpy_s(PluginsAdminDlg::_updaterFullPath, PluginsAdminDlg::_updaterDir);
+	PathAppend(PluginsAdminDlg::_updaterFullPath, TEXT("gup.exe"));
 
 	MSG msg;
 	msg.wParam = 0;
@@ -620,7 +556,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE, PWSTR pCmdLine, int)
 	try
 	{
 		notepad_plus_plus.init(hInstance, NULL, quotFileName.c_str(), &cmdLineParams);
-		allowWmCopydataMessages(notepad_plus_plus, nppParameters, ver);
+		allowWmCopydataMessages(notepad_plus_plus, nppParameters, nppParameters.getWinVersion());
 		bool going = true;
 		while (going)
 		{
@@ -672,6 +608,6 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE, PWSTR pCmdLine, int)
 		::MessageBoxA(Notepad_plus_Window::gNppHWND, "An exception that we did not yet found its name is just caught", "Unknown Exception", MB_OK);
 		doException(notepad_plus_plus);
 	}
-
+	CoUninitialize();
 	return static_cast<int>(msg.wParam);
 }

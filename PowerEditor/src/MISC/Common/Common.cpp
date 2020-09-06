@@ -674,7 +674,7 @@ generic_string BuildMenuFileName(int filenameLen, unsigned int pos, const generi
 }
 
 
-void PathRemoveFileSpec(generic_string& path)
+generic_string PathRemoveFileSpecCommpat(generic_string& path)
 {
     generic_string::size_type lastBackslash = path.find_last_of(TEXT('\\'));
     if (lastBackslash == generic_string::npos)
@@ -693,11 +693,11 @@ void PathRemoveFileSpec(generic_string& path)
         else
             path.erase(lastBackslash);
     }
-	return;
+	return path;
 }
 
 
-void PathAppend(generic_string& strDest, const generic_string& str2append)
+void PathAppendCompat(generic_string& strDest, const generic_string& str2append)
 {
 	if (strDest.empty() && str2append.empty()) // "" + ""
 	{
@@ -1304,7 +1304,7 @@ bool deleteFileOrFolder(const generic_string& f2delete)
 void getFilesInFolder(std::vector<generic_string>& files, const generic_string& extTypeFilter, const generic_string& inFolder)
 {
 	generic_string filter = inFolder;
-	PathAppend(filter, extTypeFilter);
+	PathAppendCompat(filter, extTypeFilter);
 
 	WIN32_FIND_DATA foundData;
 	HANDLE hFindFile = ::FindFirstFile(filter.c_str(), &foundData);
@@ -1312,13 +1312,13 @@ void getFilesInFolder(std::vector<generic_string>& files, const generic_string& 
 	if (hFindFile != INVALID_HANDLE_VALUE && !(foundData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))
 	{
 		generic_string foundFullPath = inFolder;
-		PathAppend(foundFullPath, foundData.cFileName);
+		PathAppendCompat(foundFullPath, foundData.cFileName);
 		files.push_back(foundFullPath);
 
 		while (::FindNextFile(hFindFile, &foundData))
 		{
 			generic_string foundFullPath2 = inFolder;
-			PathAppend(foundFullPath2, foundData.cFileName);
+			PathAppendCompat(foundFullPath2, foundData.cFileName);
 			files.push_back(foundFullPath2);
 		}
 	}

@@ -136,26 +136,24 @@ DWORD WINAPI Notepad_plus::monitorFileOnChange(void * params)
 
 BufferID Notepad_plus::doOpen(const generic_string& fileName, bool isRecursive, bool isReadOnly, int encoding, const TCHAR *backupFileName, FILETIME fileNameTimestamp)
 {
-	const rsize_t longFileNameBufferSize = MAX_PATH; // TODO stop using fixed-size buffer
-	if (fileName.size() >= longFileNameBufferSize - 1) // issue with all other sub-routines
+	const rsize_t longFileNameBufferSize = MAX_FILE_PATH; // TODO stop using fixed-size buffer (X not viable :: will effect plugins)
+	if (fileName.size() >= longFileNameBufferSize) // issue with all other sub-routines
 		return BUFFER_INVALID;
-
 	//If [GetFullPathName] succeeds, the return value is the length, in TCHARs, of the string copied to lpBuffer, not including the terminating null character.
 	//If the lpBuffer buffer is too small to contain the path, the return value [of GetFullPathName] is the size, in TCHARs, of the buffer that is required to hold the path and the terminating null character.
 	//If [GetFullPathName] fails for any other reason, the return value is zero.
 
-	NppParameters& nppParam = NppParameters::getInstance();
+	NppParameters& nppParam = *nppParms;
 	TCHAR longFileName[longFileNameBufferSize];
 
-	const DWORD getFullPathNameResult = ::GetFullPathName(fileName.c_str(), longFileNameBufferSize, longFileName, NULL);
-	if (getFullPathNameResult == 0)
+	auto fileNameArr = fileName.c_str();
+
+	const DWORD getFullPathNameResult = ::GetFullPathName(fileNameArr, longFileNameBufferSize, longFileName, NULL);
+	if (getFullPathNameResult == 0 || getFullPathNameResult > longFileNameBufferSize)
 	{
 		return BUFFER_INVALID;
 	}
-	if (getFullPathNameResult > longFileNameBufferSize)
-	{
-		return BUFFER_INVALID;
-	}
+
 	assert(_tcslen(longFileName) == getFullPathNameResult);
 
 	if (_tcschr(longFileName, '~'))
@@ -167,7 +165,7 @@ BufferID Notepad_plus::doOpen(const generic_string& fileName, bool isRecursive, 
 	bool isSnapshotMode = backupFileName != NULL && PathFileExists(backupFileName);
 	if (isSnapshotMode && !PathFileExists(longFileName)) // UNTITLED
 	{
-		wcscpy_s(longFileName, fileName.c_str());
+		wcscpy_s(longFileName, fileNameArr);
 	}
     _lastRecentFileList.remove(longFileName);
 
@@ -181,7 +179,7 @@ BufferID Notepad_plus::doOpen(const generic_string& fileName, bool isRecursive, 
 	// 3. a file name with relative path to open or create
 
 	// Search case 1 & 2 firstly
-	BufferID foundBufID = MainFileManager.getBufferFromName(fileName.c_str());
+	BufferID foundBufID = MainFileManager.getBufferFromName(fileNameArr);
 
 	if (foundBufID == BUFFER_INVALID)
 		fileName2Find = longFileName;
@@ -235,7 +233,7 @@ BufferID Notepad_plus::doOpen(const generic_string& fileName, bool isRecursive, 
 		if (!PathFileExists(longFileName) && !globbing)
 		{
 			generic_string longFileDir(longFileName);
-			PathRemoveFileSpec(longFileDir);
+			PathRemoveFileSpecCommpat(longFileDir);
 
 			bool isCreateFileSuccessful = false;
 			if (PathFileExists(longFileDir.c_str()))
@@ -368,19 +366,19 @@ BufferID Notepad_plus::doOpen(const generic_string& fileName, bool isRecursive, 
     }
     else
     {
-        if (globbing || ::PathIsDirectory(fileName.c_str()))
+        if (globbing || ::PathIsDirectory(fileNameArr))
         {
             vector<generic_string> fileNames;
             vector<generic_string> patterns;
             if (globbing)
             {
-                const TCHAR * substring = wcsrchr(fileName.c_str(), TCHAR('\\'));
+                const TCHAR * substring = wcsrchr(fileNameArr, TCHAR('\\'));
 				if (substring)
 				{
-					size_t pos = substring - fileName.c_str();
+					size_t pos = substring - fileNameArr;
 
 					patterns.push_back(substring + 1);
-					generic_string dir(fileName.c_str(), pos + 1); // use char * to evoke:
+					generic_string dir(fileNameArr, pos + 1); // use char * to evoke:
 																   // string (const char* s, size_t n);
 																   // and avoid to call (if pass string) :
 																   // string (const string& str, size_t pos, size_t len = npos);
@@ -548,7 +546,7 @@ bool Notepad_plus::doSave(BufferID id, const TCHAR * filename, bool isCopy)
 		// try to open Notepad++ in admin mode
 		if (!_isAdministrator)
 		{
-			bool isSnapshotMode = NppParameters::getInstance().getNppGUI().isSnapshotMode();
+			bool isSnapshotMode = nppUIParms->isSnapshotMode();
 			if (isSnapshotMode) // if both rememberSession && backup mode are enabled
 			{                   // Open the 2nd Notepad++ instance in Admin mode, then close the 1st instance.
 				int openInAdminModeRes = _nativeLangSpeaker.messageBox("OpenInAdminMode",
@@ -559,11 +557,8 @@ bool Notepad_plus::doSave(BufferID id, const TCHAR * filename, bool isCopy)
 
 				if (openInAdminModeRes == IDYES)
 				{
-					TCHAR nppFullPath[MAX_PATH];
-					::GetModuleFileName(NULL, nppFullPath, MAX_PATH);
-
 					generic_string args = TEXT("-multiInst");
-					size_t shellExecRes = (size_t)::ShellExecute(_pPublicInterface->getHSelf(), TEXT("runas"), nppFullPath, args.c_str(), TEXT("."), SW_SHOW);
+					size_t shellExecRes = (size_t)::ShellExecute(_pPublicInterface->getHSelf(), TEXT("runas"), nppParms->_nppModulePath, args.c_str(), TEXT("."), SW_SHOW);
 
 					// If the function succeeds, it returns a value greater than 32. If the function fails,
 					// it returns an error value that indicates the cause of the failure.
@@ -594,9 +589,6 @@ bool Notepad_plus::doSave(BufferID id, const TCHAR * filename, bool isCopy)
 
 				if (openInAdminModeRes == IDYES)
 				{
-					TCHAR nppFullPath[MAX_PATH];
-					::GetModuleFileName(NULL, nppFullPath, MAX_PATH);
-
 					BufferID bufferID = _pEditView->getCurrentBufferID();
 					Buffer * buf = MainFileManager.getBufferByID(bufferID);
 
@@ -607,7 +599,7 @@ bool Notepad_plus::doSave(BufferID id, const TCHAR * filename, bool isCopy)
 					args += TEXT("\"");
 					args += fileNamePath;
 					args += TEXT("\"");
-					size_t shellExecRes = (size_t)::ShellExecute(_pPublicInterface->getHSelf(), TEXT("runas"), nppFullPath, args.c_str(), TEXT("."), SW_SHOW);
+					size_t shellExecRes = (size_t)::ShellExecute(_pPublicInterface->getHSelf(), TEXT("runas"), nppParms->_nppModulePath, args.c_str(), TEXT("."), SW_SHOW);
 
 					// If the function succeeds, it returns a value greater than 32. If the function fails,
 					// it returns an error value that indicates the cause of the failure.
@@ -1498,7 +1490,7 @@ bool Notepad_plus::fileSave(BufferID id)
 			{
 				// Get the current file's directory
 				generic_string path = fn;
-				::PathRemoveFileSpec(path);
+				::PathRemoveFileSpecCommpat(path);
 				fn_bak = path.c_str();
 				fn_bak += TEXT("\\");
 

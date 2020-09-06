@@ -115,7 +115,6 @@ TCHAR* resolveLinkFile(HWND hwnd, TCHAR* linkFilePath)
 			}
 			psl->Release();
 		}
-		CoUninitialize();
 	}
 	return 0;
 } 
@@ -1063,7 +1062,7 @@ void Notepad_plus::command(int id)
 			else if (id == IDM_EDIT_CURRENTDIRTOCLIP)
 			{
 				generic_string dir(buf->getFullPathName());
-				PathRemoveFileSpec(dir);
+				PathRemoveFileSpecCommpat(dir);
 				str2Cliboard(dir);
 			}
 			else if (id == IDM_EDIT_FILENAMETOCLIP)
@@ -2766,8 +2765,7 @@ void Notepad_plus::command(int id)
 				TEXT("Editing contextMenu"),
 				MB_OK|MB_APPLMODAL);
 
-            NppParameters& nppParams = NppParameters::getInstance();
-            BufferID bufID = doOpen((nppParams.getContextMenuPath()));
+            BufferID bufID = doOpen((nppParms->getContextMenuPath()));
 			switchToFile(bufID);
             break;
         }
@@ -3028,8 +3026,7 @@ void Notepad_plus::command(int id)
 		case IDM_CONFUPDATERPROXY :
 		{
 			// wingup doesn't work with the obsolete security layer (API) under xp since downloadings are secured with SSL on notepad_plus_plus.org
-			winVer ver = NppParameters::getInstance().getWinVersion();
-			if (ver <= WV_XP)
+			if (nppParms->getWinVersion() <= WV_XP)
 			{
 				long res = _nativeLangSpeaker.messageBox("XpUpdaterProblem",
 					_pPublicInterface->getHSelf(),
@@ -3044,19 +3041,12 @@ void Notepad_plus::command(int id)
 			}
 			else
 			{
-				generic_string updaterDir = (NppParameters::getInstance()).getNppPath();
-				PathAppend(updaterDir, TEXT("updater"));
-
-				generic_string updaterFullPath = updaterDir;
-				PathAppend(updaterFullPath, TEXT("gup.exe"));
-
-
 #ifdef DEBUG // if not debug, then it's release
 				bool isCertifVerified = true;
 #else //RELEASE
 				// check the signature on updater
 				SecurityGard securityGard;
-				bool isCertifVerified = securityGard.checkModule(updaterFullPath, nm_gup);
+				bool isCertifVerified = securityGard.checkModule(PluginsAdminDlg::_updaterFullPath, nm_gup);
 #endif
 				if (isCertifVerified)
 				{
@@ -3084,7 +3074,7 @@ void Notepad_plus::command(int id)
 							param += TEXT(" -px64");
 						}
 					}
-					Process updater(updaterFullPath.c_str(), param.c_str(), updaterDir.c_str());
+					Process updater(PluginsAdminDlg::_updaterFullPath, param.c_str(), PluginsAdminDlg::_updaterDir);
 
 					updater.run();
 				}
