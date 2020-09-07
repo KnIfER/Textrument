@@ -32,6 +32,7 @@
 #include "Parameters.h"
 #include "PluginInterface.h"
 #include "IDAllocator.h"
+#include <map>
 
 typedef BOOL (__cdecl * PFUNCISUNICODE)();
 
@@ -129,6 +130,14 @@ public:
 	generic_string getLoadedPluginNames() const;
 
 	std::vector<PluginInfo *> _pluginInfos;
+
+	std::map<int, int> _plugin_cid_table;
+
+	std::map<long, int> _plugin_module_table;
+
+	HMENU getMenuForCommand(int cmdID);
+
+	HMENU getMenuForModule(HINSTANCE moduleID);
 private:
 	NppData _nppData;
 	HMENU _hPluginsMenu = NULL;

@@ -113,7 +113,9 @@ LRESULT Notepad_plus_Window::runProc(HWND hwnd, UINT message, WPARAM wParam, LPA
 			{
 				_notepad_plus_plus_core._pPublicInterface = this;
 				setFontStack(&HFontWraps);
-				return _notepad_plus_plus_core.init(hwnd);
+				auto ret = _notepad_plus_plus_core.init(hwnd);;
+				_toolbarHWND = _notepad_plus_plus_core._toolBar.getHSelf();
+				return ret;
 			}
 			catch (std::exception& ex)
 			{
@@ -2223,16 +2225,17 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 		
 		case NPPM_GETPLUGINMENU:
 		{
-			TCHAR *userLangName = reinterpret_cast<TCHAR *>(lParam);
+			HWND pluginHinst = reinterpret_cast<HWND>(lParam);
+
 			auto pluginStack = _pluginsManager._pluginInfos;
-			for(auto psI:pluginStack) {
-				//::MessageBox(NULL, psI->_moduleName.data(), TEXT(""), MB_OK);
-				if(psI->_moduleName._Equal(userLangName)) {
-					//::MessageBox(NULL, buffer, TEXT(""), MB_OK);
-					//TrackPopupMenu(psI->_pluginMenu, TPM_RETURNCMD, 0, 0, 0, _windowsMenu., NULL);
-					return (LRESULT)psI->_pluginMenu;
-				}
+			auto id = _pluginsManager._plugin_module_table.find((long)pluginHinst);
+			if(id!=_pluginsManager._plugin_module_table.end()) {
+				auto idx = id->second;
+				if(idx>=0 && idx<_pluginsManager._pluginInfos.size()) {
+					return (LRESULT)_pluginsManager._pluginInfos[idx]->_pluginMenu;
+				} 
 			}
+
 			return (LRESULT)0;
 		}
 

@@ -571,6 +571,24 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE, PWSTR pCmdLine, int)
 						::TranslateMessage(&msg);
 						::DispatchMessageW(&msg);
 					}
+					//workaround : process the toolbar message right in the message loop. 
+					if(notepad_plus_plus._toolbarHWND==msg.hwnd&&msg.message==WM_RBUTTONUP) {
+						//todo  ask whether the plugin icon has other specified function
+						//todo WM_MBUTTONUP
+						//todo provide context menu for all icons
+						POINT pt;
+						GetCursorPos(&pt);
+
+						auto & nppApp = notepad_plus_plus._notepad_plus_plus_core;
+						
+						int id = nppApp.getButtonCommand(pt);
+						
+						HMENU hMenu = nppApp._pluginsManager.getMenuForCommand(id);
+						
+						if(hMenu) {
+							TrackPopupMenu(hMenu, 0, pt.x,  pt.y, 0, Notepad_plus_Window::gNppHWND, NULL);
+						}
+					}
 				}
 			}
 		}

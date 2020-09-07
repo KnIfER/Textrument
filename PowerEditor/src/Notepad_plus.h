@@ -639,6 +639,8 @@ public:
 	HINSTANCE getHinst();
 
 	TCHAR* getModuleFileName() const;
+
+	int getButtonCommand(POINT &pointer);
 };
 
 

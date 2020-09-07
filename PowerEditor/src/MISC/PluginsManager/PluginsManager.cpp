@@ -30,6 +30,7 @@
 #include <dbghelp.h>
 #include <algorithm>
 #include <cinttypes>
+#include <map>
 #include "PluginsManager.h"
 #include "resource.h"
 
@@ -444,27 +445,29 @@ bool PluginsManager::removeShortcutByCmdID(int cmdID)
 void PluginsManager::addInMenuFromPMIndex(int i)
 {
     vector<PluginCmdShortcut> & pluginCmdSCList = (NppParameters::getInstance()).getPluginCommandList();
-	::InsertMenu(_hPluginsMenu, i, MF_BYPOSITION | MF_POPUP, (UINT_PTR)_pluginInfos[i]->_pluginMenu, _pluginInfos[i]->_funcName.c_str());
+	auto & plug = *_pluginInfos[i];
+	::InsertMenu(_hPluginsMenu, i, MF_BYPOSITION | MF_POPUP, (UINT_PTR)plug._pluginMenu, plug._funcName.c_str());
+	_plugin_module_table[(long)plug._hLib] = i;
 
     unsigned short j = 0;
-	for ( ; j < _pluginInfos[i]->_nbFuncItem ; ++j)
+	for ( ; j < plug._nbFuncItem ; ++j)
 	{
-		if (_pluginInfos[i]->_funcItems[j]._pFunc == NULL)
+		if (plug._funcItems[j]._pFunc == NULL)
 		{
-			::InsertMenu(_pluginInfos[i]->_pluginMenu, j, MF_BYPOSITION | MF_SEPARATOR, 0, TEXT(""));
+			::InsertMenu(plug._pluginMenu, j, MF_BYPOSITION | MF_SEPARATOR, 0, TEXT(""));
 			continue;
 		}
 
-        _pluginsCommands.push_back(PluginCommand(_pluginInfos[i]->_moduleName.c_str(), j, _pluginInfos[i]->_funcItems[j]._pFunc));
+        _pluginsCommands.push_back(PluginCommand(plug._moduleName.c_str(), j, plug._funcItems[j]._pFunc));
 
 		int cmdID = ID_PLUGINS_CMD + static_cast<int32_t>(_pluginsCommands.size() - 1);
-		_pluginInfos[i]->_funcItems[j]._cmdID = cmdID;
-		generic_string itemName = _pluginInfos[i]->_funcItems[j]._itemName;
+		plug._funcItems[j]._cmdID = cmdID;
+		generic_string itemName = plug._funcItems[j]._itemName;
 
-		if (_pluginInfos[i]->_funcItems[j]._pShKey)
+		if (plug._funcItems[j]._pShKey)
 		{
-			ShortcutKey & sKey = *(_pluginInfos[i]->_funcItems[j]._pShKey);
-            PluginCmdShortcut pcs(Shortcut(itemName.c_str(), sKey._isCtrl, sKey._isAlt, sKey._isShift, sKey._key), cmdID, _pluginInfos[i]->_moduleName.c_str(), j);
+			ShortcutKey & sKey = *(plug._funcItems[j]._pShKey);
+            PluginCmdShortcut pcs(Shortcut(itemName.c_str(), sKey._isCtrl, sKey._isAlt, sKey._isShift, sKey._key), cmdID, plug._moduleName.c_str(), j);
 			pluginCmdSCList.push_back(pcs);
 			itemName += TEXT("\t");
 			itemName += pcs.toString();
@@ -472,15 +475,40 @@ void PluginsManager::addInMenuFromPMIndex(int i)
 		else
 		{	//no ShortcutKey is provided, add an disabled shortcut (so it can still be mapped, Paramaters class can still index any changes and the toolbar wont funk out
             Shortcut sc(itemName.c_str(), false, false, false, 0x00);
-            PluginCmdShortcut pcs(sc, cmdID, _pluginInfos[i]->_moduleName.c_str(), j);	//VK_NULL and everything disabled, the menu name is left alone
+            PluginCmdShortcut pcs(sc, cmdID, plug._moduleName.c_str(), j);	//VK_NULL and everything disabled, the menu name is left alone
 			pluginCmdSCList.push_back(pcs);
 		}
-		::InsertMenu(_pluginInfos[i]->_pluginMenu, j, MF_BYPOSITION, cmdID, itemName.c_str());
+		::InsertMenu(plug._pluginMenu, j, MF_BYPOSITION, cmdID, itemName.c_str());
 
-		if (_pluginInfos[i]->_funcItems[j]._init2Check)
+		_plugin_cid_table[cmdID]=i;
+
+		if (plug._funcItems[j]._init2Check)
 			::CheckMenuItem(_hPluginsMenu, cmdID, MF_BYCOMMAND | MF_CHECKED);
 	}
 }
+
+HMENU PluginsManager::getMenuForCommand(int cmdID) {
+	auto id = _plugin_cid_table.find(cmdID);
+	if(id!=_plugin_cid_table.end()) {
+		int pluginid=id->second;
+		if(pluginid>=0&&pluginid<_pluginInfos.size()) {
+			return _pluginInfos[pluginid]->_pluginMenu;
+		}
+	}
+	return 0;
+}
+
+HMENU PluginsManager::getMenuForModule(HINSTANCE moduleID) {
+	auto id = _plugin_module_table.find((long)moduleID);
+	if(id!=_plugin_module_table.end()) {
+		int pluginid=id->second;
+		if(pluginid>=0&&pluginid<_pluginInfos.size()) {
+			return _pluginInfos[pluginid]->_pluginMenu;
+		}
+	}
+	return 0;
+}
+
 
 HMENU PluginsManager::setMenu(HMENU hMenu, const TCHAR *menuName, bool enablePluginAdmin)
 {

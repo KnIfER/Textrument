@@ -753,6 +753,27 @@ LRESULT Notepad_plus::init(HWND hwnd)
 	return TRUE;
 }
 
+int Notepad_plus::getButtonCommand(POINT &pointer) {
+	TBBUTTON tempBtn;
+	RECT rect;
+	ScreenToClient(_toolBar.getHSelf(), &pointer);
+
+	int size = ::SendMessage(_toolBar.getHSelf(), TB_BUTTONCOUNT, 0, 0);
+	int tc=-1;
+	for(int i=0;i<size;i++) {
+		::SendMessage(_toolBar.getHSelf(), TB_GETITEMRECT, i, reinterpret_cast<LPARAM>(&rect));
+
+		if(PtInRect(&rect, pointer)) {
+			pointer.x = rect.left;
+			pointer.y = rect.bottom;
+			ClientToScreen(_toolBar.getHSelf(), &pointer);
+			::SendMessage(_toolBar.getHSelf(), TB_GETBUTTON, i, reinterpret_cast<LPARAM>(&tempBtn));
+			return tempBtn.idCommand;
+		}
+	}
+	return 0;
+}
+
 void Notepad_plus::killAllChildren()
 {
 	_toolBar.destroy();

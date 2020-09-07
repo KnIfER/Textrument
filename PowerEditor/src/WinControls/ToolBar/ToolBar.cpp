@@ -107,10 +107,10 @@ bool ToolBar::init( HINSTANCE hInst, HWND hPere, toolBarStatusType type, ToolBar
 {
 	Window::init(hInst, hPere);
 	_state = type;
-	int iconSize = NppParameters::getInstance()._dpiManager.scaleX(_state == TB_LARGE?32:16);
+	int iconDpiDynamicalSize = NppParameters::getInstance()._dpiManager.scaleX(_state == TB_LARGE?32:16);
 
 	_toolBarIcons.init(buttonUnitArray, arraySize);
-	_toolBarIcons.create(_hInst, iconSize);
+	_toolBarIcons.create(_hInst, iconDpiDynamicalSize);
 
 	_nbDynButtons = _vDynBtnReg.size();
 
