@@ -774,6 +774,10 @@ int Notepad_plus::getButtonCommand(POINT &pointer) {
 	return 0;
 }
 
+void Notepad_plus::syncToolbarHwnd() {
+	_pPublicInterface->_toolbarHWND = _toolBar.getHSelf();
+}
+
 void Notepad_plus::killAllChildren()
 {
 	_toolBar.destroy();

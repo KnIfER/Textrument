@@ -30,7 +30,7 @@ void printStr(const TCHAR *str2print);
 void writeLog(const TCHAR *logFileName, const TCHAR *log2write);
 int filter(unsigned int code, struct _EXCEPTION_POINTERS *ep);
 int getCpFromStringValue(const TCHAR * encodingStr);
-std::basic_string<TCHAR> purgeMenuItemStringX(const TCHAR * menuItemStr, bool keepAmpersand = false);
+//std::basic_string<TCHAR> purgeMenuItemString(const TCHAR * menuItemStr, bool keepAmpersand = false);
 
 #define CP_ANSI_LATIN_1 1252
 #define CP_BIG5 950

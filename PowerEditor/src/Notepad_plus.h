@@ -641,6 +641,8 @@ public:
 	TCHAR* getModuleFileName() const;
 
 	int getButtonCommand(POINT &pointer);
+
+	void syncToolbarHwnd();
 };
 
 

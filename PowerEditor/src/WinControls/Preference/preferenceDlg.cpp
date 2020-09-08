@@ -610,14 +610,17 @@ INT_PTR CALLBACK BarsDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM)
 					
 				case IDC_RADIO_SMALLICON :
 					::SendMessage(_hParent, WM_COMMAND, IDM_VIEW_TOOLBAR_REDUCE, 0);
+					nppApp->syncToolbarHwnd();
 					return TRUE;
 					
 				case IDC_RADIO_BIGICON :
 					::SendMessage(_hParent, WM_COMMAND, IDM_VIEW_TOOLBAR_ENLARGE, 0);
+					nppApp->syncToolbarHwnd();
 					return TRUE;
 					
 				case IDC_RADIO_STANDARD :
 					::SendMessage(_hParent, WM_COMMAND, IDM_VIEW_TOOLBAR_STANDARD, 0);
+					nppApp->syncToolbarHwnd();
 					return TRUE;
 
 				default :
