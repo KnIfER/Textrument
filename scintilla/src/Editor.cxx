@@ -1860,7 +1860,7 @@ void Editor::ChangeSize() {
 		PRectangle rcTextArea = GetClientRectangle();
 		rcTextArea.left = static_cast<XYPOSITION>(vs.textStart);
 		rcTextArea.right -= vs.rightMarginWidth;
-		if (wrapWidth != rcTextArea.Width()) {
+		if (rcTextArea.Width()>0 && wrapWidth != rcTextArea.Width()) {
 			NeedWrapping();
 			Redraw();
 		}
