@@ -77,6 +77,7 @@ public:
 	void EndUndoAction();
 	void DropUndoSequence();
 	void DeleteUndoHistory();
+	void DeleteUndoHistoryMinusOne();
 
 	/// The save point is a marker in the undo stack where the container has stated that
 	/// the buffer was saved. Undo and redo can move over the save point.
@@ -117,7 +118,6 @@ private:
 	int utf8LineEnds;
 
 	bool collectingUndo;
-	UndoHistory uh;
 
 	std::unique_ptr<ILineVector> plv;
 
@@ -131,6 +131,7 @@ private:
 	void BasicDeleteChars(Sci::Position position, Sci::Position deleteLength);
 
 public:
+	UndoHistory uh;
 
 	CellBuffer(bool hasStyles_, bool largeDocument_);
 	// Deleted so CellBuffer objects can not be copied.

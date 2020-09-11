@@ -5,6 +5,10 @@
 build_x64
 boost_*
 
+*/Npp_*
+*/NppHex*
+*/HexEditor_0*
+
 */NppPlugins
 
 /PowerEd

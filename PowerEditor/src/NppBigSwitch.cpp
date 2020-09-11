@@ -1057,9 +1057,17 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 			length = UnicodeConvertor.convert(buffer, length-1);
 
 			// set text in target
-			pSci->execute(SCI_CLEARALL);
-			pSci->addText(length, UnicodeConvertor.getNewBuf());
-			pSci->execute(SCI_EMPTYUNDOBUFFER);
+			if(wParam==115) { 
+				// Preserve History
+				pSci->execute(SCI_SETUNDOCOLLECTION, 0, 0);
+				pSci->execute(SCI_CLEARALL);
+				pSci->addText(length, UnicodeConvertor.getNewBuf());
+				pSci->execute(SCI_SETUNDOCOLLECTION, 1, 0);
+			} else {
+				pSci->execute(SCI_CLEARALL);
+				pSci->addText(length, UnicodeConvertor.getNewBuf());
+				pSci->execute(SCI_EMPTYUNDOBUFFER);
+			}
 
 			pSci->execute(SCI_SETCODEPAGE);
 
@@ -1092,10 +1100,17 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 			length = UnicodeConvertor.convert(buffer, length-1);
 
 			// set text in target
-			pSci->execute(SCI_CLEARALL);
-			pSci->addText(length, UnicodeConvertor.getNewBuf());
-
-			pSci->execute(SCI_EMPTYUNDOBUFFER);
+			if(wParam==115) { 
+				// Preserve History
+				pSci->execute(SCI_SETUNDOCOLLECTION, 0, 0);
+				pSci->execute(SCI_CLEARALL);
+				pSci->addText(length, UnicodeConvertor.getNewBuf());
+				pSci->execute(SCI_SETUNDOCOLLECTION, 1, 0);
+			} else {
+				pSci->execute(SCI_CLEARALL);
+				pSci->addText(length, UnicodeConvertor.getNewBuf());
+				pSci->execute(SCI_EMPTYUNDOBUFFER);
+			}
 
 			// set cursor position
 			pSci->execute(SCI_GOTOPOS);
@@ -1108,6 +1123,17 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 			(pSci->getCurrentBuffer())->setUnicodeMode(um);
 			(pSci->getCurrentBuffer())->setDirty(true);
 			return um;
+		}
+
+		case NPPM_EMPTYEDITHISTORY:
+		{
+			if(wParam&0x1) {
+				_mainEditView.execute(SCI_EMPTYUNDOBUFFER, lParam, lParam);
+			}
+			if(wParam&0x2) {
+				_subEditView.execute(SCI_EMPTYUNDOBUFFER, lParam, lParam);
+			}
+			return 0;
 		}
 
 		case NPPM_ACTIVATEDOC:

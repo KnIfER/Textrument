@@ -226,9 +226,9 @@ public:
 		}
 	};
 
+	CellBuffer cb;
 private:
 	int refCount;
-	CellBuffer cb;
 	CharClassify charClass;
 	CharacterCategoryMap charMap;
 	std::unique_ptr<CaseFolder> pcf;

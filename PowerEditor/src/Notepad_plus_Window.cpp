@@ -203,7 +203,7 @@ void Notepad_plus_Window::init(HINSTANCE hInst, HWND parent, const TCHAR *cmdLin
 	LocalizationSwitcher & localizationSwitcher = nppParams.getLocalizationSwitcher();
 	lstrcpy(universal_buffer, nppDir);
 	PathAppend(universal_buffer, TEXT("localization"));
-	lstrcpy(universal_buffer, TEXT("\\"));
+	lstrcat(universal_buffer, TEXT("\\"));
 
 	_notepad_plus_plus_core.getMatchedFileNames(universal_buffer, patterns, fileNames, false, false);
 	for (size_t i = 0, len = fileNames.size(); i < len; ++i) {
@@ -220,7 +220,7 @@ void Notepad_plus_Window::init(HINSTANCE hInst, HWND parent, const TCHAR *cmdLin
     {
 		lstrcpy(universal_buffer, nppParams.getAppDataNppDir());
 	    PathAppend(universal_buffer, TEXT("themes"));
-		lstrcpy(universal_buffer, TEXT("\\"));
+		lstrcat(universal_buffer, TEXT("\\"));
 	    _notepad_plus_plus_core.getMatchedFileNames(universal_buffer, patterns, fileNames, false, false);
 	    for (size_t i = 0, len = fileNames.size() ; i < len ; ++i)
 	    {
@@ -232,7 +232,7 @@ void Notepad_plus_Window::init(HINSTANCE hInst, HWND parent, const TCHAR *cmdLin
 
 	lstrcpy(universal_buffer, nppDir);
 	PathAppend(universal_buffer, TEXT("themes"));
-	lstrcpy(universal_buffer, TEXT("\\"));
+	lstrcat(universal_buffer, TEXT("\\"));
 	_notepad_plus_plus_core.getMatchedFileNames(universal_buffer, patterns, fileNames, false, false);
 	for (size_t i = 0, len = fileNames.size(); i < len ; ++i)
 	{

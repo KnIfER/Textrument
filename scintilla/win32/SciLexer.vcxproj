@@ -117,10 +117,10 @@
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalLibraryDirectories>$(BOOST)\bin.v2\libs\regex\build\msvc-14.2\release\address-model-64\link-static\runtime-link-static\threading-multi;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <ModuleDefinitionFile>Scintilla.def</ModuleDefinitionFile>
+      <OutputFile>../../PowerEditor\bin64\$(TargetName)$(TargetExt)</OutputFile>
     </Link>
     <PostBuildEvent>
-      <Command>signtool sign /f D:\Code\FigureOut\notepad-plus-plus\scintilla\win32\x64\Release\nppsig.pfx /p http://www.russellcottrell.com/greek/utilities/surrogatepaircalculator.htm D:\Code\FigureOut\notepad-plus-plus\scintilla\win32\x64\Release\SciLexer.dll
-copy   /Y  D:\Code\FigureOut\notepad-plus-plus\scintilla\win32\x64\Release\SciLexer.dll D:\Code\FigureOut\notepad-plus-plus\PowerEditor\bin64\SciLexer.dll</Command>
+      <Command>cleanup.bat ../../PowerEditor\bin64\tools\cleandll.bat ../../PowerEditor\bin64\$(TargetName)$(TargetExt)</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>

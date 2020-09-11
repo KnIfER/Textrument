@@ -5905,7 +5905,11 @@ sptr_t Editor::WndProc(unsigned int iMessage, uptr_t wParam, sptr_t lParam) {
 		return (pdoc->CanUndo() && !pdoc->IsReadOnly()) ? 1 : 0;
 
 	case SCI_EMPTYUNDOBUFFER:
-		pdoc->DeleteUndoHistory();
+		if(lParam==1&&wParam==1) {
+			pdoc->cb.uh.DeleteUndoHistoryMinusOne();
+		} else {
+			pdoc->DeleteUndoHistory();
+		}
 		return 0;
 
 	case SCI_GETFIRSTVISIBLELINE:
