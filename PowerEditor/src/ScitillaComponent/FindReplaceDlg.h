@@ -321,6 +321,18 @@ public :
 			_pFinder->_scintView.getFocus();
 		}
 	};
+	
+	void toggleFinder() {
+		// Show finder and set focus
+		if (_pFinder) 
+		{
+			auto vis = _pFinder->isVisible();
+			::SendMessage(_hParent, vis?NPPM_DMMHIDE:NPPM_DMMSHOW, 0, reinterpret_cast<LPARAM>(_pFinder->getHSelf()));
+			if(vis) {
+				_pFinder->_scintView.getFocus();
+			}
+		}
+	};
 
 	HWND getHFindResults() {
 		if (_pFinder)
