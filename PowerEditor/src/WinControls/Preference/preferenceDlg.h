@@ -275,6 +275,8 @@ public :
 
 	virtual void destroy();
 
+	void invalidateRadioBtns(bool forPrefDLg=false);
+
 	static INT_PTR CALLBACK DlgProcShellSettings(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam);
 private :
 	INT_PTR CALLBACK run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam);

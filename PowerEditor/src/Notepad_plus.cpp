@@ -367,7 +367,6 @@ LRESULT Notepad_plus::init(HWND hwnd)
 	}
 	_mainDocTab.display();
 
-
 	TabBarPlus::doDragNDrop((tabBarStatus & TAB_DRAGNDROP) != 0);
 	TabBarPlus::setDrawTopBar((tabBarStatus & TAB_DRAWTOPBAR) != 0);
 	TabBarPlus::setDrawInactiveTab((tabBarStatus & TAB_DRAWINACTIVETAB) != 0);
@@ -632,6 +631,8 @@ LRESULT Notepad_plus::init(HWND hwnd)
 	_rebarBottom.init(_pPublicInterface->getHinst(), hwnd);
 	_toolBar.addToRebar(&_rebarTop);
 	_rebarTop.setIDVisible(REBAR_BAR_TOOLBAR, willBeShown);
+
+	checkMenuItem(_toolBar.getState()+IDM_SETTING_SMALLICON, true);
 
 	checkMacroState();
 
@@ -7197,6 +7198,34 @@ HINSTANCE Notepad_plus::getHinst() {
 	return _pPublicInterface->getHinst();
 }
 
-TCHAR* Notepad_plus::getModuleFileName() const{
+TCHAR* Notepad_plus::getModuleFileName() const {
 	return nppParms->_nppModulePath;
+}
+
+
+void Notepad_plus::switchToIconMode(toolBarStatusType targetState, bool fromPrefDlg) 
+{
+	if (_toolBar.getState() != targetState)
+	{
+		switch (targetState)
+		{
+		case TB_SMALL :
+			_toolBar.reduce();
+			break;
+		case TB_LARGE :
+			_toolBar.enlarge();
+			break;
+		case TB_STANDARD:
+		default :
+			_toolBar.setToUglyIcons();
+		}
+	}
+
+	if(!fromPrefDlg) {
+		_preference.invalidateRadioBtns(true);
+	}
+	checkMenuItem(targetState+IDM_SETTING_SMALLICON, true);
+	checkMenuItem((targetState+1)%3+IDM_SETTING_SMALLICON, false);
+	checkMenuItem((targetState+2)%3+IDM_SETTING_SMALLICON, false);
+	syncToolbarHwnd();
 }

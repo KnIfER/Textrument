@@ -430,6 +430,19 @@ void PreferenceDlg::destroy()
 	_delimiterSettingsDlg.destroy();
 }
 
+void PreferenceDlg::invalidateRadioBtns(bool forPrefDLg)
+{
+	if(_barsDlg.isCreated()) {
+		toolBarStatusType tbStatus = nppApp->_toolBar.getState();
+		::SendDlgItemMessage(_barsDlg.getHSelf(), tbStatus+IDC_RADIO_SMALLICON, BM_SETCHECK, BST_CHECKED, 0);
+		if(forPrefDLg) {
+			::SendDlgItemMessage(_barsDlg.getHSelf(), (tbStatus+1)%3+IDC_RADIO_SMALLICON, BM_SETCHECK, BST_UNCHECKED, 0);
+			::SendDlgItemMessage(_barsDlg.getHSelf(), (tbStatus+2)%3+IDC_RADIO_SMALLICON, BM_SETCHECK, BST_UNCHECKED, 0);
+		}
+		bool showTool = nppApp->_rebarTop.getIDVisible(REBAR_BAR_TOOLBAR);
+		::SendDlgItemMessage(_hSelf, IDC_CHECK_HIDE, BM_SETCHECK, showTool?BST_CHECKED:BST_UNCHECKED, 0);
+	}
+}
 
 INT_PTR CALLBACK BarsDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM)
 {
@@ -439,27 +452,11 @@ INT_PTR CALLBACK BarsDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM)
 		case WM_INITDIALOG :
 		{
 			const NppGUI & nppGUI = nppParms->getNppGUI();
-			toolBarStatusType tbStatus = nppGUI._toolBarStatus;
 			int tabBarStatus = nppGUI._tabStatus;
-			bool showTool = nppGUI._toolbarShow;
 			bool showStatus = nppGUI._statusBarShow;
 			bool showMenu = nppGUI._menuBarShow;
 
-			::SendDlgItemMessage(_hSelf, IDC_CHECK_HIDE, BM_SETCHECK, showTool?BST_UNCHECKED:BST_CHECKED, 0);
-			int ID2Check = 0;
-			switch (tbStatus)
-			{
-				case TB_SMALL :
-					ID2Check = IDC_RADIO_SMALLICON;
-					break;
-				case TB_LARGE :
-					ID2Check = IDC_RADIO_BIGICON;
-					break;
-				case TB_STANDARD:
-				default :
-					ID2Check = IDC_RADIO_STANDARD;
-			}
-			::SendDlgItemMessage(_hSelf, ID2Check, BM_SETCHECK, BST_CHECKED, 0);
+			_preferenceDlg->invalidateRadioBtns();
 			
 			::SendDlgItemMessage(_hSelf, IDC_CHECK_REDUCE, BM_SETCHECK, tabBarStatus & TAB_REDUCE, 0);
 			::SendDlgItemMessage(_hSelf, IDC_CHECK_LOCK, BM_SETCHECK, !(tabBarStatus & TAB_DRAGNDROP), 0);
@@ -609,18 +606,9 @@ INT_PTR CALLBACK BarsDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM)
 				return TRUE;
 					
 				case IDC_RADIO_SMALLICON :
-					::SendMessage(_hParent, WM_COMMAND, IDM_VIEW_TOOLBAR_REDUCE, 0);
-					nppApp->syncToolbarHwnd();
-					return TRUE;
-					
 				case IDC_RADIO_BIGICON :
-					::SendMessage(_hParent, WM_COMMAND, IDM_VIEW_TOOLBAR_ENLARGE, 0);
-					nppApp->syncToolbarHwnd();
-					return TRUE;
-					
 				case IDC_RADIO_STANDARD :
-					::SendMessage(_hParent, WM_COMMAND, IDM_VIEW_TOOLBAR_STANDARD, 0);
-					nppApp->syncToolbarHwnd();
+					nppApp->switchToIconMode((toolBarStatusType)(wParam-IDC_RADIO_SMALLICON), true);
 					return TRUE;
 
 				default :

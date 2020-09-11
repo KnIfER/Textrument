@@ -1062,6 +1062,11 @@ BEGIN
             MENUITEM "Import plugin(s)...",         IDM_SETTING_IMPORTPLUGIN
             MENUITEM "Import style theme(s)...",    IDM_SETTING_IMPORTSTYLETHEMS
         END
+
+		MENUITEM "Small Icons",        IDM_SETTING_SMALLICON
+		MENUITEM "Big Icons",          IDM_SETTING_BIGICON  
+		MENUITEM "Standard Icons",     IDM_SETTING_STANDARDICON  
+
         MENUITEM SEPARATOR
         MENUITEM "Edit Popup ContextMenu",      IDM_SETTING_EDITCONTEXTMENU
     END

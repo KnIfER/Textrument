@@ -1800,37 +1800,10 @@ void Notepad_plus::command(int id)
 
 
 		case IDM_VIEW_TOOLBAR_REDUCE:
-		{
-            toolBarStatusType state = _toolBar.getState();
-
-            if (state != TB_SMALL)
-            {
-			    _toolBar.reduce();
-			    changeToolBarIcons();
-            }
-		}
-		break;
-
 		case IDM_VIEW_TOOLBAR_ENLARGE:
-		{
-            toolBarStatusType state = _toolBar.getState();
-
-            if (state != TB_LARGE)
-            {
-			    _toolBar.enlarge();
-			    changeToolBarIcons();
-            }
-		}
-		break;
-
 		case IDM_VIEW_TOOLBAR_STANDARD:
 		{
-			toolBarStatusType state = _toolBar.getState();
-
-            if (state != TB_STANDARD)
-            {
-				_toolBar.setToUglyIcons();
-			}
+			switchToIconMode((toolBarStatusType)(id-IDM_VIEW_TOOLBAR_REDUCE));
 		}
 		break;
 
@@ -2757,16 +2730,38 @@ void Notepad_plus::command(int id)
 			break;
 		}
 
+        case IDM_SETTING_BIGICON   :
+        case IDM_SETTING_SMALLICON :
+		case IDM_SETTING_STANDARDICON :
+        {
+			bool ctrldown = GetKeyState(VK_CONTROL)&0x80;
+			if(ctrldown) {
+				_rebarTop.setIDVisible(REBAR_BAR_TOOLBAR, false);
+				_preference.invalidateRadioBtns(true);
+			} else {
+				_rebarTop.setIDVisible(REBAR_BAR_TOOLBAR, true);
+				switchToIconMode((toolBarStatusType)(id-IDM_SETTING_SMALLICON));
+			}
+            break;
+        }
+
+		case IDM_SETTING_HIDETOOLBAR:
+		{
+			boolean toolbarShow = _rebarTop.getIDVisible(REBAR_BAR_TOOLBAR);
+			_rebarTop.setIDVisible(REBAR_BAR_TOOLBAR, !toolbarShow);
+			break;
+		}
+
         case IDM_SETTING_EDITCONTEXTMENU :
         {
-			_nativeLangSpeaker.messageBox("ContextMenuXmlEditWarning",
+			if(IDOK==_nativeLangSpeaker.messageBox("ContextMenuXmlEditWarning",
 				_pPublicInterface->getHSelf(),
 				TEXT("Editing contextMenu.xml allows you to modify your Notepad++ popup context menu on edit zone.\rYou have to restart your Notepad++ to take effect after modifying contextMenu.xml."),
 				TEXT("Editing contextMenu"),
-				MB_OK|MB_APPLMODAL);
-
-            BufferID bufID = doOpen((nppParms->getContextMenuPath()));
-			switchToFile(bufID);
+				MB_OKCANCEL|MB_APPLMODAL)) {
+				BufferID bufID = doOpen((nppParms->getContextMenuPath()));
+				switchToFile(bufID);
+			}
             break;
         }
 

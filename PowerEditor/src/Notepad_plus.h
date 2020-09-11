@@ -643,6 +643,8 @@ public:
 	int getButtonCommand(POINT &pointer);
 
 	void syncToolbarHwnd();
+
+	void switchToIconMode(toolBarStatusType targetState, bool fromPrefDlg=false);
 };
 
 
