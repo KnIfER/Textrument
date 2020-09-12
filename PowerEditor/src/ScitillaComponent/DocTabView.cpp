@@ -29,6 +29,7 @@
 
 #include "DocTabView.h"
 #include "ScintillaEditView.h"
+#include "Notepad_plus.h"
 
 #ifndef _WIN32_IE
 #define _WIN32_IE	0x0600
@@ -37,6 +38,8 @@
 bool bNewTabFarRight = 1;
 
 bool DocTabView::_hideTabBarStatus = false;
+
+extern Notepad_plus* nppApp;
 
 void DocTabView::addBuffer(BufferID buffer)
 {
@@ -238,8 +241,18 @@ void DocTabView::reSizeTo(RECT & rc)
 		TabBar::reSizeTo(rc);
 		rc.left	 += borderWidth;
 		rc.right -= borderWidth * 2;
-		rc.left	 -= borderXComp;
-		rc.right += borderXComp * 2;
+		if(borderXComp) {
+			rc.left	 -= borderXComp;
+			rc.right += borderXComp * 2;
+			auto vInf = nppApp->_dockingManager.getContainerInfo();
+			if(vInf[0]->isVisible()) {
+				rc.left	 += borderXComp;
+				rc.right	 -= borderXComp;
+			}
+			if(vInf[1]->isVisible()) {
+				rc.right	 -= borderXComp;
+			}
+		}
 		rc.top   += borderWidth;
 		rc.bottom -= (borderWidth * 2);
 		_pView->reSizeTo(rc);
