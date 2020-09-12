@@ -2730,7 +2730,7 @@ void Notepad_plus::command(int id)
         case IDM_SETTING_SMALLICON :
 		case IDM_SETTING_STANDARDICON :
         {
-			bool ctrldown = GetKeyState(VK_CONTROL)&0x80;
+			bool ctrldown = isWindowMessaging==0&&GetKeyState(VK_CONTROL)&0x80;
 			if(ctrldown) {
 				_rebarTop.setIDVisible(REBAR_BAR_TOOLBAR, false);
 				_preference.invalidateRadioBtns(true);

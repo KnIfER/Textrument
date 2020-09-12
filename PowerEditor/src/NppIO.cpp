@@ -234,34 +234,38 @@ BufferID Notepad_plus::doOpen(const generic_string& fileName, bool isRecursive, 
 		{
 			generic_string longFileDir(longFileName);
 			PathRemoveFileSpecCommpat(longFileDir);
+			auto ParentPath = longFileDir.c_str();
 
 			bool isCreateFileSuccessful = false;
-			if (PathFileExists(longFileDir.c_str()))
+			if (PathFileExists(ParentPath))
 			{
-				int res = _nativeLangSpeaker.messageBox("CreateNewFileOrNot",
-					_pPublicInterface->getHSelf(),
-					TEXT("\"$STR_REPLACE$\" doesn't exist. Create it?"),
-					TEXT("Create new file"),
-					MB_YESNO,
-					0,
-					longFileName);
+				if(lstrcmp(ParentPath, nppParam._nppPath)==0) {
+				} else {
+					int res = _nativeLangSpeaker.messageBox("CreateNewFileOrNot",
+						_pPublicInterface->getHSelf(),
+						TEXT("\"$STR_REPLACE$\" doesn't exist. Create it?"),
+						TEXT("Create new file"),
+						MB_YESNO,
+						0,
+						longFileName);
 
-				if (res == IDYES)
-				{
-					bool isOK = MainFileManager.createEmptyFile(longFileName);
-					if (isOK)
+					if (res == IDYES)
 					{
-						isCreateFileSuccessful = true;
-					}
-					else
-					{
-						_nativeLangSpeaker.messageBox("CreateNewFileError",
-							_pPublicInterface->getHSelf(),
-							TEXT("Cannot create the file \"$STR_REPLACE$\"."),
-							TEXT("Create new file"),
-							MB_OK,
-							0,
-							longFileName);
+						bool isOK = MainFileManager.createEmptyFile(longFileName);
+						if (isOK)
+						{
+							isCreateFileSuccessful = true;
+						}
+						else
+						{
+							_nativeLangSpeaker.messageBox("CreateNewFileError",
+								_pPublicInterface->getHSelf(),
+								TEXT("Cannot create the file \"$STR_REPLACE$\"."),
+								TEXT("Create new file"),
+								MB_OK,
+								0,
+								longFileName);
+						}
 					}
 				}
 			}

@@ -2138,11 +2138,11 @@ void Notepad_plus::checkDocState()
 			}
 		}
 	}
-
+	
 	bool isCurrentUntitled = curBuf->isUntitled();
 	enableCommand(IDM_FILE_SAVE, isCurrentDirty, MENU | TOOLBAR);
 	enableCommand(IDM_FILE_SAVEALL, isSeveralDirty, MENU | TOOLBAR);
-	enableCommand(IDM_VIEW_GOTO_NEW_INSTANCE, !(isCurrentDirty || isCurrentUntitled), MENU);
+	enableCommand(IDM_VIEW_GOTO_NEW_INSTANCE, !(isCurrentDirty || isCurrentUntitled && (curBuf->docLength()>0||curBuf->isModified())), MENU);
 	enableCommand(IDM_VIEW_LOAD_IN_NEW_INSTANCE, !(isCurrentDirty || isCurrentUntitled), MENU);
 
 	bool isSysReadOnly = curBuf->getFileReadOnly();
@@ -3748,7 +3748,7 @@ void Notepad_plus::docOpenInNewInstance(FileTransferMode mode, int x, int y)
 {
 	BufferID bufferID = _pEditView->getCurrentBufferID();
 	Buffer * buf = MainFileManager.getBufferByID(bufferID);
-	if (buf->isUntitled() || buf->isDirty())
+	if (buf->isUntitled()&&(buf->docLength()>0||buf->isModified()) || buf->isDirty())
 		return;
 
 	TCHAR nppName[MAX_PATH];

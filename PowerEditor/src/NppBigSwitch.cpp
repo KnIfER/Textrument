@@ -2267,7 +2267,7 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 
 		case NPPM_OPENINTERNALEXTERNALPATH: 
 		{
-			bool ctrldown = GetKeyState(VK_CONTROL)&0x80;
+			bool ctrldown = isWindowMessaging==0&&GetKeyState(VK_CONTROL)&0x80;
 
 			TCHAR* expandedStr = (TCHAR *)lParam;
 			if(!expandedStr && wParam && wParam<=10) {
