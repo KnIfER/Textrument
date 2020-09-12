@@ -379,7 +379,7 @@ LRESULT Notepad_plus::init(HWND hwnd)
 	bool isVertical = (nppGUI._splitterPos == POS_VERTICAL);
 
     _subSplitter.init(_pPublicInterface->getHinst(), hwnd);
-    _subSplitter.create(&_mainDocTab, &_subDocTab, 8, SplitterMode::DYNAMIC, 50, 50, isVertical);
+    _subSplitter.create(&_mainDocTab, &_subDocTab, 8, SplitterMode::DYNAMIC, nppGUI._splitter_ratio, nppGUI._splitter_ratioBK, isVertical);
 
     //--Status Bar Section--//
 	bool willBeShown = nppGUI._statusBarShow;

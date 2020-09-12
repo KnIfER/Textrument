@@ -72,7 +72,7 @@ void Splitter::init( HINSTANCE hInst, HWND hPere, int splitterSize, double iSpli
 
 	_splitPercent = iSplitRatio;
 
-	//_backupPercent = iBackupRatio;
+	_backupPercent = iBackupRatio;
 
 	wcex.cbSize			= sizeof(WNDCLASSEX);
 	wcex.style			= CS_HREDRAW | CS_VREDRAW;

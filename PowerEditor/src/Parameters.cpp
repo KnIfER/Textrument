@@ -4485,6 +4485,13 @@ void NppParameters::feedGUIParameters(TiXmlNode *node)
 		}
 		else if (!lstrcmp(nm, TEXT("ScintillaViewsSplitter")))
 		{
+			int i;
+			const TCHAR* val = element->Attribute(TEXT("size"), &i);
+			if (val) _nppGUI._splitter_ratio = i;
+
+			const TCHAR* val2 = element->Attribute(TEXT("silk"), &i);
+			if (val2) _nppGUI._splitter_ratioBK = i;
+
 			TiXmlNode *n = childNode->FirstChild();
 			if (n)
 			{
@@ -5632,6 +5639,12 @@ void NppParameters::createXmlTreeFromGUIParams()
 	{
 		TiXmlElement *GUIConfigElement = (newGUIRoot->InsertEndChild(TiXmlElement(TEXT("GUIConfig"))))->ToElement();
 		GUIConfigElement->SetAttribute(TEXT("name"), TEXT("ScintillaViewsSplitter"));
+		auto & splitter = nppApp->_subSplitter;
+		if(nppApp->_subEditView.isVisible()) {
+			splitter.syncSize();
+			GUIConfigElement->SetAttribute(TEXT("size"), splitter._ratio);
+			GUIConfigElement->SetAttribute(TEXT("silk"), splitter._ratioBK);
+		}
 		const TCHAR *pStr = _nppGUI._splitterPos == POS_VERTICAL ? TEXT("vertical") : TEXT("horizontal");
 		GUIConfigElement->InsertEndChild(TiXmlText(pStr));
 	}

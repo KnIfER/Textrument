@@ -78,11 +78,11 @@ public:
 		return _splitterSize;
 	}
 
+	double _splitPercent = 0.;
+	double _backupPercent = 0.;
 
 private:
 	RECT _rect = {};
-	double _splitPercent = 0.;
-	double _backupPercent = 0.;
 	int _splitterSize = 0;
 	bool _isDraged = false;
 	bool _isLeftButtonDown = false;

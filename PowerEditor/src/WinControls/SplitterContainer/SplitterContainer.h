@@ -77,14 +77,19 @@ public :
 
 
 	void toggleEqualPanel();
+
+	void syncSize();
+
+	int _ratio = 50;
+
+	int _ratioBK = 0;
+
 private :
 	Window* _pWin0 = nullptr; // left or top window
 	Window* _pWin1 = nullptr; // right or bottom window
 
 	Splitter _splitter;
 	int _splitterSize = 0;
-	int _ratio = 0;
-	int _ratioBK = 0;
 	int _x = 0;
 	int _y = 0;
 	HMENU _hPopupMenu = NULL;

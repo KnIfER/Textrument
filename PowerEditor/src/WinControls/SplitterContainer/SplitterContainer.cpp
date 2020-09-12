@@ -183,6 +183,12 @@ void SplitterContainer::toggleEqualPanel()
 	SendMessage(_splitter.getHSelf(), WM_LBUTTONDBLCLK, 0, 0);
 }
 
+void SplitterContainer::syncSize()
+{
+	_ratio = _splitter._splitPercent;
+	_ratioBK = _splitter._backupPercent;
+}
+
 LRESULT SplitterContainer::runProc(UINT message, WPARAM wParam, LPARAM lParam)
 {
 	switch (message)

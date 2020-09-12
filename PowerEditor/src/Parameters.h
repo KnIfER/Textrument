@@ -915,6 +915,9 @@ struct NppGUI final
 
 	bool _dragOpenUseFilter = false;
 	bool _dragOpenRecursive = true;
+
+	int _splitter_ratio = 50;
+	int _splitter_ratioBK = 50;
 };
 
 struct ScintillaViewParams
