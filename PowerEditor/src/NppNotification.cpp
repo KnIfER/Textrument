@@ -271,9 +271,14 @@ BOOL Notepad_plus::notify(SCNotification *notification)
 					{
 						TCHAR goToView[32] = TEXT("Move to Other View");
 						TCHAR cloneToView[32] = TEXT("Clone to Other View");
+						TCHAR goToInst[32] = TEXT("Move to New Instance");
 						vector<MenuItemUnit> itemUnitArray;
 						itemUnitArray.push_back(MenuItemUnit(IDM_VIEW_GOTO_ANOTHER_VIEW, goToView));
 						itemUnitArray.push_back(MenuItemUnit(IDM_VIEW_CLONE_TO_ANOTHER_VIEW, cloneToView));
+						auto buf = _pEditView->getCurrentBuffer();
+						if(!(buf->isDirty()||buf->isUntitled()&&(buf->docLength()>0||buf->isModified()))) {
+							itemUnitArray.push_back(MenuItemUnit(IDM_VIEW_GOTO_NEW_INSTANCE, goToInst));
+						}
 						_tabPopupDropMenu.create(_pPublicInterface->getHSelf(), itemUnitArray, _mainMenuHandle);
 						_nativeLangSpeaker.changeLangTabDrapContextMenu(_tabPopupDropMenu.getMenuHandle());
 					}

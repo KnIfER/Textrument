@@ -449,11 +449,13 @@ void NativeLangSpeaker::changeLangTabDrapContextMenu(HMENU hCM)
 {
 	const int POS_GO2VIEW = 0;
 	const int POS_CLONE2VIEW = 1;
+	const int POS_GO2INST = 2;
 
 	if (_nativeLangA)
 	{
 		const char *goToViewA = nullptr;
 		const char *cloneToViewA = nullptr;
+		const char *goToInst = nullptr;
 
 		TiXmlNodeA *tabBarMenu = _nativeLangA->FirstChild("Menu");
 		if (tabBarMenu)
@@ -472,6 +474,8 @@ void NativeLangSpeaker::changeLangTabDrapContextMenu(HMENU hCM)
 					goToViewA = element->Attribute("name");
 				else if (ordre == 6)
 					cloneToViewA = element->Attribute("name");
+				else if (ordre == 24)
+					goToInst = element->Attribute("name");
 			}
 		}
 
@@ -487,6 +491,12 @@ void NativeLangSpeaker::changeLangTabDrapContextMenu(HMENU hCM)
 			const wchar_t *cloneToViewG = wmc.char2wchar(cloneToViewA, _nativeLangEncoding);
 			int cmdID = ::GetMenuItemID(hCM, POS_CLONE2VIEW);
 			::ModifyMenu(hCM, POS_CLONE2VIEW, MF_BYPOSITION|MF_STRING, cmdID, cloneToViewG);
+		}
+		if (goToInst && goToInst[0])
+		{
+			const wchar_t *goToInstG = wmc.char2wchar(goToInst, _nativeLangEncoding);
+			int cmdID = ::GetMenuItemID(hCM, POS_GO2INST);
+			::ModifyMenu(hCM, POS_GO2INST, MF_BYPOSITION|MF_STRING, cmdID, goToInstG);
 		}
 	}
 }
