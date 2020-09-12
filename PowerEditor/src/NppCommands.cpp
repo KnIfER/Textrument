@@ -1480,7 +1480,7 @@ void Notepad_plus::command(int id)
         }
 		break;
 
-		case NPPM_TOGGLESPLITPANELEQUAL:
+		case IDM_SETTING_TOGGLESPLITPANELEQUAL:
 		{
 			if(_subSplitter.isVisible()) {
 				_subSplitter.toggleEqualPanel();

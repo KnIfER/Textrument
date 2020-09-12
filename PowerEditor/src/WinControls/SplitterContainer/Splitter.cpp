@@ -43,7 +43,9 @@ void Splitter::init( HINSTANCE hInst, HWND hPere, int splitterSize, double iSpli
 		throw std::runtime_error("Splitter::init : Parameter hPere is null");
 
 	if (iSplitRatio < 0)
-		throw std::runtime_error("Splitter::init : Parameter iSplitRatio shoulds be 0 < ratio < 100");
+		iSplitRatio=0;
+	if (iSplitRatio > 100)
+		iSplitRatio=100;
 
 	Window::init(hInst, hPere);
 	_splitterSize = splitterSize;
@@ -60,14 +62,6 @@ void Splitter::init( HINSTANCE hInst, HWND hPere, int splitterSize, double iSpli
 	{
 		//Fixed spliter
 		_isFixed = true;
-	}
-	else
-	{
-		if (iSplitRatio >= 100)
-		{
-			//cant be 100 % or more
-			throw std::runtime_error("Splitter::init : Parameter iSplitRatio shoulds be 0 < ratio < 100");
-		}
 	}
 
 	_splitPercent = iSplitRatio;

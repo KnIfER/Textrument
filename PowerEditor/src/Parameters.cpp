@@ -408,7 +408,7 @@ static const WinMenuKeyDefinition winKeyDefs[] =
 	{ VK_NULL,    IDM_SETTING_STANDARDICON,                     false, false, false, nullptr },
 	{ VK_NULL,    IDM_SETTING_HIDETOOLBAR,                      false, false, false, TEXT("Toggle Hide Toolbar") },
 	
-	{ VK_NULL,    NPPM_TOGGLESPLITPANELEQUAL,                   false, false, false, TEXT("Toggle Split Panel Size") },
+	{ VK_OEM_COMMA,    IDM_SETTING_TOGGLESPLITPANELEQUAL,                   true, false, false, TEXT("Toggle Split Panel Size") },
 };
 
 
