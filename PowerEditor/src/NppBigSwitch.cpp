@@ -430,6 +430,9 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 		case NPPM_SWITCHTOFILE :
 		{
 			BufferID id = MainFileManager.getBufferFromName(reinterpret_cast<const TCHAR *>(lParam));
+			if(_pEditView->getCurrentBuffer()==id) {
+				return true;
+			}
 			if (id != BUFFER_INVALID)
 				return switchToFile(id);
 			return false;
