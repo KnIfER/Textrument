@@ -403,10 +403,12 @@ static const WinMenuKeyDefinition winKeyDefs[] =
 	{ VK_NULL,    IDM_DEBUGINFO,                                false, false, false, nullptr },
 	{ VK_F1,      IDM_ABOUT,                                    false, false, false, nullptr },
 //  { VK_F1,      IDM_HELP,                                     false, false, true,  nullptr }
-	{ VK_NULL,    IDM_SETTING_SMALLICON,                             false, false, false, nullptr },
-	{ VK_NULL,    IDM_SETTING_BIGICON,                             false, false, false, nullptr },
-	{ VK_NULL,    IDM_SETTING_STANDARDICON,                             false, false, false, nullptr },
-	{ VK_NULL,    IDM_SETTING_HIDETOOLBAR,                             false, false, false, TEXT("Toggle Hide Toolbar") },
+	{ VK_NULL,    IDM_SETTING_SMALLICON,                        false, false, false, nullptr },
+	{ VK_NULL,    IDM_SETTING_BIGICON,                          false, false, false, nullptr },
+	{ VK_NULL,    IDM_SETTING_STANDARDICON,                     false, false, false, nullptr },
+	{ VK_NULL,    IDM_SETTING_HIDETOOLBAR,                      false, false, false, TEXT("Toggle Hide Toolbar") },
+	
+	{ VK_NULL,    NPPM_TOGGLESPLITPANELEQUAL,                   false, false, false, TEXT("Toggle Split Panel Size") },
 };
 
 

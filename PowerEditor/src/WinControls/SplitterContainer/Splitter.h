@@ -70,7 +70,7 @@ public:
 	virtual void destroy() override;
 
 	void resizeSpliter(RECT *pRect = NULL);
-	void init(HINSTANCE hInst, HWND hPere, int splitterSize, double iSplitRatio, DWORD dwFlags);
+	void init(HINSTANCE hInst, HWND hPere, int splitterSize, double iSplitRatio, double iBackupRatio, DWORD dwFlags);
 	void rotate();
 
 	int getPhisicalSize() const
@@ -82,6 +82,7 @@ public:
 private:
 	RECT _rect = {};
 	double _splitPercent = 0.;
+	double _backupPercent = 0.;
 	int _splitterSize = 0;
 	bool _isDraged = false;
 	bool _isLeftButtonDown = false;

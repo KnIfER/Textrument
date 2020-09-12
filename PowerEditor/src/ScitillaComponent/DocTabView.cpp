@@ -245,11 +245,11 @@ void DocTabView::reSizeTo(RECT & rc)
 			rc.left	 -= borderXComp;
 			rc.right += borderXComp * 2;
 			auto vInf = nppApp->_dockingManager.getContainerInfo();
-			if(vInf[0]->isVisible()) {
+			if(vInf[0]->isVisible() || nppApp->_subSplitter.isVisible()&&this==&nppApp->_subDocTab) {
 				rc.left	 += borderXComp;
 				rc.right	 -= borderXComp;
 			}
-			if(vInf[1]->isVisible()) {
+			if(vInf[1]->isVisible()|| nppApp->_subSplitter.isVisible()&&this==&nppApp->_mainDocTab) {
 				rc.right	 -= borderXComp;
 			}
 		}

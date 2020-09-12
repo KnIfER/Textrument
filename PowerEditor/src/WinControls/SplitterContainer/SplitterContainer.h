@@ -50,7 +50,7 @@ public :
 	virtual ~SplitterContainer() = default;
 
 	void create(Window *pWin0, Window *pWin1, int splitterSize = 4,
-		SplitterMode mode = SplitterMode::DYNAMIC, int ratio = 50, bool _isVertical = true);
+		SplitterMode mode = SplitterMode::DYNAMIC, int ratio = 50, int ratioBK = 50, bool _isVertical = true);
 
 	void destroy();
 
@@ -76,6 +76,7 @@ public :
 	}
 
 
+	void toggleEqualPanel();
 private :
 	Window* _pWin0 = nullptr; // left or top window
 	Window* _pWin1 = nullptr; // right or bottom window
@@ -83,6 +84,7 @@ private :
 	Splitter _splitter;
 	int _splitterSize = 0;
 	int _ratio = 0;
+	int _ratioBK = 0;
 	int _x = 0;
 	int _y = 0;
 	HMENU _hPopupMenu = NULL;

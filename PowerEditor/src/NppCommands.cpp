@@ -1456,7 +1456,7 @@ void Notepad_plus::command(int id)
                         else
                             pWindow = _pDocTab;
 
-                        _pMainSplitter->create(pWindow, ScintillaEditView::getUserDefineDlg(), 8, SplitterMode::RIGHT_FIX, 45);
+                        _pMainSplitter->create(pWindow, ScintillaEditView::getUserDefineDlg(), 8, SplitterMode::RIGHT_FIX, 45, 45);
                     }
 
 					_pMainWindow = _pMainSplitter;
@@ -1478,6 +1478,14 @@ void Notepad_plus::command(int id)
 			checkMenuItem(IDM_LANG_USER_DLG, !isUDDlgVisible);
 			_toolBar.setCheck(IDM_LANG_USER_DLG, !isUDDlgVisible);
         }
+		break;
+
+		case NPPM_TOGGLESPLITPANELEQUAL:
+		{
+			if(_subSplitter.isVisible()) {
+				_subSplitter.toggleEqualPanel();
+			}
+		}
 		break;
 
 		case IDM_EDIT_SELECTALL:

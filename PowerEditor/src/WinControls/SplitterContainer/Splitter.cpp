@@ -37,7 +37,7 @@ bool Splitter::_isVerticalFixedRegistered = false;
 
 #define SPLITTER_SIZE 8
 
-void Splitter::init( HINSTANCE hInst, HWND hPere, int splitterSize, double iSplitRatio, DWORD dwFlags)
+void Splitter::init( HINSTANCE hInst, HWND hPere, int splitterSize, double iSplitRatio, double iBackupRatio, DWORD dwFlags)
 {
 	if (hPere == NULL)
 		throw std::runtime_error("Splitter::init : Parameter hPere is null");
@@ -71,6 +71,8 @@ void Splitter::init( HINSTANCE hInst, HWND hPere, int splitterSize, double iSpli
 	}
 
 	_splitPercent = iSplitRatio;
+
+	//_backupPercent = iBackupRatio;
 
 	wcex.cbSize			= sizeof(WNDCLASSEX);
 	wcex.style			= CS_HREDRAW | CS_VREDRAW;
@@ -327,10 +329,10 @@ LRESULT CALLBACK Splitter::spliterWndProc(UINT uMsg, WPARAM wParam, LPARAM lPara
 				}
 				else
 				{
-					if (pt.x <= 1)
+					if (pt.x <= 0)
 					{
-						_rect.left = 1;
-						_splitPercent = 1;
+						_rect.left = -_splitterSize/2;
+						_splitPercent = 0;
 					}
 					else
 					{
@@ -342,7 +344,7 @@ LRESULT CALLBACK Splitter::spliterWndProc(UINT uMsg, WPARAM wParam, LPARAM lPara
 						else
 						{
 							_rect.left = rt.right - 5;
-							_splitPercent = 99;
+							_splitPercent = 100;
 						}
 					}
 				}
@@ -359,16 +361,23 @@ LRESULT CALLBACK Splitter::spliterWndProc(UINT uMsg, WPARAM wParam, LPARAM lPara
 			RECT r;
 			::GetClientRect(_hParent, &r);
 
+			if(_splitPercent==50) {
+				_splitPercent=_backupPercent;
+			} else {
+				_backupPercent=_splitPercent;
+				_splitPercent=50;
+			}
+
+			double ratio = _splitPercent/100;
+
 			if (_dwFlags & SV_HORIZONTAL) 
 			{
-				_rect.top = (r.bottom - _splitterSize) / 2;
+				_rect.top = (r.bottom - _splitterSize) * ratio;
 			}
 			else
 			{
-				_rect.left = (r.right - _splitterSize) / 2;
+				_rect.left = (r.right - 0) * ratio - _splitterSize/2;
 			}
-
-			_splitPercent = 50;
 			
 			::SendMessage(_hParent, WM_RESIZE_CONTAINER, _rect.left, _rect.top);
 			::MoveWindow(_hSelf, _rect.left, _rect.top, _rect.right, _rect.bottom, FALSE);
@@ -605,7 +614,7 @@ void Splitter::rotate()
 			_dwFlags |= SV_HORIZONTAL;
 		}
 
-		init(_hInst, _hParent, _splitterSize, _splitPercent, _dwFlags);
+		init(_hInst, _hParent, _splitterSize, _splitPercent, _backupPercent, _dwFlags);
 	}
 }
 

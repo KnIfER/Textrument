@@ -37,7 +37,7 @@ bool SplitterContainer::_isRegistered = false;
 extern bool bNewTabFarRight;
 
 
-void SplitterContainer::create(Window *pWin0, Window *pWin1, int splitterSize, SplitterMode mode, int ratio, bool isVertical)
+void SplitterContainer::create(Window *pWin0, Window *pWin1, int splitterSize, SplitterMode mode, int ratio, int ratioBK, bool isVertical)
 {
 	//Window::init(hInst, parent);
 	_pWin0 = pWin0;
@@ -45,6 +45,7 @@ void SplitterContainer::create(Window *pWin0, Window *pWin1, int splitterSize, S
 	_splitterSize = splitterSize;
 	_splitterMode = mode;
 	_ratio = ratio;
+	_ratioBK = ratioBK;
 	_dwSplitterStyle |= isVertical?SV_VERTICAL:SV_HORIZONTAL;
 
 	if (_splitterMode != SplitterMode::DYNAMIC)
@@ -177,13 +178,18 @@ LRESULT CALLBACK SplitterContainer::staticWinProc(HWND hwnd, UINT message, WPARA
 }
 
 
+void SplitterContainer::toggleEqualPanel()
+{
+	SendMessage(_splitter.getHSelf(), WM_LBUTTONDBLCLK, 0, 0);
+}
+
 LRESULT SplitterContainer::runProc(UINT message, WPARAM wParam, LPARAM lParam)
 {
 	switch (message)
 	{
 		case WM_CREATE:
 		{
-			_splitter.init(_hInst, _hSelf, _splitterSize, _ratio, _dwSplitterStyle);
+			_splitter.init(_hInst, _hSelf, _splitterSize, _ratio, _ratioBK, _dwSplitterStyle);
 			return TRUE;
 		}
 
@@ -217,7 +223,7 @@ LRESULT SplitterContainer::runProc(UINT message, WPARAM wParam, LPARAM lParam)
 
 			if (_dwSplitterStyle & SV_VERTICAL)
 			{
-				if (wParam != 0)
+				//if (wParam != 0)
 				{
 					rc0.right = int(wParam);
 
@@ -227,7 +233,7 @@ LRESULT SplitterContainer::runProc(UINT message, WPARAM wParam, LPARAM lParam)
 			}
 			else //SV_HORIZONTAL
 			{
-				if (lParam != 0)
+				//if (lParam != 0)
 				{
 					rc0.bottom = int(lParam);
 
