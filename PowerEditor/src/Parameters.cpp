@@ -3837,10 +3837,12 @@ generic_string NppParameters::getLocPathFromStr(const generic_string & localizat
 		return TEXT("bulgarian.xml");
 	if (localizationCode == TEXT("ca"))
 		return TEXT("catalan.xml");
-	if (localizationCode == TEXT("zh-tw") || localizationCode == TEXT("zh-hk") || localizationCode == TEXT("zh-sg"))
-		return TEXT("taiwaneseMandarin.xml");
+	if (localizationCode == TEXT("zh-hk"))
+		return TEXT("chineseTraditional.xml");
 	if (localizationCode == TEXT("zh") || localizationCode == TEXT("zh-cn"))
 		return TEXT("chineseSimplified.xml");
+	if (localizationCode == TEXT("zh-tw") || localizationCode == TEXT("zh-sg"))
+		return TEXT("taiwanese.xml");
 	if (localizationCode == TEXT("co") || localizationCode == TEXT("co-fr"))
 		return TEXT("corsican.xml");
 	if (localizationCode == TEXT("hr"))
@@ -3977,6 +3979,18 @@ generic_string NppParameters::getLocPathFromStr(const generic_string & localizat
 		return TEXT("zulu.xml");
 	if (localizationCode == TEXT("ne") || localizationCode == TEXT("nep"))
 		return TEXT("nepali.xml");
+	if (localizationCode == TEXT("oc-aranes"))
+		return TEXT("aranese.xml");
+	if (localizationCode == TEXT("exy"))
+		return TEXT("extremaduran.xml");
+	if (localizationCode == TEXT("keb"))
+		return TEXT("kabyle.xml");
+	if (localizationCode == TEXT("lij"))
+		return TEXT("ligurian.xml");
+	if (localizationCode == TEXT("ga"))
+		return TEXT("irish.xml");
+	if (localizationCode == TEXT("sgs"))
+		return TEXT("samogitian.xml");
 
 	return generic_string();
 }
