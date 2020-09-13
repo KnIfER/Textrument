@@ -7,14 +7,15 @@ import org.jdom.input.SAXBuilder;
 import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
 import org.junit.Test;
+import org.xml.sax.InputSource;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.StringWriter;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 public class TextrumentLocalePatchs {
@@ -328,14 +329,20 @@ public class TextrumentLocalePatchs {
 		new File(sourceFolder, "taiwaneseMandarin.xml").renameTo(new File(sourceFolder, "taiwanese.xml"));
 
 		
+		
     }
-
+    
+	@Test
+	public void TestJDOM() throws Exception {
+		processXmlFileById(shortName_id_table.get(LANG.ChineseSimplified.code), false);
+	}
 
     static class Action {
     	/** 0=delete; 1=modify; 2=insert */
     	int type;
     	String[] XMLPath;
     	String[] values;// = new String[filters.length];
+		String tagName;
 		String idField="id";
 		String id=null;
 		String fieldName=null;
@@ -355,10 +362,13 @@ public class TextrumentLocalePatchs {
 			}
 		}
 	}
-
+	
+	public interface ActionApplier {
+		void pushActions();
+	}
+	
 	static ArrayList<Action> actions = new ArrayList<>(128);
-
-
+    
 	static void pushActionByPathIDForNameField(String jsonTrans, int type, int id, String...XMLPath) {
 		Action action = new Action(jsonTrans, type, XMLPath);
 		action.id = Integer.toString(id);
@@ -366,23 +376,13 @@ public class TextrumentLocalePatchs {
 		actions.add(action);
 	}
 
-	static void pushActionByPathFieldedIDForNameField(String jsonTrans, int type, String idField, int id, String...XMLPath) {
+	static Action pushActionByPathFieldedIDForNameField(String jsonTrans, int type, String idField, int id, String...XMLPath) {
 		Action action = new Action(jsonTrans, type, XMLPath);
 		action.idField = idField;
 		action.id = Integer.toString(id);
 		action.fieldName = "name";
 		actions.add(action);
-	}
-
-	
-	@Test
-	public void TestJDOM() throws Exception {
-		new Patch_V1().pushActions();
-		processXmlFileById(shortName_id_table.get(LANG.ChineseSimplified.code), false);
-	}
-	
-	public interface ActionApplier {
-		void pushActions();
+		return action;
 	}
 
 	/** Process one xml file by id. */
@@ -390,11 +390,34 @@ public class TextrumentLocalePatchs {
 		
 		String xmlFileName = filters[id];
 
-		File testFile = new File(sourceFolder, xmlFileName);
+		File file = new File(sourceFolder, xmlFileName);
 
-		String localPath = new File("").getAbsolutePath();
-		SAXBuilder builder = new SAXBuilder();
-		org.jdom.Document document = builder.build(testFile);
+		byte[] data = new byte[(int) file.length()];
+		FileInputStream fin = new FileInputStream(file);
+		fin.read(data);
+		fin.close();
+		String xmlText = new String(data, StandardCharsets.UTF_8);
+
+		Pattern p = Pattern.compile("(\\r\\n)+\\S(?<!<)");
+		Matcher m = p.matcher(xmlText);
+		StringBuffer sb = new StringBuffer(xmlText.length());
+		while(m.find()) {
+			m.appendReplacement(sb, m.group(0).replace("\r\n", "|LFCR|"));
+		}
+		m.appendTail(sb);
+		xmlText = sb.toString();
+		
+		xmlText = xmlText.replace("\r\n\r\n", "<LFCR/>");
+
+
+		//if(1==1) {
+		//	Log(xmlText);
+		//	return;
+		//}
+		
+		//xmlText = xmlText.replaceAll(, "|LFCR|$1");
+		
+		org.jdom.Document document = new SAXBuilder().build(new StringReader(xmlText));
 
 		for (int i = 0; i < actions.size(); i++) {
 			Action aI = actions.get(i);
@@ -404,7 +427,8 @@ public class TextrumentLocalePatchs {
 					Element toDelp = (Element) _toDel.getParent();
 					toDelp.removeChild(_toDel.getName());
 				}
-			} else if(aI.type==1) {
+			} 
+			else if(aI.type==1) {
 				String value = aI.values[id];
 				if(value!=null) {
 					Element _toMod = getElementByPath(document.getRootElement(), aI.XMLPath);
@@ -428,14 +452,34 @@ public class TextrumentLocalePatchs {
 						}
 					}
 				}
+			} 
+			else if(aI.type==2) {
+				String value = aI.values[id];
+				if(value!=null && aI.tagName!=null) {
+					Element _toInsp = getElementByPath(document.getRootElement(), aI.XMLPath);
+					if(_toInsp!=null) {
+						Element ele = new Element(aI.tagName);
+						if(aI.id!=null) {
+							ele.setAttribute(aI.idField, aI.id);
+						}
+						if(aI.fieldName!=null) {
+							ele.setAttribute(aI.fieldName, value);
+						} else {
+							ele.setText(value);
+						}
+						
+						_toInsp.addContent(ele);
+					}
+				}
 			}
 
 		}
 
 		XMLOutputter xmlOutput = new XMLOutputter();
 		Format f = Format.getRawFormat();
-		//f.setIndent("  "); // 文本缩进
-		//f.setTextMode(Format.TextMode.TRIM_FULL_WHITE);
+		f.setIndent("    "); // 文本缩进
+		f.setLineSeparator("\r\n");
+		f.setTextMode(Format.TextMode.PRESERVE);
 		xmlOutput.setFormat(f);
 		//xmlOutput.output(document, new FileOutputStream(testFile));
 		StringWriter sw = new StringWriter();
@@ -445,10 +489,15 @@ public class TextrumentLocalePatchs {
 
 		text = text.replace(" />", "/>");
 
+		text = text.replaceAll("\\s+\\r\\n", "\r\n");
+		
+		text = text.replace("|LFCR|", "\r\n");
+		text = text.replaceAll(".*<LFCR/>\r\n", "\r\n");
+		
 		if(test) {
 			Log(text);
 		} else {
-			FileOutputStream fo = new FileOutputStream(testFile);
+			FileOutputStream fo = new FileOutputStream(file);
 			fo.write(text.getBytes(StandardCharsets.UTF_8));
 			fo.flush();
 			fo.close();
@@ -569,8 +618,8 @@ public class TextrumentLocalePatchs {
 		English("en", "English", "English"),
 		Yoruba("yo", "Yorùbá", "Yoruba"),
 		Vietnamese("vi", "Tiếng Việt", "Vietnamese"),
-		ChineseTraditional("zh-TW", "正體中文", "Chinese Traditional"),
-		ChineseSimplified("zh-CN", "简体中文", "Chinese Simplified");
+		ChineseTraditional("zh_TW", "正體中文", "Chinese Traditional"),
+		ChineseSimplified("zh_CN", "简体中文", "Chinese Simplified");
 
 		private String code;
 		private String name;
@@ -615,6 +664,10 @@ public class TextrumentLocalePatchs {
 	
 	private static void Log(String name) {
 		System.out.println(name);
+	}
+	
+	static {
+		new Patch_V1().pushActions();
 	}
 }
 
