@@ -421,55 +421,62 @@ public class TextrumentLocalePatchs {
 
 		for (int i = 0; i < actions.size(); i++) {
 			Action aI = actions.get(i);
-			if(aI.type==0) {
-				Element _toDel = getElementByPath(document.getRootElement(), aI.XMLPath);
-				if(_toDel!=null) {
-					Element toDelp = (Element) _toDel.getParent();
-					toDelp.removeChild(_toDel.getName());
-				}
-			} 
-			else if(aI.type==1) {
-				String value = aI.values[id];
-				if(value!=null) {
-					Element _toMod = getElementByPath(document.getRootElement(), aI.XMLPath);
-					if(_toMod!=null) {
-						if(aI.id!=null) {
-							List<Element> childs = _toMod.getChildren();
-							_toMod = null;
-							for(Element cI:childs) {
-								if(aI.id.equals(cI.getAttributeValue(aI.idField))) {
-									_toMod = cI;
-									break;
+			switch (aI.type) {
+				case DELETE: {
+					Element _toDel = getElementByPath(document.getRootElement(), aI.XMLPath);
+					if (_toDel != null) {
+						Element toDelp = (Element) _toDel.getParent();
+						toDelp.removeChild(_toDel.getName());
+					}
+				} break;
+				case MODIFY: {
+					String value = aI.values[id];
+					if (value != null) {
+						Element _toMod = getElementByPath(document.getRootElement(), aI.XMLPath);
+						if (_toMod != null) {
+							if (aI.id != null) {
+								List<Element> childs = _toMod.getChildren();
+								_toMod = null;
+								for (Element cI : childs) {
+									if (aI.id.equals(cI.getAttributeValue(aI.idField))) {
+										_toMod = cI;
+										break;
+									}
 								}
 							}
 						}
-					}
-					if(_toMod!=null) {
-						if(aI.fieldName!=null) {
-							_toMod.setAttribute(aI.fieldName, value);
-						} else {
-							_toMod.setText(value);
+						if (_toMod != null) {
+							if (aI.fieldName != null) {
+								_toMod.setAttribute(aI.fieldName, value);
+							} else {
+								_toMod.setText(value);
+							}
 						}
 					}
+					break;
 				}
-			} 
-			else if(aI.type==2) {
-				String value = aI.values[id];
-				if(value!=null && aI.tagName!=null) {
-					Element _toInsp = getElementByPath(document.getRootElement(), aI.XMLPath);
-					if(_toInsp!=null) {
-						Element ele = new Element(aI.tagName);
-						if(aI.id!=null) {
-							ele.setAttribute(aI.idField, aI.id);
+				case INSERT: {
+					String value = aI.values[id];
+					if (value != null && aI.tagName != null) {
+						Element _toInsp = getElementByPath(document.getRootElement(), aI.XMLPath);
+						if (_toInsp != null) {
+							Element ele = new Element(aI.tagName);
+							if (aI.id != null) {
+								if(hasChildElementWithId(_toInsp.getChildren(), aI.idField, aI.id)) {
+									continue;
+								}
+								ele.setAttribute(aI.idField, aI.id);
+							}
+							if (aI.fieldName != null) {
+								ele.setAttribute(aI.fieldName, value);
+							} else {
+								ele.setText(value);
+							}
+
+							_toInsp.addContent(ele);
 						}
-						if(aI.fieldName!=null) {
-							ele.setAttribute(aI.fieldName, value);
-						} else {
-							ele.setText(value);
-						}
-						
-						_toInsp.addContent(ele);
 					}
+					break;
 				}
 			}
 
@@ -503,7 +510,16 @@ public class TextrumentLocalePatchs {
 			fo.close();
 		}
 	}
-	
+
+	private boolean hasChildElementWithId(List<Element> children, String idField, String id) {
+		for (Element child : children) {
+			if (id.equals(child.getAttributeValue(idField))) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 	private Element getElementByPath(Element rootElement, String...names) {
 		for(String nI:names) {
 			rootElement = rootElement.getChild(nI);

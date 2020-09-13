@@ -78,7 +78,7 @@ MenuPosition menuPos[] = {
 	{ 3,  9, -1, "view-tab" },
 	{ 3, 18, -1, "view-collapseLevel" },
 	{ 3, 19, -1, "view-uncollapseLevel" },
-	{ 3, 23, -1, "view-project" },
+	{ 3, 24, -1, "view-project" },
 
 	{ 4,  5, -1, "encoding-characterSets" },
 	{ 4,  5,  0, "encoding-arabic" },
