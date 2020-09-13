@@ -1815,7 +1815,9 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 				if (_pTrayIco)
 					_pTrayIco->doTrayIcon(REMOVE);
 
-				const NppGUI & nppgui = nppParam.getNppGUI();
+				NppGUI & nppgui = *(NppGUI*)&nppParam.getNppGUI();
+
+				nppgui._splitter_isVisible = _subSplitter.isVisible();
 
 				bool isSnapshotMode = nppgui.isSnapshotMode();
 

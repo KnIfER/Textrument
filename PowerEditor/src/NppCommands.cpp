@@ -2739,20 +2739,18 @@ void Notepad_plus::command(int id)
 		case IDM_SETTING_STANDARDICON :
         {
 			bool ctrldown = isWindowMessaging==0&&GetKeyState(VK_CONTROL)&0x80;
-			if(ctrldown) {
-				_rebarTop.setIDVisible(REBAR_BAR_TOOLBAR, false);
-				_preference.invalidateRadioBtns(true);
-			} else {
+			if(!ctrldown) {
 				_rebarTop.setIDVisible(REBAR_BAR_TOOLBAR, true);
 				switchToIconMode((toolBarStatusType)(id-IDM_SETTING_SMALLICON));
+				break;
 			}
-            break;
         }
 
 		case IDM_SETTING_HIDETOOLBAR:
 		{
 			boolean toolbarShow = _rebarTop.getIDVisible(REBAR_BAR_TOOLBAR);
 			_rebarTop.setIDVisible(REBAR_BAR_TOOLBAR, !toolbarShow);
+			_preference.invalidateRadioBtns(true);
 			break;
 		}
 

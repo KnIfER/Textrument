@@ -5640,7 +5640,7 @@ void NppParameters::createXmlTreeFromGUIParams()
 		TiXmlElement *GUIConfigElement = (newGUIRoot->InsertEndChild(TiXmlElement(TEXT("GUIConfig"))))->ToElement();
 		GUIConfigElement->SetAttribute(TEXT("name"), TEXT("ScintillaViewsSplitter"));
 		auto & splitter = nppApp->_subSplitter;
-		if(nppApp->_subEditView.isVisible()) {
+		if(_nppGUI._splitter_isVisible) {
 			splitter.syncSize();
 			GUIConfigElement->SetAttribute(TEXT("size"), splitter._ratio);
 			GUIConfigElement->SetAttribute(TEXT("silk"), splitter._ratioBK);

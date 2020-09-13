@@ -440,7 +440,7 @@ void PreferenceDlg::invalidateRadioBtns(bool forPrefDLg)
 			::SendDlgItemMessage(_barsDlg.getHSelf(), (tbStatus+2)%3+IDC_RADIO_SMALLICON, BM_SETCHECK, BST_UNCHECKED, 0);
 		}
 		bool showTool = nppApp->_rebarTop.getIDVisible(REBAR_BAR_TOOLBAR);
-		::SendDlgItemMessage(_hSelf, IDC_CHECK_HIDE, BM_SETCHECK, showTool?BST_CHECKED:BST_UNCHECKED, 0);
+		::SendDlgItemMessage(_barsDlg.getHSelf(), IDC_CHECK_HIDE, BM_SETCHECK, showTool?BST_UNCHECKED:BST_CHECKED, 0);
 	}
 }
 

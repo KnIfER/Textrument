@@ -918,6 +918,7 @@ struct NppGUI final
 
 	int _splitter_ratio = 50;
 	int _splitter_ratioBK = 50;
+	bool _splitter_isVisible;
 };
 
 struct ScintillaViewParams
