@@ -1149,13 +1149,16 @@ CommandShortcut::CommandShortcut(const Shortcut& sc, long id) :	Shortcut(sc), _i
 		if(1) {
 			//_category_path|=(4l<<13);
 		}
+		if(_id>=IDM_FILE_OPEN_FOLDER&&_id<=IDM_FILE_OPEN_CMD) {
+			_category_path|=(3l<<13);
+		}
 	} else if ( _id < IDM_SEARCH) {
 		_category = TEXT("Edit");
 		_category_path=2;
-	} else if (_id >= IDM_EDIT_AUTOCOMPLETE && _id <= IDM_EDIT_AUTOCOMPLETE_PATH) {
+	} else if (id >= IDM_EDIT_AUTOCOMPLETE && id <= IDM_EDIT_AUTOCOMPLETE_PATH) {
 		_category = TEXT("Edit");
 		_category_path=2;
-	} else if ( _id < IDM_VIEW) {
+	} else if ( id < IDM_VIEW) {
 		_category = TEXT("Search");
 		_category_path=3;
 		if(id>=IDM_SEARCH_MARKALLEXT1 && id<=IDM_SEARCH_UNMARKALLEXT5) { //MARK UNMARK
@@ -1173,7 +1176,7 @@ CommandShortcut::CommandShortcut(const Shortcut& sc, long id) :	Shortcut(sc), _i
 		} else if(id>IDM_VIEW_UNFOLD && id<IDM_VIEW_UNFOLD+9) { // Uncollapse
 			_category_path|=(20l<<13);
 		} else if(id>=IDM_VIEW_PROJECT_PANEL_1 && id<=IDM_VIEW_PROJECT_PANEL_3) { //Project Panel
-			if(id!=IDM_VIEW_MONITORING) _category_path|=(24l<<13);
+			if(id!=IDM_VIEW_MONITORING) _category_path|=(25l<<13);
 		} else if(id>=IDM_VIEW_TAB1 && id<=IDM_VIEW_TAB_MOVEBACKWARD) { //TAB
 			if(id!=IDM_VIEW_MONITORING) _category_path|=(10l<<13);
 		} else if(id>=IDM_VIEW_IN_FIREFOX && id<=IDM_VIEW_IN_IE) { //Browser
@@ -1185,6 +1188,10 @@ CommandShortcut::CommandShortcut(const Shortcut& sc, long id) :	Shortcut(sc), _i
 	} else if ( _id < IDM_LANG) {
 		_category = TEXT("Format");
 		_category_path=5;
+		if(_id>=IDM_FORMAT_TODOS&&id<=IDM_FORMAT_TOMAC) {
+			_category_path=2;
+			_category_path|=(17l<<13);
+		}
 	} else if ( _id < IDM_ABOUT) {
 		_category = TEXT("Lang");
 		_category_path=6;
