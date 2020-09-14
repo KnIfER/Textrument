@@ -1607,7 +1607,9 @@ bool Notepad_plus::fileSaveAll()
 	return true;
 }
 
-bool Notepad_plus::fileSaveAs(BufferID id, bool isSaveCopy)
+TCHAR* LastSavedPath;
+
+bool Notepad_plus::fileSaveAs(BufferID id, bool isSaveCopy, bool forbidSaveAsOpenedCheck)
 {
 	BufferID bufferID = id;
 	if (id == BUFFER_INVALID)
@@ -1618,7 +1620,7 @@ bool Notepad_plus::fileSaveAs(BufferID id, bool isSaveCopy)
 
     fDlg.setExtFilter(TEXT("All types"), TEXT(".*"), NULL);
 	int langTypeIndex = setFileOpenSaveDlgFilters(fDlg, false, buf->getLangType());
-	fDlg.setDefFileName(buf->getFileName());
+	fDlg.setDefFileName(forbidSaveAsOpenedCheck&&LastSavedPath?LastSavedPath:buf->getFileName());
 
     fDlg.setExtIndex(langTypeIndex + 1); // +1 for "All types"
 
@@ -1629,16 +1631,26 @@ bool Notepad_plus::fileSaveAs(BufferID id, bool isSaveCopy)
 
 	TCHAR *pfn = fDlg.doSaveDlg();
 
+	if(forbidSaveAsOpenedCheck) {
+		if(!LastSavedPath) {
+			LastSavedPath = new TCHAR[MAX_FILE_PATH];
+		}
+		lstrcpy(LastSavedPath, pfn);
+	}
+
 	// Enable file autodetection again.
 	(const_cast<NppGUI &>(nppParam.getNppGUI()))._fileAutoDetection = cdBefore;
 
 	if (pfn)
 	{
-		BufferID other = _pDocTab->findBufferByName(pfn);
-		if (other == BUFFER_INVALID)
-			other = _pNonDocTab->findBufferByName(pfn);
+		BufferID other = BUFFER_INVALID;
+		if(!forbidSaveAsOpenedCheck) {
+			other = _pDocTab->findBufferByName(pfn);
+			if (other == BUFFER_INVALID)
+				other = _pNonDocTab->findBufferByName(pfn);
+		}
 
-		if (other == BUFFER_INVALID)	//can save, as both (same and other) view don't contain buffer
+		if (forbidSaveAsOpenedCheck || other == BUFFER_INVALID)	//can save, as both (same and other) view don't contain buffer
 		{
 			bool res = doSave(bufferID, pfn, isSaveCopy);
 			//buf->setNeedsLexing(true);	//commented to fix wrapping being removed after save as (due to SCI_CLEARSTYLE or something, seems to be Scintilla bug)

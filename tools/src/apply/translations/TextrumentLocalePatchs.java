@@ -761,9 +761,9 @@ public class TextrumentLocalePatchs {
 	
 	@Test
 	public void simpleExtractorTest() throws Exception {
-		extractItem("id", "6103", "name", "Native-Langue", "Dialog", "Preference", "Global");
-		extractItem("id", "6104", "name", "Native-Langue", "Dialog", "Preference", "Global");
-		extractItem("id", "6105", "name", "Native-Langue", "Dialog", "Preference", "Global");
+		extractItem("id", "6103", "name", "Native-Langue", "Dialog", "Preference", "Global"); // 小图标
+		extractItem("id", "6104", "name", "Native-Langue", "Dialog", "Preference", "Global"); // 大图标
+		extractItem("id", "6105", "name", "Native-Langue", "Dialog", "Preference", "Global"); // 标准图标
 		
 		Log(buf.toString());
 	}

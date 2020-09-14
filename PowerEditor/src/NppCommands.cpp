@@ -311,9 +311,14 @@ void Notepad_plus::command(int id)
 			fileSaveAll();
 			break;
 
-		case IDM_FILE_SAVEAS :
-			fileSaveAs();
-			break;
+		case IDM_FILE_SAVEAS :{
+			bool ctrldown = isWindowMessaging==0&&GetKeyState(VK_CONTROL)&0x80;
+			if(ctrldown) {
+				fileSaveAs(BUFFER_INVALID, true, true);
+			} else {
+				fileSaveAs();
+			}
+		} break;
 
 		case IDM_FILE_SAVECOPYAS :
 			fileSaveAs(BUFFER_INVALID, true);
