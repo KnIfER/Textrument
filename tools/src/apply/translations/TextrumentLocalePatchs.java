@@ -223,7 +223,7 @@ public class TextrumentLocalePatchs {
 	static {
 		for (int i = 0; i < shortNames.length; i++) {
 			if(shortNames[i]!=null) {
-				shortName_id_table.put(shortNames[i].toString(), i);
+				shortName_id_table.put(shortNames[i].code, i);
 			}
 		}
 	}
@@ -359,12 +359,13 @@ public class TextrumentLocalePatchs {
 				JSONObject jsonObj = JSONObject.parseObject(values);
 				String[] keyArr = jsonObj.keySet().toArray(ArrayUtils.EMPTY_STRING_ARRAY);
 				this.values = new String[filters.length];
-				for(String kI:keyArr) {
+				for(String kI:keyArr) {// 分发
 					Integer id = shortName_id_table.get(kI.trim());
 					if(id!=null) {
 						this.values[id] = jsonObj.getString(kI);
 					}
 				}
+				this.values[shortName_id_table.get(LANG.English1.code)]=this.values[shortName_id_table.get(LANG.English.code)];
 			}
 		}
 	}
@@ -398,10 +399,10 @@ public class TextrumentLocalePatchs {
 
 	/** Process one xml file by id. */
 	public static void processXmlFileByEnum(LANG Enum, boolean test) throws Exception {
-		if(shortName_id_table.get(Enum.toString())==null) {
+		if(shortName_id_table.get(Enum.code)==null) {
 			return;
 		}
-		int id = shortName_id_table.get(Enum.toString());
+		int id = shortName_id_table.get(Enum.code);
 		
 		String xmlFileName = filters[id];
 
