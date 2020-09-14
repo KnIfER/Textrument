@@ -3,11 +3,11 @@ package apply.translations;
 import com.alibaba.fastjson.JSONObject;
 import org.apache.commons.lang.ArrayUtils;
 import org.jdom.Element;
+import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
 import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
 import org.junit.Test;
-import org.xml.sax.InputSource;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -22,6 +22,7 @@ public class TextrumentLocalePatchs {
 	static final int DELETE = 0;
 	static final int MODIFY = 1;
 	static final int INSERT = 2;
+	static final int EXTRACT = 3;
 	/** 这是我们感兴趣的子资料文件夹*/
 	static String[] filters = new String[]{
 			"afrikaans.xml"
@@ -334,7 +335,7 @@ public class TextrumentLocalePatchs {
     
 	@Test
 	public void TestJDOM() throws Exception {
-		processXmlFileById(shortName_id_table.get(LANG.ChineseSimplified.code), false);
+		processXmlFileByEnum(LANG.ChineseSimplified, false);
 	}
 
     static class Action {
@@ -376,21 +377,30 @@ public class TextrumentLocalePatchs {
 		actions.add(action);
 	}
 
-	static Action pushActionByPathFieldedIDForNameField(String jsonTrans, int type, String idField, int id, String...XMLPath) {
+	static Action pushActionByPathFieldedIDForNameField(String jsonTrans, int type, String idField, Object id, String...XMLPath) {
 		Action action = new Action(jsonTrans, type, XMLPath);
 		action.idField = idField;
-		action.id = Integer.toString(id);
+		action.id = ""+id;
 		action.fieldName = "name";
 		actions.add(action);
 		return action;
 	}
+	
 
 	/** Process one xml file by id. */
-	public void processXmlFileById(int id, boolean test) throws Exception {
+	public static void processXmlFileByEnum(LANG Enum, boolean test) throws Exception {
+		if(shortName_id_table.get(Enum.code)==null) {
+			return;
+		}
+		int id = shortName_id_table.get(Enum.code);
 		
 		String xmlFileName = filters[id];
 
 		File file = new File(sourceFolder, xmlFileName);
+		
+		if(!file.exists()) {
+			return;
+		}
 
 		byte[] data = new byte[(int) file.length()];
 		FileInputStream fin = new FileInputStream(file);
@@ -407,17 +417,27 @@ public class TextrumentLocalePatchs {
 		m.appendTail(sb);
 		xmlText = sb.toString();
 		
+		int stid = xmlText.indexOf("<NotepadPlus>");
+		int edid = xmlText.indexOf("</NotepadPlus>")+"</NotepadPlus>".length();
+		String xmlStart = xmlText.substring(0, stid);
+		String xmlEnd = xmlText.substring(edid);
+		xmlText = xmlText.substring(stid, edid);
+		
 		xmlText = xmlText.replace("\r\n\r\n", "<LFCR/>");
 
+		xmlText = xmlStart+xmlText;
+		
+		org.jdom.Document document = null;
 
-		//if(1==1) {
-		//	Log(xmlText);
-		//	return;
-		//}
-		
-		//xmlText = xmlText.replaceAll(, "|LFCR|$1");
-		
-		org.jdom.Document document = new SAXBuilder().build(new StringReader(xmlText));
+		try {
+			document = new SAXBuilder().build(new StringReader(xmlText));
+		} catch (Exception e) {
+			Log(file.getPath());
+			Log(xmlText);
+			e.printStackTrace();
+			System.exit(0);
+			return;
+		}
 
 		for (int i = 0; i < actions.size(); i++) {
 			Action aI = actions.get(i);
@@ -478,6 +498,29 @@ public class TextrumentLocalePatchs {
 					}
 					break;
 				}
+				case EXTRACT: {
+					Element _toExt = getElementByPath(document.getRootElement(), aI.XMLPath);
+					String value=null;
+					if (_toExt != null) {
+						if (aI.id != null) {
+							_toExt = getChildElementWithId(_toExt.getChildren(), aI.idField, aI.id);
+						}
+					}
+					if(_toExt!=null) {
+						if(aI.fieldName!=null) {
+							value = _toExt.getAttributeValue(aI.fieldName);
+						} else {
+							value = _toExt.getValue();
+						}
+					}
+					if(value!=null) {
+						buf.append(Enum.code);
+						buf.append(":'");
+						buf.append(value);
+						buf.append("', ");
+					}
+					break;
+				}
 			}
 
 		}
@@ -502,16 +545,17 @@ public class TextrumentLocalePatchs {
 		text = text.replaceAll(".*<LFCR/>\r\n", "\r\n");
 		
 		if(test) {
-			Log(text);
+			if(actions.get(0).type!=EXTRACT)Log(text);
 		} else {
 			FileOutputStream fo = new FileOutputStream(file);
 			fo.write(text.getBytes(StandardCharsets.UTF_8));
+			fo.write(xmlEnd.getBytes(StandardCharsets.UTF_8));
 			fo.flush();
 			fo.close();
 		}
 	}
 
-	private boolean hasChildElementWithId(List<Element> children, String idField, String id) {
+	private static boolean hasChildElementWithId(List<Element> children, String idField, String id) {
 		for (Element child : children) {
 			if (id.equals(child.getAttributeValue(idField))) {
 				return true;
@@ -519,8 +563,17 @@ public class TextrumentLocalePatchs {
 		}
 		return false;
 	}
+	
+	private static Element getChildElementWithId(List<Element> children, String idField, String id) {
+		for (Element child : children) {
+			if (id.equals(child.getAttributeValue(idField))) {
+				return child;
+			}
+		}
+		return null;
+	}
 
-	private Element getElementByPath(Element rootElement, String...names) {
+	private static Element getElementByPath(Element rootElement, String...names) {
 		for(String nI:names) {
 			rootElement = rootElement.getChild(nI);
 			if(rootElement==null) {
@@ -684,6 +737,35 @@ public class TextrumentLocalePatchs {
 	
 	static {
 		new Patch_V1().pushActions();
+	}
+	
+	static StringBuilder buf = new StringBuilder();
+
+	private static void pushExtractAction(String idF, String id, String nmF, String...XMLPath) {
+		Action actionExt=new Action(null, EXTRACT, XMLPath);
+		actionExt.idField=idF;
+		actionExt.id=id;
+		actionExt.fieldName=nmF;
+		actions.add(actionExt);
+	}
+	
+	private static void extractItem(String idF, String id, String nmF, String...XMLPath) throws Exception {
+		actions.clear();
+		buf.append("{");
+		pushExtractAction(idF, id, nmF, XMLPath);
+		for(LANG idx:LANG.values()) {
+			processXmlFileByEnum(idx, true);
+		}
+		buf.append("}\r\n");
+	}
+	
+	@Test
+	public void simpleExtractorTest() throws Exception {
+		extractItem("id", "6103", "name", "Native-Langue", "Dialog", "Preference", "Global");
+		extractItem("id", "6104", "name", "Native-Langue", "Dialog", "Preference", "Global");
+		extractItem("id", "6105", "name", "Native-Langue", "Dialog", "Preference", "Global");
+		
+		Log(buf.toString());
 	}
 }
 

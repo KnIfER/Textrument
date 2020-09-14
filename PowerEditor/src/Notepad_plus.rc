@@ -684,7 +684,7 @@ BEGIN
         END
         MENUITEM SEPARATOR
         MENUITEM "Summary...",                  IDM_VIEW_SUMMARY
-        MENUITEM "Switch To Instead Of Toggle Panels", IDM_VIEW_SWOGGLE
+        MENUITEM "Switch To Instead of Toggle Panels", IDM_VIEW_SWOGGLE
         MENUITEM SEPARATOR
         POPUP "Project Panels"
         BEGIN
