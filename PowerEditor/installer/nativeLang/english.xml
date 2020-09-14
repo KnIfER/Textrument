@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="UTF-8"?>
 <NotepadPlus>
     <Native-Langue name="English" filename="english.xml" version="7.9">
         <Menu>
@@ -23,7 +23,7 @@
                     <Item subMenuId="file-openFolder" name="Open Containing Folder"/>
                     <Item subMenuId="file-closeMore" name="Close More"/>
                     <Item subMenuId="file-recentFiles" name="&amp;Recent Files"/>
-                    <Item subMenuId="edit-copyToClipboard"  name="Copy to Clipboard"/>
+                    <Item subMenuId="edit-copyToClipboard" name="Copy to Clipboard"/>
                     <Item subMenuId="edit-indent" name="Indent"/>
                     <Item subMenuId="edit-convertCaseTo" name="Convert Case to"/>
                     <Item subMenuId="edit-lineOperations" name="Line Operations"/>
@@ -39,24 +39,24 @@
                     <Item subMenuId="search-jumpDown" name="Jump Down"/>
                     <Item subMenuId="search-bookmark" name="Bookmark"/>
                     <Item subMenuId="view-currentFileIn" name="View Current File in"/>
-                    <Item subMenuId="view-showSymbol"  name="Show Symbol"/>
-                    <Item subMenuId="view-zoom"  name="Zoom"/>
-                    <Item subMenuId="view-moveCloneDocument"  name="Move/Clone Current Document"/>
-                    <Item subMenuId="view-tab"  name="Tab"/>
+                    <Item subMenuId="view-showSymbol" name="Show Symbol"/>
+                    <Item subMenuId="view-zoom" name="Zoom"/>
+                    <Item subMenuId="view-moveCloneDocument" name="Move/Clone Current Document"/>
+                    <Item subMenuId="view-tab" name="Tab"/>
                     <Item subMenuId="view-collapseLevel" name="Collapse Level"/>
                     <Item subMenuId="view-uncollapseLevel" name="Uncollapse Level"/>
-                    <Item subMenuId="view-project" name="Project"/>
-                    <Item subMenuId="encoding-characterSets"  name="Character Set"/>
-                    <Item subMenuId="encoding-arabic"  name="Arabic"/>
-                    <Item subMenuId="encoding-baltic"  name="Baltic"/>
-                    <Item subMenuId="encoding-celtic"  name="Celtic"/>
-                    <Item subMenuId="encoding-cyrillic"  name="Cyrillic"/>
-                    <Item subMenuId="encoding-centralEuropean"  name="Central European"/>
-                    <Item subMenuId="encoding-chinese"  name="Chinese"/>
-                    <Item subMenuId="encoding-easternEuropean"  name="Eastern European"/>
-                    <Item subMenuId="encoding-greek"  name="Greek"/>
-                    <Item subMenuId="encoding-hebrew"  name="Hebrew"/>
-                    <Item subMenuId="encoding-japanese"  name="Japanese"/>
+                    <Item subMenuId="view-project" name="Project Panels"/>
+                    <Item subMenuId="encoding-characterSets" name="Character Set"/>
+                    <Item subMenuId="encoding-arabic" name="Arabic"/>
+                    <Item subMenuId="encoding-baltic" name="Baltic"/>
+                    <Item subMenuId="encoding-celtic" name="Celtic"/>
+                    <Item subMenuId="encoding-cyrillic" name="Cyrillic"/>
+                    <Item subMenuId="encoding-centralEuropean" name="Central European"/>
+                    <Item subMenuId="encoding-chinese" name="Chinese"/>
+                    <Item subMenuId="encoding-easternEuropean" name="Eastern European"/>
+                    <Item subMenuId="encoding-greek" name="Greek"/>
+                    <Item subMenuId="encoding-hebrew" name="Hebrew"/>
+                    <Item subMenuId="encoding-japanese" name="Japanese"/>
                     <Item subMenuId="encoding-korean" name="Korean"/>
                     <Item subMenuId="encoding-northEuropean" name="North European"/>
                     <Item subMenuId="encoding-thai" name="Thai"/>
@@ -85,7 +85,7 @@
                     <Item id="41007" name="Sav&amp;e All"/>
                     <Item id="41008" name="Save &amp;As..."/>
                     <Item id="41010" name="Print..."/>
-                    <Item id="1001"  name="Print Now"/>
+                    <Item id="1001" name="Print Now"/>
                     <Item id="41011" name="E&amp;xit"/>
                     <Item id="41012" name="Load Session..."/>
                     <Item id="41013" name="Save Session..."/>
@@ -291,7 +291,7 @@
                     <Item id="46250" name="Define your language..."/>
                     <Item id="46300" name="Open User Defined Language folder..."/>
                     <Item id="46180" name="User-Defined"/>
-                    <Item id="47000" name="About Notepad++"/>
+                    <Item id="47000" name="About Textrument"/>
                     <Item id="47010" name="Command Line Arguments..."/>
                     <Item id="47001" name="Notepad++ Home"/>
                     <Item id="47002" name="Notepad++ Project Page"/>
@@ -327,42 +327,48 @@
                     <Item id="42041" name="Empty Recent Files List"/>
                     <Item id="48016" name="Modify Shortcut/Delete Macro..."/>
                     <Item id="48017" name="Modify Shortcut/Delete Command..."/>
+                    <Item id="44070" name="Tab List"/>
+                    <Item id="44105" name="Switch To Instead of Toggle Panels"/>
+                    <Item id="48100" name="Small icons"/>
+                    <Item id="48101" name="Big icons"/>
+                    <Item id="48102" name="Standard icons"/>
                 </Commands>
             </Main>
             <Splitter>
             </Splitter>
             <TabBar>
-                    <Item CMID="0" name="Close"/>
-                    <Item CMID="1" name="Close All BUT This"/>
-                    <Item CMID="2" name="Save"/>
-                    <Item CMID="3" name="Save As..."/>
-                    <Item CMID="4" name="Print"/>
-                    <Item CMID="5" name="Move to Other View"/>
-                    <Item CMID="6" name="Clone to Other View"/>
-                    <Item CMID="7" name="Full File Path to Clipboard"/>
-                    <Item CMID="8" name="Filename to Clipboard"/>
-                    <Item CMID="9" name="Current Dir. Path to Clipboard"/>
-                    <Item CMID="10" name="Rename"/>
-                    <Item CMID="11" name="Move to Recycle Bin"/>
-                    <Item CMID="12" name="Read-Only"/>
-                    <Item CMID="13" name="Clear Read-Only Flag"/>
-                    <Item CMID="14" name="Move to New Instance"/>
-                    <Item CMID="15" name="Open in New Instance"/>
-                    <Item CMID="16" name="Reload"/>
-                    <Item CMID="17" name="Close All to the Left"/>
-                    <Item CMID="18" name="Close All to the Right"/>
-                    <Item CMID="19" name="Open Containing Folder in Explorer"/>
-                    <Item CMID="20" name="Open Containing Folder in cmd"/>
-                    <Item CMID="21" name="Open in Default Viewer"/>
-                    <Item CMID="22" name="Close All Unchanged"/>
+                <Item CMID="0" name="Close"/>
+                <Item CMID="1" name="Close All BUT This"/>
+                <Item CMID="2" name="Save"/>
+                <Item CMID="3" name="Save As..."/>
+                <Item CMID="4" name="Print"/>
+                <Item CMID="5" name="Move to Other View"/>
+                <Item CMID="6" name="Clone to Other View"/>
+                <Item CMID="7" name="Full File Path to Clipboard"/>
+                <Item CMID="8" name="Filename to Clipboard"/>
+                <Item CMID="9" name="File Dir Path to Clipboard"/>
+                <Item CMID="10" name="Rename"/>
+                <Item CMID="11" name="Move to Recycle Bin"/>
+                <Item CMID="12" name="Read-Only"/>
+                <Item CMID="13" name="Clear Read-Only Flag"/>
+                <Item CMID="14" name="Move to New Instance"/>
+                <Item CMID="15" name="Open in New Instance"/>
+                <Item CMID="16" name="Reload"/>
+                <Item CMID="17" name="Close All to the Left"/>
+                <Item CMID="18" name="Close All to the Right"/>
+                <Item CMID="19" name="Open Containing Folder in Explorer"/>
+                <Item CMID="20" name="Open Containing Folder in cmd"/>
+                <Item CMID="21" name="Open in Default Viewer"/>
+                <Item CMID="22" name="Close All Unchanged"/>
+                <Item CMID="23" name="Open Linked File / Directory"/>
             </TabBar>
         </Menu>
 
         <Dialog>
             <Find title="" titleFind="Find" titleReplace="Replace" titleFindInFiles="Find in Files" titleMark="Mark">
-                <Item id="1"    name="Find Next"/>
+                <Item id="1" name="Find Next"/>
                 <Item id="1722" name="Backward direction"/>
-                <Item id="2"    name="Close"/>
+                <Item id="2" name="Close"/>
                 <Item id="1620" name="&amp;Find what :"/>
                 <Item id="1603" name="Match &amp;whole word only"/>
                 <Item id="1604" name="Match &amp;case"/>
@@ -394,7 +400,7 @@
                 <Item id="1641" name="Find All in Current Document"/>
                 <Item id="1686" name="Transparenc&amp;y"/>
                 <Item id="1703" name="&amp;. matches newline"/>
-				<Item id="1721" name="▲"/>
+                <Item id="1721" name="▲"/>
                 <Item id="1723" name="▼ Find Next"/>
             </Find>
 
@@ -413,8 +419,8 @@
             <GoToLine title="Go to...">
                 <Item id="2007" name="&amp;Line"/>
                 <Item id="2008" name="&amp;Offset"/>
-                <Item id="1"    name="Go"/>
-                <Item id="2"    name="I'm going nowhere"/>
+                <Item id="1" name="Go"/>
+                <Item id="2" name="I'm going nowhere"/>
                 <Item id="2004" name="You are here:"/>
                 <Item id="2005" name="You want to go to:"/>
                 <Item id="2006" name="You can't go further than:"/>
@@ -422,48 +428,48 @@
 
             <Run title="Run...">
                 <Item id="1903" name="The Program to Run"/>
-                <Item id="1"    name="Run"/>
-                <Item id="2"    name="Cancel"/>
+                <Item id="1" name="Run"/>
+                <Item id="2" name="Cancel"/>
                 <Item id="1904" name="Save..."/>
             </Run>
 
             <MD5FromFilesDlg title="Generate MD5 digest from files">
                 <Item id="1922" name="Choose files to generate MD5..."/>
                 <Item id="1924" name="Copy to Clipboard"/>
-                <Item id="2"    name="Close"/>
+                <Item id="2" name="Close"/>
             </MD5FromFilesDlg>
 
             <MD5FromTextDlg title="Generate MD5 digest">
                 <Item id="1932" name="Treat each line as a separate string"/>
                 <Item id="1934" name="Copy to Clipboard"/>
-                <Item id="2"    name="Close"/>
+                <Item id="2" name="Close"/>
             </MD5FromTextDlg>
 
             <SHA256FromFilesDlg title="Generate SHA-256 digest from files">
                 <Item id="1922" name="Choose files to generate SHA-256..."/>
                 <Item id="1924" name="Copy to Clipboard"/>
-                <Item id="2"    name="Close"/>
+                <Item id="2" name="Close"/>
             </SHA256FromFilesDlg>
 
             <SHA256FromTextDlg title="Generate SHA-256 digest">
                 <Item id="1932" name="Treat each line as a separate string"/>
                 <Item id="1934" name="Copy to Clipboard"/>
-                <Item id="2"    name="Close"/>
+                <Item id="2" name="Close"/>
             </SHA256FromTextDlg>
 
-            <PluginsAdminDlg title="Plugins Admin" titleAvailable = "Available" titleUpdates = "Updates" titleInstalled = "Installed">
-                <ColumnPlugin   name="Plugin"/>
-                <ColumnVersion  name="Version"/>
+            <PluginsAdminDlg title="Plugins Admin" titleAvailable="Available" titleUpdates="Updates" titleInstalled="Installed">
+                <ColumnPlugin name="Plugin"/>
+                <ColumnVersion name="Version"/>
                 <Item id="5501" name="Search:"/>
                 <Item id="5503" name="Install"/>
                 <Item id="5504" name="Update"/>
                 <Item id="5505" name="Remove"/>
                 <Item id="5508" name="Next"/>
-                <Item id="2"    name="Close"/>
+                <Item id="2" name="Close"/>
             </PluginsAdminDlg>
 
             <StyleConfig title="Style Configurator">
-                <Item id="2"    name="Cancel"/>
+                <Item id="2" name="Cancel"/>
                 <Item id="2301" name="Save &amp;&amp; Close"/>
                 <Item id="2303" name="Transparency"/>
                 <Item id="2306" name="Select theme: "/>
@@ -510,71 +516,6 @@
                 <ScintillaCommandsTab name="Scintilla commands"/>
                 <ConflictInfoOk name="No shortcut conflicts for this item."/>
                 <ConflictInfoEditing name="No conflicts . . ."/>
-                <MainCommandNames>
-                    <Item id="41019" name="Open containing folder in Explorer"/>
-                    <Item id="41020" name="Open containing folder in Command Prompt"/>
-                    <Item id="41021" name="Restore Recent Closed File"/>
-                    <Item id="45001" name="EOL Conversion to Windows (CR LF)"/>
-                    <Item id="45002" name="EOL Conversion to Unix (LF)"/>
-                    <Item id="45003" name="EOL Conversion to Macintosh (CR)"/>
-                    <Item id="43022" name="Mark search results using 1st style"/>
-                    <Item id="43024" name="Mark search results using 2nd style"/>
-                    <Item id="43026" name="Mark search results using 3rd style"/>
-                    <Item id="43028" name="Mark search results using 4th style"/>
-                    <Item id="43030" name="Mark search results using 5th style"/>
-                    <Item id="43023" name="Clear marks using 1st style"/>
-                    <Item id="43025" name="Clear marks using 2nd style"/>
-                    <Item id="43027" name="Clear marks using 3rd style"/>
-                    <Item id="43029" name="Clear marks using 4th style"/>
-                    <Item id="43031" name="Clear marks using 5th style"/>
-                    <Item id="43032" name="Clear marks using any style"/>
-                    <Item id="43033" name="Previous mark using 1st style"/>
-                    <Item id="43034" name="Previous mark using 2nd style"/>
-                    <Item id="43035" name="Previous mark using 3rd style"/>
-                    <Item id="43036" name="Previous mark using 4th style"/>
-                    <Item id="43037" name="Previous mark using 5th style"/>
-                    <Item id="43038" name="Previous mark created with Mark"/>
-                    <Item id="43039" name="Next mark using 1st style"/>
-                    <Item id="43040" name="Next mark using 2nd style"/>
-                    <Item id="43041" name="Next mark using 3rd style"/>
-                    <Item id="43042" name="Next mark using 4th style"/>
-                    <Item id="43043" name="Next mark using 5th style"/>
-                    <Item id="43044" name="Next mark created with Mark"/>
-                    <Item id="44100" name="View current file in Firefox"/>
-                    <Item id="44101" name="View current file in Chrome"/>
-                    <Item id="44103" name="View current file in IE"/>
-                    <Item id="44102" name="View current file in Edge"/>
-                    <Item id="50003" name="Switch to previous document"/>
-                    <Item id="50004" name="Switch to next document"/>
-                    <Item id="44051" name="Collapse Level 1"/>
-                    <Item id="44052" name="Collapse Level 2"/>
-                    <Item id="44053" name="Collapse Level 3"/>
-                    <Item id="44054" name="Collapse Level 4"/>
-                    <Item id="44055" name="Collapse Level 5"/>
-                    <Item id="44056" name="Collapse Level 6"/>
-                    <Item id="44057" name="Collapse Level 7"/>
-                    <Item id="44058" name="Collapse Level 8"/>
-                    <Item id="44061" name="Uncollapse Level 1"/>
-                    <Item id="44062" name="Uncollapse Level 2"/>
-                    <Item id="44063" name="Uncollapse Level 3"/>
-                    <Item id="44064" name="Uncollapse Level 4"/>
-                    <Item id="44065" name="Uncollapse Level 5"/>
-                    <Item id="44066" name="Uncollapse Level 6"/>
-                    <Item id="44067" name="Uncollapse Level 7"/>
-                    <Item id="44068" name="Uncollapse Level 8"/>
-                    <Item id="44081" name="Toggle Project Panel 1"/>
-                    <Item id="44082" name="Toggle Project Panel 2"/>
-                    <Item id="44083" name="Toggle Project Panel 3"/>
-                    <Item id="44085" name="Toggle Folder as Workspace"/>
-                    <Item id="44080" name="Toggle Document Map"/>
-                    <Item id="44084" name="Toggle Function List"/>
-                    <Item id="50005" name="Toggle macro recording"/>
-                    <Item id="44104" name="Switch to Project Panel 1"/>
-                    <Item id="44105" name="Switch to Project Panel 2"/>
-                    <Item id="44106" name="Switch to Project Panel 3"/>
-                    <Item id="44107" name="Switch to Folder as Workspace"/>
-                    <Item id="44108" name="Switch to Function List"/>
-                </MainCommandNames>
             </ShortcutMapper>
             <ShortcutMapperSubDialg title="Shortcut">
                 <Item id="1" name="OK"/>
@@ -784,7 +725,7 @@
 
                     <Item id="6125" name="Document List Panel"/>
                     <Item id="6126" name="Show"/>
-                    <Item id="6127" name="Disable extension column"/>
+                    <Item id="6127" name="Show extension column"/>
                 </Global>
                 <Scintillas title="Editing">
                     <Item id="6216" name="Caret Settings"/>
@@ -839,16 +780,19 @@ You can define several column markers by using white space to separate the diffe
                     <Item id="6420" name="Apply to opened ANSI files"/>
                 </NewDoc>
 
-                <DefaultDir title="Default Directory">
+                <DefaultDir title="Directory">
                     <Item id="6413" name="Default Directory (Open/Save)"/>
                     <Item id="6414" name="Follow current document"/>
                     <Item id="6415" name="Remember last used directory"/>
-                    <Item id="6430" name="Use new style dialog (without Unix style path capacity)"/>
+                    <Item id="6430" name="Use new style dialog "/>
                     <Item id="6431" name="Open all files of folder instead of launching Folder as Workspace on folder dropping"/>
+                    <Item id="6433" name="Filters"/>
+                    <Item id="6432" name="Drag and Drop"/>
+                    <Item id="6434" name="Recursively"/>
                 </DefaultDir>
 
                 <FileAssoc title="File Association">
-                    <Item id="4008" name="Please exit Notepad++ and relaunch Notepad++ in Administrator mode to use this feature."/>
+                    <Item id="4008" name="Please exit Textrument and relaunch Textrument in Administrator mode to use this feature."/>
                     <Item id="4009" name="Supported extensions:"/>
                     <Item id="4010" name="Registered extensions:"/>
                 </FileAssoc>
@@ -908,10 +852,13 @@ You can define several column markers by using white space to separate the diffe
                 </Print>
 
                 <Searching title="Searching">
-                    <Item id="6901" name="Don't fill find field in Find dialog with selected word"/>
-                    <Item id="6902" name="Use monospaced font in Find dialog (Need to restart Notepad++)"/>
+                    <Item id="6901" name="Fetch selected word"/>
+                    <Item id="6902" name="Monospaced font"/>
                     <Item id="6903" name="Find dialog remains open after search that outputs to results window"/>
                     <Item id="6904" name="Confirm Replace All in All Opened Documents"/>
+                    <Item id="6906" name="Get nearby word"/>
+                    <Item id="6905" name="Enlarged font"/>
+                    <Item id="6907" name="Find Field"/>
                 </Searching>
 
                 <RecentFilesHistory title="Recent Files History">
@@ -963,10 +910,10 @@ You can define several column markers by using white space to separate the diffe
 
                 <MultiInstance title="Multi-Instance">
                     <Item id="6151" name="Multi-instance settings"/>
-                    <Item id="6152" name="Open session in a new instance of Notepad++"/>
+                    <Item id="6152" name="Open session in a new instance of Textrument"/>
                     <Item id="6153" name="Always in multi-instance mode"/>
                     <Item id="6154" name="Default (mono-instance)"/>
-                    <Item id="6155" name="* The modification of this setting needs to restart Notepad++"/>
+                    <Item id="6155" name="* The modification of this setting needs to restart Textrument"/>
                 </MultiInstance>
 
                 <Delimiter title="Delimiter">
@@ -1011,11 +958,11 @@ You can define several column markers by using white space to separate the diffe
                     <Item id="6319" name="Enable"/>
                     <Item id="6320" name="No underline"/>
                     <Item id="6322" name="Session file ext.:"/>
-                    <Item id="6323" name="Enable Notepad++ auto-updater"/>
+                    <Item id="6323" name="Enable Textrument auto-updater"/>
                     <Item id="6324" name="Document Switcher (Ctrl+TAB)"/>
                     <Item id="6331" name="Show only filename in title bar"/>
                     <Item id="6334" name="Autodetect character encoding"/>
-                    <Item id="6349" name="Use DirectWrite (May improve rendering special characters, need to restart Notepad++)"/>
+                    <Item id="6349" name="Use DirectWrite (May improve rendering special characters, need to restart Textrument)"/>
                     <Item id="6350" name="Enable fullbox mode"/>
                     <Item id="6337" name="Workspace file ext.:"/>
                     <Item id="6114" name="Enable"/>
@@ -1056,8 +1003,8 @@ You can define several column markers by using white space to separate the diffe
                 <Item id="2" name="Cancel"/>
             </ColumnEditor>
             <FindInFinder title="Find in finder">
-                <Item id="1"    name="Find All"/>
-                <Item id="2"    name="Close"/>
+                <Item id="1" name="Find All"/>
+                <Item id="2" name="Close"/>
                 <Item id="1711" name="&amp;Find what :"/>
                 <Item id="1713" name="Search only in found lines"/>
                 <Item id="1714" name="Match &amp;whole word only"/>
@@ -1077,11 +1024,12 @@ You can define several column markers by using white space to separate the diffe
                 <Item id="5" name="N&amp;o to all"/>
             </DoSaveOrNot>
         </Dialog>
-        <MessageBox> <!-- $INT_REPLACE$ is a place holder, don't translate it -->
-            <ContextMenuXmlEditWarning title="Editing contextMenu" message="Editing contextMenu.xml allows you to modify your Notepad++ popup context menu.
-You have to restart your Notepad++ to take effect after modifying contextMenu.xml."/>
+        <MessageBox>
+            <!-- $INT_REPLACE$ is a place holder, don't translate it -->
+            <ContextMenuXmlEditWarning title="Editing contextMenu" message="Editing contextMenu.xml allows you to modify your Textrument popup context menu.
+You have to restart your Textrument to take effect after modifying contextMenu.xml."/>
             <NppHelpAbsentWarning title="File does not exist" message="
-doesn't exist. Please download it on Notepad++ site."/>
+doesn't exist. Please download it on Textrument site."/>
             <SaveCurrentModifWarning title="Save Current Modification" message="You should save the current modification.
 All the saved modifications can not be undone.
 
@@ -1090,10 +1038,10 @@ Continue?"/>
 All the saved modifications can not be undone.
 
 Continue?"/>
-            <CannotMoveDoc title="Move to new Notepad++ Instance" message="Document is modified, save it then try again."/>
-            <DocReloadWarning title="Reload" message="Are you sure you want to reload the current file and lose the changes made in Notepad++?"/>
+            <CannotMoveDoc title="Move to new Textrument Instance" message="Document is modified, save it then try again."/>
+            <DocReloadWarning title="Reload" message="Are you sure you want to reload the current file and lose the changes made in Textrument?"/>
             <FileLockedWarning title="Save failed" message="Please check whether if this file is opened in another program"/>
-            <FileAlreadyOpenedInNpp title="" message="The file is already opened in Notepad++."/>
+            <FileAlreadyOpenedInNpp title="" message="The file is already opened in Textrument."/>
             <DeleteFileFailed title="Delete File" message="Delete File failed"/>
 
             <NbFileToOpenImportantWarning title="Amount of files to open is too large" message="$INT_REPLACE$ files are about to be opened.
@@ -1123,14 +1071,14 @@ Do you want to reload it?"/>
             <DoReloadOrNotAndLooseChange title="Reload" message="&quot;$STR_REPLACE$&quot;
 
 This file has been modified by another program.
-Do you want to reload it and lose the changes made in Notepad++?"/>
+Do you want to reload it and lose the changes made in Textrument?"/>
             <PrehistoricSystemDetected title="Prehistoric system detected" message="It seems you still use a prehistoric system. This feature works only on a modern system, sorry."/>
-            <XpUpdaterProblem title="Notepad++ Updater" message="Notepad++ updater is not compatible with XP due to the obsolete security layer under XP.
-Do you want to go to Notepad++ page to download the latest version?"/>
-            <GUpProxyConfNeedAdminMode title="Proxy Settings" message="Please relaunch Notepad++ in Admin mode to configure proxy."/>
+            <XpUpdaterProblem title="Textrument Updater" message="Textrument updater is not compatible with XP due to the obsolete security layer under XP.
+Do you want to go to Textrument page to download the latest version?"/>
+            <GUpProxyConfNeedAdminMode title="Proxy Settings" message="Please relaunch Textrument in Admin mode to configure proxy."/>
             <DocTooDirtyToMonitor title="Monitoring problem" message="The document is dirty. Please save the modification before monitoring it."/>
             <DocNoExistToMonitor title="Monitoring problem" message="The file should exist to be monitored."/>
-            <FileTooBigToOpen title="File size problem" message="File is too big to be opened by Notepad++"/>
+            <FileTooBigToOpen title="File size problem" message="File is too big to be opened by Textrument"/>
             <CreateNewFileOrNot title="Create new file" message="&quot;$STR_REPLACE$&quot; doesn't exist. Create it?"/>
             <CreateNewFileError title="Create new file" message="Cannot create the file &quot;$STR_REPLACE$&quot;."/>
             <OpenFileError title="ERROR" message="Can not open file &quot;$STR_REPLACE$&quot;."/>
@@ -1353,7 +1301,7 @@ Find in all files except exe, obj &amp;&amp; log:
             <find-result-title-info-selections value="($INT_REPLACE1$ hits in $INT_REPLACE2$ selections of $INT_REPLACE3$ searched)"/>
             <find-result-title-info-extra value=" - Line Filter Mode: only display the filtered results"/>
             <find-result-hits value="($INT_REPLACE$ hits)"/>
-            <find-regex-zero-length-match value="zero length match" />
+            <find-regex-zero-length-match value="zero length match"/>
         </MiscStrings>
     </Native-Langue>
 </NotepadPlus>

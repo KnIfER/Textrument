@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="UTF-8"?>
 <NotepadPlus>
     <Native-Langue name="Gaeilge" filename="irish.xml" version="7.8.7">
         <Menu>
@@ -23,7 +23,7 @@
                     <Item subMenuId="file-openFolder" name="Oscail an fillteán ina bhfuil"/>
                     <Item subMenuId="file-closeMore" name="Dún tuilleadh"/>
                     <Item subMenuId="file-recentFiles" name="&amp;Comhaid le déanaí"/>
-                    <Item subMenuId="edit-copyToClipboard"  name="Cóipeáil chuig an ngearrthaisce"/>
+                    <Item subMenuId="edit-copyToClipboard" name="Cóipeáil chuig an ngearrthaisce"/>
                     <Item subMenuId="edit-indent" name="Indent"/>
                     <Item subMenuId="edit-convertCaseTo" name="Tiontaigh an cás go"/>
                     <Item subMenuId="edit-lineOperations" name="Oibríochtaí líne"/>
@@ -39,24 +39,24 @@
                     <Item subMenuId="search-jumpDown" name="Léim síos"/>
                     <Item subMenuId="search-bookmark" name="Bookmark"/>
                     <Item subMenuId="view-currentFileIn" name="Breathnaigh ar an gcomhad reatha i"/>
-                    <Item subMenuId="view-showSymbol"  name="Taispeáin comhartha"/>
-                    <Item subMenuId="view-zoom"  name="Gluais"/>
-                    <Item subMenuId="view-moveCloneDocument"  name="Bog/Clónaigh an cháipéis reatha"/>
-                    <Item subMenuId="view-tab"  name="Cluaisín"/>
+                    <Item subMenuId="view-showSymbol" name="Taispeáin comhartha"/>
+                    <Item subMenuId="view-zoom" name="Gluais"/>
+                    <Item subMenuId="view-moveCloneDocument" name="Bog/Clónaigh an cháipéis reatha"/>
+                    <Item subMenuId="view-tab" name="Cluaisín"/>
                     <Item subMenuId="view-collapseLevel" name="Collapse Level"/>
                     <Item subMenuId="view-uncollapseLevel" name="Uncollapse Level"/>
-                    <Item subMenuId="view-project" name="Tionscadal"/>
-                    <Item subMenuId="encoding-characterSets"  name="Character Set"/>
-                    <Item subMenuId="encoding-arabic"  name="Arabic"/>
-                    <Item subMenuId="encoding-baltic"  name="Baltic"/>
-                    <Item subMenuId="encoding-celtic"  name="Ceilteach"/>
-                    <Item subMenuId="encoding-cyrillic"  name="Cyrillic"/>
-                    <Item subMenuId="encoding-centralEuropean"  name="Lár na hEorpa"/>
-                    <Item subMenuId="encoding-chinese"  name="Chinese"/>
-                    <Item subMenuId="encoding-easternEuropean"  name="Oirthear na hEorpa"/>
-                    <Item subMenuId="encoding-greek"  name="Gréigis"/>
-                    <Item subMenuId="encoding-hebrew"  name="Eabhrais"/>
-                    <Item subMenuId="encoding-japanese"  name="Seapáinis"/>
+                    <Item subMenuId="view-project" name="Painéil Tionscadail"/>
+                    <Item subMenuId="encoding-characterSets" name="Character Set"/>
+                    <Item subMenuId="encoding-arabic" name="Arabic"/>
+                    <Item subMenuId="encoding-baltic" name="Baltic"/>
+                    <Item subMenuId="encoding-celtic" name="Ceilteach"/>
+                    <Item subMenuId="encoding-cyrillic" name="Cyrillic"/>
+                    <Item subMenuId="encoding-centralEuropean" name="Lár na hEorpa"/>
+                    <Item subMenuId="encoding-chinese" name="Chinese"/>
+                    <Item subMenuId="encoding-easternEuropean" name="Oirthear na hEorpa"/>
+                    <Item subMenuId="encoding-greek" name="Gréigis"/>
+                    <Item subMenuId="encoding-hebrew" name="Eabhrais"/>
+                    <Item subMenuId="encoding-japanese" name="Seapáinis"/>
                     <Item subMenuId="encoding-korean" name="Coiréis"/>
                     <Item subMenuId="encoding-northEuropean" name="Tuaisceart na hEorpa"/>
                     <Item subMenuId="encoding-thai" name="Thai"/>
@@ -85,7 +85,7 @@
                     <Item id="41007" name="Tai&amp;sc uile"/>
                     <Item id="41008" name="Taisc &amp;mar..."/>
                     <Item id="41010" name="Clóbhuail..."/>
-                    <Item id="1001"  name="Clóbhuail anois"/>
+                    <Item id="1001" name="Clóbhuail anois"/>
                     <Item id="41011" name="S&amp;coir"/>
                     <Item id="41012" name="Load Session..."/>
                     <Item id="41013" name="Save Session..."/>
@@ -291,7 +291,7 @@
                     <Item id="46250" name="Define your language..."/>
                     <Item id="46300" name="Oscail User Defined Language folder..."/>
                     <Item id="46180" name="User-Defined"/>
-                    <Item id="47000" name="Maidir le Notepad++"/>
+                    <Item id="47000" name="Maidir le Textrument"/>
                     <Item id="47010" name="Command Line Arguments..."/>
                     <Item id="47001" name="Baile Notepad++"/>
                     <Item id="47002" name="Notepad++ Project Page"/>
@@ -329,42 +329,48 @@
                     <Item id="42041" name="Empty Recent Files List"/>
                     <Item id="48016" name="Modify Shortcut/Delete Macro..."/>
                     <Item id="48017" name="Modify Shortcut/Delete Command..."/>
+                    <Item id="44070" name="Tab Liosta"/>
+                    <Item id="44105" name="Gníomhachtaigh an bpainéal ach ní scoránaigh sé"/>
+                    <Item id="48100" name="Deilbhíní móra"/>
+                    <Item id="48101" name="Deilbhíní beaga"/>
+                    <Item id="48102" name="Deilbhíní caighdeánacha"/>
                 </Commands>
             </Main>
             <Splitter>
             </Splitter>
             <TabBar>
-                    <Item CMID="0" name="Dún"/>
-                    <Item CMID="1" name="Dún uile ACH AMHÁIN an ceann seo"/>
-                    <Item CMID="2" name="Taisc"/>
-                    <Item CMID="3" name="Taisc mar..."/>
-                    <Item CMID="4" name="Clóbhuail"/>
-                    <Item CMID="5" name="Bog chuig amharc eile"/>
-                    <Item CMID="6" name="Clone to Other View"/>
-                    <Item CMID="7" name="Full File Path chuig an ngearrthaisce"/>
-                    <Item CMID="8" name="Filename chuig an ngearrthaisce"/>
-                    <Item CMID="9" name="Current Dir. Path chuig an ngearrthaisce"/>
-                    <Item CMID="10" name="Athainmnigh"/>
-                    <Item CMID="11" name="Move to Recycle Bin"/>
-                    <Item CMID="12" name="Inléite-Amháin"/>
-                    <Item CMID="13" name="Glan Read-Only Flag"/>
-                    <Item CMID="14" name="Move to New Instance"/>
-                    <Item CMID="15" name="Oscail in New Instance"/>
-                    <Item CMID="16" name="Athluchtaigh é"/>
-                    <Item CMID="17" name="Dún GACH CEANN ar chlé"/>
-                    <Item CMID="18" name="Dún GACH CEANN ar dheis"/>
-                    <Item CMID="19" name="Oscail Containing Folder in Explorer"/>
-                    <Item CMID="20" name="Oscail Containing Folder in cmd"/>
-                    <Item CMID="21" name="Oscail san amharcóir réamhshocraithe"/>
-                    <Item CMID="22" name="Dún GACH CEANN gan athrú"/>
+                <Item CMID="0" name="Dún"/>
+                <Item CMID="1" name="Dún uile ACH AMHÁIN an ceann seo"/>
+                <Item CMID="2" name="Taisc"/>
+                <Item CMID="3" name="Taisc mar..."/>
+                <Item CMID="4" name="Clóbhuail"/>
+                <Item CMID="5" name="Bog chuig amharc eile"/>
+                <Item CMID="6" name="Clone to Other View"/>
+                <Item CMID="7" name="Full File Path chuig an ngearrthaisce"/>
+                <Item CMID="8" name="Filename chuig an ngearrthaisce"/>
+                <Item CMID="9" name="Current Dir. Path chuig an ngearrthaisce"/>
+                <Item CMID="10" name="Athainmnigh"/>
+                <Item CMID="11" name="Move to Recycle Bin"/>
+                <Item CMID="12" name="Inléite-Amháin"/>
+                <Item CMID="13" name="Glan Read-Only Flag"/>
+                <Item CMID="14" name="Move to New Instance"/>
+                <Item CMID="15" name="Oscail in New Instance"/>
+                <Item CMID="16" name="Athluchtaigh é"/>
+                <Item CMID="17" name="Dún GACH CEANN ar chlé"/>
+                <Item CMID="18" name="Dún GACH CEANN ar dheis"/>
+                <Item CMID="19" name="Oscail Containing Folder in Explorer"/>
+                <Item CMID="20" name="Oscail Containing Folder in cmd"/>
+                <Item CMID="21" name="Oscail san amharcóir réamhshocraithe"/>
+                <Item CMID="22" name="Dún GACH CEANN gan athrú"/>
+                <Item CMID="23" name="Oscail an comhad nasctha / Eolaire"/>
             </TabBar>
         </Menu>
 
         <Dialog>
             <Find title="" titleFind="Find" titleReplace="Replace" titleFindInFiles="Find in Files" titleMark="Mark">
-                <Item id="1"    name="Aimsigh ar aghaidh"/>
+                <Item id="1" name="Aimsigh ar aghaidh"/>
                 <Item id="1722" name="Siar"/>
-                <Item id="2"    name="Dún"/>
+                <Item id="2" name="Dún"/>
                 <Item id="1620" name="&amp;Céard ba cheart a aimsiú :"/>
                 <Item id="1603" name="Match &amp;whole word only"/>
                 <Item id="1604" name="Match &amp;case"/>
@@ -396,7 +402,7 @@
                 <Item id="1641" name="Aimsigh uile sa cháipéis reatha"/>
                 <Item id="1686" name="Trédhearc&amp;acht"/>
                 <Item id="1703" name="&amp;. matches newline"/>
-				<Item id="1721" name="▲"/>
+                <Item id="1721" name="▲"/>
                 <Item id="1723" name="▼ Aimsigh ar aghaidh"/>
             </Find>
 
@@ -415,8 +421,8 @@
             <GoToLine title="Téigh chuig...">
                 <Item id="2007" name="&amp;Líne"/>
                 <Item id="2008" name="&amp;Offset"/>
-                <Item id="1"    name="Téigh"/>
-                <Item id="2"    name="Níl ag dul aon áit"/>
+                <Item id="1" name="Téigh"/>
+                <Item id="2" name="Níl ag dul aon áit"/>
                 <Item id="2004" name="Tá tú anseo:"/>
                 <Item id="2005" name="Is mian leat dul chuig:"/>
                 <Item id="2006" name="Ní féidir leat dul níos faide ná:"/>
@@ -424,48 +430,48 @@
 
             <Run title="Rith...">
                 <Item id="1903" name="An ríomhchlár le rith"/>
-                <Item id="1"    name="Rith"/>
-                <Item id="2"    name="Cealaigh"/>
+                <Item id="1" name="Rith"/>
+                <Item id="2" name="Cealaigh"/>
                 <Item id="1904" name="Taisc..."/>
             </Run>
 
             <MD5FromFilesDlg title="Generate MD5 digest from files">
                 <Item id="1922" name="Choose files to generate MD5..."/>
                 <Item id="1924" name="Cóipeáil chuig an ngearrthaisce"/>
-                <Item id="2"    name="Dún"/>
+                <Item id="2" name="Dún"/>
             </MD5FromFilesDlg>
 
             <MD5FromTextDlg title="Generate MD5 digest">
                 <Item id="1932" name="Treat each line as a separate string"/>
                 <Item id="1934" name="Cóipeáil chuig an ngearrthaisce"/>
-                <Item id="2"    name="Dún"/>
+                <Item id="2" name="Dún"/>
             </MD5FromTextDlg>
 
             <SHA256FromFilesDlg title="Generate SHA-256 digest from files">
                 <Item id="1922" name="Choose files to generate SHA-256..."/>
                 <Item id="1924" name="Cóipeáil chuig an ngearrthaisce"/>
-                <Item id="2"    name="Dún"/>
+                <Item id="2" name="Dún"/>
             </SHA256FromFilesDlg>
 
             <SHA256FromTextDlg title="Generate SHA-256 digest">
                 <Item id="1932" name="Treat each line as a separate string"/>
                 <Item id="1934" name="Cóipeáil chuig an ngearrthaisce"/>
-                <Item id="2"    name="Dún"/>
+                <Item id="2" name="Dún"/>
             </SHA256FromTextDlg>
 
-            <PluginsAdminDlg title="Plugins Admin" titleAvailable = "Available" titleUpdates = "Updates" titleInstalled = "Installed">
-                <ColumnPlugin   name="Breiseán"/>
-                <ColumnVersion  name="Leagan"/>
+            <PluginsAdminDlg title="Plugins Admin" titleAvailable="Available" titleUpdates="Updates" titleInstalled="Installed">
+                <ColumnPlugin name="Breiseán"/>
+                <ColumnVersion name="Leagan"/>
                 <Item id="5501" name="Cuardaigh:"/>
                 <Item id="5503" name="Suiteáil é"/>
                 <Item id="5504" name="Nuashonraigh é"/>
                 <Item id="5505" name="Bain"/>
                 <Item id="5508" name="Ar aghaidh"/>
-                <Item id="2"    name="Dún"/>
+                <Item id="2" name="Dún"/>
             </PluginsAdminDlg>
 
             <StyleConfig title="Style Configurator">
-                <Item id="2"    name="Cealaigh"/>
+                <Item id="2" name="Cealaigh"/>
                 <Item id="2301" name="Taisc &amp;&amp; Dún"/>
                 <Item id="2303" name="Trédhearcacht"/>
                 <Item id="2306" name="Roghnaigh téama: "/>
@@ -512,66 +518,6 @@
                 <ScintillaCommandsTab name="Scintilla commands"/>
                 <ConflictInfoOk name="No shortcut conflicts for this item."/>
                 <ConflictInfoEditing name="No conflicts . . ."/>
-                <MainCommandNames>
-                    <Item id="41019" name="Oscail containing folder in Explorer"/>
-                    <Item id="41020" name="Oscail containing folder in Command Prompt"/>
-                    <Item id="41021" name="Restore Recent Closed File"/>
-                    <Item id="45001" name="EOL Conversion to Windows (CR LF)"/>
-                    <Item id="45002" name="EOL Conversion to Unix (LF)"/>
-                    <Item id="45003" name="EOL Conversion to Macintosh (CR)"/>
-                    <Item id="43022" name="Mark search results using 1st style"/>
-                    <Item id="43024" name="Mark search results using 2nd style"/>
-                    <Item id="43026" name="Mark search results using 3rd style"/>
-                    <Item id="43028" name="Mark search results using 4th style"/>
-                    <Item id="43030" name="Mark search results using 5th style"/>
-                    <Item id="43023" name="Glan marks using 1st style"/>
-                    <Item id="43025" name="Glan marks using 2nd style"/>
-                    <Item id="43027" name="Glan marks using 3rd style"/>
-                    <Item id="43029" name="Glan marks using 4th style"/>
-                    <Item id="43031" name="Glan marks using 5th style"/>
-                    <Item id="43032" name="Glan marks using any style"/>
-                    <Item id="43033" name="Previous mark using 1st style"/>
-                    <Item id="43034" name="Previous mark using 2nd style"/>
-                    <Item id="43035" name="Previous mark using 3rd style"/>
-                    <Item id="43036" name="Previous mark using 4th style"/>
-                    <Item id="43037" name="Previous mark using 5th style"/>
-                    <Item id="43038" name="Previous mark created with Mark..."/>
-                    <Item id="43039" name="Next mark using 1st style"/>
-                    <Item id="43040" name="Next mark using 2nd style"/>
-                    <Item id="43041" name="Next mark using 3rd style"/>
-                    <Item id="43042" name="Next mark using 4th style"/>
-                    <Item id="43043" name="Next mark using 5th style"/>
-                    <Item id="43044" name="Next mark created with Mark..."/>
-                    <Item id="44100" name="View current file in Firefox"/>
-                    <Item id="44101" name="View current file in Chrome"/>
-                    <Item id="44103" name="View current file in IE"/>
-                    <Item id="44102" name="View current file in Edge"/>
-                    <Item id="50003" name="Switch to previous document"/>
-                    <Item id="50004" name="Switch to next document"/>
-                    <Item id="44051" name="Collapse Level 1"/>
-                    <Item id="44052" name="Collapse Level 2"/>
-                    <Item id="44053" name="Collapse Level 3"/>
-                    <Item id="44054" name="Collapse Level 4"/>
-                    <Item id="44055" name="Collapse Level 5"/>
-                    <Item id="44056" name="Collapse Level 6"/>
-                    <Item id="44057" name="Collapse Level 7"/>
-                    <Item id="44058" name="Collapse Level 8"/>
-                    <Item id="44061" name="Uncollapse Level 1"/>
-                    <Item id="44062" name="Uncollapse Level 2"/>
-                    <Item id="44063" name="Uncollapse Level 3"/>
-                    <Item id="44064" name="Uncollapse Level 4"/>
-                    <Item id="44065" name="Uncollapse Level 5"/>
-                    <Item id="44066" name="Uncollapse Level 6"/>
-                    <Item id="44067" name="Uncollapse Level 7"/>
-                    <Item id="44068" name="Uncollapse Level 8"/>
-                    <Item id="44081" name="Toggle Project Panel 1"/>
-                    <Item id="44082" name="Toggle Project Panel 2"/>
-                    <Item id="44083" name="Toggle Project Panel 3"/>
-                    <Item id="44085" name="Toggle Folder as Workspace"/>
-                    <Item id="44080" name="Toggle Document Map"/>
-                    <Item id="44084" name="Toggle Function List"/>
-                    <Item id="50005" name="Toggle macro recording"/>
-                </MainCommandNames>
             </ShortcutMapper>
             <ShortcutMapperSubDialg title="Aicearra">
                 <Item id="1" name="Tá go maith"/>
@@ -781,7 +727,7 @@
 
                     <Item id="6125" name="Document List Panel"/>
                     <Item id="6126" name="Taispeáin"/>
-                    <Item id="6127" name="Díchumasaigh extension column"/>
+                    <Item id="6127" name="Cumasaigh colún síneadh"/>
                 </Global>
                 <Scintillas title="Eagarthóireacht">
                     <Item id="6216" name="Caret Settings"/>
@@ -836,16 +782,19 @@ You can define several column markers by using white space to separate the diffe
                     <Item id="6420" name="Apply to opened ANSI files"/>
                 </NewDoc>
 
-                <DefaultDir title="Default Directory">
+                <DefaultDir title="eolaire">
                     <Item id="6413" name="Default Directory (Oscail/Save)"/>
                     <Item id="6414" name="Follow current document"/>
                     <Item id="6415" name="Remember last used directory"/>
-                    <Item id="6430" name="Use new style dialog (without Unix style path capacity)"/>
+                    <Item id="6430" name="Use new style dialog "/>
                     <Item id="6431" name="Open all files of folder instead of launching Folder as Workspace on folder dropping"/>
+                    <Item id="6433" name="scagairí"/>
+                    <Item id="6432" name="Tarraing agus Buail"/>
+                    <Item id="6434" name="hathchúrsach"/>
                 </DefaultDir>
 
                 <FileAssoc title="File Association">
-                    <Item id="4008" name="Please exit Notepad++ and relaunch Notepad++ in Administrator mode to use this feature."/>
+                    <Item id="4008" name="Please exit Textrument and relaunch Textrument in Administrator mode to use this feature."/>
                     <Item id="4009" name="Supported extensions:"/>
                     <Item id="4010" name="Registered extensions:"/>
                 </FileAssoc>
@@ -905,8 +854,11 @@ You can define several column markers by using white space to separate the diffe
                 </Print>
 
                 <Searching title="Cuardach">
-                    <Item id="6901" name="Don't fill find field in Find dialog with selected word"/>
-                    <Item id="6902" name="Use monospaced font in Find dialog (Need to restart Notepad++)"/>
+                    <Item id="6901" name="Gabh focal roghnaithe"/>
+                    <Item id="6902" name="monospaced Cló"/>
+                    <Item id="6906" name="Faigh focail in aice láimhe"/>
+                    <Item id="6905" name="Clómhéid Enlarge"/>
+                    <Item id="6907" name="Search Field"/>
                 </Searching>
 
                 <RecentFilesHistory title="Recent Files History">
@@ -958,10 +910,10 @@ You can define several column markers by using white space to separate the diffe
 
                 <MultiInstance title="Multi-Instance">
                     <Item id="6151" name="Multi-instance settings"/>
-                    <Item id="6152" name="Oscail session in a new instance of Notepad++"/>
+                    <Item id="6152" name="Oscail session in a new instance of Textrument"/>
                     <Item id="6153" name="Always in multi-instance mode"/>
                     <Item id="6154" name="Default (mono-instance)"/>
-                    <Item id="6155" name="* The modification of this setting needs to restart Notepad++"/>
+                    <Item id="6155" name="* The modification of this setting needs to restart Textrument"/>
                 </MultiInstance>
 
                 <Delimiter title="Delimiter">
@@ -1006,11 +958,11 @@ You can define several column markers by using white space to separate the diffe
                     <Item id="6319" name="Cumasaigh"/>
                     <Item id="6320" name="No underline"/>
                     <Item id="6322" name="Session file ext.:"/>
-                    <Item id="6323" name="Cumasaigh Notepad++ auto-updater"/>
+                    <Item id="6323" name="Cumasaigh Textrument auto-updater"/>
                     <Item id="6324" name="Document Switcher (Ctrl+TAB)"/>
                     <Item id="6331" name="Show only filename in title bar"/>
                     <Item id="6334" name="Autodetect character encoding"/>
-                    <Item id="6349" name="Use DirectWrite (May improve rendering special characters, need to restart Notepad++)"/>
+                    <Item id="6349" name="Use DirectWrite (May improve rendering special characters, need to restart Textrument)"/>
                     <Item id="6337" name="Workspace file ext.:"/>
                     <Item id="6114" name="Cumasaigh"/>
                     <Item id="6117" name="Cumasaigh MRU behaviour"/>
@@ -1050,8 +1002,8 @@ You can define several column markers by using white space to separate the diffe
                 <Item id="2" name="Cealaigh"/>
             </ColumnEditor>
             <FindInFinder title="Aimsigh san aimsitheoir">
-                <Item id="1"    name="Aimsigh uile"/>
-                <Item id="2"    name="Dún"/>
+                <Item id="1" name="Aimsigh uile"/>
+                <Item id="2" name="Dún"/>
                 <Item id="1711" name="&amp;Céard ba cheart a aimsiú :"/>
                 <Item id="1713" name="Search only in found lines"/>
                 <Item id="1714" name="Match &amp;whole word only"/>
@@ -1071,21 +1023,22 @@ You can define several column markers by using white space to separate the diffe
                 <Item id="5" name="N&amp;o to all"/>
             </DoSaveOrNot>
         </Dialog>
-        <MessageBox> <!-- $INT_REPLACE$ is a place holder, don't translate it -->
-            <ContextMenuXmlEditWarning title="Editing contextMenu" message="Editing contextMenu.xml allows you to modify your Notepad++ popup context menu.
-You have to restart your Notepad++ to take effect after modifying contextMenu.xml."/>
+        <MessageBox>
+            <!-- $INT_REPLACE$ is a place holder, don't translate it -->
+            <ContextMenuXmlEditWarning title="Editing contextMenu" message="Editing contextMenu.xml allows you to modify your Textrument popup context menu.
+You have to restart your Textrument to take effect after modifying contextMenu.xml."/>
             <NppHelpAbsentWarning title="File does not exist" message="
-doesn't exist. Please download it on Notepad++ site."/>
+doesn't exist. Please download it on Textrument site."/>
             <SaveCurrentModifWarning title="Save Current Modification" message="You should save the current modification.
 All the saved modifications can not be undone.
 Continue?"/>
             <LoseUndoAbilityWarning title="Lose Undo Ability Warning" message="You should save the current modification.
 All the saved modifications can not be undone.
 Continue?"/>
-            <CannotMoveDoc title="Move to new Notepad++ Instance" message="Document is modified, save it then try again."/>
-            <DocReloadWarning title="Reload" message="Are you sure you want to reload the current file and lose the changes made in Notepad++?"/>
+            <CannotMoveDoc title="Move to new Textrument Instance" message="Document is modified, save it then try again."/>
+            <DocReloadWarning title="Reload" message="Are you sure you want to reload the current file and lose the changes made in Textrument?"/>
             <FileLockedWarning title="Save failed" message="Please check whether if this file is opened in another program"/>
-            <FileAlreadyOpenedInNpp title="" message="The file is already opened in Notepad++."/>
+            <FileAlreadyOpenedInNpp title="" message="The file is already opened in Textrument."/>
             <DeleteFileFailed title="Delete File" message="Delete File failed"/>
 
             <NbFileToOpenImportantWarning title="Amount of files to open is too large" message="$INT_REPLACE$ files are about to be opened.
@@ -1113,14 +1066,14 @@ This file has been modified by another program.
 Do you want to reload it?"/>
             <DoReloadOrNotAndLooseChange title="Reload" message="&quot;$STR_REPLACE$&quot;
 This file has been modified by another program.
-Do you want to reload it and lose the changes made in Notepad++?"/>
+Do you want to reload it and lose the changes made in Textrument?"/>
             <PrehistoricSystemDetected title="Prehistoric system detected" message="It seems you still use a prehistoric system. This feature works only on a modern system, sorry."/>
-            <XpUpdaterProblem title="Notepad++ Updater" message="Notepad++ updater is not compatible with XP due to the obsolete security layer under XP.
-Do you want to go to Notepad++ page to download the latest version?"/>
-            <GUpProxyConfNeedAdminMode title="Proxy Settings" message="Please relaunch Notepad++ in Admin mode to configure proxy."/>
+            <XpUpdaterProblem title="Textrument Updater" message="Textrument updater is not compatible with XP due to the obsolete security layer under XP.
+Do you want to go to Textrument page to download the latest version?"/>
+            <GUpProxyConfNeedAdminMode title="Proxy Settings" message="Please relaunch Textrument in Admin mode to configure proxy."/>
             <DocTooDirtyToMonitor title="Monitoring problem" message="The document is dirty. Please save the modification before monitoring it."/>
             <DocNoExistToMonitor title="Monitoring problem" message="The file should exist to be monitored."/>
-            <FileTooBigToOpen title="File size problem" message="File is too big to be opened by Notepad++"/>
+            <FileTooBigToOpen title="File size problem" message="File is too big to be opened by Textrument"/>
             <CreateNewFileOrNot title="Create new file" message="&quot;$STR_REPLACE$&quot; doesn't exist. Create it?"/>
             <CreateNewFileError title="Create new file" message="Cannot create the file &quot;$STR_REPLACE$&quot;."/>
             <OpenFileError title="ERROR" message="Can not open file &quot;$STR_REPLACE$&quot;."/>
@@ -1340,7 +1293,7 @@ Find in all files except exe, obj &amp;&amp; log:
             <find-result-title-info-selections value="($INT_REPLACE1$ hits in $INT_REPLACE2$ selections of $INT_REPLACE3$ searched)"/>
             <find-result-title-info-extra value=" - Line Filter Mode: only display the filtered results"/>
             <find-result-hits value="($INT_REPLACE$ hits)"/>
-            <find-regex-zero-length-match value="zero length match" />
+            <find-regex-zero-length-match value="zero length match"/>
         </MiscStrings>
     </Native-Langue>
 </NotepadPlus>

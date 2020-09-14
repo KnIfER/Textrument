@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="UTF-8"?>
 <NotepadPlus>
     <Native-Langue name="Українська" filename="ukrainian.xml" version="7.8.7">
         <Menu>
@@ -23,7 +23,7 @@
                     <Item subMenuId="file-openFolder" name="Відкрити теку розташування"/>
                     <Item subMenuId="file-closeMore" name="Закрити ще"/>
                     <Item subMenuId="file-recentFiles" name="Недавні файли"/>
-                    <Item subMenuId="edit-copyToClipboard"  name="Копіювати в буфер"/>
+                    <Item subMenuId="edit-copyToClipboard" name="Копіювати в буфер"/>
                     <Item subMenuId="edit-indent" name="Абзац"/>
                     <Item subMenuId="edit-convertCaseTo" name="Змінити регістр"/>
                     <Item subMenuId="edit-lineOperations" name="Дії над рядком"/>
@@ -39,24 +39,24 @@
                     <Item subMenuId="search-jumpDown" name="Вниз"/>
                     <Item subMenuId="search-bookmark" name="Закладка"/>
                     <Item subMenuId="view-currentFileIn" name="Перегляд поточного файлу в"/>
-                    <Item subMenuId="view-showSymbol"  name="Показати символ"/>
-                    <Item subMenuId="view-zoom"  name="Масштаб"/>
-                    <Item subMenuId="view-moveCloneDocument"  name="Перемістити/Клонувати поточний документ"/>
-                    <Item subMenuId="view-tab"  name="Вкладка"/>
+                    <Item subMenuId="view-showSymbol" name="Показати символ"/>
+                    <Item subMenuId="view-zoom" name="Масштаб"/>
+                    <Item subMenuId="view-moveCloneDocument" name="Перемістити/Клонувати поточний документ"/>
+                    <Item subMenuId="view-tab" name="Вкладка"/>
                     <Item subMenuId="view-collapseLevel" name="Згорнути рівень"/>
                     <Item subMenuId="view-uncollapseLevel" name="Розгорнути рівень"/>
-                    <Item subMenuId="view-project" name="Проект"/>
-                    <Item subMenuId="encoding-characterSets"  name="Кодування"/>
-                    <Item subMenuId="encoding-arabic"  name="Арабська"/>
-                    <Item subMenuId="encoding-baltic"  name="Балтійська"/>
-                    <Item subMenuId="encoding-celtic"  name="Кельтська"/>
-                    <Item subMenuId="encoding-cyrillic"  name="Кирилиця"/>
-                    <Item subMenuId="encoding-centralEuropean"  name="Центральноєвропейська"/>
-                    <Item subMenuId="encoding-chinese"  name="Китайська"/>
-                    <Item subMenuId="encoding-easternEuropean"  name="Східноєвропейська"/>
-                    <Item subMenuId="encoding-greek"  name="Грецька"/>
-                    <Item subMenuId="encoding-hebrew"  name="Іврит"/>
-                    <Item subMenuId="encoding-japanese"  name="Японська"/>
+                    <Item subMenuId="view-project" name="панелі проекту"/>
+                    <Item subMenuId="encoding-characterSets" name="Кодування"/>
+                    <Item subMenuId="encoding-arabic" name="Арабська"/>
+                    <Item subMenuId="encoding-baltic" name="Балтійська"/>
+                    <Item subMenuId="encoding-celtic" name="Кельтська"/>
+                    <Item subMenuId="encoding-cyrillic" name="Кирилиця"/>
+                    <Item subMenuId="encoding-centralEuropean" name="Центральноєвропейська"/>
+                    <Item subMenuId="encoding-chinese" name="Китайська"/>
+                    <Item subMenuId="encoding-easternEuropean" name="Східноєвропейська"/>
+                    <Item subMenuId="encoding-greek" name="Грецька"/>
+                    <Item subMenuId="encoding-hebrew" name="Іврит"/>
+                    <Item subMenuId="encoding-japanese" name="Японська"/>
                     <Item subMenuId="encoding-korean" name="Корейська"/>
                     <Item subMenuId="encoding-northEuropean" name="Північноєвропейська"/>
                     <Item subMenuId="encoding-thai" name="Тайська"/>
@@ -85,7 +85,7 @@
                     <Item id="41007" name="Зберегти все"/>
                     <Item id="41008" name="Зберегти як..."/>
                     <Item id="41010" name="Друк..."/>
-                    <Item id="1001"  name="Друкувати негайно"/>
+                    <Item id="1001" name="Друкувати негайно"/>
                     <Item id="41011" name="Вийти"/>
                     <Item id="41012" name="Завантажити сеанс..."/>
                     <Item id="41013" name="Зберегти сеанс..."/>
@@ -290,7 +290,7 @@
                     <Item id="46250" name="Визначити мову..."/>
                     <Item id="46300" name="Відкрити користувацьку теку мови..."/>
                     <Item id="46180" name="Визначено користувачем"/>
-                    <Item id="47000" name="Про Notepad++"/>
+                    <Item id="47000" name="Про Textrument"/>
                     <Item id="47010" name="Аргументи командного рядка..."/>
                     <Item id="47001" name="Домівка Notepad++"/>
                     <Item id="47002" name="Сторінка проекту Notepad++"/>
@@ -328,42 +328,48 @@
                     <Item id="42041" name="Очистити список останніх файлів"/>
                     <Item id="48016" name="Змінити комб. клавіш/Видалити макрос..."/>
                     <Item id="48017" name="Змінити комб. клавіш/Видалити команду..."/>
+                    <Item id="44070" name="список Tab"/>
+                    <Item id="44105" name="Активуйте панель, але не переключити його"/>
+                    <Item id="48100" name="Дрібні значки"/>
+                    <Item id="48101" name="Великі значки"/>
+                    <Item id="48102" name="Стандартні значки"/>
                 </Commands>
             </Main>
             <Splitter>
             </Splitter>
             <TabBar>
-                    <Item CMID="0" name="Закрити"/>
-                    <Item CMID="1" name="Закрити всі, крім поточної"/>
-                    <Item CMID="2" name="Зберегти"/>
-                    <Item CMID="3" name="Зберегти як..."/>
-                    <Item CMID="4" name="Друкувати"/>
-                    <Item CMID="5" name="Відкрити в іншому вікні"/>
-                    <Item CMID="6" name="Копіювати в інше вікно"/>
-                    <Item CMID="7" name="Повний шлях файлу до буфера обміну"/>
-                    <Item CMID="8" name="Назву файлу до буфера обміну"/>
-                    <Item CMID="9" name="Поточний шлях до буфера обміну"/>
-                    <Item CMID="10" name="Перейменувати"/>
-                    <Item CMID="11" name="Перемістити в смітник"/>
-                    <Item CMID="12" name="Лише читання"/>
-                    <Item CMID="13" name="Прибрати позначку „Лише читання“"/>
-                    <Item CMID="14" name="Перейти до нового екземпляра"/>
-                    <Item CMID="15" name="Відкрити в новому екземплярі"/>
-                    <Item CMID="16" name="Перезавантажити"/>
-                    <Item CMID="17" name="Закрити все зліва"/>
-                    <Item CMID="18" name="Закрити все справа"/>
-                    <Item CMID="19" name="Відкрити теку в провіднику"/>
-                    <Item CMID="20" name="Відкрити теку в cmd"/>
-                    <Item CMID="21" name="Відкрити в типовому засобі перегляду"/>
-                    <Item CMID="22" name="Закрити всі незмінені"/>
+                <Item CMID="0" name="Закрити"/>
+                <Item CMID="1" name="Закрити всі, крім поточної"/>
+                <Item CMID="2" name="Зберегти"/>
+                <Item CMID="3" name="Зберегти як..."/>
+                <Item CMID="4" name="Друкувати"/>
+                <Item CMID="5" name="Відкрити в іншому вікні"/>
+                <Item CMID="6" name="Копіювати в інше вікно"/>
+                <Item CMID="7" name="Повний шлях файлу до буфера обміну"/>
+                <Item CMID="8" name="Назву файлу до буфера обміну"/>
+                <Item CMID="9" name="Поточний шлях до буфера обміну"/>
+                <Item CMID="10" name="Перейменувати"/>
+                <Item CMID="11" name="Перемістити в смітник"/>
+                <Item CMID="12" name="Лише читання"/>
+                <Item CMID="13" name="Прибрати позначку „Лише читання“"/>
+                <Item CMID="14" name="Перейти до нового екземпляра"/>
+                <Item CMID="15" name="Відкрити в новому екземплярі"/>
+                <Item CMID="16" name="Перезавантажити"/>
+                <Item CMID="17" name="Закрити все зліва"/>
+                <Item CMID="18" name="Закрити все справа"/>
+                <Item CMID="19" name="Відкрити теку в провіднику"/>
+                <Item CMID="20" name="Відкрити теку в cmd"/>
+                <Item CMID="21" name="Відкрити в типовому засобі перегляду"/>
+                <Item CMID="22" name="Закрити всі незмінені"/>
+                <Item CMID="23" name="Відкрити пов&amp;#39;язаний файл / каталог"/>
             </TabBar>
         </Menu>
 
         <Dialog>
             <Find title="" titleFind="Знайти" titleReplace="Замінити" titleFindInFiles="Знайти у файлах" titleMark="Позначки">
-                <Item id="1"    name="Знайти далі"/>
+                <Item id="1" name="Знайти далі"/>
                 <Item id="1722" name="Зворотній напрямок"/>
-                <Item id="2"    name="Закрити"/>
+                <Item id="2" name="Закрити"/>
                 <Item id="1620" name="Що шукати:"/>
                 <Item id="1603" name="Лише цілі слова"/>
                 <Item id="1604" name="Враховувати регістр"/>
@@ -395,7 +401,7 @@
                 <Item id="1641" name="Знайти все в поточному документі"/>
                 <Item id="1686" name="Прозорість"/>
                 <Item id="1703" name="&amp;. новий рядок"/>
-				<Item id="1721" name="▲"/>
+                <Item id="1721" name="▲"/>
                 <Item id="1723" name="▼ Знайти далі"/>
             </Find>
 
@@ -414,8 +420,8 @@
             <GoToLine title="Перехід до...">
                 <Item id="2007" name="Рядок"/>
                 <Item id="2008" name="Стовпчик"/>
-                <Item id="1"    name="Вперед!"/>
-                <Item id="2"    name="Не хочу нікуди"/>
+                <Item id="1" name="Вперед!"/>
+                <Item id="2" name="Не хочу нікуди"/>
                 <Item id="2004" name="Ми тут:"/>
                 <Item id="2005" name="Йдемо туди:"/>
                 <Item id="2006" name="Далі не пройти:"/>
@@ -423,48 +429,46 @@
 
             <Run title="Запустити...">
                 <Item id="1903" name="Введіть параметр запуску програми"/>
-                <Item id="1"    name="Пуск!"/>
-                <Item id="2"    name="Скасувати"/>
+                <Item id="1" name="Пуск!"/>
+                <Item id="2" name="Скасувати"/>
                 <Item id="1904" name="Зберегти..."/>
             </Run>
 
             <MD5FromFilesDlg title="Згенерувати MD5 з файлів">
                 <Item id="1922" name="Вибрати файли для генерації MD5..."/>
                 <Item id="1924" name="Копіювати в буфер обміну"/>
-                <Item id="2"    name="Закрити"/>
+                <Item id="2" name="Закрити"/>
             </MD5FromFilesDlg>
 
             <MD5FromTextDlg title="Згенерувати MD5">
                 <Item id="1932" name="Обробити кожен рядок як окремий"/>
                 <Item id="1934" name="Копіювати в буфер обміну"/>
-                <Item id="2"    name="Закрити"/>
+                <Item id="2" name="Закрити"/>
             </MD5FromTextDlg>
-            
             <SHA256FromFilesDlg title="Згенерувати SHA-256 з файлів">
                 <Item id="1922" name="Оберіть файли для генерування SHA-256..."/>
                 <Item id="1924" name="Копіювати в буфер обміну"/>
-                <Item id="2"    name="Закрити"/>
+                <Item id="2" name="Закрити"/>
             </SHA256FromFilesDlg>
 
             <SHA256FromTextDlg title="Згенерувати SHA-256">
                 <Item id="1932" name="Обробити кожен рядок як окремий"/>
                 <Item id="1934" name="Копіювати в буфер обміну"/>
-                <Item id="2"    name="Закрити"/>
+                <Item id="2" name="Закрити"/>
             </SHA256FromTextDlg>
-            
-            <PluginsAdminDlg title="Адміністрування плагінів" titleAvailable = "Доступно" titleUpdates = "Оновлення" titleInstalled = "Встановлено">
-                <ColumnPlugin   name="Плагін"/>
-                <ColumnVersion  name="Версія"/>
+            <PluginsAdminDlg title="Адміністрування плагінів" titleAvailable="Доступно" titleUpdates="Оновлення" titleInstalled="Встановлено">
+                <ColumnPlugin name="Плагін"/>
+                <ColumnVersion name="Версія"/>
                 <Item id="5501" name="Пошук:"/>
                 <Item id="5503" name="Встановити"/>
                 <Item id="5504" name="Оновити"/>
                 <Item id="5505" name="Вилучити"/>
                 <Item id="5508" name="Далі"/>
-                <Item id="2"    name="Закрити"/>
+                <Item id="2" name="Закрити"/>
             </PluginsAdminDlg>
 
             <StyleConfig title="Визначення стилів">
-                <Item id="2"    name="Скасувати"/>
+                <Item id="2" name="Скасувати"/>
                 <Item id="2301" name="Зберегти і закрити"/>
                 <Item id="2303" name="Прозорість"/>
                 <Item id="2306" name="Вибрати тему: "/>
@@ -720,7 +724,7 @@
 
                     <Item id="6125" name="Панель списку документів"/>
                     <Item id="6126" name="Показати"/>
-                    <Item id="6127" name="Вимкнути колонку розширення"/>
+                    <Item id="6127" name="Включити стовпець розширення"/>
                 </Global>
                 <Scintillas title="Редагування">
                     <Item id="6216" name="Налаштування вставки"/>
@@ -774,16 +778,19 @@
                     <Item id="6420" name="При відкритті ANSI-файла"/>
                 </NewDoc>
 
-                <DefaultDir title="Типова тека">
+                <DefaultDir title="каталог">
                     <Item id="6413" name="Типова тека (Відкриття/Збереження)"/>
                     <Item id="6414" name="Наслідувати поточний документ"/>
                     <Item id="6415" name="Пам'ятати останню теку"/>
-                    <Item id="6430" name="Використовувати новий стиль діалогу (без шляху в стилі Unix)"/>
+                    <Item id="6430" name="Використовувати новий стиль діалогу "/>
                     <Item id="6431" name="Відкривати всі файли теки, замість відкриття теки в якості робочого простору"/>
+                    <Item id="6433" name="фільтри"/>
+                    <Item id="6432" name="Перетягнути і кинути"/>
+                    <Item id="6434" name="рекурсивний"/>
                 </DefaultDir>
 
                 <FileAssoc title="Асоціації файлів">
-                    <Item id="4008" name="Щоб використовувати цю функцію, перезапустіть Notepad++ в режимі адміністратора."/>
+                    <Item id="4008" name="Щоб використовувати цю функцію, перезапустіть Textrument в режимі адміністратора."/>
                     <Item id="4009" name="Підтримувані:"/>
                     <Item id="4010" name="Зареєстровані:"/>
                 </FileAssoc>
@@ -891,10 +898,10 @@
 
                 <MultiInstance title="Режим вікон">
                     <Item id="6151" name="Режим відкриття файлів"/>
-                    <Item id="6152" name="Відкривати сеанс у новому вікні Notepad++"/>
+                    <Item id="6152" name="Відкривати сеанс у новому вікні Textrument"/>
                     <Item id="6153" name="Завжди відкривати в новому вікні"/>
                     <Item id="6154" name="Все в одному вікні (типово)"/>
-                    <Item id="6155" name="* Зміна цих налаштувань потребує перезапуску Notepad++"/>
+                    <Item id="6155" name="* Зміна цих налаштувань потребує перезапуску Textrument"/>
                 </MultiInstance>
 
                 <Delimiter title="Розділювач">
@@ -938,7 +945,7 @@
                     <Item id="6319" name="Увімкнути"/>
                     <Item id="6320" name="Не підкреслювати"/>
                     <Item id="6322" name="Розширення файлу сеансу:"/>
-                    <Item id="6323" name="Автоматичне оновлення Notepad++"/>
+                    <Item id="6323" name="Автоматичне оновлення Textrument"/>
                     <Item id="6324" name="Перемикання документів (Ctrl+Tab)"/>
                     <Item id="6331" name="Показувати в рядку заголовка лише назву файлу"/>
                     <Item id="6334" name="Автовизначення кодування символів"/>
@@ -983,8 +990,8 @@
                 <Item id="2" name="Скасувати"/>
             </ColumnEditor>
             <FindInFinder title="Знайти у пошуковику">
-                <Item id="1"    name="Знайти все"/>
-                <Item id="2"    name="Закрити"/>
+                <Item id="1" name="Знайти все"/>
+                <Item id="2" name="Закрити"/>
                 <Item id="1711" name="Що шукати:"/>
                 <Item id="1713" name="Шукати лише в знайдених рядках"/>
                 <Item id="1714" name="Лише &amp;цілі слова"/>
@@ -995,7 +1002,7 @@
                 <Item id="1718" name="Розширений (\n \r, \t, \0, \x...)"/>
                 <Item id="1720" name="&amp;. відповідає новому рядку"/>
             </FindInFinder>
-            <DoSaveOrNot title="Зберегти"> 
+            <DoSaveOrNot title="Зберегти">
                 <Item id="1761" name="Зберегти файл &quot;$STR_REPLACE$&quot; ?"/>
                 <Item id="6" name="Так"/>
                 <Item id="7" name="Ні"/>
@@ -1004,11 +1011,12 @@
                 <Item id="5" name="Ні для всіх"/>
             </DoSaveOrNot>
         </Dialog>
-        <MessageBox> <!-- $INT_REPLACE$ is a place holder, don't translate it -->
-            <ContextMenuXmlEditWarning title="Зміна contextMenu" message="Зміна contextMenu.xml дозволяє вам змінювати випадаюче меню Notepad++.
-Для застосування змін необхідно перезапустити Notepad++."/>
+        <MessageBox>
+            <!-- $INT_REPLACE$ is a place holder, don't translate it -->
+            <ContextMenuXmlEditWarning title="Зміна contextMenu" message="Зміна contextMenu.xml дозволяє вам змінювати випадаюче меню Textrument.
+Для застосування змін необхідно перезапустити Textrument."/>
             <NppHelpAbsentWarning title="Файл не існує" message="
-не існує. Завантажте його на сайті Notepad++."/>
+не існує. Завантажте його на сайті Textrument."/>
             <SaveCurrentModifWarning title="Зберегти поточну модифікацію" message="Ви повинні зберегти поточні зміни.
 Всі збережені зміни неможливо відмінити.
 
@@ -1017,10 +1025,10 @@
 Всі збережені зміни неможливо відмінити.
 
 Продовжити?"/>
-            <CannotMoveDoc title="Перемістити в новий зразок Notepad++" message="Документ змінений. Збережіть його і спробуйте знову."/>
-            <DocReloadWarning title="Перезавантажити" message="Ви дійсно хочете перезавантажити поточний файл і втратити зміни, зроблені в Notepad++?"/>
+            <CannotMoveDoc title="Перемістити в новий зразок Textrument" message="Документ змінений. Збережіть його і спробуйте знову."/>
+            <DocReloadWarning title="Перезавантажити" message="Ви дійсно хочете перезавантажити поточний файл і втратити зміни, зроблені в Textrument?"/>
             <FileLockedWarning title="Збереження невдале" message="Перевірте, чи цей файл не відкритий в іншій програмі"/>
-            <FileAlreadyOpenedInNpp title="" message="Файл вже відкрито в Notepad++."/>
+            <FileAlreadyOpenedInNpp title="" message="Файл вже відкрито в Textrument."/>
             <DeleteFileFailed title="Видалення файлу" message="Не вдалося вилучити файл"/>
 
             <NbFileToOpenImportantWarning title="Надто велика кількість файлів для відкриття" message="$INT_REPLACE$ файлів невдовзі будуть відкриті.
@@ -1049,14 +1057,14 @@
             <DoReloadOrNotAndLooseChange title="Перезавантажити" message="&quot;$STR_REPLACE$&quot;
 
 Цей файл був змінений іншою програмою.
-Хочете перезавантажити його і втратити всі зміни, зроблені в Notepad++?"/>
+Хочете перезавантажити його і втратити всі зміни, зроблені в Textrument?"/>
             <PrehistoricSystemDetected title="Виявлено застарілу систему" message="Схоже, ви все ще використовуєте застарілу систему. Шкода, але ця функція працює лише на сучасній системі."/>
-            <XpUpdaterProblem title="Система оновлення Notepad++" message="Система оновлення Notepad++ несумісна з XP, у зв'язку із застарілою системою безпеки XP.
-Хочете перейти на веб-сторінку Notepad++ для завантаження найновішої версії?"/>
-            <GUpProxyConfNeedAdminMode title="Параметри проксі" message="Перезапустіть Notepad++ в режимі Адміністратора для налаштування проксі."/>
+            <XpUpdaterProblem title="Система оновлення Textrument" message="Система оновлення Textrument несумісна з XP, у зв'язку із застарілою системою безпеки XP.
+Хочете перейти на веб-сторінку Textrument для завантаження найновішої версії?"/>
+            <GUpProxyConfNeedAdminMode title="Параметри проксі" message="Перезапустіть Textrument в режимі Адміністратора для налаштування проксі."/>
             <DocTooDirtyToMonitor title="Проблема моніторингу" message="Документ змінено. Будь ласка, збережіть зміни перед його моніторингом."/>
             <DocNoExistToMonitor title="Проблема моніторингу" message="Файл повинен існувати для його моніторингу."/>
-            <FileTooBigToOpen title="Проблема розміру файлу" message="Файл завеликий для відкриття в Notepad++"/>
+            <FileTooBigToOpen title="Проблема розміру файлу" message="Файл завеликий для відкриття в Textrument"/>
             <CreateNewFileOrNot title="Створити новий файл" message="&quot;$STR_REPLACE$&quot; не існує. Створити його?"/>
             <CreateNewFileError title="Створити новий файл" message="Не вдалося створить файл &quot;$STR_REPLACE$&quot;."/>
             <OpenFileError title="ПОМИЛКА" message="Не вдалося відкрити файл &quot;$STR_REPLACE$&quot;."/>

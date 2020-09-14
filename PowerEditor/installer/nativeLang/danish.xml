@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="UTF-8"?>
 <NotepadPlus>
     <Native-Langue name="Dansk" filename="danish.xml" version="7.8.1">
         <Menu>
@@ -45,7 +45,7 @@
                     <Item subMenuId="view-tab" name="Faneblad"/>
                     <Item subMenuId="view-collapseLevel" name="Sammenfold niveau"/>
                     <Item subMenuId="view-uncollapseLevel" name="Udfold niveau"/>
-                    <Item subMenuId="view-project" name="Projekt"/>
+                    <Item subMenuId="view-project" name="Projekt Paneler"/>
                     <Item subMenuId="encoding-characterSets" name="Tegnsæt"/>
                     <Item subMenuId="encoding-arabic" name="Arabisk"/>
                     <Item subMenuId="encoding-baltic" name="Baltisk"/>
@@ -284,7 +284,7 @@
                     <Item id="46250" name="Definer dit sprog..."/>
                     <Item id="46300" name="Åbn mappe med brugerdefineret sprog..."/>
                     <Item id="46180" name="Brugerdefineret"/>
-                    <Item id="47000" name="Om Notepad++"/>
+                    <Item id="47000" name="Om Textrument"/>
                     <Item id="47010" name="Kommandolinjeparametre..."/>
                     <Item id="47001" name="Notepad++ hjem"/>
                     <Item id="47002" name="Notepad++ projektside"/>
@@ -322,42 +322,48 @@
                     <Item id="42041" name="Ryd listen over seneste filer"/>
                     <Item id="48016" name="Rediger genvej/slet makro..."/>
                     <Item id="48017" name="Rediger genvej/slet kommando..."/>
+                    <Item id="44070" name="Tab List"/>
+                    <Item id="44105" name="Aktiver panel, men ikke skifte det"/>
+                    <Item id="48100" name="Små ikoner"/>
+                    <Item id="48101" name="Store ikoner"/>
+                    <Item id="48102" name="Standardikoner"/>
                 </Commands>
             </Main>
             <Splitter>
             </Splitter>
             <TabBar>
-                    <Item CMID="0" name="Luk"/>
-                    <Item CMID="1" name="Luk alle, undtagen dette"/>
-                    <Item CMID="2" name="Gem"/>
-                    <Item CMID="3" name="Gem som..."/>
-                    <Item CMID="4" name="Udskriv"/>
-                    <Item CMID="5" name="Flyt til anden visning"/>
-                    <Item CMID="6" name="Klon til anden visning"/>
-                    <Item CMID="7" name="Kopier fuld filsti"/>
-                    <Item CMID="8" name="Kopier filnavn"/>
-                    <Item CMID="9" name="Kopier mappesti"/>
-                    <Item CMID="10" name="Omdøb"/>
-                    <Item CMID="11" name="Flyt til papirkurv"/>
-                    <Item CMID="12" name="Skrivebeskyttet"/>
-                    <Item CMID="13" name="Fjern skrivebeskyttelse"/>
-                    <Item CMID="14" name="Flyt til ny instans"/>
-                    <Item CMID="15" name="Åbn i ny instans"/>
-                    <Item CMID="16" name="Genindlæs"/>
-                    <Item CMID="17" name="Luk alle til venstre"/>
-                    <Item CMID="18" name="Luk alle til højre"/>
-                    <Item CMID="19" name="Åbn indeholdende mappe i Stifinder"/>
-                    <Item CMID="20" name="Åbn indeholdende mappe i Kommandoprompt"/>
-                    <Item CMID="21" name="Åbn i standardfremviser"/>
-                    <Item CMID="22" name="Luk alle som ikke er ændret"/>
+                <Item CMID="0" name="Luk"/>
+                <Item CMID="1" name="Luk alle, undtagen dette"/>
+                <Item CMID="2" name="Gem"/>
+                <Item CMID="3" name="Gem som..."/>
+                <Item CMID="4" name="Udskriv"/>
+                <Item CMID="5" name="Flyt til anden visning"/>
+                <Item CMID="6" name="Klon til anden visning"/>
+                <Item CMID="7" name="Kopier fuld filsti"/>
+                <Item CMID="8" name="Kopier filnavn"/>
+                <Item CMID="9" name="Kopier mappesti"/>
+                <Item CMID="10" name="Omdøb"/>
+                <Item CMID="11" name="Flyt til papirkurv"/>
+                <Item CMID="12" name="Skrivebeskyttet"/>
+                <Item CMID="13" name="Fjern skrivebeskyttelse"/>
+                <Item CMID="14" name="Flyt til ny instans"/>
+                <Item CMID="15" name="Åbn i ny instans"/>
+                <Item CMID="16" name="Genindlæs"/>
+                <Item CMID="17" name="Luk alle til venstre"/>
+                <Item CMID="18" name="Luk alle til højre"/>
+                <Item CMID="19" name="Åbn indeholdende mappe i Stifinder"/>
+                <Item CMID="20" name="Åbn indeholdende mappe i Kommandoprompt"/>
+                <Item CMID="21" name="Åbn i standardfremviser"/>
+                <Item CMID="22" name="Luk alle som ikke er ændret"/>
+                <Item CMID="23" name="Åbn den sammenkædede fil / Bibliotek"/>
             </TabBar>
         </Menu>
 
         <Dialog>
             <Find title="" titleFind="Søg" titleReplace="Erstat" titleFindInFiles="Søg i filer" titleMark="Mærk">
-                <Item id="1"    name="Find næste"/>
+                <Item id="1" name="Find næste"/>
                 <Item id="1722" name="Baglæns retning"/>
-                <Item id="2"    name="Luk"/>
+                <Item id="2" name="Luk"/>
                 <Item id="1620" name="&amp;Søg efter:"/>
                 <Item id="1603" name="Søg kun på &amp;hele ord"/>
                 <Item id="1604" name="Forskel på store og små &amp;bogstaver"/>
@@ -389,7 +395,7 @@
                 <Item id="1641" name="&amp;Find alle i nuværende dokument"/>
                 <Item id="1686" name="&amp;Gennemsigtig"/>
                 <Item id="1703" name="&amp;. finder linjeskift"/>
-				<Item id="1721" name="▲"/>
+                <Item id="1721" name="▲"/>
                 <Item id="1723" name="▼ Find næste"/>
             </Find>
 
@@ -408,8 +414,8 @@
             <GoToLine title="Gå til...">
                 <Item id="2007" name="&amp;Linje"/>
                 <Item id="2008" name="&amp;Forskydning"/>
-                <Item id="1"    name="&amp;Gå"/>
-                <Item id="2"    name="Jeg går ingen steder"/>
+                <Item id="1" name="&amp;Gå"/>
+                <Item id="2" name="Jeg går ingen steder"/>
                 <Item id="2004" name="Du er her:"/>
                 <Item id="2005" name="Du vil gå til:"/>
                 <Item id="2006" name="Du kan højst gå til:"/>
@@ -417,48 +423,48 @@
 
             <Run title="Kør...">
                 <Item id="1903" name="Programmet der skal køres"/>
-                <Item id="1"    name="Kør"/>
-                <Item id="2"    name="Annuller"/>
+                <Item id="1" name="Kør"/>
+                <Item id="2" name="Annuller"/>
                 <Item id="1904" name="Gem..."/>
             </Run>
 
             <MD5FromFilesDlg title="Generer MD5-fingeraftryk fra filer">
                 <Item id="1922" name="Vælg filer til generering af MD5..."/>
                 <Item id="1924" name="Kopier til udklipsholder"/>
-                <Item id="2"    name="Luk"/>
+                <Item id="2" name="Luk"/>
             </MD5FromFilesDlg>
 
             <MD5FromTextDlg title="Generer MD5-fingeraftryk">
                 <Item id="1932" name="Behandl hver linje som en separat streng"/>
                 <Item id="1934" name="Kopier til udklipsholder"/>
-                <Item id="2"    name="Luk"/>
+                <Item id="2" name="Luk"/>
             </MD5FromTextDlg>
 
             <SHA256FromFilesDlg title="Generer SHA-256-fingeraftryk fra filer">
                 <Item id="1922" name="Vælg filer til generering af SHA-256..."/>
                 <Item id="1924" name="Kopier til udklipsholder"/>
-                <Item id="2"    name="Luk"/>
+                <Item id="2" name="Luk"/>
             </SHA256FromFilesDlg>
 
             <SHA256FromTextDlg title="Generer SHA-256-fingeraftryk">
                 <Item id="1932" name="Behandl hver linje som en separat streng"/>
                 <Item id="1934" name="Kopier til udklipsholder"/>
-                <Item id="2"    name="Luk"/>
+                <Item id="2" name="Luk"/>
             </SHA256FromTextDlg>
 
-            <PluginsAdminDlg title="Pluginadmin" titleAvailable = "Tilgængelig" titleUpdates = "Opdateringer" titleInstalled = "Installeret">
-                <ColumnPlugin   name="Plugin"/>
-                <ColumnVersion  name="Version"/>
+            <PluginsAdminDlg title="Pluginadmin" titleAvailable="Tilgængelig" titleUpdates="Opdateringer" titleInstalled="Installeret">
+                <ColumnPlugin name="Plugin"/>
+                <ColumnVersion name="Version"/>
                 <Item id="5501" name="Søg:"/>
                 <Item id="5503" name="Installer"/>
                 <Item id="5504" name="Opdater"/>
                 <Item id="5505" name="Fjern"/>
                 <Item id="5508" name="Næste"/>
-                <Item id="2"    name="Luk"/>
+                <Item id="2" name="Luk"/>
             </PluginsAdminDlg>
 
             <StyleConfig title="Udseende-konfigurator">
-                <Item id="2"    name="Annuller"/>
+                <Item id="2" name="Annuller"/>
                 <Item id="2301" name="Gem og luk"/>
                 <Item id="2303" name="Gennemsigtig"/>
                 <Item id="2306" name="Vælg tema: "/>
@@ -714,7 +720,7 @@
 
                     <Item id="6125" name="Dokumentlistepanel"/>
                     <Item id="6126" name="Vis"/>
-                    <Item id="6127" name="Deaktivér filtype-kolonne"/>
+                    <Item id="6127" name="Aktiver forlængerstativ"/>
                 </Global>
                 <Scintillas title="Redigering">
                     <Item id="6216" name="Markørindstillinger"/>
@@ -769,12 +775,15 @@
                     <Item id="6420" name="Anvend når ANSI-filer åbnes"/>
                 </NewDoc>
 
-                <DefaultDir title="Standardmappe">
+                <DefaultDir title="Vejviser">
                     <Item id="6413" name="Standardmappe (åbn/gem)"/>
                     <Item id="6414" name="Følg nuværende dokument"/>
                     <Item id="6415" name="Husk sidste anvendte mappe"/>
-                    <Item id="6430" name="Brug gem-dialog med nyt udseende (uden filtype funktionalitet og stikapacitet i Unix-stil)"/>
+                    <Item id="6430" name="Brug gem-dialog med nyt udseende "/>
                     <Item id="6431" name="Åbn alle mappens filer ved slip af mappe, fremfor at starte mappe som arbejdsområde"/>
+                    <Item id="6433" name="filtre"/>
+                    <Item id="6432" name="Træk og slip"/>
+                    <Item id="6434" name="rekursivt"/>
                 </DefaultDir>
 
                 <FileAssoc title="Filtilknytning">
@@ -885,10 +894,10 @@
 
                 <MultiInstance title="Multi-instans">
                     <Item id="6151" name="Multi-instansindstillinger"/>
-                    <Item id="6152" name="Åbn session i en ny instans af Notepad++"/>
+                    <Item id="6152" name="Åbn session i en ny instans af Textrument"/>
                     <Item id="6153" name="Altid i multi-instans-tilstand"/>
                     <Item id="6154" name="Standard (én instans)"/>
-                    <Item id="6155" name="* Notepad++ skal genstartes før ændringen træder i kraft"/>
+                    <Item id="6155" name="* Textrument skal genstartes før ændringen træder i kraft"/>
                 </MultiInstance>
 
                 <Delimiter title="Afgrænser">
@@ -933,7 +942,7 @@
                     <Item id="6319" name="Aktivér"/>
                     <Item id="6320" name="Ikke understreget"/>
                     <Item id="6322" name="Filtype for sessionsfil:"/>
-                    <Item id="6323" name="Aktivér automatisk opdatering af Notepad++"/>
+                    <Item id="6323" name="Aktivér automatisk opdatering af Textrument"/>
                     <Item id="6324" name="Dokumentskifter (Ctrl+Tabulator)"/>
                     <Item id="6331" name="Vis kun filnavn i titellinjen"/>
                     <Item id="6334" name="Automatisk registrering af tegnkodning"/>
@@ -977,8 +986,8 @@
                 <Item id="2" name="Annuller"/>
             </ColumnEditor>
             <FindInFinder title="Find i finder">
-                <Item id="1"    name="Find alle"/>
-                <Item id="2"    name="Luk"/>
+                <Item id="1" name="Find alle"/>
+                <Item id="2" name="Luk"/>
                 <Item id="1711" name="&amp;Søg efter:"/>
                 <Item id="1713" name="Søg kun i fundne linjer"/>
                 <Item id="1714" name="Søg kun på &amp;hele ord"/>
@@ -989,7 +998,7 @@
                 <Item id="1718" name="&amp;Udvidet (\n, \r, \t, \0, \x...)"/>
                 <Item id="1720" name="&amp;. finder linjeskift"/>
             </FindInFinder>
-            <DoSaveOrNot title="Gem"> 
+            <DoSaveOrNot title="Gem">
                 <Item id="1761" name="Gem filen &quot;$STR_REPLACE$&quot;?"/>
                 <Item id="6" name="&amp;Ja"/>
                 <Item id="7" name="&amp;Nej"/>
@@ -998,11 +1007,12 @@
                 <Item id="5" name="N&amp;ej til alle"/>
             </DoSaveOrNot>
         </Dialog>
-        <MessageBox> <!-- $INT_REPLACE$ is a place holder, don't translate it -->
-            <ContextMenuXmlEditWarning title="Redigering af genvejsmenu" message="Ved redigering af contextMenu.xml kan du ændre genvejsmenuen i Notepad++.
-Du skal genstarte Notepad++ før ændringerne i contextMenu.xml træder i kraft."/>
+        <MessageBox>
+            <!-- $INT_REPLACE$ is a place holder, don't translate it -->
+            <ContextMenuXmlEditWarning title="Redigering af genvejsmenu" message="Ved redigering af contextMenu.xml kan du ændre genvejsmenuen i Textrument.
+Du skal genstarte Textrument før ændringerne i contextMenu.xml træder i kraft."/>
             <NppHelpAbsentWarning title="Filen findes ikke" message="
-findes ikke. Download den venligst fra Notepad++'s websted."/>
+findes ikke. Download den venligst fra Textrument's websted."/>
             <SaveCurrentModifWarning title="Gem nuværende ændring" message="Du bør gemme den nuværende ændring.
 Alle gemte ændringer kan ikke fortrydes.
 
@@ -1011,18 +1021,18 @@ Fortsæt?"/>
 Alle gemte ændringer kan ikke fortrydes.
 
 Fortsæt?"/>
-            <CannotMoveDoc title="Flyt til ny instans af Notepad++" message="Dokument er ændret. Gem det og prøv igen."/>
-            <DocReloadWarning title="Genindlæs" message="Er du sikker på, at du vil genindlæse den nuværende fil og miste de ændringer der er lavet i Notepad++?"/>
+            <CannotMoveDoc title="Flyt til ny instans af Textrument" message="Dokument er ændret. Gem det og prøv igen."/>
+            <DocReloadWarning title="Genindlæs" message="Er du sikker på, at du vil genindlæse den nuværende fil og miste de ændringer der er lavet i Textrument?"/>
             <FileLockedWarning title="Gemning mislykkedes" message="Tjek venligst om filen allerede er åbnet i et andet program"/>
-            <FileAlreadyOpenedInNpp title="" message="Filen er allerede åbnet i Notepad++."/>
+            <FileAlreadyOpenedInNpp title="" message="Filen er allerede åbnet i Textrument."/>
             <DeleteFileFailed title="Slet fil" message="Sletning af filen mislykkedes"/>
 
             <NbFileToOpenImportantWarning title="Du er ved at åbne et stort antal filer" message="$INT_REPLACE$ filer er ved at blive åbnet.
 Er du sikker på, at du vil åbne dem?"/>
-			<SettingsOnCloudError title="Indstillinger i skyen" message="Det ser ud til at stien af indstillinger i skyen er sat på et skrivebeskyttet drev,
+            <SettingsOnCloudError title="Indstillinger i skyen" message="Det ser ud til at stien af indstillinger i skyen er sat på et skrivebeskyttet drev,
 eller på en mappe som kræver priviligerede rettigheder for at få skriveadgang.
 Dine indstillinger på sky annulleres. Nulstil venligst en relateret værdi i dialogen Præferencer."/>
-			<FilePathNotFoundWarning title="Åbning af fil" message="Filen du prøver at åbne findes ikke."/>
+            <FilePathNotFoundWarning title="Åbning af fil" message="Filen du prøver at åbne findes ikke."/>
             <SessionFileInvalidError title="Kunne ikke indlæse session" message="Sessionsfilen er enten ødelagt eller ugyldig."/>
             <DroppingFolderAsProjectModeWarning title="Ugyldig handling" message="Du kan kun slippe filer eller mapper men ikke begge dele, da du er i slippe mappe som projekt-tilstand.
 skal du aktivere &quot;Åbn alle mappens filer ved slip af mappe, fremfor at starte mappe som arbejdsområde&quot; i &quot;Standardmappe&quot;-afsnittet i Præferencer-dialogen for at få handlingen til at virke."/>
@@ -1044,13 +1054,13 @@ Du vil genindlæse den?"/>
             <DoReloadOrNotAndLooseChange title="Genindlæs" message="&quot;$STR_REPLACE$&quot;
 
 Filen er blevet ændret af et andet program.
-Vil du genindlæse den og miste ændringerne som er foretaget i Notepad++?"/>
+Vil du genindlæse den og miste ændringerne som er foretaget i Textrument?"/>
             <PrehistoricSystemDetected title="Forhistorisk system registreret" message="Det ser ud til at du stadig bruger et forhistorisk system. Funktionaliteten virker beklageligvis kun på et moderne system."/>
-            <XpUpdaterProblem title="Opdatering af Notepad++" message="Opdatering af Notepad++ er ikke kompatibel med XP pga. det forældede sikkerhedslag under XP.
-Vil du gå til Notepad++-siden for at downloade den seneste version?"/>
+            <XpUpdaterProblem title="Opdatering af Textrument" message="Opdatering af Textrument er ikke kompatibel med XP pga. det forældede sikkerhedslag under XP.
+Vil du gå til Textrument-siden for at downloade den seneste version?"/>
             <DocTooDirtyToMonitor title="Problem med overvågning" message="Dokumentet er beskidt. Gem venligst ændringen inden det overvåges."/>
             <DocNoExistToMonitor title="Problem med overvågning" message="Filen skal findes for at kunne overvåges."/>
-            <FileTooBigToOpen title="Problem med filstørrelse" message="Filen er for stor til at blive åbnet af Notepad++"/>
+            <FileTooBigToOpen title="Problem med filstørrelse" message="Filen er for stor til at blive åbnet af Textrument"/>
             <CreateNewFileOrNot title="Opret ny fil" message="&quot;$STR_REPLACE$&quot; findes ikke. Skal den oprettes?."/>
             <CreateNewFileError title="Opret ny fil" message="Kan ikke oprette filen &quot;$STR_REPLACE$&quot;."/>
             <OpenFileError title="FEJL" message="Kan ikke åbne filen &quot;$STR_REPLACE$&quot;."/>

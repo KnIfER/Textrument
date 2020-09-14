@@ -1,11 +1,11 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="UTF-8"?>
 <NotepadPlus>
-    <Native-Langue name = "Indonesian" filename="indonesian.xml" version="7.5.5">
+    <Native-Langue name="Indonesian" filename="indonesian.xml" version="7.5.5">
         <Menu>
             <Main>
                 <!-- Main Menu Entries -->
-                 <Entries>
-                   <Item menuId="file" name="Berkas"/>
+                <Entries>
+                    <Item menuId="file" name="Berkas"/>
                     <Item menuId="edit" name="Edit"/>
                     <Item menuId="search" name="Cari"/>
                     <Item menuId="view" name="Tampilan"/>
@@ -24,7 +24,7 @@
                     <Item subMenuId="file-openFolder" name="Buka Folder Terkait"/>
                     <Item subMenuId="file-closeMore" name="Tutup Lagi"/>
                     <Item subMenuId="file-recentFiles" name="File Terbaru"/>
-                    <Item subMenuId="edit-copyToClipboard"  name="Salin ke Klipbor"/>
+                    <Item subMenuId="edit-copyToClipboard" name="Salin ke Klipbor"/>
                     <Item subMenuId="edit-indent" name="Indentasi"/>
                     <Item subMenuId="edit-convertCaseTo" name="Ganti Kapitalisasi"/>
                     <Item subMenuId="edit-lineOperations" name="Operasi Baris"/>
@@ -39,32 +39,32 @@
                     <Item subMenuId="search-jumpUp" name="Loncat Naik"/>
                     <Item subMenuId="search-jumpDown" name="Loncat Turun"/>
                     <Item subMenuId="search-bookmark" name="Tanda"/>
-                    <Item subMenuId="view-showSymbol"  name="Tampilkan Simbol"/>
-                    <Item subMenuId="view-zoom"  name="Pembesaran"/>
-                    <Item subMenuId="view-moveCloneDocument"  name="Pindahkan/Duplikatkan Dokumen Ini"/>
-                    <Item subMenuId="view-tab"  name="Tab"/>
+                    <Item subMenuId="view-showSymbol" name="Tampilkan Simbol"/>
+                    <Item subMenuId="view-zoom" name="Pembesaran"/>
+                    <Item subMenuId="view-moveCloneDocument" name="Pindahkan/Duplikatkan Dokumen Ini"/>
+                    <Item subMenuId="view-tab" name="Tab"/>
                     <Item subMenuId="view-collapseLevel" name="Ciutkan Level"/>
                     <Item subMenuId="view-uncollapseLevel" name="Kembangkan Level"/>
-                    <Item subMenuId="view-project" name="Proyek"/>
-                    <Item subMenuId="encoding-characterSets"  name="Set Karakter"/>
-                    <Item subMenuId="encoding-arabic"  name="Arab"/>
-                    <Item subMenuId="encoding-baltic"  name="Baltik"/>
-                    <Item subMenuId="encoding-celtic"  name="Seltik"/>
-                    <Item subMenuId="encoding-cyrillic"  name="Sirilik"/>
-                    <Item subMenuId="encoding-centralEuropean"  name="Eropa Tengah"/>
-                    <Item subMenuId="encoding-chinese"  name="Cina"/>
-                    <Item subMenuId="encoding-easternEuropean"  name="Eropa Timur"/>
-                    <Item subMenuId="encoding-greek"  name="Yunani"/>
-                    <Item subMenuId="encoding-hebrew"  name="Ibrani"/>
-                    <Item subMenuId="encoding-japanese"  name="Jepang"/>
+                    <Item subMenuId="view-project" name="proyek Panel"/>
+                    <Item subMenuId="encoding-characterSets" name="Set Karakter"/>
+                    <Item subMenuId="encoding-arabic" name="Arab"/>
+                    <Item subMenuId="encoding-baltic" name="Baltik"/>
+                    <Item subMenuId="encoding-celtic" name="Seltik"/>
+                    <Item subMenuId="encoding-cyrillic" name="Sirilik"/>
+                    <Item subMenuId="encoding-centralEuropean" name="Eropa Tengah"/>
+                    <Item subMenuId="encoding-chinese" name="Cina"/>
+                    <Item subMenuId="encoding-easternEuropean" name="Eropa Timur"/>
+                    <Item subMenuId="encoding-greek" name="Yunani"/>
+                    <Item subMenuId="encoding-hebrew" name="Ibrani"/>
+                    <Item subMenuId="encoding-japanese" name="Jepang"/>
                     <Item subMenuId="encoding-korean" name="Korea"/>
                     <Item subMenuId="encoding-northEuropean" name="Eropa Utara"/>
                     <Item subMenuId="encoding-thai" name="Thai"/>
                     <Item subMenuId="encoding-turkish" name="Turki"/>
                     <Item subMenuId="encoding-westernEuropean" name="Eropa Barat"/>
                     <Item subMenuId="encoding-vietnamese" name="Vietnam"/>
-                    <Item subMenuId="settings-import"  name="Impor"/>
-                    <Item subMenuId="tools-md5"  name="MD5"/>
+                    <Item subMenuId="settings-import" name="Impor"/>
+                    <Item subMenuId="tools-md5" name="MD5"/>
                 </SubEntries>
 
                 <!-- all menu item -->
@@ -82,7 +82,7 @@
                     <Item id="41007" name="Simpan Semua"/>
                     <Item id="41008" name="Simpan Sebagai..."/>
                     <Item id="41010" name="Cetak..."/>
-                    <Item id="1001"  name="Cetak Langsung"/>
+                    <Item id="1001" name="Cetak Langsung"/>
                     <Item id="41011" name="Keluar"/>
                     <Item id="41012" name="Muat Sesi..."/>
                     <Item id="41013" name="Simpan Sesi..."/>
@@ -222,8 +222,8 @@
                     <Item id="44019" name="Tampilkan Semua Karakter"/>
                     <Item id="44020" name="Tampilkan Panduan Indentasi"/>
                     <Item id="44022" name="Penggal Baris"/>
-                    <Item id="44023" name="Besarkan	Ctrl+Mouse Wheel Up"/>
-                    <Item id="44024" name="Kecilkan	Ctrl+Mouse Wheel Down"/>
+                    <Item id="44023" name="Besarkan Ctrl+Mouse Wheel Up"/>
+                    <Item id="44024" name="Kecilkan Ctrl+Mouse Wheel Down"/>
                     <Item id="44025" name="Tampilkan Spasi Putih dan TAB"/>
                     <Item id="44026" name="Tampilkan Akhir Baris"/>
                     <Item id="44029" name="Buka Semua Lipatan"/>
@@ -279,7 +279,7 @@
                     <Item id="46001" name="Konfigurator Gaya..."/>
                     <Item id="46250" name="Definisikan bahasa anda..."/>
                     <Item id="46180" name="Definisi-Pengguna"/>
-                    <Item id="47000" name="Ihwal Notepad++..."/>
+                    <Item id="47000" name="Ihwal Textrument..."/>
                     <Item id="47010" name="Argumen Baris Perintah..."/>
                     <Item id="47001" name="Beranda Notepad++"/>
                     <Item id="47002" name="Laman Proyek Notepad++"/>
@@ -309,42 +309,47 @@
                     <Item id="42041" name="Kosongkan Daftar Berkas Terbaru"/>
                     <Item id="48016" name="Ubah Pintasan/Hapus Makro..."/>
                     <Item id="48017" name="Ubah Pintasan/Hapus Perintah..."/>
-			
+                    <Item id="44070" name="tab Daftar"/>
+                    <Item id="44105" name="Aktifkan panel tapi tidak beralih itu"/>
+                    <Item id="48100" name="Ikon kecil"/>
+                    <Item id="48101" name="Ikon besar"/>
+                    <Item id="48102" name="Ikon standar"/>
                 </Commands>
             </Main>
             <Splitter>
             </Splitter>
             <TabBar>
-                    <Item CMID="0" name="Tutup"/>
-                    <Item CMID="1" name="Tutup Semua Kecuali Ini"/>
-                    <Item CMID="2" name="Simpan"/>
-                    <Item CMID="3" name="Simpan Sebagai..."/>
-                    <Item CMID="4" name="Cetak"/>
-                    <Item CMID="5" name="Pindah ke Tampilan Lain"/>
-                    <Item CMID="6" name="Duplikat ke Tampilan Lain"/>
-                    <Item CMID="7" name="Path Lengkap Berkas ke Klipbor"/>
-                    <Item CMID="8" name="Nama Berkas ke Klipbor"/>
-                    <Item CMID="9" name="Path Direktori Aktif ke Klipbor"/>
-                    <Item CMID="10" name="Ganti Nama"/>
-                    <Item CMID="11" name="Hapus"/>
-                    <Item CMID="12" name="Hanya-Baca"/>
-                    <Item CMID="13" name="Hapus Tanda Hanya-Baca"/>
-                    <Item CMID="14" name="Pindahkan ke Perwujudan Baru"/>
-                    <Item CMID="15" name="Buka dalam Perwujudan Baru"/>
-                    <Item CMID="16" name="Muat ulang"/>
-                    <Item CMID="17" name="Tutup Semua ke Kiri"/>
-                    <Item CMID="18" name="Tutup Semua ke Kanan"/>
-                    <Item CMID="19" name="Buka Folder Terkait di Penjelajah"/>
-                    <Item CMID="20" name="Buka Folder Terkait di cmd"/>
-                    <Item CMID="21" name="Buka di Penampil Bawaan"/>
+                <Item CMID="0" name="Tutup"/>
+                <Item CMID="1" name="Tutup Semua Kecuali Ini"/>
+                <Item CMID="2" name="Simpan"/>
+                <Item CMID="3" name="Simpan Sebagai..."/>
+                <Item CMID="4" name="Cetak"/>
+                <Item CMID="5" name="Pindah ke Tampilan Lain"/>
+                <Item CMID="6" name="Duplikat ke Tampilan Lain"/>
+                <Item CMID="7" name="Path Lengkap Berkas ke Klipbor"/>
+                <Item CMID="8" name="Nama Berkas ke Klipbor"/>
+                <Item CMID="9" name="Path Direktori Aktif ke Klipbor"/>
+                <Item CMID="10" name="Ganti Nama"/>
+                <Item CMID="11" name="Hapus"/>
+                <Item CMID="12" name="Hanya-Baca"/>
+                <Item CMID="13" name="Hapus Tanda Hanya-Baca"/>
+                <Item CMID="14" name="Pindahkan ke Perwujudan Baru"/>
+                <Item CMID="15" name="Buka dalam Perwujudan Baru"/>
+                <Item CMID="16" name="Muat ulang"/>
+                <Item CMID="17" name="Tutup Semua ke Kiri"/>
+                <Item CMID="18" name="Tutup Semua ke Kanan"/>
+                <Item CMID="19" name="Buka Folder Terkait di Penjelajah"/>
+                <Item CMID="20" name="Buka Folder Terkait di cmd"/>
+                <Item CMID="21" name="Buka di Penampil Bawaan"/>
+                <Item CMID="23" name="Buka file terkait / Directory"/>
             </TabBar>
         </Menu>
 
         <Dialog>
             <Find title="" titleFind="Cari" titleReplace="Ganti" titleFindInFiles="Cari dalam Berkas" titleMark="Tanda">
-                <Item id="1"    name="Cari Selanjutnya"/>
+                <Item id="1" name="Cari Selanjutnya"/>
                 <Item id="1722" name="Arah mundur"/>
-                <Item id="2"    name="Tutup"/>
+                <Item id="2" name="Tutup"/>
                 <Item id="1620" name="Cari apa:"/>
                 <Item id="1603" name="Cocokkan seluruh kata"/>
                 <Item id="1604" name="Cocokkan kapitalisasi"/>
@@ -393,8 +398,8 @@
             <GoToLine title="Pergi ke...">
                 <Item id="2007" name="Baris"/>
                 <Item id="2008" name="Ofset"/>
-                <Item id="1"    name="Pergi"/>
-                <Item id="2"    name="Tetap di tempat"/>
+                <Item id="1" name="Pergi"/>
+                <Item id="2" name="Tetap di tempat"/>
                 <Item id="2004" name="Anda di sini:"/>
                 <Item id="2005" name="Anda ingin pergi ke:"/>
                 <Item id="2006" name="Anda tidak dapat lewat dari:"/>
@@ -402,25 +407,25 @@
 
             <Run title="Jalankan...">
                 <Item id="1903" name="Program untuk Dijalankan"/>
-                <Item id="1"    name="Jalankan"/>
-                <Item id="2"    name="Batal"/>
+                <Item id="1" name="Jalankan"/>
+                <Item id="2" name="Batal"/>
                 <Item id="1904" name="Simpan..."/>
             </Run>
 
             <MD5FromFilesDlg title="Hasilkan intisari MD5 dari berkas">
                 <Item id="1922" name="Pilih file untuk menghasilkan MD5..."/>
                 <Item id="1924" name="Salin ke papan klip"/>
-                <Item id="2"    name="Tutup"/>
+                <Item id="2" name="Tutup"/>
             </MD5FromFilesDlg>
 
             <MD5FromTextDlg title="Hasilkan intisari MD5">
                 <Item id="1932" name="Perlakukan tiap baris sebagai string terpisah"/>
                 <Item id="1934" name="Salin ke papan klip"/>
-                <Item id="2"    name="Tutup"/>
+                <Item id="2" name="Tutup"/>
             </MD5FromTextDlg>
 
             <StyleConfig title="Konfigurator Gaya">
-                <Item id="2"    name="Batal"/>
+                <Item id="2" name="Batal"/>
                 <Item id="2301" name="Simpan  Tutup"/>
                 <Item id="2303" name="Transparansi"/>
                 <Item id="2306" name="Pilih tema: "/>
@@ -672,13 +677,11 @@
                     <Item id="6119" name="Multibaris"/>
                     <Item id="6120" name="Vertikal"/>
                     <Item id="6121" name="Keluar saat tab terakhir ditutup"/>
-			
                     <Item id="6122" name="Sembunyikan bilah menu (Tukar dengan Alt/F10)"/>
                     <Item id="6123" name="Pelokalan"/>
-			
                     <Item id="6125" name="Panel Daftar Dokumen"/>
                     <Item id="6126" name="Tampilkan"/>
-                    <Item id="6127" name="Nonaktifkan ekstensi kolom"/>
+                    <Item id="6127" name="Aktifkan kolom ekstensi"/>
                 </Global>
                 <Scintillas title="Pengeditan">
                     <Item id="6216" name="Pengaturan Caret"/>
@@ -706,7 +709,6 @@
                     <Item id="6209" name="Jumlah kolom: "/>
                     <Item id="6234" name="Nonaktifkan fitur gulir lanjutan
 (bila Anda memiliki masalah touchpad)"/>
-			
                     <Item id="6211" name="Pengaturan Batas Vertikal"/>
                     <Item id="6212" name="Modus baris"/>
                     <Item id="6213" name="Modus latar"/>
@@ -716,7 +718,6 @@
                     <Item id="6235" name="Tanpa tepian"/>
                     <Item id="6236" name="Aktifkan pengguliran di luar baris terakhir"/>
                 </Scintillas>
-		    
                 <NewDoc title="Dokumen Baru">
                     <Item id="6401" name="Format"/>
                     <Item id="6402" name="Windows"/>
@@ -732,13 +733,15 @@
                     <Item id="6419" name="Dokumen Baru"/>
                     <Item id="6420" name="Terapkan untuk berkas ANSI"/>
                 </NewDoc>
-		    
-                <DefaultDir title="Direktori Baku">
+                <DefaultDir title="Direktori">
                     <Item id="6413" name="Direktori Baku (Buka/Simpan)"/>
                     <Item id="6414" name="Ikuti dokumen aktif"/>
                     <Item id="6415" name="Ingat direktori terakhir"/>
-                    <Item id="6430" name="Gunakan dialog gaya baru (tanpa fitur ekstensi file dan kapasitas jalur gaya Unix)"/>
+                    <Item id="6430" name="Gunakan dialog gaya baru "/>
                     <Item id="6431" name="Buka semua file dari folder bukan meluncurkan folder sebagai Ruang kerja saat menjatuhkan folder"/>
+                    <Item id="6433" name="filter"/>
+                    <Item id="6432" name="Drag dan Drop"/>
+                    <Item id="6434" name="rekursif"/>
                 </DefaultDir>
 
                 <FileAssoc title="Asosiasi Berkas">
@@ -799,7 +802,6 @@
                     <Item id="6727" name="Di sini tampilan pengaturan variabel Anda"/>
                     <Item id="6728" name="Kepala and Kaki"/>
                 </Print>
-		    
                 <RecentFilesHistory title="Riwayat File Terbaru">
                     <Item id="6304" name="Riwayat File Terbaru"/>
                     <Item id="6306" name="Jumlah entri maks. :"/>
@@ -849,7 +851,7 @@
 
                 <MultiInstance title="Multi-Jendela">
                     <Item id="6151" name="Pengaturan multi-jendela"/>
-                    <Item id="6152" name="Buka sesi di jendela baru Notepad++"/>
+                    <Item id="6152" name="Buka sesi di jendela baru Textrument"/>
                     <Item id="6153" name="Selalu dalam mode multi-jendela"/>
                     <Item id="6154" name="Bawaan (satu-jendela)"/>
                     <Item id="6155" name="* Mengubah pengaturan ini perlu memulai ulang Notepad ++"/>
@@ -871,7 +873,6 @@
                     <Item id="6263" name="Tanpa awan"/>
                     <Item id="6267" name="Atur jalur lokasi awan Anda di sini:"/>
                 </Cloud>
-                
                 <SearchEngine title="Mesin Pencari">
                     <Item id="6271" name="Mesin Pencari (untuk perintah &quot;Cari di Internet&quot;)"/>
                     <Item id="6272" name="DuckDuckGo"/>
@@ -893,7 +894,7 @@
                     <Item id="6319" name="Aktifkan"/>
                     <Item id="6320" name="Tanpa garis bawah"/>
                     <Item id="6322" name="Ekst. berkas sesi:"/>
-                    <Item id="6323" name="Aktifkan pembaru otomatis Notepad++"/>
+                    <Item id="6323" name="Aktifkan pembaru otomatis Textrument"/>
                     <Item id="6324" name="Penukar Dokumen (Ctrl+TAB)"/>
                     <Item id="6331" name="Tampilkan nama berkas saja di bilah judul"/>
                     <Item id="6334" name="Otomatis deteksi pengodean karakter"/>
@@ -937,8 +938,8 @@
                 <Item id="2" name="Batal"/>
             </ColumnEditor>
             <FindInFinder title="Cari di pencari">
-                <Item id="1"    name="Cari Semua"/>
-                <Item id="2"    name="Tutup"/>
+                <Item id="1" name="Cari Semua"/>
+                <Item id="2" name="Tutup"/>
                 <Item id="1711" name="Cari apa :"/>
                 <Item id="1713" name="Hanya cari di baris yang ditemukan"/>
                 <Item id="1714" name="Cocokkan seluruh kata"/>
@@ -949,10 +950,11 @@
                 <Item id="1718" name="Lanjut (\n, \r, \t, \0, \x...)"/>
                 <Item id="1720" name=". cocokkan baris baru"/>
             </FindInFinder>
-		</Dialog>
-        <MessageBox> <!-- $INT_REPLACE$ adalah tempat dudukan, jangan diterjemahkan -->
-		<!-- Dari bagian ini -->
-		<!-- Sengaja dikosongkan. Penerjemah: "I am human not robot." ;Nicedward; -->
+        </Dialog>
+        <MessageBox>
+            <!-- $INT_REPLACE$ adalah tempat dudukan, jangan diterjemahkan -->
+            <!-- Dari bagian ini -->
+            <!-- Sengaja dikosongkan. Penerjemah: "I am human not robot." ;Nicedward; -->
         </MessageBox>
         <ClipboardHistory>
             <PanelTitle name="Riwayat Papan klip"/>
@@ -978,8 +980,8 @@
         </DocumentMap>
         <FunctionList>
             <PanelTitle name="Daftar Fungsi"/>
-            <SortTip name="Urutkan" />
-            <ReloadTip name="Muat ulang" />
+            <SortTip name="Urutkan"/>
+            <ReloadTip name="Muat ulang"/>
         </FunctionList>
         <FolderAsWorkspace>
             <PanelTitle name="Folder sebagai Ruang kerja"/>

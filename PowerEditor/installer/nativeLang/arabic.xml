@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-    <!--
+<!--
     URL: https://www.w3schools.com/xml/xml_syntax.asp
     - &#xD;  is (\r) new line 
     - &gt;   is (>) and &lt; is (<)
@@ -53,7 +53,7 @@
                     <Item subMenuId="view-tab" name="علامة التبويب"/>
                     <Item subMenuId="view-collapseLevel" name="مستوى الطي"/>
                     <Item subMenuId="view-uncollapseLevel" name="مستوى إلغاء الطي"/>
-                    <Item subMenuId="view-project" name="مشروع"/>
+                    <Item subMenuId="view-project" name="لوحات المشروع"/>
                     <Item subMenuId="encoding-characterSets" name="مجموعة الأحرف"/>
                     <Item subMenuId="encoding-arabic" name="Arabic"/>
                     <Item subMenuId="encoding-baltic" name="Baltic"/>
@@ -290,7 +290,7 @@
                     <Item id="46001" name="مكون النمط..."/>
                     <Item id="46250" name="تعريف لغتك..."/>
                     <Item id="46180" name="معرف من قبل المستخدم"/>
-                    <Item id="47000" name="عن Notepad++"/>
+                    <Item id="47000" name="عن Textrument"/>
                     <Item id="47010" name="متغيرات سطر الأوامر..."/>
                     <Item id="47001" name="الصفحة الرئيسية Notepad++"/>
                     <Item id="47002" name="صفحة المشروع Notepad++"/>
@@ -325,34 +325,40 @@
                     <Item id="42041" name="مسح قائمة الملفات الأخيرة"/>
                     <Item id="48016" name="تعديل الاختصار / حذف الماكرو..."/>
                     <Item id="48017" name="تعديل الاختصار / حذف الأمر..."/>
+                    <Item id="44070" name="قائمة التبويب"/>
+                    <Item id="44105" name="تفعيل لوحة ولكن لا تبديل ذلك"/>
+                    <Item id="48100" name="أيقونات صغيرة"/>
+                    <Item id="48101" name="أيقونات كبيرة"/>
+                    <Item id="48102" name="أيقونات قياسية"/>
                 </Commands>
             </Main>
             <Splitter>
             </Splitter>
             <TabBar>
-                    <Item CMID="0" name="إغلاق"/>
-                    <Item CMID="1" name="إغلاق الكل باستثناء هذا"/>
-                    <Item CMID="2" name="حفظ"/>
-                    <Item CMID="3" name="حفظ باسم..."/>
-                    <Item CMID="4" name="طباعة"/>
-                    <Item CMID="5" name="نقل إلى العرض الآخر"/>
-                    <Item CMID="6" name="استنساخ إلى العرض الآخر"/>
-                    <Item CMID="7" name="مسار الملف الكامل إلى الذاكرة"/>
-                    <Item CMID="8" name="اسم الملف إلى الذاكرة"/>
-                    <Item CMID="9" name="مسار المجلد الحالي إلى الذاكرة"/>
-                    <Item CMID="10" name="إعادة تسمية"/>
-                    <Item CMID="11" name="نقل إلى سلة المهملات"/>
-                    <Item CMID="12" name="للقراءة فقط"/>
-                    <Item CMID="13" name="مسح علامة للقراءة فقط"/>
-                    <Item CMID="14" name="نقل إلى مثيل جديد"/>
-                    <Item CMID="15" name="فتح في مثيل جديد"/>
-                    <Item CMID="16" name="إعادة تحميل"/>
-                    <Item CMID="17" name="إغلاق الكل إلى اليسار"/>
-                    <Item CMID="18" name="إغلاق الكل إلى اليمين"/>
-                    <Item CMID="19" name="فتح مجلد الهدف في مستعرض الملفات"/>
-                    <Item CMID="20" name="فتح مجلد الهدف في cmd"/>
-                    <Item CMID="21" name="فتح في العارض الافتراضي"/>
-                    <Item CMID="22" name="إغلاق الكل بدون تغيير"/>
+                <Item CMID="0" name="إغلاق"/>
+                <Item CMID="1" name="إغلاق الكل باستثناء هذا"/>
+                <Item CMID="2" name="حفظ"/>
+                <Item CMID="3" name="حفظ باسم..."/>
+                <Item CMID="4" name="طباعة"/>
+                <Item CMID="5" name="نقل إلى العرض الآخر"/>
+                <Item CMID="6" name="استنساخ إلى العرض الآخر"/>
+                <Item CMID="7" name="مسار الملف الكامل إلى الذاكرة"/>
+                <Item CMID="8" name="اسم الملف إلى الذاكرة"/>
+                <Item CMID="9" name="مسار المجلد الحالي إلى الذاكرة"/>
+                <Item CMID="10" name="إعادة تسمية"/>
+                <Item CMID="11" name="نقل إلى سلة المهملات"/>
+                <Item CMID="12" name="للقراءة فقط"/>
+                <Item CMID="13" name="مسح علامة للقراءة فقط"/>
+                <Item CMID="14" name="نقل إلى مثيل جديد"/>
+                <Item CMID="15" name="فتح في مثيل جديد"/>
+                <Item CMID="16" name="إعادة تحميل"/>
+                <Item CMID="17" name="إغلاق الكل إلى اليسار"/>
+                <Item CMID="18" name="إغلاق الكل إلى اليمين"/>
+                <Item CMID="19" name="فتح مجلد الهدف في مستعرض الملفات"/>
+                <Item CMID="20" name="فتح مجلد الهدف في cmd"/>
+                <Item CMID="21" name="فتح في العارض الافتراضي"/>
+                <Item CMID="22" name="إغلاق الكل بدون تغيير"/>
+                <Item CMID="23" name="فتح الملف المرتبط / دليل"/>
             </TabBar>
         </Menu>
 
@@ -392,7 +398,7 @@
                 <Item id="1641" name="بحث عن الكل في المستند الحالي"/>
                 <Item id="1686" name="الشفاف&amp;ية"/>
                 <Item id="1703" name="&amp;. تطابق سطر جديد"/>
-				<Item id="1721" name="▲"/>
+                <Item id="1721" name="▲"/>
                 <Item id="1723" name="▼ بحث عن التالي"/>
             </Find>
 
@@ -436,7 +442,6 @@
                 <Item id="1934" name="نسخ إلى الذاكرة"/>
                 <Item id="2" name="إغلاق"/>
             </MD5FromTextDlg>
-            
             <SHA256FromFilesDlg title="توليد توقيع SHA-256 من الملفات">
                 <Item id="1922" name="حدد الملفات لتوليد SHA-256..."/>
                 <Item id="1924" name="نسخ إلى الذاكرة"/>
@@ -448,7 +453,6 @@
                 <Item id="1934" name="نسخ إلى الذاكرة"/>
                 <Item id="2" name="إغلاق"/>
             </SHA256FromTextDlg>
-            
             <PluginsAdminDlg title="مدير الإضافات" titleAvailable="المتوفر" titleUpdates="التحديثات" titleInstalled="المثبت">
                 <ColumnPlugin name="الإضافة"/>
                 <ColumnVersion name="النسخة"/>
@@ -717,7 +721,7 @@
 
                     <Item id="6125" name="لوحة قائمة المستند"/>
                     <Item id="6126" name="إظهار"/>
-                    <Item id="6127" name="تعطيل العمود الإضافي"/>
+                    <Item id="6127" name="تمكين العمود التمديد"/>
                 </Global>
                 <Scintillas title="تحرير">
                     <Item id="6216" name="إعدادات مؤشر الكتابة"/>
@@ -771,12 +775,15 @@
                     <Item id="6420" name="تطبيق على كل ملفات ANSI المفتوحة"/>
                 </NewDoc>
 
-                <DefaultDir title="الدليل الافتراضي">
+                <DefaultDir title="الدليل">
                     <Item id="6413" name="الدليل الافتراضي (فتح / حفظ)"/>
                     <Item id="6414" name="اتبع المستند الحالي"/>
                     <Item id="6415" name="تذكر آخر دليل تم استخدامه"/>
-                    <Item id="6430" name="استخدام مربع حوار بالنمط الجديد (بدون ميزة تنسيق الملف وخاصية نمط مسار Unix)"/>
+                    <Item id="6430" name="استخدام مربع حوار بالنمط الجديد "/>
                     <Item id="6431" name="فتح جميع الملفات في المجلد بدلاً من فتح المجلد كمساحدة عمل عند إفلات المجلد"/>
+                    <Item id="6433" name="مرشحات"/>
+                    <Item id="6432" name="السحب والإسقاط"/>
+                    <Item id="6434" name="متكرر"/>
                 </DefaultDir>
 
                 <FileAssoc title="امتداد الملف">
@@ -887,10 +894,10 @@
 
                 <MultiInstance title="المثيل المتعدد">
                     <Item id="6151" name="إعدادات المثيل المتعدد"/>
-                    <Item id="6152" name="فتح الجلسة في مثيل جديد من Notepad++"/>
+                    <Item id="6152" name="فتح الجلسة في مثيل جديد من Textrument"/>
                     <Item id="6153" name="دائماً في وضع المثيل المتعدد"/>
                     <Item id="6154" name="الافتراضي (أحادي المثيل)"/>
-                    <Item id="6155" name="* تعديل هذا الإعداد يحتاج إلى إعادة تشغيل Notepad++"/>
+                    <Item id="6155" name="* تعديل هذا الإعداد يحتاج إلى إعادة تشغيل Textrument"/>
                 </MultiInstance>
 
                 <Delimiter title="المحدد">
@@ -934,7 +941,7 @@
                     <Item id="6319" name="تفعيل"/>
                     <Item id="6320" name="بدون تسطير"/>
                     <Item id="6322" name="امتداد ملف الجلسة:"/>
-                    <Item id="6323" name="تفعيل تحديث Notepad++ بشكل تلقائي"/>
+                    <Item id="6323" name="تفعيل تحديث Textrument بشكل تلقائي"/>
                     <Item id="6324" name="مبدل المستندات (Ctrl + TAB)"/>
                     <Item id="6331" name="إظهار اسم الملف فقط في شريط العنوان"/>
                     <Item id="6334" name="كشف ترميز الأحرف بشكل تلقائي"/>
@@ -989,7 +996,7 @@
                 <Item id="1718" name="م&amp;وسع (\n, \r, \t, \0, \x...)"/>
                 <Item id="1720" name="&amp;. تطابق سطر جديد"/>
             </FindInFinder>
-            <DoSaveOrNot title="حفظ"> 
+            <DoSaveOrNot title="حفظ">
                 <Item id="1761" name="حفظ الملف &quot;$STR_REPLACE$&quot; ؟"/>
                 <Item id="6" name="نعم"/>
                 <Item id="7" name="لا"/>
@@ -998,15 +1005,16 @@
                 <Item id="5" name="لا للكل"/>
             </DoSaveOrNot>
         </Dialog>
-        <MessageBox> <!-- $INT_REPLACE$ is a place holder, don't translate it -->
-            <ContextMenuXmlEditWarning title="تحرير القائمة المنبثقة" message="إن تحرير contextMenu.xml يسمح لك بتعديل قائمة السياق المنبثقة لـ Notepad++.&#xA; يجب عليك إعادة تشغيل Notepad++ ليتم تطبيق التعديلات التي قمت بها على contextMenu.xml."/>
-            <NppHelpAbsentWarning title="الملف غير موجود" message="&#xA;غير موجود. الرجاء تنزيله من على موقع Notepad++."/>
+        <MessageBox>
+            <!-- $INT_REPLACE$ is a place holder, don't translate it -->
+            <ContextMenuXmlEditWarning title="تحرير القائمة المنبثقة" message="إن تحرير contextMenu.xml يسمح لك بتعديل قائمة السياق المنبثقة لـ Textrument.&#xA; يجب عليك إعادة تشغيل Textrument ليتم تطبيق التعديلات التي قمت بها على contextMenu.xml."/>
+            <NppHelpAbsentWarning title="الملف غير موجود" message="&#xA;غير موجود. الرجاء تنزيله من على موقع Textrument."/>
             <SaveCurrentModifWarning title="حفظ التعديلات الحالية" message="يجب عليك حفظ التعديلات الحالية.&#xA;كل التعديلات التي سوف يتم حفظها لا يمكن التراجع عنها.&#xA;متابعة؟"/>
             <LoseUndoAbilityWarning title="تحذير من فقد القدرة على التراجع" message="يجب عليك حفظ التعديلات الحالية.&#xA;كل التعديلات التي سوف يتم حفظها لا يمكن التراجع عنها.&#xA;&#xA;متابعة؟"/>
-            <CannotMoveDoc title="نقل إلى مثيل Notepad++ جديد" message="المستند تم تعديله، قم بحفظه ثم حاول مرة آخرى."/>
-            <DocReloadWarning title="إعادة تحميل" message="هل تريد بالتأكيد إعادة تحميل الملف الحالي وفقد كل التعديلات التي عملها داخل Notepad++؟"/>
+            <CannotMoveDoc title="نقل إلى مثيل Textrument جديد" message="المستند تم تعديله، قم بحفظه ثم حاول مرة آخرى."/>
+            <DocReloadWarning title="إعادة تحميل" message="هل تريد بالتأكيد إعادة تحميل الملف الحالي وفقد كل التعديلات التي عملها داخل Textrument؟"/>
             <FileLockedWarning title="فشل الحفظ" message="الرجاء التحقق من أن هذا الملف مفتوح في برنامج أخر"/>
-            <FileAlreadyOpenedInNpp title="" message="هذا الملف مفتوح بالفعل في Notepad++."/>
+            <FileAlreadyOpenedInNpp title="" message="هذا الملف مفتوح بالفعل في Textrument."/>
             <DeleteFileFailed title="حذف الملف" message="فشل حذف الملف"/>
 
             <NbFileToOpenImportantWarning title="عدد الملفات المطلوب فتحها كبير جداً" message="$INT_REPLACE$ ملفات سوف يتم فتحها.&#xA;هل أنت متأكد أنك تريد فتحها؟"/>
@@ -1021,12 +1029,12 @@
             <DoDeleteOrNot title="حذف الملف" message="هذا الملف &quot;$STR_REPLACE$&quot;&#xA;سوف يتم نقله إلى سلة المهملات وسوف يتم إغلاق المستند الحالي.&#xA;متابعة؟"/>
             <NoBackupDoSaveFile title="حفظ" message="لا يمكن العثور على ملف النسخ الاحتياطي الخاص بك (تم حذفه من الخارج).&#xA;قم بحفظه وإلا سيتم فقدان البيانات الخاصة بك&#xA;هل تريد حفظ الملف &quot;$STR_REPLACE$&quot;؟"/>
             <DoReloadOrNot title="إعادة تحميل" message="&quot;$STR_REPLACE$&quot;&#xA;&#xA;تم تعديل هذا الملف بواسطة برنامج آخر.&#xA;هل تريد إعادة تحميله؟"/>
-            <DoReloadOrNotAndLooseChange title="إعادة تحميل" message="&quot;$STR_REPLACE$&quot;&#xA;&#xA;تم تعديل هذا الملف بواسطة برنامج آخر&#xA;هل تريد إعادة تحميله وفقدان التعديلات التي قمت بها في Notepad++؟"/>
+            <DoReloadOrNotAndLooseChange title="إعادة تحميل" message="&quot;$STR_REPLACE$&quot;&#xA;&#xA;تم تعديل هذا الملف بواسطة برنامج آخر&#xA;هل تريد إعادة تحميله وفقدان التعديلات التي قمت بها في Textrument؟"/>
             <PrehistoricSystemDetected title="تم اكتشاف نظام ما قبل التاريخ" message="يبدو أنك لا تزال تستخدم نظام ما قبل التاريخ. هذه الميزة تعمل فقط على نظام حديث، آسف."/>
-            <XpUpdaterProblem title="محدث Notepad++" message="محدث Notepad++ غير متوافق مع XP بسبب طبقة أمان عفا عليها الزمن ضمن XP.&#xA;هل تريد أن تذهب إلى صفحة Notepad++ لتحميل أحدث إصدار؟"/>
+            <XpUpdaterProblem title="محدث Textrument" message="محدث Textrument غير متوافق مع XP بسبب طبقة أمان عفا عليها الزمن ضمن XP.&#xA;هل تريد أن تذهب إلى صفحة Textrument لتحميل أحدث إصدار؟"/>
             <DocTooDirtyToMonitor title="مشكلة في المراقبة" message="الوثيقة متسخة. الرجاء حفظ التعديل قبل مراقبتها."/>
             <DocNoExistToMonitor title="مشكلة في المراقبة" message="يجب أن يكون الملف موجوداً ليتم مراقبته."/>
-            <FileTooBigToOpen title="مشكلة في حجم الملف" message="الملف كبير جداً ليتم فتحه بواسطة Notepad++"/>
+            <FileTooBigToOpen title="مشكلة في حجم الملف" message="الملف كبير جداً ليتم فتحه بواسطة Textrument"/>
             <CreateNewFileOrNot title="إنشاء ملف جديد" message="&quot;$STR_REPLACE$&quot; غير موجود. القيام بإنشائه؟"/>
             <CreateNewFileError title="إنشاء ملف جديد" message="لا يمكن إنشاء الملف &quot;$STR_REPLACE$&quot;."/>
             <OpenFileError title="خطأ" message="لا يمكن فتح الملف &quot;$STR_REPLACE$&quot;."/>
