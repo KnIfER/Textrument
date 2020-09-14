@@ -2,6 +2,7 @@ package apply.translations;
 
 import com.alibaba.fastjson.JSONObject;
 import org.apache.commons.lang.ArrayUtils;
+import org.apache.commons.lang.StringUtils;
 import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
@@ -347,6 +348,7 @@ public class TextrumentLocalePatchs {
 		String idField="id";
 		String id=null;
 		String fieldName=null;
+		StringConverter converter=null;
 		Action(String values, int type, String...XMLPath) {
 			this.type = type;
 			this.XMLPath = XMLPath;
@@ -366,6 +368,10 @@ public class TextrumentLocalePatchs {
 	
 	public interface ActionApplier {
 		void pushActions();
+	}
+	
+	public interface StringConverter {
+		String editInput(String input);
 	}
 	
 	static ArrayList<Action> actions = new ArrayList<>(128);
@@ -450,7 +456,12 @@ public class TextrumentLocalePatchs {
 					}
 				} break;
 				case MODIFY: {
-					String value = aI.values[id];
+					String value=null;
+					if(aI.converter!=null) {
+						value= StringUtils.EMPTY;
+					} else {
+						value = aI.values[id];
+					}
 					if (value != null) {
 						Element _toMod = getElementByPath(document.getRootElement(), aI.XMLPath);
 						if (_toMod != null) {
@@ -466,6 +477,13 @@ public class TextrumentLocalePatchs {
 							}
 						}
 						if (_toMod != null) {
+							if(aI.converter!=null) {
+								value=_toMod.getAttributeValue(aI.fieldName);
+								value = aI.converter.editInput(value);
+								if(value==null) {
+									continue;
+								}
+							}
 							if (aI.fieldName != null) {
 								_toMod.setAttribute(aI.fieldName, value);
 							} else {

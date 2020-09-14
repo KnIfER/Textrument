@@ -173,23 +173,19 @@ INT_PTR CALLBACK PreferenceDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM 
 			_wVector.push_back(DlgInfo(&_searchEngineDlg, TEXT("Search Engine"), TEXT("SearchEngine"), IDD_PREFERENCE_SEARCHENGINE_BOX));
 			_wVector.push_back(DlgInfo(&_settingsDlg, TEXT("MISC."), TEXT("MISC"), IDD_PREFERENCE_SETTING_BOX));
 
-			nppParms = &NppParameters::getInstance();
-
 			if(CreateFonts(true)) {
 				setWindowFont(_hSelf, hFontCategory);
 			}
 
-			makeCategoryList();
 			getClientRect(rSubPanel);
-
 			rSubPanel.top += nppParms->_dpiManager.scaleY(10);
 			rSubPanel.bottom -= nppParms->_dpiManager.scaleY(43);
 			rSubPanel.left += nppParms->_dpiManager.scaleX(180);
 			rSubPanel.right -= nppParms->_dpiManager.scaleX(30);
 
-			currentSettingsIndex = nppUIParms->currentSettingsIndex;
+			showDialogByIndex(nppUIParms->currentSettingsIndex, true);
 
-			showDialogByIndex(currentSettingsIndex, true);
+			makeCategoryList();
 
 			if(currentSettingsIndex) {
 				setListSelection(currentSettingsIndex);
@@ -202,7 +198,7 @@ INT_PTR CALLBACK PreferenceDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM 
 			_wVector[0]._dlg->display();
 #endif
 
-						ETDTProc enableDlgTheme = (ETDTProc)nppParms->getEnableThemeDlgTexture();
+			ETDTProc enableDlgTheme = (ETDTProc)nppParms->getEnableThemeDlgTexture();
 			if (enableDlgTheme)
 				enableDlgTheme(_hSelf, ETDT_ENABLETAB);
 
@@ -379,7 +375,7 @@ void PreferenceDlg::showDialogByIndex(size_t index, bool init) const
 		dlg->init(_hInst, _hSelf);
 		dlg->create(dlgWrap._res, false, false);
 		dlg->reSizeTo(rSubPanel);
-		*flag=0x1;
+		if(rSubPanel.right>0) *flag=0x1;
 	} 
 	if(!(*flag&0x2) && hFontSubPanel!=0) {
 		//::MessageBox(NULL, TEXT("SETFONT"), TEXT(""), MB_OK);
