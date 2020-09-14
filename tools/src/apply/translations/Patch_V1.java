@@ -68,15 +68,82 @@ public class Patch_V1 implements TextrumentLocalePatchs.ActionApplier {
 			action.tagName="Item";
 			
 			pushActionByPathFieldedIDForNameField("{zh_CN:'标准图标'}", MODIFY, "id", 6105, "Native-Langue", "Dialog", "Preference", "Global");
-			pushActionByPathFieldedIDForNameField("{zh_CN:'文件另存为...'}", MODIFY, "CMID", 3, "Native-Langue", "Menu", "TabBar");
-			pushActionByPathFieldedIDForNameField("{zh_CN:'文件重命名'}", MODIFY, "CMID", 10, "Native-Langue", "Menu", "TabBar");
+			pushActionByPathFieldedIDForNameField("{zh_CN:'另存为其他...'}", MODIFY, "CMID", 3, "Native-Langue", "Menu", "TabBar");
+			pushActionByPathFieldedIDForNameField("{zh_CN:'重命名文件'}", MODIFY, "CMID", 10, "Native-Langue", "Menu", "TabBar");
 			
 			action = pushActionByPathFieldedIDForNameField(null, MODIFY, "id", 47000, "Native-Langue", "Menu", "Main", "Commands");
+			action.converter = input -> input.replace("Notepad++", "Textrument");
+			
+			action = pushActionByPathFieldedIDForNameField(null, MODIFY, "id", 6152, "Native-Langue", "Dialog", "Preference", "MultiInstance");
+			action.converter = input -> input.replace("Notepad++", "Textrument");
+			action = pushActionByPathFieldedIDForNameField(null, MODIFY, "id", 6155, "Native-Langue", "Dialog", "Preference", "MultiInstance");
+			action.converter = input -> input.replace("Notepad++", "Textrument");
+			action = pushActionByPathFieldedIDForNameField(null, MODIFY, "id", 6323, "Native-Langue", "Dialog", "Preference", "MISC");
+			action.converter = input -> input.replace("Notepad++", "Textrument");
+			action = pushActionByPathFieldedIDForNameField(null, MODIFY, "id", 6349, "Native-Langue", "Dialog", "Preference", "MISC");
+			action.converter = input -> input.replace("Notepad++", "Textrument");
+			action = pushActionByPathFieldedIDForNameField(null, MODIFY, "id", 4008, "Native-Langue", "Dialog", "Preference", "FileAssoc");
+			action.converter = input -> input.replace("Notepad++", "Textrument");
+			action = pushActionByPathFieldedIDForNameField(null, MODIFY, "id", 6902, "Native-Langue", "Dialog", "Preference", "Searching");
+			action.converter = input -> input.replace("Notepad++", "Textrument");
+			
+			action = pushActionByPathFieldedIDForNameField(null, MODIFY, "id", null, "Native-Langue", "MessageBox", "ContextMenuXmlEditWarning");
+			action.fieldName="message";
+			action.converter = input -> input.replace("Notepad++", "Textrument");
+			action = pushActionByPathFieldedIDForNameField(null, MODIFY, "id", null, "Native-Langue", "MessageBox", "NppHelpAbsentWarning");
+			action.fieldName="message";
+			action.converter = input -> input.replace("Notepad++", "Textrument");
+			action = pushActionByPathFieldedIDForNameField(null, MODIFY, "id", null, "Native-Langue", "MessageBox", "CannotMoveDoc");
+			action.fieldName="title";
+			action.converter = input -> input.replace("Notepad++", "Textrument");
+			action = pushActionByPathFieldedIDForNameField(null, MODIFY, "id", null, "Native-Langue", "MessageBox", "DocReloadWarning");
+			action.fieldName="message";
+			action.converter = input -> input.replace("Notepad++", "Textrument");
+			action = pushActionByPathFieldedIDForNameField(null, MODIFY, "id", null, "Native-Langue", "MessageBox", "FileAlreadyOpenedInNpp");
+			action.fieldName="message";
+			action.converter = input -> input.replace("Notepad++", "Textrument");
+			action = pushActionByPathFieldedIDForNameField(null, MODIFY, "id", null, "Native-Langue", "MessageBox", "DoReloadOrNotAndLooseChange");
+			action.fieldName="message";
+			action.converter = input -> input.replace("Notepad++", "Textrument");
+			action = pushActionByPathFieldedIDForNameField(null, MODIFY, "id", null, "Native-Langue", "MessageBox", "XpUpdaterProblem");
+			action.fieldName="title";
+			action.converter = input -> input.replace("Notepad++", "Textrument");
+			action = pushActionByPathFieldedIDForNameField(null, MODIFY, "id", null, "Native-Langue", "MessageBox", "XpUpdaterProblem");
+			action.fieldName="message";
+			action.converter = input -> input.replace("Notepad++", "Textrument");
+			action = pushActionByPathFieldedIDForNameField(null, MODIFY, "id", null, "Native-Langue", "MessageBox", "GUpProxyConfNeedAdminMode");
+			action.fieldName="message";
+			action.converter = input -> input.replace("Notepad++", "Textrument");
+			action = pushActionByPathFieldedIDForNameField(null, MODIFY, "id", null, "Native-Langue", "MessageBox", "FileTooBigToOpen");
+			action.fieldName="message";
 			action.converter = input -> input.replace("Notepad++", "Textrument");
 
 
 			//搜索框 ( Search Field )
 			action = pushActionByPathFieldedIDForNameField("{sq:'Kërko Field', ar:'مجال البحث', am:'የፍለጋ መስክ', az:'Axtar Field', ga:'Search Field', et:'Otsi Field', eu:'Search Eremua', be:'поле пошуку', bg:'поле за търсене', is:'leit Field', pl:'Pole wyszukiwania', bs:'polje za pretragu', fa:'جستجو درست', af:'Soek Field', da:'Søg Field', de:'Suchfeld', ru:'поле поиска', fr:'Champ de recherche', tl:'Search Field', fi:'Hakukenttä', fy:'Search Field', km:'វាលស្វែងរក', ka:'ძებნა სფერო', gu:'શોધ ક્ષેત્ર', kk:'Іздеу өрісі', ht:'Search Field', ko:'검색 필드', ha:'search Field', nl:'Zoekveld', ky:'Издөө талаасы', gl:'campo de busca', ca:'camp de cerca', cs:'Vyhledávací pole', kn:'ಹುಡುಕು ಫೀಲ್ಡ್', co:'Search Field', hr:'polje za pretraživanje', ku:'Search Field', la:'quaerere Field', lv:'Meklēt lauks', lo:'ຄົ້ນຫາພາກສະຫນາມ', lt:'Paieška laukas', lb:'Sich Field', ro:'Căutare câmp', mg:'Search Field', mt:'Fittex Qasam', mr:'शोध फील्ड', ml:'തിരയൽ ഫീൽഡ്', ms:'carian Field', mk:'поле за пребарување', mi:'Rapu Field', mn:'хайх талбар', bn:'অনুসন্ধান ফিল্ড', my:'ရှာရန်ဖျော်ဖြေမှု', hmn:'Nrhiav Teb', xh:'Ukufuna Field', zu:'Ukucinga Field', ne:'खोज क्षेत्र', no:'Søkefelt', pa:'ਖੋਜ ਖੇਤਰ', pt:'campo de pesquisa', ps:'د لټون ساحوي', ny:'Search Field', ja:'検索フィールド', sv:'sökfält', sm:'Search Field', sr:'polje за претрагу', st:'Search Field', si:'සොයන්න ක්ෂේත්ර', eo:'Serĉu Kampo', sk:'vyhľadávacie pole', sl:'Iskanje Polje', sw:'Search Field', gd:'Rannsachadh Field', ceb:'search Field', so:'Search Field', tg:'Ҷустуҷӯ Field', te:'శోధన ఫీల్డ్', ta:'தேடல் புலம்', th:'ค้นหาสนาม', tr:'Arama alanı', cy:'Chwilio Field', ur:'تلاش کا میدان', uk:'поле пошуку', uz:'Qidiruv Field', es:'Campo de búsqueda', iw:'שדה חיפוש', el:'Αναζήτηση πεδίο', haw:'Search Field', sd:'ڳولا جو ميدان', hu:'Keresés mező', sn:'Search Field', hy:'Որոնել Field', ig:'search Field', it:'campo di ricerca', yi:'זוכן Field', hi:'खोज क्षेत्र', su:'Pilarian Lapang', id:'Cari Lapangan', jw:'search Field', en:'Find Field', yo:'search Field', vi:'Search Field', zh_TW:'搜索欄', zh_CN:'搜索框'}", INSERT, "id", 6907, "Native-Langue", "Dialog", "Preference", "Searching");
 			action.tagName="Item";
+			
+			
+			//过滤 ( Filter )
+			action = pushActionByPathFieldedIDForNameField("{sq:'Filters', ar:'مرشحات', am:'ማጣሪያዎች', az:'Filters', ga:'scagairí', et:'filtrid', eu:'iragazkiak', be:'фільтры', bg:'Филтри', is:'síur', pl:'filtry', bs:'filteri', fa:'فیلترها برای تصفیه آب', af:'filters', da:'filtre', de:'Filter', ru:'фильтры', fr:'filtres', tl:'Mga filter', fi:'Suodattimet', fy:'Filters', km:'តម្រង', ka:'ფილტრები', gu:'ગાળકો', kk:'сүзгілер', ht:'filtè', ko:'필터', ha:'Matatu', nl:'filters', ky:'Чыпкалар', gl:'filtros', ca:'filtres', cs:'filtry', kn:'ಶೋಧಕಗಳು', co:'filtri', hr:'filteri', ku:'Parzûn', la:'Filtra', lv:'Filtri', lo:'ການກັ່ນຕອງ', lt:'Filtrai', lb:'Filtere', ro:'Filtre', mg:'sivana', mt:'filtri', mr:'फिल्टर', ml:'ഫിൽട്ടറുകൾ', ms:'penapis', mk:'филтри', mi:'Tātari', mn:'Шүүлтүүрүүд', bn:'ফিল্টার', my:'စိစစ်မှုများ', hmn:'Lim', xh:'amacebo okucoca', zu:'Izihlungi', ne:'फिल्टर', no:'filtre', pa:'ਫਿਲਟਰ', pt:'filtros', ps:'چاڼګرونه', ny:'Zosefera', ja:'フィルタ', sv:'filter', sm:'faamama', sr:'Филтери', st:'filter', si:'පෙරහන්', eo:'filtriloj', sk:'filtre', sl:'filtri', sw:'filters', gd:'Criathairean', ceb:'pagsala', so:'filtarrada', tg:'Филтрҳо', te:'వడపోతలు', ta:'வடிகட்டிகள்', th:'ฟิลเตอร์', tr:'Filtreler', cy:'Hidlau', ur:'فلٹرز', uk:'фільтри', uz:'filtrlar', es:'filtros', iw:'מסנן', el:'φίλτρα', haw:'kānana', sd:'فلٽر', hu:'Szűrők', sn:'filters', hy:'զտիչներ', ig:'nzacha', it:'filtri', yi:'filters', hi:'फिल्टर', su:'saringan', id:'filter', jw:'filter-filter', en:'Filters', yo:'Ajọ', vi:'bộ lọc', zh_TW:'過濾', zh_CN:'过滤'}", INSERT, "id", 6433, "Native-Langue", "Dialog", "Preference", "DefaultDir");
+			action.tagName="Item";
+			
+			//拖拽打开 ( Drag and Drop )
+			action = pushActionByPathFieldedIDForNameField("{sq:'Tërhiq dhe lësho', ar:'السحب والإسقاط', am:'ጎትት እና ጣል', az:'İşarələ və Yerləşdir', ga:'Tarraing agus Buail', et:'Tõmba ja lase lahti', eu:'Eta Eraman', be:'перацягвання', bg:'Влачите и пускате', is:'Draga og sleppa', pl:'Przeciągnij i upuść', bs:'Povuci i ispusti', fa:'کشیدن و انداختن', af:'Sleep', da:'Træk og slip', de:'Drag and Drop', ru:'Перетаскивание', fr:'Glisser déposer', tl:'I-drag at Drop', fi:'Raahaa ja pudota', fy:'Sleepe en los litte', km:'អូសនិងទម្លាក់', ka:'\u1C92ადმოათრიე და ჩააგდე', gu:'ખેંચો અને છોડો', kk:'Жылжыту', ht:'Trennen ak gout', ko:'끌어서 놓기', ha:'Jawo kuma Drop', nl:'Drag and Drop', ky:'Сүйрөп барып таштоо', gl:'Arrastrar e soltar', ca:'Arrossegar i deixar anar', cs:'Drag and Drop', kn:'ಎಳೆದು', co:'Drag è Amicu', hr:'Povlačenje i ispuštanje', ku:'Drag û Drop', la:'Extraho quod occumbo', lv:'Vilkt un nomest', lo:'Drag ແລະການຫຼຸດລົງ', lt:'Tempti ir paleisti', lb:'Souvill an Drop', ro:'Tragere și plasare', mg:'Drag sy Drop', mt:'Drag u Drop', mr:'ड्रॅग आणि ड्रॉप करा', ml:'വലിച്ചിടുക', ms:'Seret dan lepas', mk:'Повлечи и пушти', mi:'Tōia me Whakataka', mn:'Drag болон буурсан', bn:'টানা এবং পতন', my:'Drag and Drop', hmn:'Drag thiab nco', xh:'Yitsale uyiwise', zu:'Hudula bese udedele', ne:'तानेर खसाल्नु', no:'Dra og slipp', pa:'ਅਤੇ ਸੁੱਟੋ', pt:'Drag and Drop', ps:'راکښن او &#39;خه', ny:'Kokani ndikuponya', ja:'ドラッグアンドドロップ', sv:'Dra och släpp', sm:'Tolo ma lea Mataua', sr:'Превуци и отпусти', st:'Hulela le lerotholi', si:'ඇද අතහරින්න', eo:'Treni kaj malfiksi', sk:'Drag and Drop', sl:'Povleci in spusti', sw:'Drag na kuacha', gd:'Slaod agus Drop', ceb:'Drag ug Drop', so:'Jiid iyo dejinta', tg:'Кашолакунӣ ва Тарки', te:'లాగివదులు', ta:'இழுத்து டிராப்', th:'ลากแล้ววาง', tr:'Sürükle ve bırak', cy:'Llusgo a Gollwng', ur:'ڈریگ اور ڈراپ', uk:'Перетягнути і кинути', uz:'Drag va Drop', es:'Arrastrar y soltar', iw:'גרור ושחרר', el:'Drag and Drop', haw:'Kauo a mai hapai ku', sd:'ڇڪيو ۽ بوند', hu:'Fogd és vidd', sn:'Zvuva uye Drop', hy:'Քարշեք եւ բաց թողեք', ig:'Dọrọ na dobe', it:'Trascinare e rilasciare', yi:'שלעפּן און דראָפּ', hi:'खींचें और छोड़ें', su:'Nyered tur ngaleupas', id:'Drag dan Drop', jw:'Seret lan Selehake', en:'Drag and Drop', yo:'Fa ati Ju', vi:'Kéo và thả', zh_TW:'拖放', zh_CN:'拖拽打开'}", INSERT, "id", 6432, "Native-Langue", "Dialog", "Preference", "DefaultDir");
+			action.tagName="Item";
+			
+			//递归打开 ( Recursively )
+			action = pushActionByPathFieldedIDForNameField("{sq:'Recursively', ar:'متكرر', am:'Recursively', az:'recursively', ga:'hathchúrsach', et:'rekursiivselt', eu:'errekurtsiboki', be:'рэкурсіўны', bg:'Рекурсивно', is:'endurkvæmt', pl:'rekurencyjnie', bs:'rekurzivno', fa:'به صورت بازگشتی', af:'rekursief', da:'rekursivt', de:'Rekursiv', ru:'Рекурсивный', fr:'récursive', tl:'recursively', fi:'rekursiivisesti', fy:'Recursively', km:'ហៅខ្លួនឯង', ka:'რეკურსიული', gu:'recursively', kk:'рекурсивті', ht:'recursive', ko:'재귀', ha:'recursively', nl:'recursief', ky:'Recursively', gl:'recursively', ca:'de forma recursiva', cs:'rekurzivně', kn:'ಪುನರಾವರ್ತಿತವಾಗಿ', co:'dalli', hr:'rekurzivno', ku:'Recursively', la:'recursively', lv:'rekursīvi', lo:'recursively', lt:'rekursyviai', lb:'Recursively', ro:'recursiv', mg:'Recursively', mt:'recursively', mr:'recursively', ml:'പെർമിഷൻ', ms:'rekursif', mk:'рекурзивно', mi:'recursively', mn:'Рекурсивээр', bn:'recursively', my:'နေ့တိုင်းပြန်လည်စတင်မည်', hmn:'recursively', xh:'Recursively', zu:'Recursively', ne:'दोहोरिएर', no:'rekursivt', pa:'ਲਗਾਤਾਰ', pt:'recursively', ps:'Recursively', ny:'Recursively', ja:'再帰的に', sv:'rekursivt', sm:'Recursively', sr:'рецурсивели', st:'Recursively', si:'ඇත්තෙන් වෙනසට භාජනය', eo:'rikure', sk:'rekurzívne', sl:'rekurzivno', sw:'recursively', gd:'Recursively', ceb:'Recursively', so:'Recursively', tg:'Recursively', te:'పునరావృతంగా', ta:'மீண்டும் மீண்டும்', th:'ซ้ำ', tr:'Tekrarlı', cy:'recursively', ur:'تکراری', uk:'рекурсивний', uz:'Yinelemeli', es:'Recursivamente', iw:'ברקורסיה', el:'αναδρομικά', haw:'Recursively', sd:'Recursively', hu:'rekurzívan', sn:'Recursively', hy:'recursively', ig:'recursively', it:'ricorsivamente', yi:'רעקורסיוועלי', hi:'रिकर्सिवली', su:'Recursively', id:'rekursif', jw:'Recursively', en:'Recursively', yo:'Recursively', vi:'đệ quy', zh_TW:'遞歸', zh_CN:'递归打开全部'}", INSERT, "id", 6434, "Native-Langue", "Dialog", "Preference", "DefaultDir");
+			action.tagName="Item";
+			
+			//新样式对话框
+			action = pushActionByPathFieldedIDForNameField(null, MODIFY, "id", 6430, "Native-Langue", "Dialog", "Preference", "DefaultDir");
+			action.converter = input -> input.replaceAll("[(（].*[）)]", "");			
+			
+			//目录 ( Directory )
+			action = pushActionByPathFieldedIDForNameField("{sq:'drejtori', ar:'الدليل', am:'ማውጫ', az:'Directory', ga:'eolaire', et:'kataloog', eu:'Directory', be:'каталог', bg:'указател', is:'Skrá', pl:'Informator', bs:'imenik', fa:'فهرست راهنما', af:'Gids', da:'Vejviser', de:'Verzeichnis', ru:'каталог', fr:'Annuaire', tl:'Directory', fi:'hakemisto', fy:'Directory', km:'ថត', ka:'დირექტორია', gu:'ડિરેક્ટરી', kk:'анықтамалық', ht:'Anyè', ko:'예배 규칙서', ha:'Directory', nl:'directory', ky:'справочник', gl:'guía', ca:'directori', cs:'Adresář', kn:'ಡೈರೆಕ್ಟರಿ', co:'Directory', hr:'Imenik', ku:'Directory', la:'Directory', lv:'katalogs', lo:'Directory', lt:'katalogas', lb:'Guide', ro:'Director', mg:'Directory', mt:'Direttorju', mr:'निर्देशिका', ml:'ഡയറക്ടറി', ms:'Direktori', mk:'директориум', mi:'Whaiaronga', mn:'лавлах', bn:'নির্দেশিকা', my:'လမ်းညွှန်', hmn:'Directory', xh:'Directory', zu:'Directory', ne:'निर्देशिका', no:'Directory', pa:'ਡਾਇਰੈਕਟਰੀ', pt:'Diretório', ps:'Directory', ny:'Directory', ja:'ディレクトリ', sv:'Directory', sm:'aufaʻatonu', sr:'именик', st:'Directory', si:'නාමාවලිය', eo:'Katalogo', sk:'adresár', sl:'Imenik', sw:'Saraka', gd:'Directory', ceb:'Directory', so:'Directory', tg:'директорӣ', te:'డైరెక్టరీ', ta:'அடைவு', th:'ไดเรกทอรี', tr:'rehber', cy:'Cyfeiriadur', ur:'ڈائریکٹری', uk:'каталог', uz:'Directory', es:'Directorio', iw:'מַדרִיך', el:'Ευρετήριο', haw:'Papa Kuhikuhi', sd:'ھدايت نامو', hu:'Könyvtár', sn:'dhairetori', hy:'տեղեկատու', ig:'Directory', it:'elenco', yi:'דירעקטארי', hi:'निर्देशिका', su:'pitunjuk', id:'Direktori', jw:'Direktori', en:'Directory', yo:'Directory', vi:'Danh mục', zh_TW:'目錄', zh_CN:'目录'}", MODIFY, null, null, "Native-Langue", "Dialog", "Preference", "DefaultDir");
+			action.fieldName="title";		
+			
+			
 	}
 }

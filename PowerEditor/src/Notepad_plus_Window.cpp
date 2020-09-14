@@ -210,6 +210,12 @@ void Notepad_plus_Window::init(HINSTANCE hInst, HWND parent, const TCHAR *cmdLin
 		localizationSwitcher.addLanguageFromXml(fileNames[i]);
 	}
 
+#if 0
+	TCHAR buffer[200]={0};
+	wsprintf(buffer,TEXT("%d"), localizationSwitcher.size());
+	::MessageBox(NULL, buffer, TEXT(""), MB_OK);
+#endif
+
 	fileNames.clear();
 	ThemeSwitcher & themeSwitcher = nppParams.getThemeSwitcher();
 

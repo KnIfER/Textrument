@@ -1,6 +1,7 @@
 package apply.translations;
 
 import com.alibaba.fastjson.JSONObject;
+import com.intellij.ide.ui.EditorOptionsTopHitProvider;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 import org.jdom.Element;
@@ -125,15 +126,15 @@ public class TextrumentLocalePatchs {
 			LANG.Afrikaans
 			, LANG.Albanian
 			, LANG.Arabic
-			, null // "aragonese.xml"
-			, null // "aranese.xml"
+			, LANG.aragonese // "aragonese.xml"
+			, null//LANG.aranese // "aranese.xml"
 			, LANG.Azerbaijani
 			, LANG.Basque
 			, LANG.Belarusian
 			, LANG.Bengali
 			, LANG.Bosnian
 			, LANG.Portuguese //"brazilian_portuguese.xml"
-			, null // "breton.xml"
+			, LANG.breton // "breton.xml"
 			, LANG.Bulgarian
 			, LANG.Catalan
 			, LANG.ChineseSimplified
@@ -144,14 +145,14 @@ public class TextrumentLocalePatchs {
 			, LANG.Danish
 			, LANG.Dutch
 			, LANG.English
-			, LANG.English
+			, LANG.English1
 			, LANG.Esperanto
 			, LANG.Estonian
 			, null // "extremaduran.xml"
 			, null // "farsi.xml"
 			, LANG.Finnish
 			, LANG.French
-			, null // "friulian.xml"
+			, LANG.friulian // "friulian.xml"
 			, LANG.Galician
 			, LANG.Georgian
 			, LANG.German
@@ -164,7 +165,7 @@ public class TextrumentLocalePatchs {
 			, LANG.Irish
 			, LANG.Italian
 			, LANG.Japanese
-			, null // "kabyle.xml"
+			, LANG.kabyle // "kabyle.xml"
 			, LANG.Kannada
 			, LANG.Kazakh
 			, LANG.Korean
@@ -180,16 +181,16 @@ public class TextrumentLocalePatchs {
 			, LANG.Mongolian
 			, LANG.Nepali
 			, LANG.Norwegian
-			, null // "nynorsk.xml"
-			, null // "occitan.xml"
+			, LANG.nynorsk // "nynorsk.xml"
+			, LANG.occitan // "occitan.xml"
 			, null // "piglatin.xml"
 			, LANG.Polish
 			, LANG.Portuguese
 			, LANG.Punjabi
 			, LANG.Romanian
 			, LANG.Russian
-			, null // "samogitian.xml"
-			, null // "sardinian.xml"
+			, LANG.Samoan // "samogitian.xml"
+			, LANG.sardinian // "sardinian.xml"
 			, LANG.Serbian
 			, null // "serbianCyrillic.xml"
 			, LANG.Sinhala
@@ -222,7 +223,7 @@ public class TextrumentLocalePatchs {
 	static {
 		for (int i = 0; i < shortNames.length; i++) {
 			if(shortNames[i]!=null) {
-				shortName_id_table.put(shortNames[i].code, i);
+				shortName_id_table.put(shortNames[i].toString(), i);
 			}
 		}
 	}
@@ -324,14 +325,16 @@ public class TextrumentLocalePatchs {
 	};
 
 	/** 这是我们的源文件夹*/
-	static File sourceFolder=new File("D:\\Code\\FigureOut\\notepad-plus-plus\\PowerEditor\\installer\\nativeLang");
+	static File sourceFolder=new File("..\\PowerEditor\\installer\\nativeLang");
 
 	/** Simply transfer key-values pair among xmls. */
     public static void main(String[] args) throws Exception {
 		new File(sourceFolder, "taiwaneseMandarin.xml").renameTo(new File(sourceFolder, "taiwanese.xml"));
 
-		
-		
+
+		for(LANG idx:LANG.values()) {
+			processXmlFileByEnum(idx, false);
+		}
     }
     
 	@Test
@@ -386,7 +389,7 @@ public class TextrumentLocalePatchs {
 	static Action pushActionByPathFieldedIDForNameField(String jsonTrans, int type, String idField, Object id, String...XMLPath) {
 		Action action = new Action(jsonTrans, type, XMLPath);
 		action.idField = idField;
-		action.id = ""+id;
+		action.id = id==null?null:""+id;
 		action.fieldName = "name";
 		actions.add(action);
 		return action;
@@ -395,10 +398,10 @@ public class TextrumentLocalePatchs {
 
 	/** Process one xml file by id. */
 	public static void processXmlFileByEnum(LANG Enum, boolean test) throws Exception {
-		if(shortName_id_table.get(Enum.code)==null) {
+		if(shortName_id_table.get(Enum.toString())==null) {
 			return;
 		}
-		int id = shortName_id_table.get(Enum.code);
+		int id = shortName_id_table.get(Enum.toString());
 		
 		String xmlFileName = filters[id];
 
@@ -414,24 +417,41 @@ public class TextrumentLocalePatchs {
 		fin.close();
 		String xmlText = new String(data, StandardCharsets.UTF_8);
 
+		StringBuffer sb = new StringBuffer(xmlText.length());
+		
+		ArrayList<String> arrComments = new ArrayList<>();
+		Pattern commentPattern = Pattern.compile("(<!--.*?-->)", Pattern.DOTALL);
+		Matcher commentMatcher = commentPattern.matcher(xmlText);
+		while (commentMatcher.find()) {
+			arrComments.add(commentMatcher.group(1));
+			commentMatcher.appendReplacement(sb, "<COMMENT_"+(arrComments.size()-1)+"/>");
+		}
+		commentMatcher.appendTail(sb);
+		xmlText = sb.toString();
+		
+		
 		Pattern p = Pattern.compile("(\\r\\n)+\\S(?<!<)");
 		Matcher m = p.matcher(xmlText);
-		StringBuffer sb = new StringBuffer(xmlText.length());
+		sb.setLength(0);
 		while(m.find()) {
 			m.appendReplacement(sb, m.group(0).replace("\r\n", "|LFCR|"));
 		}
 		m.appendTail(sb);
 		xmlText = sb.toString();
 		
-		int stid = xmlText.indexOf("<NotepadPlus>");
-		int edid = xmlText.indexOf("</NotepadPlus>")+"</NotepadPlus>".length();
-		String xmlStart = xmlText.substring(0, stid);
-		String xmlEnd = xmlText.substring(edid);
-		xmlText = xmlText.substring(stid, edid);
 		
-		xmlText = xmlText.replace("\r\n\r\n", "<LFCR/>");
+		xmlText = xmlText.replace("\r\n\r\n", "<!--LFCR-->");
 
-		xmlText = xmlStart+xmlText;
+		commentPattern = Pattern.compile("<COMMENT_([0-9]+)/>");
+		commentMatcher = commentPattern.matcher(xmlText);
+		sb.setLength(0);
+		while (commentMatcher.find()) {
+			int idx = Integer.parseInt(commentMatcher.group(1));
+			commentMatcher.appendReplacement(sb, "");
+			sb.append(arrComments.get(idx));
+		}
+		commentMatcher.appendTail(sb);
+		xmlText = sb.toString();
 		
 		org.jdom.Document document = null;
 
@@ -542,7 +562,8 @@ public class TextrumentLocalePatchs {
 			}
 
 		}
-
+		
+		
 		XMLOutputter xmlOutput = new XMLOutputter();
 		Format f = Format.getRawFormat();
 		f.setIndent("    "); // 文本缩进
@@ -553,21 +574,21 @@ public class TextrumentLocalePatchs {
 		StringWriter sw = new StringWriter();
 		xmlOutput.output(document, sw);
 
-		String text = sw.toString();
+		xmlText = sw.toString();
 
-		text = text.replace(" />", "/>");
+		xmlText = xmlText.replace(" />", "/>");
 
-		text = text.replaceAll("\\s+\\r\\n", "\r\n");
-		
-		text = text.replace("|LFCR|", "\r\n");
-		text = text.replaceAll(".*<LFCR/>\r\n", "\r\n");
+		xmlText = xmlText.replaceAll("\\s+\\r\\n", "\r\n");
+
+		xmlText = xmlText.replace("|LFCR|", "\r\n");
+		xmlText = xmlText.replaceAll(".*<!--LFCR-->\r\n", "\r\n");
+
 		
 		if(test) {
-			if(actions.get(0).type!=EXTRACT)Log(text);
+			if(actions.get(0).type!=EXTRACT)Log(xmlText);
 		} else {
 			FileOutputStream fo = new FileOutputStream(file);
-			fo.write(text.getBytes(StandardCharsets.UTF_8));
-			fo.write(xmlEnd.getBytes(StandardCharsets.UTF_8));
+			fo.write(xmlText.getBytes(StandardCharsets.UTF_8));
 			fo.flush();
 			fo.close();
 		}
@@ -703,11 +724,22 @@ public class TextrumentLocalePatchs {
 		Indonesian("id", "Indonesia", "Indonesian"),
 		Javanese("jw", "Wong Jawa", "Javanese"),
 		English("en", "English", "English"),
+		English1("en1", "English", "English"),
 		Yoruba("yo", "Yorùbá", "Yoruba"),
 		Vietnamese("vi", "Tiếng Việt", "Vietnamese"),
 		ChineseTraditional("zh_TW", "正體中文", "Chinese Traditional"),
-		ChineseSimplified("zh_CN", "简体中文", "Chinese Simplified");
-
+		ChineseSimplified("zh_CN", "简体中文", "Chinese Simplified")
+		
+		//todo: Translator below locales in baidu
+		, aragonese("arg", "?", "?")
+		, breton("bre", "?", "?")
+		, friulian("fri", "?", "?")
+		, kabyle("kab", "?", "?")
+		, nynorsk("nno", "?", "?")
+		, occitan("oci", "?", "?")
+		, sardinian("sar", "?", "?")
+		
+		;
 		private String code;
 		private String name;
 		private String englishName;
@@ -744,12 +776,12 @@ public class TextrumentLocalePatchs {
 
 		@Override
 		public String toString() {
-			return code;
+			return this==English1?"en":code;
 		}
 
 	}
 	
-	private static void Log(String name) {
+	static void Log(String name) {
 		System.out.println(name);
 	}
 	

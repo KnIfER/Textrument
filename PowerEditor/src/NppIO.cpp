@@ -1634,6 +1634,7 @@ bool Notepad_plus::fileSaveAs(BufferID id, bool isSaveCopy, bool forbidSaveAsOpe
 	if(forbidSaveAsOpenedCheck) {
 		if(!LastSavedPath) {
 			LastSavedPath = new TCHAR[MAX_FILE_PATH];
+			ZeroMemory(LastSavedPath, MAX_FILE_PATH*sizeof(TCHAR));
 		}
 		lstrcpy(LastSavedPath, pfn);
 	}
