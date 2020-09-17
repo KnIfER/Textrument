@@ -270,7 +270,7 @@ void ToolBar::reset(bool create)
 					WS_EX_PALETTEWINDOW,
 					TOOLBARCLASSNAME,
 					TEXT(""),
-					WS_TOOLBARSTYLE,
+					WS_TOOLBARSTYLE|CCS_ADJUSTABLE,
 					0, 0,
 					0, 0,
 					_hParent,

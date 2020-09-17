@@ -126,8 +126,8 @@ int EncodingMapper::getIndexFromEncoding(int encoding) const
 	bool found = false;
 	int nbItem = sizeof(encodings)/sizeof(EncodingUnit);
 	int i = 0;
-	if (encoding == -1)
-		return -1;
+	if (encoding <= -1)
+		return encoding;
 	for ( ; i < nbItem; ++i)
 	{
 		if (encodings[i]._codePage == encoding)

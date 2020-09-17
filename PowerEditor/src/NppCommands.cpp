@@ -2288,8 +2288,32 @@ void Notepad_plus::command(int id)
 		case IDM_FORMAT_BINARY :
 		{
 			Buffer * buf = _pEditView->getCurrentBuffer();
-			buf->setUnicodeMode(uniEnd);
+			auto encoding = buf->getEncoding();
+			if(encoding>-2) {
+				if (buf->isDirty())
+				{
+					int answer = _nativeLangSpeaker.messageBox("SaveCurrentModifWarning",
+						_pPublicInterface->getHSelf(),
+						TEXT("You should save the current modification.\rAll the saved modifications can not be undone.\r\rContinue?"),
+						TEXT("Save Current Modification"),
+						MB_YESNOCANCEL);
+
+					if (answer == IDYES)
+					{
+						fileSave();
+						_pEditView->execute(SCI_EMPTYUNDOBUFFER);
+					}
+					else if(answer == IDCANCEL)
+						return;
+				}
+				buf->setUnicodeMode(uni8Bit);
+				buf->setEncoding(-2);
+				buf->reload();
+			}
+			buf->setUnicodeMode(uni8Bit);
 			buf->setEncoding(-2);
+
+			//_pEditView->execute(SCI_SETCODEPAGE);
 			break;
 		}
 
@@ -2327,7 +2351,9 @@ void Notepad_plus::command(int id)
 					um = uni8Bit;
 			}
 
-			if (buf->getEncoding() != -1)
+			auto encoding = buf->getEncoding();
+
+			if (encoding != -1)
 			{
 				if (buf->isDirty())
 				{
@@ -2366,8 +2392,12 @@ void Notepad_plus::command(int id)
 
 				if (um == uni8Bit)
 					_pEditView->execute(SCI_SETCODEPAGE, CP_ACP);
-				else
+				else {
+					if(encoding<=-2) {
+						_pEditView->execute(SCI_SETCODEPAGE, SC_CP_UTF8);
+					}
 					buf->setUnicodeMode(um);
+				}
 				fileReload();
 			}
 			else

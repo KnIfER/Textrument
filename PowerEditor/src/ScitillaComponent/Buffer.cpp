@@ -704,7 +704,7 @@ bool FileManager::reloadBuffer(BufferID id)
 
 void FileManager::setLoadedBufferEncodingAndEol(Buffer* buf, const Utf8_16_Read& UnicodeConvertor, int encoding, EolType bkformat)
 {
-	if (encoding == -1)
+	if (encoding <= -1)
 	{
 		NppParameters& nppParamInst = NppParameters::getInstance();
 		const NewDocDefaultSettings & ndds = (nppParamInst.getNppGUI()).getNewDocDefaultSettings();
@@ -713,6 +713,9 @@ void FileManager::setLoadedBufferEncodingAndEol(Buffer* buf, const Utf8_16_Read&
 		if (um == uni7Bit)
 			um = (ndds._openAnsiAsUtf8) ? uniCookie : uni8Bit;
 
+		if(encoding<=-2) {
+			um = uni8Bit;
+		}
 		buf->setUnicodeMode(um);
 	}
 	else
@@ -892,7 +895,7 @@ bool FileManager::backupCurrentBuffer()
 				int lengthDoc = _pNotepadPlus->_pEditView->getCurrentDocLen();
 				char* buf = (char*)_pNotepadPlus->_pEditView->execute(SCI_GETCHARACTERPOINTER);	//to get characters directly from Scintilla buffer
 				size_t items_written = 0;
-				if (encoding == -1) //no special encoding; can be handled directly by Utf8_16_Write
+				if (encoding <= -1) //no special encoding; can be handled directly by Utf8_16_Write
 				{
 					items_written = UnicodeConvertor.fwrite(buf, lengthDoc);
 					if (lengthDoc == 0)
@@ -1019,7 +1022,7 @@ bool FileManager::saveBuffer(BufferID id, const TCHAR * filename, bool isCopy, g
 		int lengthDoc = _pscratchTilla->getCurrentDocLen();
 		char* buf = (char*)_pscratchTilla->execute(SCI_GETCHARACTERPOINTER);	//to get characters directly from Scintilla buffer
 		size_t items_written = 0;
-		if (encoding == -1) //no special encoding; can be handled directly by Utf8_16_Write
+		if (encoding <= -1) //no special encoding; can be handled directly by Utf8_16_Write
 		{
 			items_written = UnicodeConvertor.fwrite(buf, lengthDoc);
 			if (lengthDoc == 0)
@@ -1058,7 +1061,6 @@ bool FileManager::saveBuffer(BufferID id, const TCHAR * filename, bool isCopy, g
 
 			if (error_msg != NULL)
 				*error_msg = TEXT("Failed to save file.\nNot enough space on disk to save file?");
-
 			return false;
 		}
 
@@ -1324,7 +1326,9 @@ bool FileManager::loadFileData(Document doc, const TCHAR * filename, char* data,
 	}
 	_pscratchTilla->execute(SCI_CLEARALL);
 
+	bool hexMode = fileFormat._encoding==-2;
 
+	if(!hexMode)
 	if (fileFormat._language < L_EXTERNAL)
 	{
 		_pscratchTilla->execute(SCI_SETLEXER, ScintillaEditView::langNames[fileFormat._language].lexerID);
@@ -1338,6 +1342,7 @@ bool FileManager::loadFileData(Document doc, const TCHAR * filename, char* data,
 		_pscratchTilla->execute(SCI_SETLEXERLANGUAGE, 0, reinterpret_cast<LPARAM>(pName));
 	}
 
+	if(!hexMode)
 	if (fileFormat._encoding != -1)
 		_pscratchTilla->execute(SCI_SETCODEPAGE, SC_CP_UTF8);
 
@@ -1365,7 +1370,7 @@ bool FileManager::loadFileData(Document doc, const TCHAR * filename, char* data,
 			}
 			if (lenFile == 0) break;
 
-            if (isFirstTime)
+            if (isFirstTime&&!hexMode)
             {
 				// check if file contain any BOM
                 if (Utf8_16_Read::determineEncoding((unsigned char *)data, lenFile) != uni8Bit)
@@ -1389,7 +1394,11 @@ bool FileManager::loadFileData(Document doc, const TCHAR * filename, char* data,
                 isFirstTime = false;
             }
 
-			if (fileFormat._encoding != -1)
+			if(hexMode) {
+				_pscratchTilla->execute(SCI_APPENDTEXT, lenFile, reinterpret_cast<LPARAM>(data));
+				format = EolType::windows;
+			}
+			else if (fileFormat._encoding != -1)
 			{
 				if (fileFormat._encoding == SC_CP_UTF8)
 				{

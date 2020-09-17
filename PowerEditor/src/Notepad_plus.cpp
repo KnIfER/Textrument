@@ -4032,20 +4032,23 @@ void Notepad_plus::enableConvertMenuItems(EolType format) const
 void Notepad_plus::checkUnicodeMenuItems() const
 {
 	Buffer *buf = _pEditView->getCurrentBuffer();
+	int id = -1;
 	UniMode um = buf->getUnicodeMode();
 	int encoding = buf->getEncoding();
-
-	int id = -1;
-	switch (um)
-	{
+	if(buf->getEncoding()<=-2) {
+		id = IDM_FORMAT_BINARY;
+	} else {
+		switch (um)
+		{
 		case uniUTF8   : id = IDM_FORMAT_UTF_8; break;
 		case uni16BE   : id = IDM_FORMAT_UCS_2BE; break;
 		case uni16LE   : id = IDM_FORMAT_UCS_2LE; break;
 		case uniCookie : id = IDM_FORMAT_AS_UTF_8; break;
 		case uni8Bit   : id = IDM_FORMAT_ANSI; break;
+		}
 	}
 
-	if (encoding == -1)
+	if (encoding <= -1)
 	{
 		// Uncheck all in the sub encoding menu
         HMENU _formatMenuHandle = ::GetSubMenu(_mainMenuHandle, MENUINDEX_FORMAT);
@@ -4054,12 +4057,12 @@ void Notepad_plus::checkUnicodeMenuItems() const
 		if (id == -1) //um == uni16BE_NoBOM || um == uni16LE_NoBOM
 		{
 			// Uncheck all in the main encoding menu
-			::CheckMenuRadioItem(_mainMenuHandle, IDM_FORMAT_ANSI, IDM_FORMAT_AS_UTF_8, IDM_FORMAT_ANSI, MF_BYCOMMAND);
+			::CheckMenuRadioItem(_mainMenuHandle, IDM_FORMAT_ANSI, IDM_FORMAT_BINARY, IDM_FORMAT_ANSI, MF_BYCOMMAND);
 			::CheckMenuItem(_mainMenuHandle, IDM_FORMAT_ANSI, MF_UNCHECKED | MF_BYCOMMAND);
 		}
 		else
 		{
-			::CheckMenuRadioItem(_mainMenuHandle, IDM_FORMAT_ANSI, IDM_FORMAT_AS_UTF_8, id, MF_BYCOMMAND);
+			::CheckMenuRadioItem(_mainMenuHandle, IDM_FORMAT_ANSI, IDM_FORMAT_BINARY, id, MF_BYCOMMAND);
 		}
 	}
 	else
