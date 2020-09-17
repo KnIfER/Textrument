@@ -111,7 +111,9 @@ class CellBuffer {
 private:
 	bool hasStyles;
 	bool largeDocument;
+public:
 	SplitVector<char> substance;
+private:
 	SplitVector<char> style;
 	bool readOnly;
 	bool utf8Substance;

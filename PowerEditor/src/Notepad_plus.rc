@@ -712,6 +712,7 @@ BEGIN
         MENUITEM "UTF-8-BOM",                   IDM_FORMAT_UTF_8
         MENUITEM "UCS-2 BE BOM",                IDM_FORMAT_UCS_2BE
         MENUITEM "UCS-2 LE BOM",                IDM_FORMAT_UCS_2LE
+        MENUITEM "Binary Mode",                 IDM_FORMAT_BINARY
         POPUP "Character sets"
         BEGIN
             POPUP "Arabic"

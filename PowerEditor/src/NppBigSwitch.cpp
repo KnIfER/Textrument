@@ -705,8 +705,17 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 			return TRUE;
 		}
 
-		case NPPM_GETRAWFULLCURRENTPATH:
+		case NPPM_GETRAWFULLCURRENTPATH: {
+			if(wParam) {
+				BufferID id = (BufferID)wParam;
+				Buffer * buf = MainFileManager.getBufferByID(id);
+				if(buf&&buf->getID()==id) {
+					//::MessageBox(NULL, TEXT("111"), TEXT(""), MB_OK);
+					return (LRESULT)buf->getFullPathName();
+				}
+			}
 			return (LRESULT)_pEditView->getCurrentBuffer()->getFullPathName();
+		}
 
 		case NPPM_GETFULLCURRENTPATH:
 		case NPPM_GETCURRENTDIRECTORY:
@@ -890,6 +899,7 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 				return nbDocPrimary;
 			else if (lParam == SECOND_VIEW)
 				return nbDocSecond;
+			return 0;
 		}
 
 		case NPPM_GETOPENFILENAMESPRIMARY:
@@ -1047,11 +1057,15 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 				pSci = &_subEditView;
 			else
 				return -1;
-
+			// bool LoadFromFile=0;
 			// get text of current scintilla
+			if(pSci->getCurrentBuffer()->getEncoding()<=-2) {
+				return uniEnd;
+			}
 			auto length = pSci->execute(SCI_GETTEXTLENGTH, 0, 0) + 1;
 			char* buffer = new char[length];
 			pSci->execute(SCI_GETTEXT, length, reinterpret_cast<LPARAM>(buffer));
+			//char* buffer = (char*)pSci->execute(SCI_GETRAWTEXT);
 
 			// convert here
 			UniMode unicodeMode = pSci->getCurrentBuffer()->getUnicodeMode();
@@ -1060,7 +1074,8 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 			length = UnicodeConvertor.convert(buffer, length-1);
 
 			// set text in target
-			if(wParam==115) { 
+			lParam=115;
+			if(lParam==115) { 
 				// Preserve History
 				pSci->execute(SCI_SETUNDOCOLLECTION, 0, 0);
 				pSci->execute(SCI_CLEARALL);
@@ -1071,7 +1086,7 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 				pSci->addText(length, UnicodeConvertor.getNewBuf());
 				pSci->execute(SCI_EMPTYUNDOBUFFER);
 			}
-
+			
 			pSci->execute(SCI_SETCODEPAGE);
 
 			// set cursor position
@@ -1095,6 +1110,9 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 				return -1;
 
 			// get text of current scintilla
+			if(pSci->getCurrentBuffer()->getEncoding()<=-2) {
+				return uniEnd;
+			}
 			auto length = pSci->execute(SCI_GETTEXTLENGTH, 0, 0) + 1;
 			char* buffer = new char[length];
 			pSci->execute(SCI_GETTEXT, length, reinterpret_cast<LPARAM>(buffer));
@@ -1103,7 +1121,8 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 			length = UnicodeConvertor.convert(buffer, length-1);
 
 			// set text in target
-			if(wParam==115) { 
+			lParam=115;
+			if(lParam==115) { 
 				// Preserve History
 				pSci->execute(SCI_SETUNDOCOLLECTION, 0, 0);
 				pSci->execute(SCI_CLEARALL);
@@ -1126,6 +1145,12 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 			(pSci->getCurrentBuffer())->setUnicodeMode(um);
 			(pSci->getCurrentBuffer())->setDirty(true);
 			return um;
+		}
+
+		case NPPM_CURRENTBINMODE:
+		{
+			auto encoding = getCurrentBuffer()->getEncoding();
+			return encoding<=-2?encoding:0;
 		}
 
 		case NPPM_EMPTYEDITHISTORY:

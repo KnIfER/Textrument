@@ -2285,6 +2285,14 @@ void Notepad_plus::command(int id)
 			break;
 		}
 
+		case IDM_FORMAT_BINARY :
+		{
+			Buffer * buf = _pEditView->getCurrentBuffer();
+			buf->setUnicodeMode(uniEnd);
+			buf->setEncoding(-2);
+			break;
+		}
+
 		case IDM_FORMAT_ANSI :
 		case IDM_FORMAT_UTF_8 :
 		case IDM_FORMAT_UCS_2BE :

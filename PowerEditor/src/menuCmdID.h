@@ -379,6 +379,7 @@
     #define    IDM_FORMAT_CONV2_UTF_8       (IDM_FORMAT + 11)
     #define    IDM_FORMAT_CONV2_UCS_2BE     (IDM_FORMAT + 12)
     #define    IDM_FORMAT_CONV2_UCS_2LE     (IDM_FORMAT + 13)
+    #define    IDM_FORMAT_BINARY     (IDM_FORMAT + 14)
 
     #define    IDM_FORMAT_ENCODE            (IDM_FORMAT + 20)
     #define    IDM_FORMAT_WIN_1250          (IDM_FORMAT_ENCODE + 0)

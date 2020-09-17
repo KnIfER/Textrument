@@ -794,7 +794,7 @@ void ScintillaEditView::setUserLexer(const TCHAR *userLangName)
 	UINT codepage = CP_ACP;
 	UniMode unicodeMode = _currentBuffer->getUnicodeMode();
 	int encoding = _currentBuffer->getEncoding();
-	if (encoding == -1)
+	if (encoding <= -1)
 	{
 		if (unicodeMode == uniUTF8 || unicodeMode == uniCookie)
 			codepage = CP_UTF8;

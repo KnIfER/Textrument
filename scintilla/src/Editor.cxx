@@ -5823,6 +5823,10 @@ sptr_t Editor::WndProc(unsigned int iMessage, uptr_t wParam, sptr_t lParam) {
 
 	switch (iMessage) {
 
+	case SCI_GETRAWTEXT: {
+			return (sptr_t)pdoc->GetCharPointer();
+		}
+
 	case SCI_GETTEXT: {
 			if (lParam == 0)
 				return pdoc->Length() + 1;
