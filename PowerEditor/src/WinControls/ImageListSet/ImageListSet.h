@@ -132,6 +132,8 @@ public :
 
 	int size();
 
+	int length();
+
 	int getNbIcon() const {
 		return int(_tbiis.size());
 	};
@@ -146,6 +148,7 @@ public :
 		return _iconListVector[witchList].changeIcon(iconIndex, iconLocation);
 	};
 
+	bool pureWithoutDynamics = true;
 private :
 	ToolBarIconIDs _tbiis;
 	unsigned int _nbCmd = 0;

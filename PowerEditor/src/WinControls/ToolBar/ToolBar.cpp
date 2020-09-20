@@ -350,11 +350,16 @@ void ToolBar::reset(bool create)
 		throw std::runtime_error("ToolBar::reset : CreateWindowEx() nullptr");
 	}
 
-	//if (create) 
-	//if (_state != TB_STANDARD) 
+	if (_state != TB_STANDARD) 
 	{
-		//load dynamic icons (load just once)
-		if(_nbDynButtons > 0 && _toolBarIcons.size()<_nbTotalButtons) {
+		//load dynamic icons (load only once)
+		if(_nbDynButtons > 0 && _toolBarIcons.pureWithoutDynamics) {
+#if 0
+			static int cc=0;
+			TCHAR buffer[256]={0};
+			wsprintf(buffer,TEXT("dynamic=%d=%d=%d"), _toolBarIcons.length(), _nbTotalButtons, (LPARAM)cc++);
+			::SendMessage(_hParent, NPPM_SETSTATUSBAR, STATUSBAR_DOC_TYPE, (LPARAM)buffer);
+#endif
 			for (size_t j = 0; j < _nbDynButtons; ++j)
 			{
 				auto dynIconI = _vDynBtnReg.at(j);
@@ -364,11 +369,9 @@ void ToolBar::reset(bool create)
 				}
 				_toolBarIcons.addIcon(dynIconI);
 			}
+			_toolBarIcons.pureWithoutDynamics=false;
 		}
-	}
 
-	if (_state != TB_STANDARD)
-	{
 		//If non standard icons, use custom imagelists
 		setDefaultImageList();
 		setHotImageList();
@@ -529,8 +532,7 @@ void ToolBar::toggleToolbarWrap(){
 		reset(0);
 	} else {
 		//一闪一闪亮晶晶
-		reduce();
-		setToUglyIcons();
+		reset(1);
 	}
 #if 0
 	_toolBarIcons.resizeIcon(iconDpiDynamicalSize);

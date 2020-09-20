@@ -95,18 +95,22 @@ void ToolBarIcons::init(ToolBarButtonUnit *buttonUnitArray, int arraySize)
 
 void ToolBarIcons::reInit(int size)
 {
+	//大小不同时，清空列表
 	ImageList_SetIconSize(getDefaultLst(), size, size);
 	ImageList_SetIconSize(getHotLst(), size, size);
 	ImageList_SetIconSize(getDisableLst(), size, size);
-
-	for (size_t i = 0, len = _tbiis.size(); i < len; ++i)
-	{
-		if (_tbiis[i]._defaultIcon != -1)
+	// ImageList_RemoveAll((_iconListVector[HLIST_DEFAULT].getHandle())
+	if(length()==0) { // sanity check
+		for (size_t i = 0, len = _tbiis.size(); i < len; ++i)
 		{
-			_iconListVector[HLIST_DEFAULT].addIcon(_tbiis[i]._defaultIcon);
-			_iconListVector[HLIST_HOT].addIcon(_tbiis[i]._hotIcon);
-			_iconListVector[HLIST_DISABLE].addIcon(_tbiis[i]._grayIcon);
+			if (_tbiis[i]._defaultIcon != -1)
+			{
+				_iconListVector[HLIST_DEFAULT].addIcon(_tbiis[i]._defaultIcon);
+				_iconListVector[HLIST_HOT].addIcon(_tbiis[i]._hotIcon);
+				_iconListVector[HLIST_DISABLE].addIcon(_tbiis[i]._grayIcon);
+			}
 		}
+		pureWithoutDynamics = true;
 	}
 }
 
@@ -142,6 +146,11 @@ void ToolBarIcons::addIcon(tDynamicList iconI)
 int ToolBarIcons::size()
 {
 	return _iconListVector.size();
+}
+
+int ToolBarIcons::length()
+{
+	return ImageList_GetImageCount(_iconListVector[HLIST_DEFAULT].getHandle());
 }
 
 void ToolBarIcons::create(HINSTANCE hInst, int iconSize)
