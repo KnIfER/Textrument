@@ -6031,6 +6031,16 @@ void NppParameters::createXmlTreeFromGUIParams()
 		GUIConfigElement->SetAttribute(TEXT("docPeekOnMap"), _nppGUI._isDocPeekOnMap ? TEXT("yes") : TEXT("no"));
 	}
 
+	{
+		TiXmlNode *iconNode = nppRoot->FirstChildElement(TEXT("Icons"));
+		if (not iconNode)
+		{
+			iconNode = nppRoot->InsertEndChild(TiXmlElement(TEXT("Icons")));
+		}
+		(iconNode->ToElement())->SetAttribute(TEXT("Items"), nppApp->DumpToolbarButtons());
+		(iconNode->ToElement())->SetAttribute(TEXT("Wrap"), nppApp->_toolBar.wrap?_T("yes"):_T("no"));
+	}
+
 	// <GUIConfig name="Searching" "monospacedFontFindDlg"="no" stopFillingFindField="no" findDlgAlwaysVisible="no" confirmReplaceOpenDocs="yes" confirmMacroReplaceOpenDocs="yes" confirmReplaceInFiles="yes" confirmMacroReplaceInFiles="yes" />
 	{
 		TiXmlElement* GUIConfigElement = (newGUIRoot->InsertEndChild(TiXmlElement(TEXT("GUIConfig"))))->ToElement();

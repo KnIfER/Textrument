@@ -2309,11 +2309,10 @@ void Notepad_plus::command(int id)
 				buf->setUnicodeMode(uni8Bit);
 				buf->setEncoding(-2);
 				buf->reload();
+				_pEditView->execute(SCI_GOTOPOS);
 			}
 			buf->setUnicodeMode(uni8Bit);
 			buf->setEncoding(-2);
-
-			//_pEditView->execute(SCI_SETCODEPAGE);
 			break;
 		}
 
@@ -2943,6 +2942,12 @@ void Notepad_plus::command(int id)
 
         case IDM_ABOUT:
 		{
+			//tg
+			if(1) {
+				//SendMessage(_toolBar.getHSelf(), TB_CUSTOMIZE, 0, 0);
+				_toolBar.toggleToolbarWrap();
+				return;
+			}
 			bool doAboutDlg = false;
 			const int maxSelLen = 32;
 			auto textLen = _pEditView->execute(SCI_GETSELTEXT, 0, 0) - 1;

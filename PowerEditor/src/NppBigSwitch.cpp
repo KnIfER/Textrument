@@ -77,7 +77,6 @@ struct SortTaskListPred final
 	}
 };
 
-
 LRESULT CALLBACK Notepad_plus_Window::Notepad_plus_Proc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	if (hwnd == NULL)
@@ -521,6 +520,10 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 			int rebarBottomHeight = _rebarBottom.getHeight();
 			int statusBarHeight = _statusBar.getHeight();
 			::MoveWindow(_rebarBottom.getHSelf(), 0, rc.bottom - rebarBottomHeight - statusBarHeight, rc.right, rebarBottomHeight, TRUE);
+
+			if(_toolBar.wrap) {
+				_toolBar.syncToolbarRows();
+			}
 
 			getMainClientRect(rc);
 			_dockingManager.reSizeTo(rc);
@@ -1602,6 +1605,114 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 		case WM_NOTIFY:
 		{
 			SCNotification *notification = reinterpret_cast<SCNotification *>(lParam);
+			auto code = notification->nmhdr.code;
+			static bool customizationTweaking=false;
+			if(hwnd==Notepad_plus_Window::gNppHWND) {
+				switch(code) {
+					case TBN_QUERYINSERT:
+					{
+						if(customizationTweaking) { 
+							//todo windows localization
+							auto hwnd = FindWindow(_T("#32770"), _T("Customize Toolbar"));
+							if(hwnd) {
+								customizationTweaking=0;
+								//SetWindowLongPtr(hwnd, GWL_STYLE, GetWindowLongPtr(hwnd, GWL_STYLE)|WS_SIZEBOX|WS_THICKFRAME );
+								RECT rc;
+								::GetClientRect(Notepad_plus_Window::gNppHWND, &rc);
+								POINT center;
+								center.x = rc.left + (rc.right - rc.left)/2;
+								center.y = rc.top + (rc.bottom - rc.top)/2;
+								::ClientToScreen(Notepad_plus_Window::gNppHWND, &center);
+
+								::GetWindowRect(hwnd, &rc);
+
+								int w=rc.right - rc.left,h=rc.bottom - rc.top;
+
+								h*=1.5;
+
+								int x = center.x - w/2;
+								int y = center.y - h/2;
+
+								::SetWindowPos(hwnd, HWND_TOP, x, y, w, h, SWP_SHOWWINDOW);
+
+								HWND hList = 0;
+								RECT rc1;
+								for(int i=0;i<2;i++) {
+									hList = FindWindowEx(hwnd, hList, _T("ListBox"), NULL);
+									if(hList) 
+									{
+										::GetClientRect(hList, &rc1);
+										::GetWindowRect(hList, &rc1);
+										center.x = rc1.left;
+										center.y = rc1.top ;
+										ScreenToClient(hwnd, &center);
+										::MoveWindow(hList, center.x, center.y, rc1.right-rc1.left, (rc.bottom-center.y-7), true);
+									}
+								}
+							}
+						}
+
+					}
+					case TBN_QUERYDELETE:
+					{
+						return true;
+					}
+					case TBN_TOOLBARCHANGE:
+					case TBN_DELETINGBUTTON:
+					{
+						_toolBar.dirty=true;
+						//LPNMTOOLBAR item = (LPNMTOOLBAR) lParam; 
+						//TCHAR buffer[256]={0};
+						//wsprintf(buffer,TEXT("TBN_DELETINGBUTTON=%d=%d=%d=%d"), item->tbButton.iBitmap, item->tbButton.dwData, item->tbButton.idCommand, item->tbButton.iString);
+						//::SendMessage(_pMainWindow->getHParent(), NPPM_SETSTATUSBAR, STATUSBAR_DOC_TYPE, (LPARAM)buffer);
+						return true;
+					}
+					case TBN_GETBUTTONINFO:
+					{
+						LPNMTOOLBAR item = (LPNMTOOLBAR) lParam; 
+						auto id=((LPTBNOTIFY)lParam)->iItem;
+						if (id < _toolBar._nbTotalButtons)
+						{
+							TCHAR menuName[64];
+							LPNMTOOLBAR item = (LPNMTOOLBAR) lParam; 
+
+							::GetMenuString(_mainMenuHandle, _toolBar._pTBB[id].idCommand, menuName, 64, MF_BYCOMMAND);
+							auto meunSep = _tcsstr(menuName, _T("\t"));
+							if(meunSep>0) {
+								meunSep[0]='\0';
+							}
+							lstrcpy(item->pszText, menuName);
+							CopyMemory(&item->tbButton, &_toolBar._pTBB[id], sizeof(TBBUTTON));
+							return true;
+						}
+						return false;
+					}
+					case TBN_BEGINADJUST:
+					{
+						customizationTweaking=1;
+						return false;
+					}
+					case TBN_ENDADJUST:
+					{
+						customizationTweaking=0;
+						if(_toolBar.dirty) {
+							_toolBar.retrieveCustomBtns();
+						}
+						return true;
+					}
+					case TBN_RESET:
+					{
+						_toolBar.dirty=false;
+						if(_toolBar._pTBB_CUSTOM) {
+							delete _toolBar._pTBB_CUSTOM;
+							_toolBar._pTBB_CUSTOM=nullptr;
+							_toolBar.reset(true);
+							syncToolbarHwnd();
+						}
+						return TRUE;
+					}
+				}
+			}
 
 			if (notification->nmhdr.code == SCN_UPDATEUI)
 			{
@@ -2117,7 +2228,18 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 
 		case NPPM_ADDTOOLBARICON:
 		{
-			_toolBar.registerDynBtn(static_cast<UINT>(wParam), reinterpret_cast<toolbarIcons*>(lParam));
+			auto CMDID = static_cast<UINT>(wParam);
+			auto info = _pluginsManager.getInfoForCommand(CMDID);
+			if(!info) {
+
+			}
+			if(info) {
+				if(!info->_toolbarICCount) {
+					info->_toolbarICStart=_toolBar._vDynBtnReg.size();
+				}
+				info->_toolbarICCount++;
+			}
+			_toolBar.registerDynBtn(CMDID, reinterpret_cast<toolbarIcons*>(lParam));
 			return TRUE;
 		}
 
@@ -2328,6 +2450,13 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 				}
 			}
 			return (LRESULT)0;
+		}
+
+		case NPPM_ENABLEMENUITEM:
+		{
+			::EnableMenuItem(_mainMenuHandle, static_cast<UINT>(wParam), MF_BYCOMMAND | (static_cast<BOOL>(lParam) ? MF_ENABLED : MF_GRAYED));
+			_toolBar.setEnable(static_cast<int>(wParam), lParam != 0);
+			return TRUE;
 		}
 
 		case NPPM_HIDESTATUSBAR:

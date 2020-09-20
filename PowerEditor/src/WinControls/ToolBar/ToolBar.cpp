@@ -28,14 +28,26 @@
 #include <stdexcept>
 #include "ToolBar.h"
 #include "shortcut.h"
-#include "Parameters.h"
 #include "FindReplaceDlg_rc.h"
 #include "Notepad_plus.h"
 
 const int WS_TOOLBARSTYLE = WS_CHILD | WS_VISIBLE | WS_CLIPCHILDREN | WS_CLIPSIBLINGS | TBSTYLE_TOOLTIPS |TBSTYLE_FLAT | CCS_TOP | BTNS_AUTOSIZE | CCS_NOPARENTALIGN | CCS_NORESIZE | CCS_NODIVIDER;
 
+ToolBar::ToolBar(DPIManager* _dpiManager)
+{
+	dpiManager=_dpiManager;
+}
+
+ToolBar::ToolBar()
+{
+#ifdef PluginToolbar
+	dpiManager = new DPIManager();
+#endif
+}
+
 void ToolBar::initTheme(TiXmlDocument *toolIconsDocRoot)
 {
+#ifdef ToolBarTheme
     _toolIcons =  toolIconsDocRoot->FirstChild(TEXT("NotepadPlus"));
 	if (_toolIcons)
 	{
@@ -101,13 +113,14 @@ void ToolBar::initTheme(TiXmlDocument *toolIconsDocRoot)
 			}
 		}
 	}
+#endif
 }
 
 bool ToolBar::init( HINSTANCE hInst, HWND hPere, toolBarStatusType type, ToolBarButtonUnit *buttonUnitArray, int arraySize)
 {
 	Window::init(hInst, hPere);
 	_state = type;
-	int iconDpiDynamicalSize = NppParameters::getInstance()._dpiManager.scaleX(_state == TB_LARGE?32:16);
+	int iconDpiDynamicalSize = dpiManager->scaleX(_state == TB_LARGE?32:16);
 
 	_toolBarIcons.init(buttonUnitArray, arraySize);
 	_toolBarIcons.create(_hInst, iconDpiDynamicalSize);
@@ -144,8 +157,9 @@ bool ToolBar::init( HINSTANCE hInst, HWND hPere, toolBarStatusType type, ToolBar
 		_pTBB[i].idCommand = cmd;
 		_pTBB[i].fsState = TBSTATE_ENABLED;
 		_pTBB[i].fsStyle = (BYTE)style; 
-		_pTBB[i].dwData = 0; 
+		_pTBB[i].dwData = i; //store standard icon idx here.
 		_pTBB[i].iString = 0;
+		_pTBB_CMDID_table[cmd]=i;
 	}
 
 	if (_nbDynButtons > 0)
@@ -170,6 +184,7 @@ bool ToolBar::init( HINSTANCE hInst, HWND hPere, toolBarStatusType type, ToolBar
 			_pTBB[i].fsStyle = BTNS_BUTTON; 
 			_pTBB[i].dwData = 0; 
 			_pTBB[i].iString = 0;
+			_pTBB_CMDID_table[cmd]=i;
 		}
 	}
 
@@ -186,6 +201,9 @@ void ToolBar::destroy()
 		_pRebar = NULL;
 	}
 	delete [] _pTBB;
+	if(_pTBB_CUSTOM) {
+		delete _pTBB_CUSTOM;
+	}
 	::DestroyWindow(_hSelf);
 	_hSelf = NULL;
 	_toolBarIcons.destroy();
@@ -207,7 +225,7 @@ int ToolBar::getHeight() const
 {
 	DWORD size = static_cast<DWORD>(SendMessage(_hSelf, TB_GETBUTTONSIZE, 0, 0));
 	DWORD padding = static_cast<DWORD>(SendMessage(_hSelf, TB_GETPADDING, 0, 0));
-	int totalHeight = HIWORD(size) + HIWORD(padding) - 3;
+	int totalHeight = HIWORD(size) + HIWORD(padding) - (rows==1?3:0);
 	return totalHeight;
 }
 
@@ -216,7 +234,7 @@ void ToolBar::reduce()
 	if (_state == TB_SMALL)
 		return;
 
-	int iconDpiDynamicalSize = NppParameters::getInstance()._dpiManager.scaleX(16);
+	int iconDpiDynamicalSize = dpiManager->scaleX(16);
 	_toolBarIcons.resizeIcon(iconDpiDynamicalSize);
 	bool recreate = (_state == TB_STANDARD || _state == TB_LARGE);
 	setState(TB_SMALL);
@@ -229,7 +247,7 @@ void ToolBar::enlarge()
 	if (_state == TB_LARGE)
 		return;
 
-	int iconDpiDynamicalSize = NppParameters::getInstance()._dpiManager.scaleX(32);
+	int iconDpiDynamicalSize = dpiManager->scaleX(32);
 	_toolBarIcons.resizeIcon(iconDpiDynamicalSize);
 	bool recreate = (_state == TB_STANDARD || _state == TB_SMALL);
 	setState(TB_LARGE);
@@ -247,30 +265,74 @@ void ToolBar::setToUglyIcons()
 	Window::redraw();
 }
 
+void ToolBar::setCheck(int ID2Check, bool willBeChecked) const
+{
+	auto tbItem = const_cast<ToolBar*>(this)->getRecordedDataFromCMDID(ID2Check);
+	if(tbItem) {
+		tbItem->fsState&=~TBSTATE_CHECKED;
+		if(willBeChecked) {
+			tbItem->fsState|=TBSTATE_CHECKED;
+		}
+	}
+	::SendMessage(_hSelf, TB_CHECKBUTTON, ID2Check, MAKELONG(willBeChecked, 0));
+};
+
+void ToolBar::setEnable(int ID2Check, bool willBeChecked) const
+{
+	auto tbItem = const_cast<ToolBar*>(this)->getRecordedDataFromCMDID(ID2Check);
+	if(tbItem) {
+		tbItem->fsState&=~TBSTATE_ENABLED;
+		if(willBeChecked) {
+			tbItem->fsState|=TBSTATE_ENABLED;
+		}
+	}
+	::SendMessage(_hSelf, TB_ENABLEBUTTON, ID2Check, MAKELONG(willBeChecked, 0));
+};
+
+void ToolBar::setCustomSizeAndEnssureCapasity(int size) {
+	if(!_pTBB_CUSTOM||_pTBB_CUSTOM->size()<size) {
+		if(_pTBB_CUSTOM)
+			delete _pTBB_CUSTOM;
+		_pTBB_CUSTOM=new std::vector<TBBUTTON>(size*1.2);
+	}
+	_pTBB_CUSTOM_LEN=size;
+}
+
+TBBUTTON* ToolBar::getRecordedDataFromCMDID(int cmdId) 
+{
+	auto pdx = _pTBB_CMDID_table.find(cmdId);
+	if(pdx!=_pTBB_CMDID_table.end()) {
+		auto idx = (*pdx).second;
+		if(idx>=0&&idx<_pTBB_CUSTOM_LEN) {
+			return &_pTBB[idx];
+		}
+	}
+	return nullptr;
+}
 
 void ToolBar::reset(bool create) 
 {
+	if(dirty) {
+		retrieveCustomBtns();
+	}
 
 	if (create && _hSelf)
 	{
-		//Store current button state information
-		TBBUTTON tempBtn;
-		for (size_t i = 0; i < _nbTotalButtons; ++i)
-		{
-			::SendMessage(_hSelf, TB_GETBUTTON, i, reinterpret_cast<LPARAM>(&tempBtn));
-			_pTBB[i].fsState = tempBtn.fsState;
-		}
 		::DestroyWindow(_hSelf);
 		_hSelf = NULL;
 	}
 
 	if (!_hSelf)
 	{
+		auto style=WS_TOOLBARSTYLE|CCS_ADJUSTABLE;//|TBSTYLE_ALTDRAG;
+		if(wrap) {
+			style|=TBSTYLE_WRAPABLE;
+		}
 		_hSelf = ::CreateWindowEx(
 					WS_EX_PALETTEWINDOW,
 					TOOLBARCLASSNAME,
 					TEXT(""),
-					WS_TOOLBARSTYLE|CCS_ADJUSTABLE,
+					style,
 					0, 0,
 					0, 0,
 					_hParent,
@@ -285,10 +347,13 @@ void ToolBar::reset(bool create)
 
 	if (!_hSelf)
 	{
-		throw std::runtime_error("ToolBar::reset : CreateWindowEx() function return null");
+		throw std::runtime_error("ToolBar::reset : CreateWindowEx() nullptr");
 	}
 
-	if (create) {
+	//if (create) 
+	//if (_state != TB_STANDARD) 
+	{
+		//load dynamic icons (load just once)
 		if(_nbDynButtons > 0 && _toolBarIcons.size()<_nbTotalButtons) {
 			for (size_t j = 0; j < _nbDynButtons; ++j)
 			{
@@ -305,7 +370,6 @@ void ToolBar::reset(bool create)
 	if (_state != TB_STANDARD)
 	{
 		//If non standard icons, use custom imagelists
-
 		setDefaultImageList();
 		setHotImageList();
 		setDisableImageList();
@@ -313,7 +377,7 @@ void ToolBar::reset(bool create)
 	else
 	{
 		//Else set the internal imagelist with standard bitmaps
-		int iconDpiDynamicalSize = NppParameters::getInstance()._dpiManager.scaleX(16);
+		int iconDpiDynamicalSize = dpiManager->scaleX(16);
 		::SendMessage(_hSelf, TB_SETBITMAPSIZE, 0, MAKELPARAM(iconDpiDynamicalSize, iconDpiDynamicalSize));
 
 		//TBADDBITMAP addbmp = {_hInst, 0};
@@ -322,6 +386,7 @@ void ToolBar::reset(bool create)
 		for (size_t i = 0 ; i < _nbButtons ; ++i)
 		{
 			int icoID = _toolBarIcons.getStdIconAt(static_cast<int32_t>(i));
+			//todo load once. but standard icons small, so leave it.
 			HBITMAP hBmp = static_cast<HBITMAP>(::LoadImage(_hInst, MAKEINTRESOURCE(icoID), IMAGE_BITMAP, iconDpiDynamicalSize, iconDpiDynamicalSize, LR_LOADMAP3DCOLORS | LR_LOADTRANSPARENT));
 			addbmp.nID = reinterpret_cast<UINT_PTR>(hBmp);
 
@@ -333,8 +398,9 @@ void ToolBar::reset(bool create)
 			for (size_t j = 0; j < _nbDynButtons; ++j)
 			{
 				auto atat = _vDynBtnReg.at(j);
-				HBITMAP hBmp = atat.hBmp;
+				HBITMAP & hBmp = atat.hBmp;
 				if(!hBmp && atat.ORH->magicNum==0x666) {
+					// dynamic standard icons also load only once.
 					hBmp = static_cast<HBITMAP>(::LoadImage((HINSTANCE)(atat.ORH->HRO), MAKEINTRESOURCE(atat.ORH->resBmp), IMAGE_BITMAP, 0, 0, LR_DEFAULTSIZE | LR_LOADMAP3DCOLORS));
 				}
 				if(hBmp) {
@@ -351,19 +417,175 @@ void ToolBar::reset(bool create)
 		_nbCurrentButtons = nbBtnToAdd;
 		WORD btnSize = (_state == TB_LARGE?32:16);
 		::SendMessage(_hSelf, TB_SETBUTTONSIZE , 0, MAKELONG(btnSize, btnSize));
-		::SendMessage(_hSelf, TB_ADDBUTTONS, nbBtnToAdd, reinterpret_cast<LPARAM>(_pTBB));
+		if(_pTBB_CUSTOM && _pTBB_CUSTOM->size()) {
+			applyCustomization();
+		} else {
+			::SendMessage(_hSelf, TB_ADDBUTTONS, nbBtnToAdd, reinterpret_cast<LPARAM>(_pTBB));
+			//lazysync seps for the wrap mode.
+		}
 	}
 	::SendMessage(_hSelf, TB_AUTOSIZE, 0, 0);
 
+	reNewRBar();
+}
+
+void ToolBar::applyCustomization(bool reset){
+	// apply customization.
+	if(reset) {
+		for(int i = ::SendMessage(_hSelf, TB_BUTTONCOUNT, 0, 0) - 1; i >= 0; i--)
+		{
+			SendMessage(_hSelf, TB_DELETEBUTTON, i, 0);
+		}
+	}
+	_pTBB_SEP.clear();
+	//MENUITEMINFO mii; mii.cbSize = sizeof(MENUITEMINFO);
+	for(int i = 0; i < _pTBB_CUSTOM_LEN; i++) { //sync seps and state
+		auto & customItem = _pTBB_CUSTOM->at(i);
+		if(customItem.fsStyle&BTNS_SEP) {
+			_pTBB_SEP.push_back(i);
+		} else {
+			//if(::GetMenuItemInfo(_mainMenuHandle, _pTBB_CUSTOM->at(i).idCommand, MF_BYCOMMAND, &mii)) {
+			//	//MF_BYCOMMAND perfomance?
+			//	_pTBB_CUSTOM->at(i).fsState = mii.fState;
+			//}
+			auto tbItem = getRecordedDataFromCMDID(customItem.idCommand);
+			if(tbItem && customItem.iBitmap==tbItem->iBitmap) { //sanity check
+				customItem = *tbItem;
+			}
+		}
+
+	}
+	SendMessage(_hSelf, TB_ADDBUTTONS, _pTBB_CUSTOM_LEN, (LPARAM)_pTBB_CUSTOM->data());
+}
+
+void ToolBar::syncToolbarRows() {
+	int IdealRows = 1;
+	if(wrap) {
+		//IdealRows = SendMessage(_hSelf, TB_GETROWS , 0, 0);
+		TBBUTTON tempBtn;
+		bool bOnlyWrapOnSep=0;
+		//for(int i=0, len=_pTBB_SEP.size();i<len;i++) {
+		for(int i=0, len=bOnlyWrapOnSep?_pTBB_SEP.size():SendMessage(_hSelf, TB_BUTTONCOUNT , 0, 0);i<len;i++) {
+			::SendMessage(_hSelf, TB_GETBUTTON, bOnlyWrapOnSep?_pTBB_SEP[i]:i, reinterpret_cast<LPARAM>(&tempBtn));
+			if(tempBtn.fsState&TBSTATE_WRAP) {
+				IdealRows++;
+			}
+		}
+	}
+
+	if(1||rows!=IdealRows) {
+		rows=IdealRows;
+		RECT rc;
+		GetClientRect(_hSelf, &rc);
+
+		DWORD padding = static_cast<DWORD>(SendMessage(_hSelf, TB_GETPADDING, 0, 0));
+
+		rc.bottom=rc.top+getHeight()*IdealRows+HIWORD(padding)*(IdealRows-1);
+
+		reNewRBar();
+
+		reSizeTo(rc);
+
+		reNewRBar();
+	}
+	SendMessage(_hSelf, TB_AUTOSIZE, 0, 0);
+}
+
+void ToolBar::retrieveCustomBtns() {
+	if(_hSelf) {
+		int size = ::SendMessage(_hSelf, TB_BUTTONCOUNT, 0, 0);
+		setCustomSizeAndEnssureCapasity(size);
+
+		for(int i=0;i<size;i++) {
+			TBBUTTON & tempBtn = _pTBB_CUSTOM->at(i);
+			::SendMessage(_hSelf, TB_GETBUTTON, i, reinterpret_cast<LPARAM>(&tempBtn));
+		}
+	}
+	dirty=false;
+}
+
+void ToolBar::toggleToolbarWrap(){
+	if(wrap ^= TRUE) {
+		SendMessage(_hSelf, TB_SETSTYLE,0,
+			SendMessage(_hSelf,TB_GETSTYLE,0,0)|TBSTYLE_WRAPABLE);	
+	} else {
+		SendMessage(_hSelf, TB_SETSTYLE,0,
+			SendMessage(_hSelf,TB_GETSTYLE,0,0)&(~TBSTYLE_WRAPABLE));
+	}
+	//int size = ::SendMessage(getHSelf(), TB_BUTTONCOUNT, 0, 0);
+	//SendMessage(getHSelf(), TB_INSERTBUTTON, size, (LPARAM)&_pTBB[7]);
+	//SendMessage(getHSelf(), TB_DELETEBUTTON, size, 0);
+	//::SendMessage(_pPublicInterface->getHSelf(), WM_SIZE, 0, 0);
+	//syncToolbarRows();
+	//
+
+	if (_state != TB_STANDARD) {
+		int size = _state==TB_LARGE?32:16;
+		int iconDpiDynamicalSize = dpiManager->scaleX(size-1);
+		_toolBarIcons.resizeIcon(iconDpiDynamicalSize);
+		reset(0);
+		iconDpiDynamicalSize = dpiManager->scaleX(size);
+		_toolBarIcons.resizeIcon(iconDpiDynamicalSize);
+		reset(0);
+	} else {
+		//一闪一闪亮晶晶
+		reduce();
+		setToUglyIcons();
+	}
+#if 0
+	_toolBarIcons.resizeIcon(iconDpiDynamicalSize);
+	reset(0);
+	iconDpiDynamicalSize = nppParms->_dpiManager.scaleX(32);
+	_toolBarIcons.resizeIcon(iconDpiDynamicalSize);
+	reset(1);
+	//#endif
+	iconDpiDynamicalSize = nppParms->_dpiManager.scaleX(31);
+	_toolBarIcons.resizeIcon(iconDpiDynamicalSize);
+
+	::SendMessage(getHSelf(), TB_SETBITMAPSIZE, 0, MAKELPARAM(iconDpiDynamicalSize, iconDpiDynamicalSize));
+	iconDpiDynamicalSize = nppParms->_dpiManager.scaleX(32);
+	_toolBarIcons.resizeIcon(iconDpiDynamicalSize);
+
+	::SendMessage(getHSelf(), TB_SETBITMAPSIZE, 0, MAKELPARAM(iconDpiDynamicalSize, iconDpiDynamicalSize));
+	reset(0);
+	::SendMessage(getHSelf(), TB_SETBUTTONSIZE , 0, MAKELONG(31, 31));
+	::SendMessage(getHSelf(), TB_SETBUTTONSIZE , 0, MAKELONG(32, 32));
+
+	::SendMessage(getHSelf(), TB_BUTTONSTRUCTSIZE, sizeof(TBBUTTON), 0);
+	::SendMessage(getHSelf(), TB_SETEXTENDEDSTYLE, 0, TBSTYLE_EX_HIDECLIPPEDBUTTONS);
+#endif
+	syncToolbarRows();
+
+
+	//int iconDpiDynamicalSize = nppParms->_dpiManager.scaleX(_state==TB_LARGE?32:16);
+	//_toolBarIcons.resizeIcon(iconDpiDynamicalSize);
+	//syncToolbarRows();
+
+	//::SendMessage(_pPublicInterface->getHSelf(), WM_SIZE, 0, 0);
+
+	//reset(1);
+}
+
+void ToolBar::reNewRBar()
+{
 	if (_pRebar)
 	{
+#if 1
+		_rbBand.fMask   |= RBBIM_STYLE;
+		if(wrap) {
+			_rbBand.fStyle &= ~RBBS_USECHEVRON;
+		} else {
+			_rbBand.fStyle |= RBBS_USECHEVRON;
+		}
+#endif
 		_rbBand.hwndChild	= getHSelf();
 		_rbBand.cxMinChild	= 0;
 		_rbBand.cyIntegral	= 1;
-		_rbBand.cyMinChild	= _rbBand.cyMaxChild = getHeight();
+		_rbBand.cyMinChild	= _rbBand.cyMaxChild = getHeight()*rows;
 		_rbBand.cxIdeal		= getWidth();
 
 		_pRebar->reNew(REBAR_BAR_TOOLBAR, &_rbBand);
+		//SendMessage(_rebarTop.getHSelf(), RB_SETBARINFO, 0, &_rbBand);
 	}
 }
 
@@ -400,21 +622,43 @@ UINT ToolBar::doPopop(POINT chevPoint)
 
 	if (start < _nbCurrentButtons)
 	{	//some buttons are hidden
+		UINT elements = 0;
 		HMENU menu = ::CreatePopupMenu();
+#ifdef PluginToolbar
+		TOOLTIPTEXT ttt = {0};
+#else
 		generic_string text;
+#endif
 		while (start < _nbCurrentButtons)
 		{
 			int cmd = _pTBB[start].idCommand;
+#ifdef PluginToolbar
+			/* get text over tooltip function */
+			ttt.hdr.code	= TTN_GETDISPINFO;
+			ttt.hdr.idFrom	= cmd;
+#else
 			getNameStrFromCmd(cmd, text);
-			if (_pTBB[start].idCommand != 0)
+#endif
+			if (cmd != 0)
 			{
+#ifdef PluginToolbar
+				::SendMessage(_hParent, WM_NOTIFY, cmd, (LPARAM)&ttt);
+				if (::SendMessage(_hSelf, TB_ISBUTTONENABLED, cmd, 0) != 0) {
+					AppendMenu(menu, MF_ENABLED, cmd, ttt.lpszText);
+				} else {
+					AppendMenu(menu, MF_DISABLED|MF_GRAYED, cmd, ttt.lpszText);
+				}
+#else
 				if (::SendMessage(_hSelf, TB_ISBUTTONENABLED, cmd, 0) != 0)
 					AppendMenu(menu, MF_ENABLED, cmd, text.c_str());
 				else
 					AppendMenu(menu, MF_DISABLED|MF_GRAYED, cmd, text.c_str());
-			} else
+#endif
+			} else if (elements != 0) {
 				AppendMenu(menu, MF_SEPARATOR, 0, TEXT(""));
-			
+			}
+
+			++elements;
 			++start;
 		}
 		TrackPopupMenu(menu, 0, chevPoint.x, chevPoint.y, 0, _hSelf, NULL);
@@ -434,7 +678,10 @@ void ToolBar::addToRebar(ReBar * rebar)
 	_rbBand.fMask   = RBBIM_STYLE | RBBIM_CHILD | RBBIM_CHILDSIZE |
 					  RBBIM_SIZE | RBBIM_IDEALSIZE | RBBIM_ID;
 
-	_rbBand.fStyle		= RBBS_VARIABLEHEIGHT | RBBS_USECHEVRON | RBBS_NOGRIPPER;
+	_rbBand.fStyle		= RBBS_VARIABLEHEIGHT | RBBS_NOGRIPPER;
+	if(!wrap) {
+		_rbBand.fStyle|=RBBS_USECHEVRON;
+	}
 	_rbBand.hwndChild	= getHSelf();
 	_rbBand.wID			= REBAR_BAR_TOOLBAR;	//ID REBAR_BAR_TOOLBAR for toolbar
 	_rbBand.cxMinChild	= 0;

@@ -644,6 +644,8 @@ public:
 
 	void syncToolbarHwnd();
 
+	TCHAR* DumpToolbarButtons();
+
 	void switchToIconMode(toolBarStatusType targetState, bool fromPrefDlg=false);
 };
 

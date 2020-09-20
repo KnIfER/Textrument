@@ -32,6 +32,8 @@
 #include "Window.h"
 #include "Notepad_plus_msgs.h"
 #include "ImageListSet.h"
+#include "dpiManager.h"
+#include <map>
 
 #define REBAR_BAR_TOOLBAR		0
 #define REBAR_BAR_SEARCH		1
@@ -59,12 +61,14 @@ class TiXmlNode;
 class ToolBar : public Window
 {
 public :
-	ToolBar() = default;
+	ToolBar(DPIManager* dpiManager);
+	ToolBar();
 	virtual ~ToolBar() = default;
 
     void initTheme(TiXmlDocument *toolIconsDocRoot);
 	virtual bool init(HINSTANCE hInst, HWND hPere, toolBarStatusType type, 
 		ToolBarButtonUnit *buttonUnitArray, int arraySize);
+	void populateTBL(ToolBarButtonUnit *buttonUnitArray);
 
 	virtual void destroy();
 	void enable(int cmdID, bool doEnable) const {
@@ -82,9 +86,9 @@ public :
 		return bool(::SendMessage(_hSelf, TB_GETSTATE, ID2Check, 0) & TBSTATE_CHECKED);
 	};
 
-	void setCheck(int ID2Check, bool willBeChecked) const {
-		::SendMessage(_hSelf, TB_CHECKBUTTON, ID2Check, MAKELONG(willBeChecked, 0));
-	};
+	void setCheck(int ID2Check, bool willBeChecked) const;
+
+	void setEnable(int ID2Check, bool willBeChecked) const;
 
 	toolBarStatusType getState() const {
 		return _state;
@@ -104,13 +108,25 @@ public :
 
 	void registerDynBtn(UINT message, toolbarIcons* hBmp);
 
+	void reNewRBar();
+
 	UINT doPopop(POINT chevPoint);	//show the popup if buttons are hidden
 
 	void addToRebar(ReBar * rebar);
 
-private :
+	void setCustomSizeAndEnssureCapasity(int size);
+
+	TBBUTTON* getRecordedDataFromCMDID(int cmdId);
+
+	bool wrap;
+	bool dirty;
+//private :
 	HICON PLUGIN_ICO = 0;
 	TBBUTTON *_pTBB = nullptr;
+	std::map<int, int> _pTBB_CMDID_table;
+	std::vector<int> _pTBB_SEP;
+	std::vector<TBBUTTON> * _pTBB_CUSTOM = nullptr;
+	int _pTBB_CUSTOM_LEN = 0;
 	ToolBarIcons _toolBarIcons;
 	toolBarStatusType _state = TB_SMALL;
 	std::vector<tDynamicList> _vDynBtnReg;
@@ -118,10 +134,12 @@ private :
 	size_t _nbDynButtons = 0;
 	size_t _nbTotalButtons = 0;
 	size_t _nbCurrentButtons = 0;
+	size_t rows = 1;
 	ReBar * _pRebar = nullptr;
 	REBARBANDINFO _rbBand;
     std::vector<iconLocator> _customIconVect;
     TiXmlNode *_toolIcons = nullptr;
+	DPIManager* dpiManager;
 
 	void setDefaultImageList() {
 		::SendMessage(_hSelf, TB_SETIMAGELIST, 0, reinterpret_cast<LPARAM>(_toolBarIcons.getDefaultLst()));
@@ -134,10 +152,16 @@ private :
 	};
 
 	void reset(bool create = false);
+	void applyCustomization(bool reset = false);
 	void setState(toolBarStatusType state) {
 		_state = state;
 	}
 	
+	void syncToolbarRows();
+
+	void toggleToolbarWrap();
+
+	void retrieveCustomBtns();
 };
 
 class ReBar : public Window

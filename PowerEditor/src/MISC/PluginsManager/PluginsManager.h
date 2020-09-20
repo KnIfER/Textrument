@@ -70,6 +70,8 @@ struct PluginInfo
 	int _nbFuncItem = 0;
 	generic_string _moduleName;
 	generic_string _funcName;
+	int _toolbarICStart=-1; // count from 0 from dynmaic icons
+	int _toolbarICCount=0;
 };
 
 struct LoadedDllInfo
@@ -135,10 +137,25 @@ public:
 
 	std::map<long, int> _plugin_module_table;
 
+	static struct ptrCmp
+	{
+		bool operator()( const TCHAR * s1, const TCHAR * s2 ) const
+		{
+			return lstrcmp( s1, s2 ) < 0;
+		}
+	};
+	std::map<TCHAR*, int, ptrCmp> _plugin_module_name_table;
+
 	HMENU getMenuForCommand(int cmdID);
 
+	PluginInfo* getInfoForCommand(int cmdID);
+
+	int getIdForCommand(int cmdID);
+
+	//TCHAR* getModuleNameForCommand(int cmdID);
+
 	HMENU getMenuForModule(HINSTANCE moduleID);
-private:
+//private:
 	NppData _nppData;
 	HMENU _hPluginsMenu = NULL;
 

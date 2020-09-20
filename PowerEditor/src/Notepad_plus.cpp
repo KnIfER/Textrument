@@ -49,6 +49,7 @@
 #include "functionListPanel.h"
 #include "fileBrowser.h"
 #include "Common.h"
+#include <set>
 
 using namespace std;
 
@@ -623,9 +624,133 @@ LRESULT Notepad_plus::init(HWND hwnd)
 	scnN.nmhdr.idFrom = 0;
 	_pluginsManager.notify(&scnN);
 
+	_toolBar.dpiManager = &nppParms->_dpiManager;
 	_toolBar.init(_pPublicInterface->getHinst(), hwnd, tbStatus, toolBarIcons, sizeof(toolBarIcons)/sizeof(ToolBarButtonUnit));
 
 	changeToolBarIcons();
+	
+	//read and init customization
+	TiXmlNode *nppNode = nppParam._pXmlUserDoc->FirstChild(TEXT("NotepadPlus"));
+	if(nppNode) {
+		bool toolbarWrap=false;
+		nppNode = nppNode->FirstChildElement(TEXT("Icons"));
+		if(nppNode) {
+			auto strVal = (nppNode->ToElement())->Attribute(TEXT("Wrap"));
+			if (strVal)
+				toolbarWrap = (lstrcmp(strVal, TEXT("yes")) == 0);
+			
+			TCHAR* Icons = (TCHAR*)(nppNode->ToElement())->Attribute(TEXT("Items"));
+			if(Icons) {
+				//::MessageBox(NULL, Icons, TEXT(""), MB_OK);
+				int i=0, len = lstrlen(Icons);
+				TCHAR* head_str=0;
+				int lastStart=0;
+				vector<TCHAR*> dllNames;
+				for(;i<len;i++) {
+					if(Icons[i]==';') {
+						Icons[i]='\0';
+						if(head_str) {
+							if(lastStart) {
+								dllNames.push_back(Icons+lastStart);
+							}
+						} else {
+							head_str=Icons;
+						}
+						lastStart=i+1;
+					}
+				}
+				//for(auto DLLNMI:dllNames) ::MessageBox(NULL, DLLNMI, TEXT(""), MB_OK);
+				if(head_str) {
+					int i=0, len = lstrlen(head_str);
+					lastStart=0;
+					TCHAR* iconItem;
+					TCHAR* plugPart;
+					auto _pTBB_CUSTOM = new vector<TBBUTTON>();
+					_pTBB_CUSTOM->clear();
+					int iconCout=0;
+					for(;i<len;i++) {
+						if(head_str[i]==' ') {
+							head_str[i]='\0';
+							iconItem = Icons+lastStart;
+							if(iconItem[0]=='x') 
+							{
+								//::MessageBox(NULL, iconItem, TEXT(""), MB_OK);
+								_pTBB_CUSTOM->push_back(_toolBar._pTBB[7]);
+							} 
+							else 
+							{
+								int itemIter=0, itemLen = lstrlen(iconItem);
+								plugPart=0;
+								for(;itemIter<itemLen;itemIter++) {
+									if(iconItem[itemIter]==':') {
+										iconItem[itemIter]='\0';
+										plugPart=iconItem;
+										iconItem=iconItem+itemIter+1;
+									}
+								}
+								int iconId = _wtoi(iconItem);
+								if(iconId>=0) {
+									if(!plugPart) {
+										if(iconId<_toolBar._nbButtons) {
+											_pTBB_CUSTOM->push_back(_toolBar._pTBB[iconId]);
+										} else if(iconId>20000) { // for plugin icon from nowhere, now here just add it.
+											for(int btnIter=_toolBar._nbButtons,btnLen=_toolBar._nbTotalButtons;btnIter<btnLen;btnIter++) {
+												if(_toolBar._pTBB[btnIter].idCommand==iconId) {
+													_pTBB_CUSTOM->push_back(_toolBar._pTBB[btnIter]);
+													break;
+												}
+											}
+										}
+									} else {
+										int pluginId = _wtoi(plugPart);
+										if(pluginId>=0&&pluginId<dllNames.size()) {
+											auto pluginName = dllNames[pluginId];
+											auto pluginID = _pluginsManager._plugin_module_name_table.find(pluginName);
+											if(pluginID!=_pluginsManager._plugin_module_name_table.end()) {
+												pluginId = (*pluginID).second;
+												auto pluginInfo = _pluginsManager._pluginInfos[pluginId];
+												if(iconId<pluginInfo->_toolbarICCount) {
+													iconId+=pluginInfo->_toolbarICStart+_toolBar._nbButtons+1;
+													if(iconId>=0&&iconId<_toolBar._nbTotalButtons) {
+														_pTBB_CUSTOM->push_back(_toolBar._pTBB[iconId]);
+													}
+												}
+											}
+										}
+
+									}
+								}
+							}
+
+							lastStart=i+1;
+						}
+					}
+					if(_pTBB_CUSTOM->size()>0) {
+						std::set<TCHAR*, PluginsManager::ptrCmp> dllSet;
+						for(auto dI:dllNames) {
+							dllSet.insert(dI);
+						}
+						for(int btnIter=_toolBar._nbButtons,btnLen=_toolBar._nbTotalButtons;btnIter<btnLen;btnIter++) {
+							auto info = _pluginsManager.getInfoForCommand(_toolBar._pTBB[btnIter].idCommand);
+							if(info&&dllSet.find((TCHAR*)info->_moduleName.data())==dllSet.end()) {
+								_pTBB_CUSTOM->push_back(_toolBar._pTBB[btnIter]);
+								break;
+							}
+						}
+						_toolBar._pTBB_CUSTOM=_pTBB_CUSTOM;
+						_toolBar._pTBB_CUSTOM_LEN=_pTBB_CUSTOM->size();
+						_toolBar.applyCustomization(true);
+					} 
+					else {
+						delete _pTBB_CUSTOM;
+					}
+				}
+			}
+		}
+		if(toolbarWrap) {
+			_toolBar.toggleToolbarWrap();
+		}
+	}
 
 	_rebarTop.init(_pPublicInterface->getHinst(), hwnd);
 	_rebarBottom.init(_pPublicInterface->getHinst(), hwnd);
@@ -777,6 +902,69 @@ int Notepad_plus::getButtonCommand(POINT &pointer) {
 
 void Notepad_plus::syncToolbarHwnd() {
 	_pPublicInterface->_toolbarHWND = _toolBar.getHSelf();
+	if(_toolBar.wrap) {
+		::SendMessage(_pPublicInterface->getHSelf(), WM_SIZE, 0, 0);
+		//syncToolbarRows();
+	}
+}
+
+TCHAR* Notepad_plus::DumpToolbarButtons() {
+	generic_string customtoolbar_buildup;
+	if(_toolBar.dirty) {
+		_toolBar.retrieveCustomBtns();
+	}
+	if(!_toolBar._pTBB_CUSTOM) {
+		return (TCHAR*)customtoolbar_buildup.data();
+	}
+	customtoolbar_buildup.clear();
+	// dump PluginID:CMD#1/2/3
+	TCHAR buffer[64]={0};
+	for(int i=0;i<_toolBar._pTBB_CUSTOM_LEN;i++) {
+		TBBUTTON & tempBtn = _toolBar._pTBB_CUSTOM->at(i);
+		if(tempBtn.fsStyle&BTNS_SEP) {
+			customtoolbar_buildup+=_T("x ");
+		} else if(tempBtn.iBitmap>30) {
+			auto CMID = tempBtn.idCommand;
+			auto info_id = _pluginsManager.getIdForCommand(CMID);
+			bool added=false;
+			if(info_id>=0) {
+				auto info = _pluginsManager._pluginInfos[info_id];
+				if(info->_toolbarICStart>=0) {
+					int toolbarIter=info->_toolbarICStart, len=info->_toolbarICStart+info->_toolbarICCount;
+					if(len>toolbarIter) {
+						for(; toolbarIter<len; toolbarIter++){
+							if(CMID==_toolBar._vDynBtnReg[toolbarIter].message) {
+								break;
+							}
+						}
+						if(toolbarIter<len) {
+							wsprintf(buffer,TEXT("%d:%d "), info_id, toolbarIter-info->_toolbarICStart);
+							customtoolbar_buildup+=buffer;
+							added=true;
+						}
+					}
+				}
+			}
+			if(!added) {
+				wsprintf(buffer,TEXT("%d "), tempBtn.idCommand);
+				//wsprintf(buffer,TEXT("%d-%d "), info_id, tempBtn.idCommand);
+				customtoolbar_buildup+=buffer;
+			}
+		} else {
+			wsprintf(buffer,TEXT("%d "), tempBtn.dwData);
+			customtoolbar_buildup+=buffer;
+		}
+	}
+
+	customtoolbar_buildup+=_T(";");
+
+	// dump PluginDLL_NAMES
+	for(int i=0, len=_pluginsManager._pluginInfos.size();i<len;i++) {
+		auto info = _pluginsManager._pluginInfos[i];
+		customtoolbar_buildup+=info->_moduleName;
+		customtoolbar_buildup+=_T(";");
+	}
+	return (TCHAR*)customtoolbar_buildup.data();
 }
 
 void Notepad_plus::killAllChildren()

@@ -448,6 +448,7 @@ void PluginsManager::addInMenuFromPMIndex(int i)
 	auto & plug = *_pluginInfos[i];
 	::InsertMenu(_hPluginsMenu, i, MF_BYPOSITION | MF_POPUP, (UINT_PTR)plug._pluginMenu, plug._funcName.c_str());
 	_plugin_module_table[(long)plug._hLib] = i;
+	_plugin_module_name_table[(TCHAR*)plug._moduleName.data()] = i;
 
     unsigned short j = 0;
 	for ( ; j < plug._nbFuncItem ; ++j)
@@ -496,6 +497,28 @@ HMENU PluginsManager::getMenuForCommand(int cmdID) {
 		}
 	}
 	return 0;
+}
+
+PluginInfo* PluginsManager::getInfoForCommand(int cmdID) {
+	auto id = _plugin_cid_table.find(cmdID);
+	if(id!=_plugin_cid_table.end()) {
+		int pluginid=id->second;
+		if(pluginid>=0&&pluginid<_pluginInfos.size()) {
+			return _pluginInfos[pluginid];
+		}
+	}
+	return 0;
+}
+
+int PluginsManager::getIdForCommand(int cmdID) {
+	auto id = _plugin_cid_table.find(cmdID);
+	if(id!=_plugin_cid_table.end()) {
+		int pluginid=id->second;
+		if(pluginid>=0&&pluginid<_pluginInfos.size()) {
+			return pluginid;
+		}
+	}
+	return -1;
 }
 
 HMENU PluginsManager::getMenuForModule(HINSTANCE moduleID) {

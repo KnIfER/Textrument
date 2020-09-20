@@ -1691,7 +1691,7 @@ public:
 
 	std::vector<generic_string> _dropFiltersHistory;
 	int _dropFiltersHistoryIdx=0;
-private:
+//private:
 	NppParameters();
 	~NppParameters();
 
