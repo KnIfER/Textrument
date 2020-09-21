@@ -18,6 +18,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static apply.translations.Install.installXmlByLocale;
+import static apply.translations.Install.installXmlNativeByLocale;
 
 
 public class TextrumentLocalePatchs {
@@ -339,7 +340,7 @@ public class TextrumentLocalePatchs {
 	@Test
 	public void TestJDOM() throws Exception {
 		processXmlFileByEnum(LANG.ChineseSimplified, false);
-		installXmlByLocale(LANG.ChineseSimplified);
+		installXmlNativeByLocale(LANG.ChineseSimplified);
 	}
 
     static class Action {

@@ -27,7 +27,17 @@ public class Patch_V2 implements ActionApplier {
 			action = pushActionByPathFieldedIDForNameField("{sq:'bosh', ar:'فارغة', am:'ባዶ', az:'boş', ga:'Folamh', et:'Tühi', eu:'Empty', be:'пусты', bg:'празен', is:'tómur', pl:'Pusty', bs:'prazan', fa:'خالی', af:'leë', da:'Tom', de:'Leer', ru:'пустой', fr:'Vide', tl:'walang laman', fi:'Tyhjä', fy:'Leech', km:'ទទេ', ka:'Empty', gu:'ખાલી', kk:'Бос', ht:'Vide', ko:'빈', ha:'komai', nl:'Leeg', ky:'бош', gl:'branco', ca:'Buit', cs:'Prázdný', kn:'ಖಾಲಿ', co:'viotu', hr:'Prazan', ku:'Vala', la:'inanis', lv:'tukšs', lo:'ຫວ່າງເປົ່າ', lt:'Tuščia', lb:'eidel', ro:'Gol', mg:'Empty', mt:'vojta', mr:'रिक्त', ml:'ഒഴിഞ്ഞ', ms:'kosong', mk:'Испразни', mi:'kau', mn:'хоосон', bn:'খালি', my:'ဗလာ', hmn:'npliag', xh:'Empty', zu:'engenalutho', ne:'खाली', no:'Tømme', pa:'ਖਾਲੀ', pt:'Vazio', ps:'تش', ny:'kanthu', ja:'空の', sv:'Tömma', sm:'gaogao', sr:'празан', st:'Empty', si:'හිස්', eo:'malplena', sk:'prázdny', sl:'Prazno', sw:'Empty', gd:'Empty', ceb:'walay sulod', so:'faaruqa', tg:'холӣ', te:'ఖాళీ', ta:'காலியாக', th:'ว่างเปล่า', tr:'Boş', cy:'Gwag', ur:'خالی', uk:'порожній', uz:'bo&#39;sh', es:'Vacío', iw:'ריק', el:'Αδειάζω', haw:'Empty', sd:'خالي', hu:'Üres', sn:'Empty', hy:'դատարկ', ig:'efu', it:'Vuoto', yi:'ליידיק', hi:'खाली', su:'kosong', id:'Kosong', jw:'P', en:'Dummy', yo:'sofo', vi:'Trống', zh_TW:'空', zh_CN:'空'}", INSERT, "id", 0x7FFFFF9B, "Native-Langue", "Dialog", "ShortcutMapper", "MainCommandNames");
 			action.tagName="Item";
 			action.mkdirs=true;
+
+			pushActionByPathFieldedIDForNameField("{zh_CN:'管理快捷键(&S)...'}", MODIFY, "id", 48009, "Native-Langue", "Menu", "Main", "Commands");
 			
+			pushActionByPathFieldedIDForNameField("{zh_CN:'打开所在文件夹(&O)...'}", MODIFY, "CMID", 19, "Native-Langue", "Menu", "TabBar");
 			
+			pushActionByPathFieldedIDForNameField("{zh_CN:'重新载入(&R)...'}", MODIFY, "CMID", 16, "Native-Langue", "Menu", "TabBar");
+			
+			pushActionByPathFieldedIDForNameField("{zh_CN:'另存为其他(&S)...'}", MODIFY, "CMID", 3, "Native-Langue", "Menu", "TabBar");
+			
+			pushActionByPathFieldedIDForNameField("{zh_CN:'复制完整路径到剪切板(&F)'}", MODIFY, "CMID", 7, "Native-Langue", "Menu", "TabBar");
+			
+			pushActionByPathFieldedIDForNameField("{zh_CN:'编辑弹出菜单...'}", MODIFY, "id", 48018, "Native-Langue", "Menu", "Main", "Commands");
 	}
 }

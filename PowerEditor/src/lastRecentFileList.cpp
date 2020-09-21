@@ -101,32 +101,32 @@ void LastRecentFileList::updateMenu()
 		//add separators
 		NativeLangSpeaker *pNativeLangSpeaker = nppParam.getNativeLangSpeaker();
 
-		generic_string recentFileList = pNativeLangSpeaker->getSpecialMenuEntryName("RecentFiles");
-		generic_string openRecentClosedFile = pNativeLangSpeaker->getNativeLangMenuString(IDM_FILE_RESTORELASTCLOSEDFILE);
-		generic_string openAllFiles = pNativeLangSpeaker->getNativeLangMenuString(IDM_OPEN_ALL_RECENT_FILE);
-		generic_string cleanFileList = pNativeLangSpeaker->getNativeLangMenuString(IDM_CLEAN_RECENT_FILE_LIST);
+		auto recentFileList = pNativeLangSpeaker->getSpecialMenuEntryName("RecentFiles");
+		auto openRecentClosedFile = pNativeLangSpeaker->getNativeLangMenuString(IDM_FILE_RESTORELASTCLOSEDFILE);
+		auto openAllFiles = pNativeLangSpeaker->getNativeLangMenuString(IDM_OPEN_ALL_RECENT_FILE);
+		auto cleanFileList = pNativeLangSpeaker->getNativeLangMenuString(IDM_CLEAN_RECENT_FILE_LIST);
 
-		if (recentFileList == TEXT(""))
-			recentFileList = TEXT("&Recent Files");
-		if (openRecentClosedFile == TEXT(""))
-			openRecentClosedFile = TEXT("Restore Recent Closed File");
-		if (openAllFiles == TEXT(""))
-			openAllFiles = TEXT("Open All Recent Files");
-		if (cleanFileList == TEXT(""))
-			cleanFileList = TEXT("Empty Recent Files List");
+		if (!recentFileList)
+			recentFileList = (TCHAR*)TEXT("&Recent Files");
+		if (!openRecentClosedFile)
+			openRecentClosedFile = (TCHAR*)TEXT("Restore Recent Closed File");
+		if (!openAllFiles)
+			openAllFiles = (TCHAR*)TEXT("Open All Recent Files");
+		if (!cleanFileList)
+			cleanFileList = (TCHAR*)TEXT("Empty Recent Files List");
 
 		if (!isSubMenuMode())
 			::InsertMenu(_hMenu, _posBase + 0, MF_BYPOSITION, static_cast<UINT_PTR>(-1), 0);
 
-		::InsertMenu(_hMenu, _posBase + 1, MF_BYPOSITION, IDM_FILE_RESTORELASTCLOSEDFILE, openRecentClosedFile.c_str());
-		::InsertMenu(_hMenu, _posBase + 2, MF_BYPOSITION, IDM_OPEN_ALL_RECENT_FILE, openAllFiles.c_str());
-		::InsertMenu(_hMenu, _posBase + 3, MF_BYPOSITION, IDM_CLEAN_RECENT_FILE_LIST, cleanFileList.c_str());
+		::InsertMenu(_hMenu, _posBase + 1, MF_BYPOSITION, IDM_FILE_RESTORELASTCLOSEDFILE, openRecentClosedFile);
+		::InsertMenu(_hMenu, _posBase + 2, MF_BYPOSITION, IDM_OPEN_ALL_RECENT_FILE, openAllFiles);
+		::InsertMenu(_hMenu, _posBase + 3, MF_BYPOSITION, IDM_CLEAN_RECENT_FILE_LIST, cleanFileList);
 		::InsertMenu(_hMenu, _posBase + 4, MF_BYPOSITION, static_cast<UINT_PTR>(-1), 0);
 		_hasSeparators = true;
 
 		if (isSubMenuMode())
 		{
-			::InsertMenu(_hParentMenu, _posBase + 0, MF_BYPOSITION | MF_POPUP, reinterpret_cast<UINT_PTR>(_hMenu), (LPCTSTR)recentFileList.c_str());
+			::InsertMenu(_hParentMenu, _posBase + 0, MF_BYPOSITION | MF_POPUP, reinterpret_cast<UINT_PTR>(_hMenu), (LPCTSTR)recentFileList);
 			::InsertMenu(_hParentMenu, _posBase + 1, MF_BYPOSITION, static_cast<UINT_PTR>(-1), 0);
 		}
 	}

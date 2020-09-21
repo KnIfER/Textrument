@@ -146,15 +146,15 @@ void NativeLangSpeaker::init(TiXmlDocumentA *nativeLangDocRootA, bool loadIfEngl
     }
 }
 
-generic_string NativeLangSpeaker::getSpecialMenuEntryName(const char *entryName) const
+TCHAR* NativeLangSpeaker::getSpecialMenuEntryName(const char *entryName) const
 {
-	if (!_nativeLangA) return TEXT("");
+	if (!_nativeLangA) return 0;
 	TiXmlNodeA *mainMenu = _nativeLangA->FirstChild("Menu");
-	if (!mainMenu) return TEXT("");
+	if (!mainMenu) return 0;
 	mainMenu = mainMenu->FirstChild("Main");
-	if (!mainMenu) return TEXT("");
+	if (!mainMenu)  return 0;
 	TiXmlNodeA *entriesRoot = mainMenu->FirstChild("Entries");
-	if (!entriesRoot) return TEXT("");
+	if (!entriesRoot)  return 0;
 
 	WcharMbcsConvertor& wmc = WcharMbcsConvertor::getInstance();
 
@@ -170,26 +170,26 @@ generic_string NativeLangSpeaker::getSpecialMenuEntryName(const char *entryName)
 			const char *name = element->Attribute("name");
 			if (!strcmp(idName, entryName))
 			{
-				return wmc.char2wchar(name, _nativeLangEncoding);
+				return (TCHAR*)wmc.char2wchar(name, _nativeLangEncoding);
 			}
 		}
 	}
-	return TEXT("");
+	return 0;
 }
 
-generic_string NativeLangSpeaker::getNativeLangMenuString(int itemID) const
+TCHAR* NativeLangSpeaker::getNativeLangMenuString(int itemID) const
 {
 	if (!_nativeLangA)
-		return TEXT("");
+		return 0;
 
 	TiXmlNodeA *node = _nativeLangA->FirstChild("Menu");
-	if (!node) return TEXT("");
+	if (!node) return 0;
 
 	node = node->FirstChild("Main");
-	if (!node) return TEXT("");
+	if (!node) return 0;
 
 	node = node->FirstChild("Commands");
-	if (!node) return TEXT("");
+	if (!node) return 0;
 
 	WcharMbcsConvertor& wmc = WcharMbcsConvertor::getInstance();
 
@@ -204,11 +204,11 @@ generic_string NativeLangSpeaker::getNativeLangMenuString(int itemID) const
 			const char *name = element->Attribute("name");
 			if (name)
 			{
-				return wmc.char2wchar(name, _nativeLangEncoding);
+				return (TCHAR*)wmc.char2wchar(name, _nativeLangEncoding);
 			}
 		}
 	}
-	return TEXT("");
+	if (!node) return 0;
 }
 
 TCHAR* NativeLangSpeaker::getShortcutNameString(int itemID) const

@@ -300,16 +300,19 @@ INT_PTR CALLBACK RunDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam)
 						::InsertMenu(hRunMenu, posBase + nbCmd, MF_BYPOSITION, cmdID, uc.toMenuItemString().c_str());
 
 						NppParameters& nppParams = NppParameters::getInstance();
-                        if (nbCmd == 0)
+                        //if (nbCmd == 0)
                         {
                             // Insert the separator and modify/delete command
 							::InsertMenu(hRunMenu, posBase + nbCmd + 1, MF_BYPOSITION, static_cast<unsigned int>(-1), 0);
 							NativeLangSpeaker *pNativeLangSpeaker = nppParams.getNativeLangSpeaker();
-							generic_string nativeLangShortcutMapperMacro = pNativeLangSpeaker->getNativeLangMenuString(IDM_SETTING_SHORTCUT_MAPPER_MACRO);
-							if (nativeLangShortcutMapperMacro == TEXT(""))
-								nativeLangShortcutMapperMacro = TEXT("Modify Shortcut/Delete Command...");
-
-							::InsertMenu(hRunMenu, posBase + nbCmd + 2, MF_BYCOMMAND, IDM_SETTING_SHORTCUT_MAPPER_RUN, nativeLangShortcutMapperMacro.c_str());
+							auto nativeLangShortcutMapperMacro = pNativeLangSpeaker->getNativeLangMenuString(IDM_SETTING_EDITCONTEXTMENU);
+							if (!nativeLangShortcutMapperMacro)
+								nativeLangShortcutMapperMacro = (TCHAR*)TEXT("Edit Popup ContextMenu");
+							::InsertMenu(hRunMenu, posBase + nbCmd + 2, MF_BYCOMMAND, IDM_SETTING_EDITCONTEXTMENU, nativeLangShortcutMapperMacro);
+							nativeLangShortcutMapperMacro = pNativeLangSpeaker->getNativeLangMenuString(IDM_SETTING_SHORTCUT_MAPPER_MACRO);
+							if (!nativeLangShortcutMapperMacro)
+								nativeLangShortcutMapperMacro = (TCHAR*)TEXT("Modify Shortcut/Delete Command...");
+							::InsertMenu(hRunMenu, posBase + nbCmd + 3, MF_BYCOMMAND, IDM_SETTING_SHORTCUT_MAPPER_RUN, nativeLangShortcutMapperMacro);
                         }
 						nppParams.getAccelerator()->updateShortcuts();
 						nppParams.setShortcutDirty();

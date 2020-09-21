@@ -304,8 +304,8 @@
                     <Item id="47009" name="设置更新代理服务器..."/>
                     <Item id="48005" name="导入插件..."/>
                     <Item id="48006" name="导入主题..."/>
-                    <Item id="48018" name="编辑弹出菜单"/>
-                    <Item id="48009" name="管理快捷键..."/>
+                    <Item id="48018" name="编辑弹出菜单..."/>
+                    <Item id="48009" name="管理快捷键(&amp;S)..."/>
                     <Item id="48011" name="首选项..."/>
                     <Item id="48014" name="打开插件文件夹..."/>
                     <Item id="48015" name="插件管理..."/>
@@ -332,6 +332,10 @@
                     <Item id="48100" name="小图标"/>
                     <Item id="48101" name="大图标"/>
                     <Item id="48102" name="标准图标"/>
+                    <Item id="45014" name="二进制模式(&amp;B)"/>
+                    <Item id="48105" name="自定义工具栏"/>
+                    <Item id="48106" name="工具栏换行(&amp;W)"/>
+                    <Item id="48107" name="多行标签页(&amp;M)"/>
                 </Commands>
             </Main>
             <Splitter>
@@ -340,11 +344,11 @@
                 <Item CMID="0" name="关闭当前文件"/>
                 <Item CMID="1" name="关闭非当前文件"/>
                 <Item CMID="2" name="保存当前文件"/>
-                <Item CMID="3" name="另存为其他..."/>
+                <Item CMID="3" name="另存为其他(&amp;S)..."/>
                 <Item CMID="4" name="打印当前文件"/>
                 <Item CMID="5" name="移动到另一视图"/>
                 <Item CMID="6" name="复制到另一视图"/>
-                <Item CMID="7" name="复制完整路径到剪切板"/>
+                <Item CMID="7" name="复制完整路径到剪切板(&amp;F)"/>
                 <Item CMID="8" name="复制文件名到剪切板"/>
                 <Item CMID="9" name="复制文件路径到剪切板"/>
                 <Item CMID="10" name="重命名文件"/>
@@ -353,10 +357,10 @@
                 <Item CMID="13" name="清除只读属性"/>
                 <Item CMID="14" name="打开新窗口"/>
                 <Item CMID="15" name="在新视图中打开"/>
-                <Item CMID="16" name="重新载入"/>
+                <Item CMID="16" name="重新载入(&amp;R)..."/>
                 <Item CMID="17" name="关闭左边所有"/>
                 <Item CMID="18" name="关闭右边所有"/>
-                <Item CMID="19" name="打开所在文件夹"/>
+                <Item CMID="19" name="打开所在文件夹(&amp;O)..."/>
                 <Item CMID="20" name="打开所在文件夹(命令行)"/>
                 <Item CMID="21" name="使用默认查看器打开"/>
                 <Item CMID="22" name="关闭所有未修改"/>
@@ -516,6 +520,9 @@
                 <ScintillaCommandsTab name="Scintilla命令"/>
                 <ConflictInfoOk name="此条无快捷键冲突。"/>
                 <ConflictInfoEditing name="无冲突……"/>
+                <MainCommandNames>
+                    <Item id="2147483547" name="空"/>
+                </MainCommandNames>
             </ShortcutMapper>
             <ShortcutMapperSubDialg title="快捷键设置">
                 <Item id="1" name="确定"/>
@@ -726,6 +733,7 @@
                     <Item id="6125" name="文件列表面板"/>
                     <Item id="6126" name="显示"/>
                     <Item id="6127" name="显示扩展名栏"/>
+                    <Item id="6128" name="显示较大的字体"/>
                 </Global>
                 <Scintillas title="编辑">
                     <Item id="6216" name="光标设置"/>

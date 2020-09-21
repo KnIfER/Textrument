@@ -452,10 +452,11 @@ LRESULT Notepad_plus::init(HWND hwnd)
 		::InsertMenu(hRunMenu, static_cast<UINT>(runPosBase + i), MF_BYPOSITION, ID_USER_CMD + i, userCommands[i].toMenuItemString().c_str());
 	}
 
-    if (nbUserCommand >= 1)
+    //if (nbUserCommand >= 1)
     {
 		::InsertMenu(hRunMenu, static_cast<UINT>(runPosBase + nbUserCommand + 1), MF_BYPOSITION,  static_cast<UINT>(-1), 0);
-        ::InsertMenu(hRunMenu, static_cast<UINT>(runPosBase + nbUserCommand + 2), MF_BYCOMMAND, IDM_SETTING_SHORTCUT_MAPPER_RUN, TEXT("Modify Shortcut/Delete Command..."));
+        ::InsertMenu(hRunMenu, static_cast<UINT>(runPosBase + nbUserCommand + 2), MF_BYCOMMAND, IDM_SETTING_EDITCONTEXTMENU, TEXT("Edit Popup ContextMenu"));
+        ::InsertMenu(hRunMenu, static_cast<UINT>(runPosBase + nbUserCommand + 3), MF_BYCOMMAND, IDM_SETTING_SHORTCUT_MAPPER_RUN, TEXT("Modify Shortcut/Delete Command..."));
     }
 
 	// Updater menu item
@@ -586,9 +587,9 @@ LRESULT Notepad_plus::init(HWND hwnd)
 		{
 			// The menu name is already present (e.g. "Restore recent close file")
 			// Now get the localized name if possible
-			generic_string localizedMenuName = _nativeLangSpeaker.getNativeLangMenuString(csc.getID());
-			if(!localizedMenuName.empty())
-				csc.setName(purgeMenuItemString(localizedMenuName.c_str(), true).c_str());
+			auto localizedMenuName = _nativeLangSpeaker.getNativeLangMenuString(csc.getID());
+			if(localizedMenuName)
+				csc.setName(purgeMenuItemString(localizedMenuName, true).c_str());
 		}
 	}
 	//Translate non-menu shortcuts
@@ -4762,11 +4763,11 @@ bool Notepad_plus::addCurrentMacro()
 			::InsertMenu(hMacroMenu, posBase + nbMacro + 1, MF_BYPOSITION, static_cast<UINT>(-1), 0);
 
 			NativeLangSpeaker *pNativeLangSpeaker = nppParams.getNativeLangSpeaker();
-			generic_string nativeLangShortcutMapperMacro = pNativeLangSpeaker->getNativeLangMenuString(IDM_SETTING_SHORTCUT_MAPPER_MACRO);
-			if (nativeLangShortcutMapperMacro == TEXT(""))
-				nativeLangShortcutMapperMacro = TEXT("Modify Shortcut/Delete Macro...");
+			auto nativeLangShortcutMapperMacro = pNativeLangSpeaker->getNativeLangMenuString(IDM_SETTING_SHORTCUT_MAPPER_MACRO);
+			if (!nativeLangShortcutMapperMacro)
+				nativeLangShortcutMapperMacro = (TCHAR*)TEXT("Modify Shortcut/Delete Macro...");
 
-			::InsertMenu(hMacroMenu, posBase + nbMacro + 2, MF_BYCOMMAND, IDM_SETTING_SHORTCUT_MAPPER_MACRO, nativeLangShortcutMapperMacro.c_str());
+			::InsertMenu(hMacroMenu, posBase + nbMacro + 2, MF_BYCOMMAND, IDM_SETTING_SHORTCUT_MAPPER_MACRO, nativeLangShortcutMapperMacro);
         }
 		theMacros.push_back(ms);
 		::InsertMenu(hMacroMenu, posBase + nbMacro, MF_BYPOSITION, cmdID, ms.toMenuItemString().c_str());
@@ -6047,9 +6048,9 @@ bool Notepad_plus::reloadLang()
 		}
 		else
 		{
-			generic_string localizedMenuName = _nativeLangSpeaker.getNativeLangMenuString(csc.getID());
-			if (!localizedMenuName.empty())
-				csc.setName(purgeMenuItemString(localizedMenuName.c_str(), true).c_str());
+			auto localizedMenuName = _nativeLangSpeaker.getNativeLangMenuString(csc.getID());
+			if (localizedMenuName)
+				csc.setName(purgeMenuItemString(localizedMenuName, true).c_str());
 		}
 	}
 	_accelerator.updateFullMenu();

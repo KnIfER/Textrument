@@ -10,6 +10,7 @@ import static apply.translations.TextrumentLocalePatchs.*;
 
 public class Install {
 	static File targetFolder=new File("..\\PowerEditor\\bin64\\localization");
+	static File targetFolder1=new File("..\\PowerEditor\\bin64\\User\\nativeLang.xml");
 
 	public static void main(String[] args) throws IOException {
 		File[] fileArr = sourceFolder.listFiles();
@@ -33,6 +34,15 @@ public class Install {
 		File file = new File(sourceFolder, xmlFileName);
 		if(file.exists()) {
 			installXmlTo(file, new File(targetFolder, file.getName()));
+		}
+	}
+	
+	public static void installXmlNativeByLocale(LANG Enum) throws IOException {
+		int id = shortName_id_table.get(Enum.code);
+		String xmlFileName = filters[id];
+		File file = new File(sourceFolder, xmlFileName);
+		if(file.exists()) {
+			installXmlTo(file, targetFolder1);
 		}
 	}
 }
