@@ -108,7 +108,7 @@ public:
 		_isMultiLine = b;
 	};
 
-
+	int rowCount=1;
 protected:
 	size_t _nbItem = 0;
 	bool _hasImgLst = false;

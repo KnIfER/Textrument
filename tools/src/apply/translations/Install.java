@@ -6,8 +6,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.channels.FileChannel;
 
-import static apply.translations.TextrumentLocalePatchs.Log;
-import static apply.translations.TextrumentLocalePatchs.sourceFolder;
+import static apply.translations.TextrumentLocalePatchs.*;
 
 public class Install {
 	static File targetFolder=new File("..\\PowerEditor\\bin64\\localization");
@@ -15,14 +14,25 @@ public class Install {
 	public static void main(String[] args) throws IOException {
 		File[] fileArr = sourceFolder.listFiles();
 		for (int i = 0; i < fileArr.length; i++) {
-			Log(fileArr[i].getPath());
-			FileChannel fChanIn = new FileInputStream(fileArr[i]).getChannel();
-			FileChannel fChanOut = new FileOutputStream(new File(targetFolder, fileArr[i].getName())).getChannel();
-			fChanIn.transferTo(0, fileArr[i].length(), fChanOut);
-			fChanIn.close();
-			fChanOut.close();
+			installXmlTo(fileArr[i], new File(targetFolder, fileArr[i].getName()));
 		}
 	}
+
+	public static void installXmlTo(File from, File to) throws IOException {
+		Log(from.getPath());
+		FileChannel fChanIn = new FileInputStream(from).getChannel();
+		FileChannel fChanOut = new FileOutputStream(to).getChannel();
+		fChanIn.transferTo(0, from.length(), fChanOut);
+		fChanIn.close();
+		fChanOut.close();
+	}
 	
-	
+	public static void installXmlByLocale(LANG Enum) throws IOException {
+		int id = shortName_id_table.get(Enum.code);
+		String xmlFileName = filters[id];
+		File file = new File(sourceFolder, xmlFileName);
+		if(file.exists()) {
+			installXmlTo(file, new File(targetFolder, file.getName()));
+		}
+	}
 }

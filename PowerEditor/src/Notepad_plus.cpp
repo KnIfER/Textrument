@@ -749,6 +749,7 @@ LRESULT Notepad_plus::init(HWND hwnd)
 		}
 		if(toolbarWrap) {
 			_toolBar.toggleToolbarWrap();
+			checkMenuItem(IDM_SETTING_WRAPTOOLS, true);
 		}
 	}
 

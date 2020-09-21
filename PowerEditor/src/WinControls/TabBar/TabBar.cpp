@@ -210,7 +210,7 @@ void TabBar::setImageList(HIMAGELIST himl)
 void TabBar::reSizeTo(RECT & rc2Ajust)
 {
 	RECT rowRect;
-	int rowCount, tabsHight;
+	int tabsHight;
 
 	// Important to do that!
 	// Otherwise, the window(s) it contains will take all the resouce of CPU
@@ -427,8 +427,9 @@ void TabBarPlus::doMultiLine()
 {
 	for (int i = 0 ; i < _nbCtrl ; ++i)
 	{
-		if (_hwndArray[i])
+		if (_hwndArray[i]) {
 			SendMessage(_hwndArray[i], WM_TABSETSTYLE, isMultiLine(), TCS_MULTILINE);
+		}
 	}
 }
 
@@ -830,7 +831,7 @@ LRESULT TabBarPlus::runProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lPara
 			}
 			break;
 		}
-
+		
 		case WM_DRAWITEM :
 		{
 			drawItem((DRAWITEMSTRUCT *)lParam);
@@ -903,7 +904,7 @@ void TabBarPlus::drawItem(DRAWITEMSTRUCT *pDrawItemStruct)
 	// equalize drawing areas of active and inactive tabs
 	int paddingDynamicTwoX = NppParameters::getInstance()._dpiManager.scaleX(2);
 	int paddingDynamicTwoY = NppParameters::getInstance()._dpiManager.scaleY(2);
-	if (isSelected)
+	if (isSelected&&rowCount<=1)
 	{
 		// the drawing area of the active tab extends on all borders by default
 		rect.top += ::GetSystemMetrics(SM_CYEDGE);
@@ -950,6 +951,11 @@ void TabBarPlus::drawItem(DRAWITEMSTRUCT *pDrawItemStruct)
 		else
 		{
 			rect.top -= 2;
+			if(rowCount>1) {
+				rect.left += 2;
+				rect.right -= 2;
+			} else {
+			}
 		}
 	}
 
@@ -1120,8 +1126,9 @@ void TabBarPlus::drawItem(DRAWITEMSTRUCT *pDrawItemStruct)
 		Flags |= DT_VCENTER;
 
 		// ignoring the descent when centering (text elements below the base line) is more pleasing to the eye
-		rect.top += textDescent / 2;
-		rect.bottom += textDescent / 2;
+		int deltaY=rowCount>1?-2:0;
+		rect.top += textDescent / 2+deltaY;
+		rect.bottom += textDescent / 2+deltaY;
 
 		// 1 space distance to save icon
 		rect.left += spaceUnit;

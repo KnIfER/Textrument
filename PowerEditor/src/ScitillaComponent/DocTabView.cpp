@@ -242,6 +242,10 @@ void DocTabView::reSizeTo(RECT & rc)
 		rc.left	 += borderWidth;
 		rc.right -= borderWidth * 2;
 		if(borderXComp) {
+			if(rowCount>1) {
+				rc.top	 -= borderXComp;
+				rc.bottom += borderXComp * 2;
+			}
 			rc.left	 -= borderXComp;
 			rc.right += borderXComp * 2;
 			auto vInf = nppApp->_dockingManager.getContainerInfo();

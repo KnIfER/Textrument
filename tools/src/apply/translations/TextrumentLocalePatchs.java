@@ -1,11 +1,9 @@
 package apply.translations;
 
 import com.alibaba.fastjson.JSONObject;
-import com.intellij.ide.ui.EditorOptionsTopHitProvider;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 import org.jdom.Element;
-import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
 import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
@@ -18,6 +16,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static apply.translations.Install.installXmlByLocale;
 
 
 public class TextrumentLocalePatchs {
@@ -331,7 +331,6 @@ public class TextrumentLocalePatchs {
     public static void main(String[] args) throws Exception {
 		new File(sourceFolder, "taiwaneseMandarin.xml").renameTo(new File(sourceFolder, "taiwanese.xml"));
 
-
 		for(LANG idx:LANG.values()) {
 			processXmlFileByEnum(idx, false);
 		}
@@ -340,6 +339,7 @@ public class TextrumentLocalePatchs {
 	@Test
 	public void TestJDOM() throws Exception {
 		processXmlFileByEnum(LANG.ChineseSimplified, false);
+		installXmlByLocale(LANG.ChineseSimplified);
 	}
 
     static class Action {
@@ -741,9 +741,9 @@ public class TextrumentLocalePatchs {
 		, sardinian("sar", "?", "?")
 		
 		;
-		private String code;
-		private String name;
-		private String englishName;
+		String code;
+		String name;
+		String englishName;
 
 		LANG(String code, String name, String englishName) {
 			this.code = code;
@@ -788,6 +788,7 @@ public class TextrumentLocalePatchs {
 	
 	static {
 		new Patch_V1().pushActions();
+		new Patch_V2().pushActions();
 	}
 	
 	static StringBuilder buf = new StringBuilder();

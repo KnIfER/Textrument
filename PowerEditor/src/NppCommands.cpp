@@ -1895,10 +1895,20 @@ void Notepad_plus::command(int id)
 			break;
 		}
 
+
+		case IDM_SETTING_WRAPTABS :
 		case IDM_VIEW_DRAWTABBAR_MULTILINE :
 		{
-			TabBarPlus::setMultiLine(!TabBarPlus::isMultiLine());
+			bool val = !TabBarPlus::isMultiLine();
+			TabBarPlus::setMultiLine(val);
 			::SendMessage(_pPublicInterface->getHSelf(), WM_SIZE, 0, 0);
+			if(val) {
+				::SendMessage(_pPublicInterface->getHSelf(), WM_SIZE, 0, 0);
+			}
+			checkMenuItem(IDM_SETTING_WRAPTABS, val);
+			if(id==IDM_SETTING_WRAPTABS&&_preference.isCreated()) {
+				_preference.invalidateRadioBtns();
+			}
 			break;
 		}
 
@@ -2788,6 +2798,19 @@ void Notepad_plus::command(int id)
 			}
         }
 
+        case IDM_SETTING_CUSTTOOLS :
+		{
+			SendMessage(_toolBar.getHSelf(), TB_CUSTOMIZE, 0, 0);
+			break;
+		}
+
+        case IDM_SETTING_WRAPTOOLS :
+		{
+			_toolBar.toggleToolbarWrap();
+			checkMenuItem(IDM_SETTING_WRAPTOOLS, _toolBar.wrap);
+			break;
+		}
+
 		case IDM_SETTING_HIDETOOLBAR:
 		{
 			boolean toolbarShow = _rebarTop.getIDVisible(REBAR_BAR_TOOLBAR);
@@ -2943,11 +2966,6 @@ void Notepad_plus::command(int id)
         case IDM_ABOUT:
 		{
 			//tg
-			if(1) {
-				//SendMessage(_toolBar.getHSelf(), TB_CUSTOMIZE, 0, 0);
-				_toolBar.toggleToolbarWrap();
-				return;
-			}
 			bool doAboutDlg = false;
 			const int maxSelLen = 32;
 			auto textLen = _pEditView->execute(SCI_GETSELTEXT, 0, 0) - 1;

@@ -1635,13 +1635,14 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 
 								::SetWindowPos(hwnd, HWND_TOP, x, y, w, h, SWP_SHOWWINDOW);
 
+								::GetClientRect(hwnd, &rc);
+
 								HWND hList = 0;
 								RECT rc1;
 								for(int i=0;i<2;i++) {
 									hList = FindWindowEx(hwnd, hList, _T("ListBox"), NULL);
 									if(hList) 
 									{
-										::GetClientRect(hList, &rc1);
 										::GetWindowRect(hList, &rc1);
 										center.x = rc1.left;
 										center.y = rc1.top ;
