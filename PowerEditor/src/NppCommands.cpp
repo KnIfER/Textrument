@@ -2689,6 +2689,15 @@ void Notepad_plus::command(int id)
 			break;
 		}
 
+		case IDM_SETTING :
+		{
+			auto hMenu = GetSubMenu(_mainMenuHandle, 6);
+			POINT pt;
+			GetCursorPos(&pt);
+			TrackPopupMenu(hMenu, 0, pt.x,  pt.y, 0, Notepad_plus_Window::gNppHWND, NULL);
+			break;
+		}
+
 		case IDM_SETTING_IMPORTPLUGIN :
         {
 			// Copy plugins to Plugins Home
@@ -3482,6 +3491,9 @@ void Notepad_plus::command(int id)
 		break;
 
 		default :
+			if(id>=IDM_DUMMY&&id<=IDM_DUMMY5) {
+				break;
+			}
 			if (id > IDM_FILEMENU_LASTONE && id < (IDM_FILEMENU_LASTONE + _lastRecentFileList.getMaxNbLRF() + 1))
 			{
 				BufferID lastOpened = doOpen(_lastRecentFileList.getItem(id));

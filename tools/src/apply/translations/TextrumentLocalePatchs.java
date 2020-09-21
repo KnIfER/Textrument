@@ -343,8 +343,9 @@ public class TextrumentLocalePatchs {
 	}
 
     static class Action {
-    	/** 0=delete; 1=modify; 2=insert */
+		/** 0=delete; 1=modify; 2=insert */
     	int type;
+		boolean mkdirs=false;
     	String[] XMLPath;
     	String[] values;// = new String[filters.length];
 		String tagName;
@@ -517,7 +518,7 @@ public class TextrumentLocalePatchs {
 				case INSERT: {
 					String value = aI.values[id];
 					if (value != null && aI.tagName != null) {
-						Element _toInsp = getElementByPath(document.getRootElement(), aI.XMLPath);
+						Element _toInsp = getElementByPath(document.getRootElement(), aI.mkdirs, aI.XMLPath);
 						if (_toInsp != null) {
 							Element ele = new Element(aI.tagName);
 							if (aI.id != null) {
@@ -614,10 +615,23 @@ public class TextrumentLocalePatchs {
 	}
 
 	private static Element getElementByPath(Element rootElement, String...names) {
-		for(String nI:names) {
-			rootElement = rootElement.getChild(nI);
-			if(rootElement==null) {
-				return null;
+    	return getElementByPath(rootElement, false, names);
+	}
+	
+	private static Element getElementByPath(Element rootElement, boolean create, String...names) {
+		if(rootElement!=null) {
+			Element nextElement;
+			for(String nI:names) {
+				nextElement = rootElement.getChild(nI);
+				if(nextElement==null) {
+					if(create) {
+						nextElement = new Element(nI);
+						rootElement.addContent(nextElement);
+					} else {
+						return null;
+					}
+				}
+				rootElement = nextElement;
 			}
 		}
     	return rootElement;

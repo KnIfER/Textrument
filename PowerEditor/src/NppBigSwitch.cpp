@@ -1610,13 +1610,66 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 			if(hwnd==Notepad_plus_Window::gNppHWND) {
 				switch(code) {
 					case TBN_QUERYINSERT:
+					case TBN_QUERYDELETE:
 					{
-						if(customizationTweaking) { 
-							//todo windows localization
-							auto hwnd = FindWindow(_T("#32770"), _T("Customize Toolbar"));
+						return true;
+					}
+					case TBN_TOOLBARCHANGE:
+					case TBN_DELETINGBUTTON:
+					{
+						_toolBar.dirty=true;
+						//LPNMTOOLBAR item = (LPNMTOOLBAR) lParam; 
+						//TCHAR buffer[256]={0};
+						//wsprintf(buffer,TEXT("TBN_DELETINGBUTTON=%d=%d=%d=%d"), item->tbButton.iBitmap, item->tbButton.dwData, item->tbButton.idCommand, item->tbButton.iString);
+						//::SendMessage(_pMainWindow->getHParent(), NPPM_SETSTATUSBAR, STATUSBAR_DOC_TYPE, (LPARAM)buffer);
+						return true;
+					}
+					case TBN_GETBUTTONINFO:
+					{
+						TCHAR textBuffer[52];
+						LPNMTOOLBAR item = (LPNMTOOLBAR) lParam; 
+						auto id=((LPTBNOTIFY)lParam)->iItem;
+						if (id < _toolBar._nbTotalButtons)
+						{
+							LPNMTOOLBAR item = (LPNMTOOLBAR) lParam; 
+
+							::GetMenuString(_mainMenuHandle, _toolBar._pTBB[id].idCommand, textBuffer, 51, MF_BYCOMMAND);
+							auto meunSep = _tcsstr(textBuffer, _T("\t"));
+							if(meunSep>0) {
+								meunSep[0]='\0';
+							}
+							lstrcpy(item->pszText, textBuffer);
+							CopyMemory(&item->tbButton, &_toolBar._pTBB[id], sizeof(TBBUTTON));
+							return true;
+						}
+						// tweak customization toolbar dialog( higher、centered on the screen. )
+						if(customizationTweaking && id>=_toolBar._nbTotalButtons-2) { 
+							HWND hwnd=0;
+							auto hMenu = GetSubMenu(_mainMenuHandle, 6);
+							GetMenuString(hMenu, 7, textBuffer, 51, MF_BYPOSITION);
+							hwnd = FindWindow(_T("#32770"), textBuffer);
+							if(!hwnd) {
+								hwnd = FindWindow(_T("#32770"), _T("Customize Toolbar"));
+							}
+							if(!hwnd) {
+								HWND hwndSearch=0;
+								while((hwnd = FindWindowEx(0, hwnd, _T("#32770"), 0))) {
+									if(GetWindowLongPtr(hwnd, GWL_STYLE)==0x84c800c4) {
+										RECT rc;
+										GetWindowRect(hwnd, &rc);
+										auto w=rc.right-rc.left;
+										if(w>800&&w<900) {
+											hwndSearch = hwnd;
+											break;
+										}
+									}
+								}
+								if(hwndSearch) {
+									hwnd=hwndSearch;
+								}
+							}
 							if(hwnd) {
 								customizationTweaking=0;
-								//SetWindowLongPtr(hwnd, GWL_STYLE, GetWindowLongPtr(hwnd, GWL_STYLE)|WS_SIZEBOX|WS_THICKFRAME );
 								RECT rc;
 								::GetClientRect(Notepad_plus_Window::gNppHWND, &rc);
 								POINT center;
@@ -1651,40 +1704,6 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 									}
 								}
 							}
-						}
-
-					}
-					case TBN_QUERYDELETE:
-					{
-						return true;
-					}
-					case TBN_TOOLBARCHANGE:
-					case TBN_DELETINGBUTTON:
-					{
-						_toolBar.dirty=true;
-						//LPNMTOOLBAR item = (LPNMTOOLBAR) lParam; 
-						//TCHAR buffer[256]={0};
-						//wsprintf(buffer,TEXT("TBN_DELETINGBUTTON=%d=%d=%d=%d"), item->tbButton.iBitmap, item->tbButton.dwData, item->tbButton.idCommand, item->tbButton.iString);
-						//::SendMessage(_pMainWindow->getHParent(), NPPM_SETSTATUSBAR, STATUSBAR_DOC_TYPE, (LPARAM)buffer);
-						return true;
-					}
-					case TBN_GETBUTTONINFO:
-					{
-						LPNMTOOLBAR item = (LPNMTOOLBAR) lParam; 
-						auto id=((LPTBNOTIFY)lParam)->iItem;
-						if (id < _toolBar._nbTotalButtons)
-						{
-							TCHAR menuName[64];
-							LPNMTOOLBAR item = (LPNMTOOLBAR) lParam; 
-
-							::GetMenuString(_mainMenuHandle, _toolBar._pTBB[id].idCommand, menuName, 64, MF_BYCOMMAND);
-							auto meunSep = _tcsstr(menuName, _T("\t"));
-							if(meunSep>0) {
-								meunSep[0]='\0';
-							}
-							lstrcpy(item->pszText, menuName);
-							CopyMemory(&item->tbButton, &_toolBar._pTBB[id], sizeof(TBBUTTON));
-							return true;
 						}
 						return false;
 					}

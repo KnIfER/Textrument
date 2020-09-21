@@ -90,6 +90,7 @@ public:
 	generic_string getFileBrowserLangMenuStr(int cmdID, const TCHAR *defaultStr) const;
 	generic_string getAttrNameStr(const TCHAR *defaultStr, const char *nodeL1Name, const char *nodeL2Name = NULL) const;
 	generic_string getLocalizedStrFromID(const char *strID, const generic_string& defaultString) const;
+	TCHAR* getShortcutNameString(int itemID) const;
 
 	int messageBox(const char *msgBoxTagName, HWND hWnd, const TCHAR *message, const TCHAR *title, int msgBoxType, int intInfo = 0, const TCHAR *strInfo = NULL);
 private:

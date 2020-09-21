@@ -588,3 +588,11 @@
     #define IDM_SYSTRAYPOPUP_NEW_AND_PASTE    (IDM_SYSTRAYPOPUP + 3)
     #define IDM_SYSTRAYPOPUP_OPENFILE         (IDM_SYSTRAYPOPUP + 4)
     #define IDM_SYSTRAYPOPUP_CLOSE            (IDM_SYSTRAYPOPUP + 5)
+
+
+#define    IDM_DUMMY    (0x7fffffff - 100)
+	#define    IDM_DUMMY1    (IDM_DUMMY+1)
+	#define    IDM_DUMMY2    (IDM_DUMMY+2)
+	#define    IDM_DUMMY3    (IDM_DUMMY+3)
+	#define    IDM_DUMMY4    (IDM_DUMMY+4)
+	#define    IDM_DUMMY5    (IDM_DUMMY+5)

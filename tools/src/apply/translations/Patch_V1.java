@@ -6,7 +6,7 @@ public class Patch_V1 implements TextrumentLocalePatchs.ActionApplier {
 	@Override
 	public void pushActions() {
 			Action action;
-			actions.add(new TextrumentLocalePatchs.Action(null, 0, "Native-Langue", "Dialog", "ShortcutMapper", "MainCommandNames"));
+			actions.add(new TextrumentLocalePatchs.Action(null, DELETE, "Native-Langue", "Dialog", "ShortcutMapper", "MainCommandNames"));
 
 			pushActionByPathIDForNameField("{"+ TextrumentLocalePatchs.LANG.English+":'Current File Path to Clipboard'}", MODIFY, 42029, "Native-Langue", "Menu", "Main", "Commands");
 			pushActionByPathIDForNameField("{"+ TextrumentLocalePatchs.LANG.English+":'Current Filename to Clipboard'}", MODIFY, 42030, "Native-Langue", "Menu", "Main", "Commands");

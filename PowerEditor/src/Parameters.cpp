@@ -91,10 +91,10 @@ static const WinMenuKeyDefinition winKeyDefs[] =
 	{ VK_S,       IDM_FILE_SAVE,                                true,  false, false, nullptr },
 	{ VK_S,       IDM_FILE_SAVEAS,                              true,  true,  false, nullptr },
 	{ VK_NULL,    IDM_FILE_SAVECOPYAS,                          false, false, false, nullptr },
-	{ VK_S,       IDM_FILE_SAVEALL,                             true,  false, true,  nullptr },
+	{ VK_NULL,    IDM_FILE_SAVEALL,                             true,  false, true,  nullptr },
 	{ VK_NULL,    IDM_FILE_RENAME,                              false, false, false, nullptr },
 	{ VK_W,       IDM_FILE_CLOSE,                               true,  false, false, nullptr },
-	{ VK_W,       IDM_FILE_CLOSEALL,                            true,  false, true,  nullptr },
+	{ VK_NULL,    IDM_FILE_CLOSEALL,                            true,  false, true,  nullptr },
 	{ VK_NULL,    IDM_FILE_CLOSEALL_BUT_CURRENT,                false, false, false, nullptr },
 	{ VK_NULL,    IDM_FILE_CLOSEALL_TOLEFT,                     false, false, false, nullptr },
 	{ VK_NULL,    IDM_FILE_CLOSEALL_TORIGHT,                    false, false, false, nullptr },
@@ -409,6 +409,12 @@ static const WinMenuKeyDefinition winKeyDefs[] =
 	{ VK_NULL,    IDM_SETTING_HIDETOOLBAR,                      false, false, false, TEXT("Toggle Hide Toolbar") },
 	
 	{ VK_OEM_COMMA,    IDM_SETTING_TOGGLESPLITPANELEQUAL,                   true, false, false, TEXT("Toggle Split Panel Size") },
+	{ VK_S,       IDM_SETTING,                                  true,  false, true,  nullptr },
+	{ VK_W,       IDM_DUMMY1,                                  true,  false, true,  nullptr },
+	{ VK_F4,      IDM_DUMMY2,                                  false,  true, true,  nullptr },
+	{ VK_NULL,       IDM_DUMMY3,                                 false,  false, false,  nullptr },
+	{ VK_NULL,       IDM_DUMMY4,                                 false,  false, false,  nullptr },
+	{ VK_NULL,       IDM_DUMMY5,                                 false,  false, false,  nullptr },
 };
 
 

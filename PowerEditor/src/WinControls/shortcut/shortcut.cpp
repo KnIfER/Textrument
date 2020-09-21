@@ -1204,6 +1204,9 @@ CommandShortcut::CommandShortcut(const Shortcut& sc, long id) :	Shortcut(sc), _i
 	} else if ( _id < IDM_EXECUTE) {
 		_category = TEXT("Tool");
 		_category_path=8;
+	}  else if ( _id >= IDM_DUMMY) {
+		_category = TEXT(" - / - ");
+		_category_path=0;
 	} else {
 		_category = TEXT("Execute");
 		_category_path=10;

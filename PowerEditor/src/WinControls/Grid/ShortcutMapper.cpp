@@ -261,7 +261,17 @@ void ShortcutMapper::fillOutBabyGrid()
 				{
 					if (findKeyConflicts(nullptr, cshortcuts[i].getKeyCombo(), i))
 						isMarker = _babygrid.setMarker(true);
-
+					if(!lstrlen(cshortcuts[i].getName()))
+					{
+						auto CMDID=cshortcuts[i].getID();
+						if(CMDID>=IDM_DUMMY&&CMDID<=IDM_DUMMY5) {
+							CMDID=IDM_DUMMY;
+						}
+						TCHAR* shortcutName = _notepad_plus_plus_Kore->_nativeLangSpeaker.getShortcutNameString(CMDID);
+						if(shortcutName) {
+							cshortcuts[i].setName(shortcutName);
+						}
+					}
 					_babygrid.setText(cs_index, 1, cshortcuts[i].getName());
 					if (cshortcuts[i].isEnabled()) //avoid empty strings for better performance
 						_babygrid.setText(cs_index, 2, cshortcuts[i].toString().c_str());
@@ -311,7 +321,6 @@ void ShortcutMapper::fillOutBabyGrid()
 					} else {
 						_babygrid.setText(cs_index, 3, cshortcuts[i].getCategory());
 					}
-
 					if (isMarker)
 						isMarker = _babygrid.setMarker(false);
 					_shortcutIndex.push_back(i);
