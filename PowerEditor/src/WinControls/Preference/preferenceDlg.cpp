@@ -3892,6 +3892,7 @@ INT_PTR CALLBACK PreferenceDlg::DlgProcShellSettings(HWND hwndDlg, UINT uMsg, WP
 											::MessageBox(hwndDlg, TEXT("NppShell.dll not found : Ignore!"), TEXT(""), MB_OK | MB_TASKMODAL);
 										} else {
 											doit=1;
+											wsprintf(szSubKey, regInfoI.szSubKey, szGUID); // 再次填入ID
 										}
 									}
 								}
@@ -3905,6 +3906,7 @@ INT_PTR CALLBACK PreferenceDlg::DlgProcShellSettings(HWND hwndDlg, UINT uMsg, WP
 						}
 						if(doit) {
 							auto szData = i==2&&!menuShow?_T("x"):regInfoI.szData; // 是否抹除 Apartment 使服务失效
+							RegCloseKey(hKey);
 							lResult = RegCreateKeyEx(regInfoI.hRootKey, szSubKey, 0, NULL, REG_OPTION_NON_VOLATILE, KEY_WRITE, NULL, &hKey, NULL);
 							if (lResult == ERROR_SUCCESS) {
 								lResult = RegSetValueEx(hKey, regInfoI.lpszValueName, 0, regInfoI.type, (LPBYTE)szData, regInfoI.type==REG_SZ?(lstrlen(szData)+1) * sizeof(TCHAR):sizeof(DWORD));
