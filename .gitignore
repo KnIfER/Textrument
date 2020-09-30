@@ -165,3 +165,4 @@ PowerEditor/src/MISC/md5/RCa06792
 *.sln
 *.opendb
 plugins/plugins_dev.props
+plugins/BrowserWidget.props

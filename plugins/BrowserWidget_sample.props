@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ImportGroup Label="PropertySheets" />
+  <PropertyGroup Label="UserMacros">
+    <LIBCE>C:\tmp\chromium\cef_binary_85.3.11+g3644604+chromium-85.0.4183.102_windows64</LIBCE>
+    <LIBCE_DD>$(LIBCE)\build\libcef_dll_wrapper\Debug;$(LIBCE)\Debug</LIBCE_DD>
+    <LIBCI>$(LIBCE)\include</LIBCI>
+    <LIBCE_>libcef.lib;libcef_dll_wrapper.lib;</LIBCE_>
+  </PropertyGroup>
+  <PropertyGroup />
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <BuildMacro Include="LIBCE">
+      <Value>$(LIBCE)</Value>
+    </BuildMacro>
+    <BuildMacro Include="LIBCE_DD">
+      <Value>$(LIBCE_DD)</Value>
+    </BuildMacro>
+    <BuildMacro Include="LIBCI">
+      <Value>$(LIBCI)</Value>
+    </BuildMacro>
+    <BuildMacro Include="LIBCE_">
+      <Value>$(LIBCE_)</Value>
+    </BuildMacro>
+  </ItemGroup>
+</Project>

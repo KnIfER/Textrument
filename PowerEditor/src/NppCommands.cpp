@@ -3715,9 +3715,12 @@ void Notepad_plus::command(int id)
 			case IDM_VIEW_IN_IE      :
 				_macro.push_back(recordedMacroStep(id));
 				break;
-		}
-		if(id>=IDM_FORMAT_TODOS&&id<=IDM_FORMAT_ENCODE_END) {
-			_macro.push_back(recordedMacroStep(id));
+			default:
+				if(id>=IDM_FORMAT_TODOS&&id<=IDM_FORMAT_ENCODE_END
+					|| (id >= ID_PLUGINS_CMD) && (id < ID_PLUGINS_CMD_LIMIT) ) { //bIsPluginMessaging
+					_macro.push_back(recordedMacroStep(id));
+				}
+				break;
 		}
 	}
 }
