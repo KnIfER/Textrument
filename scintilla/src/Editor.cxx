@@ -5824,6 +5824,9 @@ sptr_t Editor::WndProc(unsigned int iMessage, uptr_t wParam, sptr_t lParam) {
 	switch (iMessage) {
 
 	case SCI_GETRAWTEXT: {
+			if(wParam && wParam==lParam) {
+				return (sptr_t)((Document*)wParam)->GetCharPointer();
+			}
 			return (sptr_t)pdoc->GetCharPointer();
 		}
 
@@ -5850,8 +5853,12 @@ sptr_t Editor::WndProc(unsigned int iMessage, uptr_t wParam, sptr_t lParam) {
 			return 1;
 		}
 
-	case SCI_GETTEXTLENGTH:
+	case SCI_GETTEXTLENGTH: {
+		if(wParam && wParam==lParam) {
+			return ((Document*)wParam)->Length();
+		}
 		return pdoc->Length();
+	}
 
 	case SCI_CUT:
 		Cut();

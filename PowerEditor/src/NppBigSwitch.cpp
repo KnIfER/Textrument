@@ -411,6 +411,37 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 			return reinterpret_cast<LRESULT>(_pEditView->getCurrentBufferID());
 		}
 
+		case NPPM_GETDOCUMENTPTR:
+		{
+			if(((Buffer*)wParam)->getID()==(BufferID)wParam)
+			{
+				return (LONG_PTR)((Buffer*)wParam)->getDocument();
+			}
+			return 0;
+		}
+
+		case NPPM_SETDOCKFOCUS:
+		{
+			for (int i = 0; i < DockingCont::AllDockerLen; ++i)
+			{
+				DockingCont::AllDockers[i]->SetActive(IsChild(DockingCont::AllDockers[i]->getHSelf(), (HWND)wParam));	//activate the container that contains the window with focus, this can be none
+			}
+			return 0;
+		}
+
+		case NPPM_CLOSEDOCK:
+		{
+			for (int i = 0; i < DockingCont::AllDockerLen; ++i)
+			{
+				if(IsChild(DockingCont::AllDockers[i]->getHSelf(), (HWND)wParam))
+				{
+					DockingCont::AllDockers[i]->doCloseOneTab();
+					break;
+				}
+			}
+			return 0;
+		}
+
 		case NPPM_RELOADBUFFERID:
 		{
 			if (!wParam)

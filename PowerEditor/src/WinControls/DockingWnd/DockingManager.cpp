@@ -58,9 +58,11 @@ LRESULT CALLBACK focusWndProc(int nCode, WPARAM wParam, LPARAM lParam)
 			CWPSTRUCT * pCwp = (CWPSTRUCT*)lParam;
 			if (pCwp->message == WM_KILLFOCUS)
 			{
+				if(IsWindow(pCwp->hwnd))
 				for (int i = 0; i < DockingCont::AllDockerLen; ++i) //DOCKCONT_MAX
 				{
-					DockingCont::AllDockers[i]->SetActive(FALSE);
+					if(DockingCont::AllDockers[i]->_isActive&&IsChild(DockingCont::AllDockers[i]->getHSelf(), pCwp->hwnd))
+						DockingCont::AllDockers[i]->SetActive(FALSE);
 				}
 			}
 			else if (pCwp->message == WM_SETFOCUS)

@@ -13,8 +13,9 @@ namespace Scintilla {
 
 template <typename T>
 class SplitVector {
-protected:
+public:
 	std::vector<T> body;
+protected:
 	T empty;	/// Returned as the result of out-of-bounds access.
 	ptrdiff_t lengthBody;
 	ptrdiff_t part1Length;

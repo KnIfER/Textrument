@@ -391,6 +391,7 @@ public:
 		cb.GetCharRange(buffer, position, lengthRetrieve);
 	}
 	char* SCI_METHOD GetCharPointer() {
+		//return (char*)cb.substance.body.data();
 		return (char*)cb.substance.BufferPointer();
 		//cb.GetCharRange(buffer, position, lengthRetrieve);
 	}
