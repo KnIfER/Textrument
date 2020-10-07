@@ -2762,6 +2762,10 @@ void Notepad_plus::setUniModeText()
 
 void Notepad_plus::addHotSpot(ScintillaEditView* view)
 {
+	//if(1) return;
+	#define URL_REG_EXPR1 "[A-Za-z]+://[A-Za-z0-9_\\-\\+~.:?&@=/%#,;\\{\\}\\(\\)\\[\\]\\|\\*\\!\\\\]+"
+	#define URL_REG_EXPR "(:?[A-Za-z]+)://[\\S]+" // much slower, why?
+	#define URL_REG_EXPR "://[^'^\"^\\s]+"
 	ScintillaEditView* pView = view ? view : _pEditView;
 
 	int urlAction = (NppParameters::getInstance()).getNppGUI()._styleURL;
@@ -2796,9 +2800,24 @@ void Notepad_plus::addHotSpot(ScintillaEditView* view)
 	pView->execute(SCI_SETTARGETRANGE, startPos, endPos);
 	int posFound = static_cast<int32_t>(pView->execute(SCI_SEARCHINTARGET, strlen(URL_REG_EXPR), reinterpret_cast<LPARAM>(URL_REG_EXPR)));
 
+	auto pDoc = (char*)pView->execute(SCI_GETRAWTEXT, 0, 0);
+	if(!pDoc) 
+		return;
+	char ca;
+	char headQuart;
+	int lastPos;
 	while (posFound != -1 && posFound != -2)
 	{
+		lastPos=posFound;
+		while(posFound>0&&(ca=pDoc[posFound-1])>='A'&&ca<='z'&&lastPos<posFound+25) --posFound;
+		headQuart=posFound<=0?0:pDoc[posFound-1];
 		int end = int(pView->execute(SCI_GETTARGETEND));
+		ca = pDoc[end-1];
+		if(headQuart=='('&&ca==')')
+		{
+			--end;
+		}
+		//todo kill all suspects after the last /
 		int foundTextLen = end - posFound;
 		if (posFound > startPos)
 			pView->execute(SCI_INDICATORCLEARRANGE, startPos, posFound - startPos);
