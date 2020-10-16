@@ -413,9 +413,13 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 
 		case NPPM_GETDOCUMENTPTR:
 		{
-			if(((Buffer*)wParam)->getID()==(BufferID)wParam)
-			{
-				return (LONG_PTR)((Buffer*)wParam)->getDocument();
+			try {
+				if(((Buffer*)wParam)->getID()==(BufferID)wParam)
+				{
+					return (LONG_PTR)((Buffer*)wParam)->getDocument();
+				}
+			} catch(...) {
+
 			}
 			return 0;
 		}
@@ -439,6 +443,17 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 					break;
 				}
 			}
+			return 0;
+		}
+
+		case NPPM_ISADMIN:
+		{
+			return _isAdministrator;
+		}
+
+		case NPPM_SELCARET:
+		{
+			_pEditView->expandWordSelection();
 			return 0;
 		}
 

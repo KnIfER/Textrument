@@ -33,6 +33,8 @@
 
 const int nbChar = 64;
 
+__declspec(selectany) bool ZH_CN;
+
 typedef const TCHAR * (__cdecl * PFUNCGETNAME)();
 
 struct NppData

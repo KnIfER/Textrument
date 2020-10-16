@@ -1039,6 +1039,7 @@ protected:
 	};
 
 	std::pair<int, int> getWordRange();
+public:
 	bool expandWordSelection();
 	void getFoldColor(COLORREF& fgColor, COLORREF& bgColor, COLORREF& activeFgColor);
 };
