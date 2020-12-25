@@ -19,7 +19,7 @@ Why it's still WIP?
 仍然存在丢失会话的可能，还有其他问题，心虚不敢放release……
 
 
-What is Not~~ep~~Mad++ ?
+Some dev logs
 ===================
 
 [Npp 魔改笔记](https://blog.csdn.net/sinat_27171121/article/details/108002522)
