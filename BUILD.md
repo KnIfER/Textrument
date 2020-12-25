@@ -54,4 +54,6 @@ To modify the props properties, go to View->Property Manager, just right click a
 
 - DLLOU_ : another plugin output path to test x32 output.
 
-
+How to update languages
+----------------------
+I use java scripts to sync language updates patch by patch.
