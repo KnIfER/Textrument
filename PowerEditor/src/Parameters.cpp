@@ -2079,6 +2079,17 @@ bool NppParameters::getSessionFromXmlTree(TiXmlDocument *pSessionDoc, Session *p
 		(*ptrSession)._activeView = index;
 	}
 
+	int number;
+	const TCHAR* val = actView->Attribute(TEXT("split"), &number);
+	if (val) _nppGUI._splitter_ratio = number;
+
+	val = actView->Attribute(TEXT("tear"), &number);
+	if (val) _nppGUI._splitter_ratioBK = number;
+
+	// this saves the ScintillaViewsSplitter
+	val = actView->Attribute(TEXT("pos"), &number);
+	if (val) _nppGUI._splitterPos = number==1;
+
 	const size_t nbView = 2;
 	TiXmlNode *viewRoots[nbView];
 	viewRoots[0] = sessionRoot->FirstChildElement(TEXT("mainView"));
@@ -2195,6 +2206,7 @@ bool NppParameters::getSessionFromXmlTree(TiXmlDocument *pSessionDoc, Session *p
 		}
 	}
 
+	_nppGUI._splitter_isVisible = ptrSession->nbSubFiles()>0;
 	return true;
 }
 
@@ -3142,6 +3154,15 @@ void NppParameters::writeSession(const Session & session, const TCHAR *fileName)
 	{
 		TiXmlNode *sessionNode = root->InsertEndChild(TiXmlElement(TEXT("Session")));
 		(sessionNode->ToElement())->SetAttribute(TEXT("activeView"), static_cast<int32_t>(session._activeView));
+
+		//if(nppApp->_subEditView.isVisible())
+		{
+			auto & splitter = nppApp->_subSplitter;
+			splitter.syncSize();
+			(sessionNode->ToElement())->SetAttribute(TEXT("split"), splitter._ratio);
+			(sessionNode->ToElement())->SetAttribute(TEXT("tear"), splitter._ratioBK);
+		}
+		(sessionNode->ToElement())->SetAttribute(TEXT("Pos"), _nppGUI._splitterPos == POS_VERTICAL);
 
 		struct ViewElem {
 			TiXmlNode *viewNode;
@@ -4503,28 +4524,6 @@ void NppParameters::feedGUIParameters(TiXmlNode *node)
 				}
 			}
 		}
-		else if (!lstrcmp(nm, TEXT("ScintillaViewsSplitter")))
-		{
-			int i;
-			const TCHAR* val = element->Attribute(TEXT("size"), &i);
-			if (val) _nppGUI._splitter_ratio = i;
-
-			const TCHAR* val2 = element->Attribute(TEXT("silk"), &i);
-			if (val2) _nppGUI._splitter_ratioBK = i;
-
-			TiXmlNode *n = childNode->FirstChild();
-			if (n)
-			{
-				const TCHAR* val = n->Value();
-				if (val)
-				{
-					if (!lstrcmp(val, TEXT("vertical")))
-						_nppGUI._splitterPos = POS_VERTICAL;
-					else if (!lstrcmp(val, TEXT("horizontal")))
-						_nppGUI._splitterPos = POS_HORIZOTAL;
-				}
-			}
-		}
 		else if (!lstrcmp(nm, TEXT("UserDefineDlg")))
 		{
 			bool isFailed = false;
@@ -5653,20 +5652,6 @@ void NppParameters::createXmlTreeFromGUIParams()
 
 		pStr = (_nppGUI._tabStatus & TAB_QUITONEMPTY) ? TEXT("yes") : TEXT("no");
 		GUIConfigElement->SetAttribute(TEXT("quitOnEmpty"), pStr);
-	}
-
-	// <GUIConfig name="ScintillaViewsSplitter">vertical</GUIConfig>
-	{
-		TiXmlElement *GUIConfigElement = (newGUIRoot->InsertEndChild(TiXmlElement(TEXT("GUIConfig"))))->ToElement();
-		GUIConfigElement->SetAttribute(TEXT("name"), TEXT("ScintillaViewsSplitter"));
-		auto & splitter = nppApp->_subSplitter;
-		if(_nppGUI._splitter_isVisible) {
-			splitter.syncSize();
-			GUIConfigElement->SetAttribute(TEXT("size"), splitter._ratio);
-			GUIConfigElement->SetAttribute(TEXT("silk"), splitter._ratioBK);
-		}
-		const TCHAR *pStr = _nppGUI._splitterPos == POS_VERTICAL ? TEXT("vertical") : TEXT("horizontal");
-		GUIConfigElement->InsertEndChild(TiXmlText(pStr));
 	}
 
 	// <GUIConfig name="UserDefineDlg" position="undocked">hide</GUIConfig>

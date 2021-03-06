@@ -2230,6 +2230,14 @@ bool Notepad_plus::fileLoadSession(const TCHAR *fn)
 				TEXT("Could not Load Session"),
 				MB_OK);
 		}
+		else {
+			if(isEmptyNpp&&_subEditView.isVisible()&&nppGUI._splitter_isVisible) {
+				Splitter & sp = _pPublicInterface->_notepad_plus_plus_core._subSplitter._splitter;
+				sp._splitPercent = nppGUI._splitter_ratio;
+				sp._backupPercent = nppGUI._splitter_ratioBK;
+				sp.resizeSpliter(0);
+			}
+		}
 	}
 	return result;
 }
