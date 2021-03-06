@@ -465,7 +465,8 @@ STDMETHODIMP CShellExt::GetIconLocation(UINT uFlags, LPTSTR szIconFile, UINT cch
 	return S_OK;
 }
 
-STDMETHODIMP CShellExt::Extract(LPCTSTR /*pszFile*/, UINT /*nIconIndex*/, HICON * phiconLarge, HICON * phiconSmall, UINT nIconSize) {
+STDMETHODIMP CShellExt::Extract(LPCTSTR /*pszFile*/, UINT /*nIconIndex*/, HICON * phiconLarge
+	, HICON * phiconSmall, UINT nIconSize) {
 	WORD sizeSmall = HIWORD(nIconSize);
 	WORD sizeLarge = LOWORD(nIconSize);
 	ICONINFO iconinfo;
@@ -473,16 +474,20 @@ STDMETHODIMP CShellExt::Extract(LPCTSTR /*pszFile*/, UINT /*nIconIndex*/, HICON 
 	HRESULT hrSmall = S_OK, hrLarge = S_OK;
 
 	if (phiconSmall)
-		hrSmall = LoadShellIcon(sizeSmall, sizeSmall, phiconSmall);
+		hrSmall = LoadShellIcon(sizeSmall, sizeSmall, phiconSmall, IDI_ICON_SHELL);
 	if (phiconLarge)
-		hrLarge = LoadShellIcon(sizeLarge, sizeLarge, phiconLarge);
+		hrLarge = LoadShellIcon(sizeLarge, sizeLarge, phiconLarge, IDI_ICON_SHELL);
 
 	if (FAILED(hrSmall) || FAILED(hrLarge)) {
 		InvalidateIcon(phiconSmall, phiconLarge);
 		return S_FALSE;
 	}
 
+	//if (!m_isDynamic)	//No modifications required  || !phiconLarge || sizeLarge < 32
 	return S_OK;
+
+	//if(1) return S_OK;
+	// here
 }
 
 void InvalidateIcon(HICON * iconSmall, HICON * iconLarge) {
@@ -615,7 +620,7 @@ STDMETHODIMP CShellExt::InvokeNPP(HWND /*hParent*/, LPCSTR /*pszWorkingDir*/, LP
 	return NOERROR;
 }
 
-STDMETHODIMP CShellExt::LoadShellIcon(int cx, int cy, HICON * phicon) {
+STDMETHODIMP CShellExt::LoadShellIcon(int cx, int cy, HICON * phicon, int id) {
 	HRESULT hr = E_OUTOFMEMORY;
 	HICON hicon = NULL;
 
@@ -625,7 +630,7 @@ STDMETHODIMP CShellExt::LoadShellIcon(int cx, int cy, HICON * phicon) {
 
 	//Either no custom defined, or failed and use fallback
 	if (hicon == NULL) {
-		hicon = (HICON)LoadImage(_hModule, MAKEINTRESOURCE(IDI_ICON_NPP), IMAGE_ICON, cx, cy, LR_DEFAULTCOLOR);
+		hicon = (HICON)LoadImage(_hModule, MAKEINTRESOURCE(id), IMAGE_ICON, cx, cy, LR_DEFAULTCOLOR);
 	}
 
 	if (hicon == NULL) {

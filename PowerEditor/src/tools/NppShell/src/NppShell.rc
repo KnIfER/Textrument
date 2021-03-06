@@ -49,4 +49,5 @@ END
 //
 
 //IDI_ICON_NPP          ICON                    "icon\\npp_1.ico"
-IDI_ICON_NPP          ICON                    "icon\\nppNewIcon.ico"
+IDI_ICON_TXT          ICON                    "icon\\nppNewIcon.ico"
+IDI_ICON_SHELL          ICON                    "icon\\shell.ico"

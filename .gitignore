@@ -4,6 +4,7 @@
 **/bin/
 秘籍
 build_x64
+build_Win32
 boost_*
 
 */Npp_*

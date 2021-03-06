@@ -11,6 +11,7 @@
 #define INC_OLE2
 #define NOMINMAX
 
+#include "resource.h"
 #include <windows.h>
 #include <windowsx.h>
 #include <shlobj.h>
@@ -98,7 +99,7 @@ private:
 
 	// *** Private methods ***
 	STDMETHODIMP InvokeNPP(HWND hParent, LPCSTR pszWorkingDir, LPCSTR pszCmd, LPCSTR pszParam, int iShowCmd);
-	STDMETHODIMP LoadShellIcon(int cx, int cy, HICON * phicon);
+	STDMETHODIMP LoadShellIcon(int cx, int cy, HICON * phicon, int id=IDI_ICON_TXT);
 
 public:
 	CShellExt();
