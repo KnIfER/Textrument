@@ -3815,7 +3815,7 @@ INT_PTR CALLBACK PreferenceDlg::DlgProcShellSettings(HWND hwndDlg, UINT uMsg, WP
 		// 卸载
 		case 1: {
 			if(IDYES==::MessageBox(hwndDlg, TEXT("确认卸载注册信息？"), TEXT(""), MB_YESNO | MB_DEFBUTTON2 | MB_TASKMODAL)) {
-#ifdef WIN64
+#ifdef _WIN64
 				TCHAR szShellExtensionKey[] = TEXT("*\\shellex\\ContextMenuHandlers\\ATextrument64");
 #else
 				TCHAR szShellExtensionKey[] = TEXT("*\\shellex\\ContextMenuHandlers\\ATextrument");
@@ -3849,7 +3849,7 @@ INT_PTR CALLBACK PreferenceDlg::DlgProcShellSettings(HWND hwndDlg, UINT uMsg, WP
 				case IDOK: {
 					TCHAR szSubKey[MAX_PATH];
 					TCHAR szDefaultCustomcommand[] = TEXT("");
-#ifdef WIN64
+#ifdef _WIN64
 					TCHAR szShellExtensionTitle[] = TEXT("ATextrument64");
 					TCHAR szShellExtensionKey[] = TEXT("*\\shellex\\ContextMenuHandlers\\ATextrument64");
 					TCHAR ShellDllName[] = TEXT("NppShell64.dll");

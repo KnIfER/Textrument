@@ -40,7 +40,7 @@ const int nbSupportedLang = 10;
 const int nbExtMax = 27;
 const int extNameMax = 18;
 
-extern PreferenceDlg* _preferenceDlg;;
+extern PreferenceDlg* _preferenceDlg;
 
 const TCHAR defExtArray[nbSupportedLang][nbExtMax][extNameMax] =
 {
@@ -105,7 +105,13 @@ INT_PTR CALLBACK RegExtDlg::run_dlgProc(UINT Message, WPARAM wParam, LPARAM lPar
 			::EnableWindow(::GetDlgItem(_hSelf, IDC_ADDFROMLANGEXT_BUTTON), false);
 			::EnableWindow(::GetDlgItem(_hSelf, IDC_REMOVEEXT_BUTTON), false);
 
+
+			::SendDlgItemMessage(_hSelf, IDC_CUSTOMEXT_EDIT, EM_SETLIMITTEXT, extNameMax - 1, 0);
+
+			cmRgster.init(_hInst, _hSelf);
+
 			NppParameters& nppParam = NppParameters::getInstance();
+			auto linkObj = ::GetDlgItem(_hSelf, IDC_ADMINMUSTBEONMSG_STATIC);
 			if (!nppParam.isAdmin())
 			{
 				::EnableWindow(::GetDlgItem(_hSelf, IDC_REGEXT_LANG_LIST), false);
@@ -113,19 +119,26 @@ INT_PTR CALLBACK RegExtDlg::run_dlgProc(UINT Message, WPARAM wParam, LPARAM lPar
 				::EnableWindow(::GetDlgItem(_hSelf, IDC_REGEXT_REGISTEREDEXTS_LIST), false);
 				::EnableWindow(::GetDlgItem(_hSelf, IDC_SUPPORTEDEXTS_STATIC), false);
 				::EnableWindow(::GetDlgItem(_hSelf, IDC_REGISTEREDEXTS_STATIC), false);
-			} else {
-				//::ShowWindow(::GetDlgItem(_hSelf, IDC_ADMINMUSTBEONMSG_STATIC), SW_HIDE);
-				auto linkObj = ::GetDlgItem(_hSelf, IDC_ADMINMUSTBEONMSG_STATIC);
-				::SetWindowText(linkObj, _T("Register Context Menu..."));
-				cmRgster.init(_hInst, _hSelf);
-				cmRgster.create(linkObj, 1000, _hSelf);
-				::SendDlgItemMessage(_hSelf, IDC_CUSTOMEXT_EDIT, EM_SETLIMITTEXT, extNameMax - 1, 0);
 
-				RECT rc;
-				::GetWindowRect(linkObj, &rc);
-				POINT center={rc.left, rc.top};
-				::ScreenToClient(_hSelf, &center);
-				MoveWindow(linkObj, center.x, 10+center.y, rc.right-rc.left, rc.bottom-rc.top, 0);
+				cmRgster.create(linkObj, 1000, _hSelf);
+				::ShowWindow(::GetDlgItem(_hSelf, IDC_REGISTER_STATIC), SW_HIDE);
+				::ShowWindow(::GetDlgItem(_hSelf, IDC_UNREGISTER_STATIC), SW_HIDE);
+			} else {
+				::ShowWindow(linkObj, SW_HIDE);
+				linkObj = ::GetDlgItem(_hSelf, IDC_REGISTER_STATIC);
+				::ShowWindow(linkObj, SW_SHOW);
+				cmRgster.create(linkObj, 1000, _hSelf);
+
+				linkObj = ::GetDlgItem(_hSelf, IDC_UNREGISTER_STATIC);
+				::ShowWindow(linkObj, SW_SHOW);
+				cmdRgster.init(_hInst, _hSelf);
+				cmdRgster.create(linkObj, 1001, _hSelf);
+
+				//RECT rc;
+				//::GetWindowRect(linkObj, &rc);
+				//POINT center={rc.left, rc.top};
+				//::ScreenToClient(_hSelf, &center);
+				//MoveWindow(linkObj, center.x, 10+center.y, rc.right-rc.left, rc.bottom-rc.top, 0);
 			}
 			return TRUE;
 		}
@@ -161,7 +174,31 @@ INT_PTR CALLBACK RegExtDlg::run_dlgProc(UINT Message, WPARAM wParam, LPARAM lPar
 			switch (wParam)
 			{
 				case 1000:{
-					_preferenceDlg->DlgProcShellSettings(_preferenceDlg->getHSelf(), 0, 0, 0);
+					NppParameters& nppParam = NppParameters::getInstance();
+					if(nppParam.isAdmin()) {
+						_preferenceDlg->DlgProcShellSettings(_preferenceDlg->getHSelf(), 0, 0, 0);
+					} else {
+						if(::MessageBox(_preferenceDlg->getHParent(), TEXT("Continue?")
+							, TEXT("Restart"), MB_YESNO|MB_DEFBUTTON2)==IDYES)
+						{
+							TCHAR path[MAX_PATH];
+							GetModuleFileName(NULL, path, MAX_PATH);
+							TCHAR args[MAX_PATH];
+							lstrcpy(args, TEXT("-multiInst"));
+							if(nppParam._nppGUI._isCmdlineNosessionActivated) {
+								lstrcpy(args, TEXT("-nosession"));
+							}
+							auto ret = (size_t)::ShellExecute(_hSelf, TEXT("runas"), path, args, 0, SW_SHOW);
+							if (ret >= 32)
+							{
+								::SendMessage(_preferenceDlg->getHParent(), WM_CLOSE, 0, 0);
+							}
+						}
+
+					}
+				} break;
+				case 1001:{
+					_preferenceDlg->DlgProcShellSettings(_preferenceDlg->getHSelf(), 1, 0, 0);
 				} break;
 				case IDC_ADDFROMLANGEXT_BUTTON :
 				{

@@ -66,4 +66,5 @@ private :
 	}
 
 	URLCtrl cmRgster;
+	URLCtrl cmdRgster;
 };

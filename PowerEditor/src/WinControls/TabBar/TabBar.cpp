@@ -1152,9 +1152,10 @@ void TabBarPlus::drawItem(DRAWITEMSTRUCT *pDrawItemStruct)
 
 		// ignoring the descent when centering (text elements below the base line) is more pleasing to the eye
 		
-		rect.top -= textDescent / 2;
-		if(rowCount>1)
-		rect.bottom -= textDescent / 2;
+		rect.top += textDescent / 2;
+		rect.bottom += textDescent / 2;
+		//if(rowCount>1)
+		//rect.bottom -= textDescent / 2;
 
 		// 1 space distance to save icon
 		rect.left += spaceUnit;

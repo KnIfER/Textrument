@@ -2231,6 +2231,7 @@ bool Notepad_plus::fileLoadSession(const TCHAR *fn)
 				MB_OK);
 		}
 		else {
+			// todo save the session path
 			if(isEmptyNpp&&_subEditView.isVisible()&&nppGUI._splitter_isVisible) {
 				Splitter & sp = _pPublicInterface->_notepad_plus_plus_core._subSplitter._splitter;
 				sp._splitPercent = nppGUI._splitter_ratio;
