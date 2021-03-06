@@ -77,6 +77,8 @@ public:
 	void activateAt(int index) const;
 	void getCurrentTitle(TCHAR *title, int titleLen);
 
+	void centerCurrentTab();
+	
 	int32_t getCurrentTabIndex() const {
 		return static_cast<int32_t>(SendMessage(_hSelf, TCM_GETCURSEL, 0, 0));
 	};

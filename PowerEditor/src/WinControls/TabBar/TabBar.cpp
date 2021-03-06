@@ -131,6 +131,31 @@ void TabBar::getCurrentTitle(TCHAR *title, int titleLen)
 	::SendMessage(_hSelf, TCM_GETITEM, getCurrentTabIndex(), reinterpret_cast<LPARAM>(&tci));
 }
 
+void TabBar::centerCurrentTab()
+{
+	int tab = getCurrentTabIndex();
+
+	int pw = getWidth()/2;
+
+	RECT itemRect;
+	::SendMessage(_hSelf, TCM_GETITEMRECT, tab, reinterpret_cast<LPARAM>(&itemRect));
+
+	int tabWidth=0;
+
+	for (int i = tab; i>=0; i--)
+	{
+		::SendMessage(_hSelf, TCM_GETITEMRECT, i, reinterpret_cast<LPARAM>(&itemRect));
+		tabWidth += itemRect.right - itemRect.left;
+		tab = i;
+		if(tabWidth>=pw) 
+		{
+			break;
+		}
+	}
+
+	::SendMessage(_hSelf, WM_HSCROLL, MAKEWPARAM(SB_THUMBPOSITION, tab), 0);
+}
+
 
 void TabBar::setFont(const TCHAR *fontName, int fontSize)
 {
@@ -951,10 +976,10 @@ void TabBarPlus::drawItem(DRAWITEMSTRUCT *pDrawItemStruct)
 		else
 		{
 			rect.top -= 2;
-			if(rowCount>1) {
+			if(rowCount>1) 
+			{
 				rect.left += 2;
 				rect.right -= 2;
-			} else {
 			}
 		}
 	}
@@ -1126,9 +1151,10 @@ void TabBarPlus::drawItem(DRAWITEMSTRUCT *pDrawItemStruct)
 		Flags |= DT_VCENTER;
 
 		// ignoring the descent when centering (text elements below the base line) is more pleasing to the eye
-		int deltaY=rowCount>1?-2:0;
-		rect.top += textDescent / 2+deltaY;
-		rect.bottom += textDescent / 2+deltaY;
+		
+		rect.top -= textDescent / 2;
+		if(rowCount>1)
+		rect.bottom -= textDescent / 2;
 
 		// 1 space distance to save icon
 		rect.left += spaceUnit;

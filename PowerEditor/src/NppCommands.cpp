@@ -1904,6 +1904,9 @@ void Notepad_plus::command(int id)
 			::SendMessage(_pPublicInterface->getHSelf(), WM_SIZE, 0, 0);
 			if(val) {
 				::SendMessage(_pPublicInterface->getHSelf(), WM_SIZE, 0, 0);
+			} else {
+				_mainDocTab.centerCurrentTab();
+				_subDocTab.centerCurrentTab();
 			}
 			checkMenuItem(IDM_SETTING_WRAPTABS, val);
 			if(id==IDM_SETTING_WRAPTABS&&_preference.isCreated()) {
