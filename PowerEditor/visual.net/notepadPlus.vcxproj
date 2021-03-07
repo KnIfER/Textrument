@@ -590,6 +590,7 @@ copy ..\src\contextMenu.xml ..\bin64\contextMenu.xml
     <ClInclude Include="..\src\MISC\md5\md5Dlgs.h" />
     <ClInclude Include="..\src\MISC\md5\md5Dlgs_rc.h" />
     <ClInclude Include="..\src\MISC\sha2\sha-256.h" />
+    <ClInclude Include="..\src\ScitillaComponent\FindReplaceDlg_rc.h" />
     <ClInclude Include="..\src\WinControls\AboutDlg\AboutDlg.h" />
     <ClInclude Include="..\src\WinControls\AnsiCharPanel\ansiCharPanel.h" />
     <ClInclude Include="..\src\ScitillaComponent\AutoCompletion.h" />
