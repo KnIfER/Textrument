@@ -836,9 +836,13 @@ void Notepad_plus::command(int id)
 			bool action = !ClosePanelRequested
 				&&(doSwitch||_pFileBrowser == nullptr||_pFileBrowser->isClosed());
 			if(action) {
-				launchFileBrowser(_pFileBrowser == nullptr?
-					// first launch, check in params to open folders
+				bool firstLaunch = _pFileBrowser == nullptr;
+				launchFileBrowser(firstLaunch? // first launch, check in params to open folders
 					&nppParms->getFileBrowserRoots() : nullptr);
+				if(firstLaunch) {
+					NppParameters& nppParam = NppParameters::getInstance();
+					_pFileBrowser->selectItemFromPath(nppParam.getFileBrowserSelectedItemPath());
+				}
 			} else {
 				_pFileBrowser->display(false);
 				_pFileBrowser->setClosed(true);
