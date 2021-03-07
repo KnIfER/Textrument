@@ -297,6 +297,7 @@ public:
 	ContextMenu _fileSwitcherMultiFilePopupMenu;
 
 	IconList _docTabIconList;
+	IconList _docTabIconListAlt;
 
     StatusBar _statusBar;
 	bool _toReduceTabBar = false;

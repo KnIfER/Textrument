@@ -1181,14 +1181,15 @@ void TabBarPlus::drawItem(DRAWITEMSTRUCT *pDrawItemStruct)
 		
 		// ignoring the descent when centering (text elements below the base line) is more pleasing to the eye
 		
-		//rect.top += textDescent / 2;
-		//rect.bottom += textDescent / 2;
 		if(!isSelected||rowCount>1) {
 			top -= NppParameters::getInstance()._dpiManager.scaleY(2);
 		}
 		rect.bottom = top + rect.bottom-rect.top + textHeight / 2;
 		rect.top = top + textHeight / 2;
-
+		if(isStandardSize) {
+			rect.top += textDescent / 2;
+			rect.bottom += textDescent / 2;
+		}
 		//if(rowCount>1)
 		//rect.bottom -= textDescent / 2;
 
