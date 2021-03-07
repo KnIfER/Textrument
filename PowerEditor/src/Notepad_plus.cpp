@@ -5637,7 +5637,7 @@ void Notepad_plus::notifyBufferChanged(Buffer * buffer, int mask)
 void Notepad_plus::notifyBufferActivated(BufferID bufid, int view)
 {
 	Buffer * buf = MainFileManager.getBufferByID(bufid);
-	buf->increaseRecentTag();
+	buf->increaseRecentTag(); // here causes tab flickering
 
 	if (view == MAIN_VIEW)
 	{

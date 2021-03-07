@@ -205,8 +205,8 @@ void DocTabView::bufferUpdated(Buffer * buffer, int mask)
 
 	// send WM_SIZE only when change tab
 	// It is needed while a tab is closed (so tab changed) in multi-line tab mode
-	if (mask & BufferChangeRecentTag)
-		::SendMessage(_hParent, WM_SIZE, 0, 0);
+	// here causes tab flickering
+	//if (mask & BufferChangeRecentTag) ::SendMessage(_hParent, WM_SIZE, 0, 0);
 }
 
 
