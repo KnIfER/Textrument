@@ -899,6 +899,17 @@ LRESULT TabBarPlus::runProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lPara
 void TabBarPlus::drawItem(DRAWITEMSTRUCT *pDrawItemStruct)
 {
 	RECT rect = pDrawItemStruct->rcItem;
+	int top = rect.top;
+
+	//TCHAR buffer[256]={0};
+
+	//rect.left -= 4;
+	//rect.top -= 4;
+	//rect.right -= 4;
+	//rect.bottom -= 4;
+
+	//wsprintf(buffer,TEXT("d=%d, %d %d, %d"), rect.left, rect.top, rect.right, rect.bottom);
+	//::SendMessage(_hParent, NPPM_SETSTATUSBAR, STATUSBAR_DOC_TYPE, (LPARAM)buffer);
 
 	int nTab = pDrawItemStruct->itemID;
 	if (nTab < 0)
@@ -925,10 +936,21 @@ void TabBarPlus::drawItem(DRAWITEMSTRUCT *pDrawItemStruct)
 	HBRUSH hBrush = ::CreateSolidBrush(::GetSysColor(COLOR_BTNFACE));
 	::FillRect(hDC, &rect, hBrush);
 	::DeleteObject((HGDIOBJ)hBrush);
+
+	TEXTMETRIC textMetrics;
+	//GetTextMetrics(hDC, &textMetrics);
+	// DT_VCENTER DT_BOTTOM
+	//rect.top += textMetrics.tmHeight/2; 
+	//rect.bottom += textMetrics.tmHeight/2; 
+	//::DrawText(hDC, TEXT("ABCDEFG"), 7, &rect, DT_SINGLELINE );
+	//if(1) return;
 	
 	// equalize drawing areas of active and inactive tabs
 	int paddingDynamicTwoX = NppParameters::getInstance()._dpiManager.scaleX(2);
 	int paddingDynamicTwoY = NppParameters::getInstance()._dpiManager.scaleY(2);
+
+
+
 	if (isSelected&&rowCount<=1)
 	{
 		// the drawing area of the active tab extends on all borders by default
@@ -1108,10 +1130,15 @@ void TabBarPlus::drawItem(DRAWITEMSTRUCT *pDrawItemStruct)
 	::GetTextExtentPoint(hDC, TEXT(" "), 1, &charPixel);
 	int spaceUnit = charPixel.cx;
 
-	TEXTMETRIC textMetrics;
 	GetTextMetrics(hDC, &textMetrics);
 	int textHeight = textMetrics.tmHeight;
 	int textDescent = textMetrics.tmDescent;
+
+	//wsprintf(buffer,TEXT("d=%d, %d, %d  tm= %d, %d"),::GetSystemMetrics(SM_CYEDGE)
+	//	, paddingDynamicTwoX, paddingDynamicTwoY
+	//	, textHeight, textDescent
+	//);// 2 3 3 19 4
+	//::SendMessage(_hParent, NPPM_SETSTATUSBAR, STATUSBAR_DOC_TYPE, (LPARAM)buffer);
 
 	int Flags = DT_SINGLELINE | DT_NOPREFIX;
 
@@ -1148,22 +1175,32 @@ void TabBarPlus::drawItem(DRAWITEMSTRUCT *pDrawItemStruct)
 	{
 		// center text vertically
 		Flags |= DT_LEFT;
-		Flags |= DT_VCENTER;
-
+		//Flags |= DT_VCENTER;
+		Flags |= DT_TOP;
+		
 		// ignoring the descent when centering (text elements below the base line) is more pleasing to the eye
 		
-		rect.top += textDescent / 2;
-		rect.bottom += textDescent / 2;
+		//rect.top += textDescent / 2;
+		//rect.bottom += textDescent / 2;
+		if(!isSelected||rowCount>1) {
+			top -= NppParameters::getInstance()._dpiManager.scaleY(2);
+		}
+		rect.bottom = top + rect.bottom-rect.top + textHeight / 2;
+		rect.top = top + textHeight / 2;
+
 		//if(rowCount>1)
 		//rect.bottom -= textDescent / 2;
 
 		// 1 space distance to save icon
 		rect.left += spaceUnit;
+
 	}
 
 	::SetTextColor(hDC, isSelected ? _activeTextColour : _inactiveTextColour);
 
 	::DrawText(hDC, decodedLabel, lstrlen(decodedLabel), &rect, Flags);
+	//::DrawText(hDC, TEXT("ABCDEFG"), 7, &rect, DT_SINGLELINE );
+
 	::RestoreDC(hDC, nSavedDC);
 }
 
