@@ -78,11 +78,10 @@ void Notepad_plus::macroPlayback(Macro macro)
 	_playingBackMacro = false;
 }
 
-TCHAR* resolveLinkFile(HWND hwnd, TCHAR* linkFilePath)
+TCHAR* resolveLinkFile(HWND hwnd, TCHAR* linkFilePath, TCHAR* targetFilePath)
 {
 	HRESULT hres;
 	IShellLink* psl;
-	TCHAR targetFilePath[MAX_PATH];
 	WIN32_FIND_DATA wfd;
 
 	hres = CoInitialize(NULL);
@@ -146,9 +145,9 @@ void Notepad_plus::command(int id)
 		case IDM_FILE_OPEN_LINK:
 		{
 			TCHAR* pathname = (TCHAR*)::SendMessage(_pPublicInterface->getHSelf(), NPPM_GETRAWFULLCURRENTPATH , 0, 0);
-			TCHAR* lnkTgt = resolveLinkFile(_pPublicInterface->getHSelf(), pathname);
+			TCHAR targetFilePath[MAX_PATH];
+			TCHAR* lnkTgt = resolveLinkFile(_pPublicInterface->getHSelf(), pathname, targetFilePath);
 			if(lnkTgt) {
-				//::MessageBox(NULL, lnkTgt, TEXT(""), MB_OK);
 				::SendMessage(_pPublicInterface->getHSelf(), NPPM_DOOPEN, 0 , (LPARAM)lnkTgt);
 			}
 		}
@@ -160,7 +159,27 @@ void Notepad_plus::command(int id)
 			cmd.run(_pPublicInterface->getHSelf(), TEXT("$(CURRENT_DIRECTORY)"));
 		}
 		break;
-		
+
+		case IDM_FILE_CONTAININGFOLDERASWORKSPACE:
+		{
+			TCHAR currentFile[CURRENTWORD_MAXLENGTH];
+			TCHAR currentDir[CURRENTWORD_MAXLENGTH];
+			::SendMessage(_pPublicInterface->getHSelf(), NPPM_GETFULLCURRENTPATH, CURRENTWORD_MAXLENGTH, reinterpret_cast<LPARAM>(currentFile));
+			::SendMessage(_pPublicInterface->getHSelf(), NPPM_GETCURRENTDIRECTORY, CURRENTWORD_MAXLENGTH, reinterpret_cast<LPARAM>(currentDir));
+
+			if (!_pFileBrowser)
+			{
+				command(IDM_VIEW_FILEBROWSER);
+			}
+
+			vector<generic_string> folders;
+			folders.push_back(currentDir);
+
+			launchFileBrowser(&folders);
+			_pFileBrowser->selectItemFromPath(currentFile);
+		}
+		break;
+
 		case IDM_FILE_OPEN_DEFAULT_VIEWER:
 		{
 			// Opens file in its default viewer. 
@@ -192,7 +211,7 @@ void Notepad_plus::command(int id)
 		case IDM_FILE_OPENFOLDERASWORSPACE:
 		{
 			generic_string folderPath = folderBrowser(_pPublicInterface->getHSelf(), TEXT("Select a folder to add in Folder as Workspace panel"));
-			if (not folderPath.empty())
+			if (!folderPath.empty())
 			{
 				if (_pFileBrowser == nullptr) // first launch, check in params to open folders
 				{
@@ -512,7 +531,7 @@ void Notepad_plus::command(int id)
 				fullFilePath += TEXT("\"");
 
 				if (id == IDM_EDIT_OPENINFOLDER ||
-					(id == IDM_EDIT_OPENASFILE && not ::PathIsDirectory(curentWord)))
+					(id == IDM_EDIT_OPENASFILE && !::PathIsDirectory(curentWord)))
 					::ShellExecute(hwnd, TEXT("open"), cmd2Exec, fullFilePath.c_str(), TEXT("."), SW_SHOW);
 			}
 			else // Full file path - need concatenate with current full file path
@@ -527,7 +546,7 @@ void Notepad_plus::command(int id)
 				fullFilePath += curentWord;
 
 				if ((id == IDM_EDIT_OPENASFILE &&
-					(not::PathFileExists(fullFilePath.c_str() + 1) || ::PathIsDirectory(fullFilePath.c_str() + 1))))
+					(!::PathFileExists(fullFilePath.c_str() + 1) || ::PathIsDirectory(fullFilePath.c_str() + 1))))
 				{
 					_nativeLangSpeaker.messageBox("FilePathNotFoundWarning",
 						_pPublicInterface->getHSelf(),
@@ -2292,7 +2311,7 @@ void Notepad_plus::command(int id)
 
 			Buffer* buf = _pEditView->getCurrentBuffer();
 
-			if (not buf->isReadOnly())
+			if (!buf->isReadOnly())
 			{
 				std::lock_guard<std::mutex> lock(command_mutex);
 				buf->setEolFormat(newFormat);
@@ -2517,7 +2536,7 @@ void Notepad_plus::command(int id)
                     return;
             }
 
-            if (not buf->isDirty())
+            if (!buf->isDirty())
             {
 				buf->setEncoding(encoding);
 				buf->setUnicodeMode(uniCookie);
@@ -3430,7 +3449,7 @@ void Notepad_plus::command(int id)
 		case IDM_FILE_RESTORELASTCLOSEDFILE:
 		{
 			generic_string lastOpenedFullPath = _lastRecentFileList.getFirstItem();
-			if (not lastOpenedFullPath.empty())
+			if (!lastOpenedFullPath.empty())
 			{
 				BufferID lastOpened = doOpen(lastOpenedFullPath);
 				if (lastOpened != BUFFER_INVALID)

@@ -1192,11 +1192,12 @@ bool FileBrowser::addInTree(const generic_string& rootPath, const generic_string
 			return false;
 	}
 
-	if (linarPathArray.empty()) // nothing to search, return node
+	if (linarPathArray.empty()) // nothing to do
 	{
-		return node;
-	}
-	else if (linarPathArray.size() == 1)
+		return false;
+	} 
+	else 
+	if (linarPathArray.size() == 1)
 	{
 		// Of course item to add should be exist on the disk
 		if (!::PathFileExists(addItemFullPath.c_str()))
@@ -1260,7 +1261,11 @@ HTREEITEM FileBrowser::findInTree(const generic_string& rootPath, HTREEITEM node
 			return nullptr;
 	}
 
-	if (linarPathArray.size() == 1)
+	if (linarPathArray.empty()) // nothing to search, return node
+	{
+		return node;
+	} 
+	else if (linarPathArray.size() == 1)
 	{
 		// Search
 		return findChildNodeFromName(node, linarPathArray[0]);

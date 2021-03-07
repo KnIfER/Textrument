@@ -411,31 +411,33 @@ static const int tabContextMenuItemPos[] =
     5,   // 2 : Save
     6,   // 3 : Save As
     10,  // 4 : Print
-    24,  // 5 : Move to Other View
-    25,  // 6 : Clone to Other View
-    22,  // 9 : Current Dir. Path to Clipboard
-    20,  // 7 : Full File Path to Clipboard
-    21,  // 8 : Filename to Clipboard
+    25,  // 5 : Move to Other View
+    26,  // 6 : Clone to Other View
+    23,  // 9 : Current Dir. Path to Clipboard
+    21,  // 7 : Full File Path to Clipboard
+    22,  // 8 : Filename to Clipboard
     7,   // 10: Rename
     8,   // 11: Move to Recycle Bin
-    17,  // 12: Read-Only
-    18,  // 13: Clear Read-Only Flag
-    26,  // 14: Move to New Instance
-    27,  // 15: Open to New Instance
+    18,  // 12: Read-Only
+    19,  // 13: Clear Read-Only Flag
+    27,  // 14: Move to New Instance
+    28,  // 15: Open to New Instance
     9,   // 16: Reload
     2,   // 17: Close ALL to the Left
     3,   // 18: Close ALL to the Right
     12,  // 19: Open Containing Folder in Explorer
     13,  // 20: Open Containing Folder in cmd
-    15,  // 21: Open in Default Viewer
+    16,  // 21: Open in Default Viewer
     4,   // 22: Close ALL Unchanged
-    14,   // 23: Open Linked File
+	14,   // 23: Open Linked File
+	15,   // 24: Open Containing Folder as Workspace
     -1   //-------End
 };
 
 
 void NativeLangSpeaker::changeLangTabContextMenu(HMENU hCM, int CMIDToChange)
 {
+	//if(false)
 	if (nullptr != _nativeLangA)
 	{
 		TiXmlNodeA *tabBarMenu = _nativeLangA->FirstChild("Menu");
@@ -460,7 +462,7 @@ void NativeLangSpeaker::changeLangTabContextMenu(HMENU hCM, int CMIDToChange)
 						continue;
 					if(!CMIDToChange || CMIDToChange==index) {
 						int pos = tabContextMenuItemPos[index];
-						if(pos==10) {
+						if(pos==10||!CMIDToChange&&index==23) {
 							continue;
 						} else if(pos>10){
 							pos--;
