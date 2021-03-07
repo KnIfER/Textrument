@@ -1404,7 +1404,8 @@ INT_PTR CALLBACK FindReplaceDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 
 				case IDNORMAL:
 				case IDEXTENDED:
-				case IDREGEXP : {
+				case IDREGEXP : 
+				{
 					if (isCheckedOrNot(IDREGEXP))
 					{
 						_options._searchType = FindRegex;
@@ -1443,15 +1444,16 @@ INT_PTR CALLBACK FindReplaceDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 					::EnableWindow(::GetDlgItem(_hSelf, IDWHOLEWORD), true);
 
 					// regex upward search is disabled
-					BOOL doEnable = TRUE;
+					bool doEnable = true;
 					if (isRegex && !nppParamInst.regexBackward4PowerUser())
 					{
-						doEnable = FALSE;
+						doEnable = false;
 					}
 					enableFindDlgItem(IDC_BACKWARDDIRECTION, doEnable);
 					enableFindDlgItem(IDC_FINDPREV, doEnable);
 
-					return TRUE; }
+					return TRUE; 
+				}
 
 				case IDWRAP :
 					findHistory._isWrap = _options._isWrapAround = isCheckedOrNot(IDWRAP);
