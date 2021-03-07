@@ -34,13 +34,6 @@
 #include "Common.h"
 
 
-// window styles
-#define POPUP_STYLES		(WS_POPUP|WS_CLIPSIBLINGS|WS_CAPTION|WS_SYSMENU|WS_THICKFRAME|WS_MAXIMIZEBOX)
-#define POPUP_EXSTYLES		(WS_EX_CONTROLPARENT|WS_EX_WINDOWEDGE|WS_EX_TOOLWINDOW)
-#define CHILD_STYLES		(WS_CHILD)
-#define CHILD_EXSTYLES		(0x00000000L)
-
-
 enum eMousePos {
 	posOutside,
 	posCaption,
@@ -128,10 +121,7 @@ public:
 
 	void focusClient();
 
-	void SetActive(BOOL bState) {
-		_isActive = bState;
-		updateCaption();
-	};
+	void SetActive(BOOL bState);
 
 	void setTabStyle(const BOOL & bDrawOgLine) {
 		_bDrawOgLine = bDrawOgLine;

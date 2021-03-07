@@ -215,6 +215,7 @@ LRESULT Gripper::runProc(UINT message, WPARAM wParam, LPARAM lParam)
 			}
 			onButtonUp();
 			::DestroyWindow(_hSelf);
+			//::ShowWindow(_hSelf, SW_HIDE);
 			return TRUE;
 		}
 		case DMM_CANCEL_MOVE:
@@ -237,9 +238,9 @@ LRESULT Gripper::runProc(UINT message, WPARAM wParam, LPARAM lParam)
 		}
 		case WM_DESTROY:
 		{
-			mouse_event(MOUSEEVENTF_LEFTUP, 0, 0, 0, 0);
-			::SetWindowPos(_hParent, HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE);
-			_pCont->focusClient();
+			//mouse_event(MOUSEEVENTF_LEFTUP, 0, 0, 0, 0);
+			//::SetWindowPos(_hParent, HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE);
+			//_pCont->focusClient();
 			delete this; // TODO: remove this line and delete this object outside of itself
 			return TRUE;
 		}
@@ -257,7 +258,7 @@ void Gripper::create()
 	POINT		pt		= {0};
 
 	// start hooking
-	::SetWindowPos(_pCont->getHSelf(), HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE);
+	//::SetWindowPos(_pCont->getHSelf(), HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE);
 	::SetCapture(_hSelf);
 	winVer ver = (NppParameters::getInstance()).getWinVersion();
 	hookMouse = ::SetWindowsHookEx(WH_MOUSE_LL, hookProcMouse, _hInst, 0);
@@ -544,6 +545,8 @@ void Gripper::doTabReordering(POINT pt)
 // smaller rectangle inside seems to be not slower - wich comes not unawaited, because it is mostly
 // hardware-driven and each single draw has its own fixed costs.
 //
+// I am more lazy. I choose to erase & paint one single rectangle on the background window.
+//
 // For further solutions I think we should leave this classic way of dragging and better use
 // alpha-blending and always move the whole content of the toolbars - so we could leave the
 // ::LockWindowUpdate() behind us.
@@ -559,18 +562,23 @@ void Gripper::drawRectangle(const POINT* pPt)
 	RECT   rc	 = {0};
 	RECT   rcNew	 = {0};
 	RECT   rcOld	 = _rcPrev;
-
+	bool lock=0;
+#if defined (USE_LOCKWINDOWUPDATE)
+	lock=1;
+#endif
+	lock=0;
 	// Get a screen device context with backstage redrawing disabled - to have a consistently
 	// and stable drawn rectangle while floating - keep in mind, that we must ensure, that
 	// finally ::LockWindowUpdate(NULL) will be called, to enable drawing for others again.
 	if (!_hdc)
 	{
 		HWND hWnd= ::GetDesktopWindow();
-		#if defined (USE_LOCKWINDOWUPDATE)
+		hWnd=_hParent;
+		if (lock)
 		_hdc= ::GetDCEx(hWnd, NULL, ::LockWindowUpdate(hWnd) ? DCX_WINDOW|DCX_CACHE|DCX_LOCKWINDOWUPDATE : DCX_WINDOW|DCX_CACHE);
-		#else
+		else
 		_hdc= ::GetDCEx(hWnd, NULL, DCX_WINDOW|DCX_CACHE);
-		#endif
+		
 	}
 
 	// Create a brush with the appropriate bitmap pattern to draw our drag rectangle
@@ -636,12 +644,12 @@ void Gripper::drawRectangle(const POINT* pPt)
 	if (_bPtOldValid)
 	{	// erase the old drag-rectangle
 		::PatBlt(hdcMem, rcOld.left  , rcOld.top  , rcOld.right  , rcOld.bottom  , PATINVERT);
-		::PatBlt(hdcMem, rcOld.left+3, rcOld.top+3, rcOld.right-6, rcOld.bottom-6, PATINVERT);
+		//::PatBlt(hdcMem, rcOld.left+3, rcOld.top+3, rcOld.right-6, rcOld.bottom-6, PATINVERT);
 	}
 	if (pPt != NULL)
 	{	// draw the new drag-rectangle
 		::PatBlt(hdcMem, rcNew.left  , rcNew.top  , rcNew.right  , rcNew.bottom  , PATINVERT);
-		::PatBlt(hdcMem, rcNew.left+3, rcNew.top+3, rcNew.right-6, rcNew.bottom-6, PATINVERT);
+		//::PatBlt(hdcMem, rcNew.left+3, rcNew.top+3, rcNew.right-6, rcNew.bottom-6, PATINVERT);
 	}
 	::BitBlt(_hdc, rc.left, rc.top, rc.right, rc.bottom, hdcMem, 0, 0, SRCCOPY);
 
@@ -652,9 +660,9 @@ void Gripper::drawRectangle(const POINT* pPt)
 
 	if (pPt == NULL)
 	{
-		#if defined(USE_LOCKWINDOWUPDATE)
+		if (lock)
 		::LockWindowUpdate(NULL);
-		#endif
+		else
 		_bPtOldValid= FALSE;
 		if (_hdc)
 		{

@@ -38,6 +38,12 @@ using namespace std;
 #define WH_MOUSE_LL 14
 #endif
 
+// window styles
+#define POPUP_STYLES		(WS_POPUP|WS_CLIPSIBLINGS|WS_CAPTION|WS_SYSMENU|WS_THICKFRAME|WS_MAXIMIZEBOX|WS_MINIMIZEBOX)
+#define POPUP_EXSTYLES		(WS_EX_CONTROLPARENT|WS_EX_WINDOWEDGE)
+#define CHILD_STYLES		(WS_CHILD)
+#define CHILD_EXSTYLES		(0x00000000L)
+
 static HWND		hWndServer		= NULL;
 static HHOOK	hookMouse		= NULL;
 
@@ -1038,6 +1044,7 @@ INT_PTR CALLBACK DockingCont::run_dlgProc(UINT Message, WPARAM wParam, LPARAM lP
 			{
 				case SC_MOVE:
 					NotifyParent(DMM_MOVE);
+					// SC_MOVE
 					return TRUE;
 				default: 
 					break;
@@ -1536,6 +1543,12 @@ void DockingCont::focusClient()
 		::SetFocus(tbData->hClient);
 	}
 }
+
+void DockingCont::SetActive(BOOL bState)
+{
+	_isActive = bState;
+	updateCaption();
+};
 
 LPARAM DockingCont::NotifyParent(UINT message)
 {

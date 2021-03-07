@@ -80,7 +80,7 @@ public:
 		}
 	};
 
-protected :
+//protected :
 
 	void create();
 
