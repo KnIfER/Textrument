@@ -590,7 +590,6 @@ copy ..\src\contextMenu.xml ..\bin64\contextMenu.xml
     <ClInclude Include="..\src\clipboardFormats.h" />
     <ClInclude Include="..\src\dpiManager.h" />
     <ClInclude Include="..\src\keys.h" />
-    <ClInclude Include="..\src\localizationString.h" />
     <ClInclude Include="..\src\MISC\Common\Sorters.h" />
     <ClInclude Include="..\src\MISC\Common\verifySignedfile.h" />
     <ClInclude Include="..\src\MISC\md5\md5.h" />
@@ -601,7 +600,6 @@ copy ..\src\contextMenu.xml ..\bin64\contextMenu.xml
     <ClInclude Include="..\src\ScitillaComponent\FindReplaceDlg_rc.h" />
     <ClInclude Include="..\src\ScitillaComponent\ScintillaRef.h" />
     <ClInclude Include="..\src\Utf8.h" />
-    <ClInclude Include="..\src\ScitillaComponent\FindReplaceDlg_rc.h" />
     <ClInclude Include="..\src\WinControls\AboutDlg\AboutDlg.h" />
     <ClInclude Include="..\src\WinControls\AnsiCharPanel\ansiCharPanel.h" />
     <ClInclude Include="..\src\ScitillaComponent\AutoCompletion.h" />
@@ -627,7 +625,6 @@ copy ..\src\contextMenu.xml ..\bin64\contextMenu.xml
     <ClInclude Include="..\src\WinControls\ContextMenu\ContextMenu.h" />
     <ClInclude Include="..\src\WinControls\PluginsAdmin\pluginsAdmin.h" />
     <ClInclude Include="..\src\WinControls\PluginsAdmin\pluginsAdminRes.h" />
-    <ClInclude Include="..\src\WinControls\Preference\preference_rc.h" />
     <ClInclude Include="..\src\WinControls\ReadDirectoryChanges\targetver.h" />
     <ClInclude Include="..\src\WinControls\shortcut\shortcutRc.h" />
     <ClInclude Include="..\src\WinControls\StaticDialog\RunDlg\RunDlg_rc.h" />
