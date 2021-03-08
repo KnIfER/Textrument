@@ -4033,6 +4033,8 @@ generic_string NppParameters::getLocPathFromStr(const generic_string & localizat
 		return TEXT("irish.xml");
 	if (localizationCode == TEXT("sgs"))
 		return TEXT("samogitian.xml");
+	if (localizationCode == TEXT("yue"))
+		return TEXT("hongKongCantonese.xml");
 
 	return generic_string();
 }
