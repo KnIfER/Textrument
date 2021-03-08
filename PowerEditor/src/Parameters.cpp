@@ -5216,6 +5216,7 @@ void NppParameters::feedGUIParameters(TiXmlNode *node)
 			watchBooleanField(element, TEXT("isFolderDroppedOpenFiles"), _nppGUI._isFolderDroppedOpenFiles);
 			watchBooleanField(element, TEXT("docPeekOnTab"), _nppGUI._isDocPeekOnTab);
 			watchBooleanField(element, TEXT("docPeekOnMap"), _nppGUI._isDocPeekOnMap);
+			watchBooleanField(element, TEXT("saveDlgExtFilterToAllTypes"), _nppGUI._setSaveDlgExtFiltToAllTypes);
 		}
 		else if (!lstrcmp(nm, TEXT("commandLineInterpreter")))
 		{
@@ -6014,7 +6015,7 @@ void NppParameters::createXmlTreeFromGUIParams()
 		GUIConfigElement->SetAttribute(TEXT("setting"), _nppGUI._multiInstSetting);
 	}
 
-	// <GUIConfig name="MISC" fileSwitcherWithExtColumn="no" backSlashIsEscapeCharacterForSql="yes" newStyleSaveDlg="no" isFolderDroppedOpenFiles="no" />
+	// <GUIConfig name="MISC" fileSwitcherWithExtColumn="no" backSlashIsEscapeCharacterForSql="yes" newStyleSaveDlg="no" isFolderDroppedOpenFiles="no" saveDlgExtFilterToAllTypesForNormalText="no" />
 	{
 		TiXmlNode *historyNode = nppRoot->FirstChildElement(TEXT("DropFilters"));
 		if (not historyNode)
@@ -6042,6 +6043,7 @@ void NppParameters::createXmlTreeFromGUIParams()
 		GUIConfigElement->SetAttribute(TEXT("isFolderDroppedOpenFiles"), _nppGUI._isFolderDroppedOpenFiles ? TEXT("yes") : TEXT("no"));
 		GUIConfigElement->SetAttribute(TEXT("docPeekOnTab"), _nppGUI._isDocPeekOnTab ? TEXT("yes") : TEXT("no"));
 		GUIConfigElement->SetAttribute(TEXT("docPeekOnMap"), _nppGUI._isDocPeekOnMap ? TEXT("yes") : TEXT("no"));
+		GUIConfigElement->SetAttribute(TEXT("saveDlgExtFilterToAllTypes"), _nppGUI._setSaveDlgExtFiltToAllTypes ? TEXT("yes") : TEXT("no"));
 	}
 
 	{

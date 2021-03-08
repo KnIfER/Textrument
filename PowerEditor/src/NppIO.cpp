@@ -1618,11 +1618,21 @@ bool Notepad_plus::fileSaveAs(BufferID id, bool isSaveCopy, bool forbidSaveAsOpe
 
 	FileDialog fDlg(_pPublicInterface->getHSelf(), _pPublicInterface->getHinst());
 
-    fDlg.setExtFilter(TEXT("All types"), TEXT(".*"), NULL);
-	int langTypeIndex = setFileOpenSaveDlgFilters(fDlg, false, buf->getLangType());
+	fDlg.setExtFilter(TEXT("All types"), TEXT(".*"), NULL);
+
+	LangType langType = buf->getLangType();
+
+	int langTypeIndex = 0;
+	if (!((NppParameters::getInstance()).getNppGUI()._setSaveDlgExtFiltToAllTypes && 
+		buf->isUntitled() && langType == L_TEXT))
+	{
+		langTypeIndex = setFileOpenSaveDlgFilters(fDlg, false, langType);
+	}
+
+
 	fDlg.setDefFileName(forbidSaveAsOpenedCheck&&LastSavedPath?LastSavedPath:buf->getFileName());
 
-    fDlg.setExtIndex(langTypeIndex + 1); // +1 for "All types"
+	fDlg.setExtIndex(langTypeIndex + 1); // +1 for "All types"
 
 	// Disable file autodetection before opening save dialog to prevent use-after-delete bug.
 	NppParameters& nppParam = NppParameters::getInstance();
