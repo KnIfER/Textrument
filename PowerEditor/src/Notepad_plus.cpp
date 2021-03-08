@@ -2339,7 +2339,10 @@ void Notepad_plus::checkDocState()
 	bool isCurrentUntitled = curBuf->isUntitled();
 	enableCommand(IDM_FILE_SAVE, isCurrentDirty, MENU | TOOLBAR);
 	enableCommand(IDM_FILE_SAVEALL, isSeveralDirty, MENU | TOOLBAR);
-	enableCommand(IDM_VIEW_GOTO_NEW_INSTANCE, !(isCurrentDirty || isCurrentUntitled && (curBuf->docLength()>0||curBuf->isModified())), MENU);
+
+	// Note : curBuf->docLength() grays out the save button incorrectly for newly created & saved Untitled buffer.
+	enableCommand(IDM_VIEW_GOTO_NEW_INSTANCE, !(isCurrentDirty || isCurrentUntitled 
+		&& (_pEditView->execute(SCI_GETLENGTH, 0, 0)>0||curBuf->isModified())), MENU);
 	enableCommand(IDM_VIEW_LOAD_IN_NEW_INSTANCE, !(isCurrentDirty || isCurrentUntitled), MENU);
 
 	bool isSysReadOnly = curBuf->getFileReadOnly();
