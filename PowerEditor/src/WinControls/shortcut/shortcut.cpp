@@ -1167,6 +1167,8 @@ CommandShortcut::CommandShortcut(const Shortcut& sc, long id) :	Shortcut(sc), _i
 			_category_path|=(21l<<13);
 		} else if(id>=IDM_SEARCH_GONEXTMARKER1 && id<=IDM_SEARCH_GONEXTMARKER_DEF) { // Jump Next
 			_category_path|=(22l<<13);
+		} else if(id>=IDM_SEARCH_STYLE1TOCLIP && id<=IDM_SEARCH_MARKEDTOCLIP) { // Styled to clipboard
+			_category_path|=(23l<<13);
 		}
 	} else if ( _id < IDM_FORMAT) {
 		_category = TEXT("View");
