@@ -648,6 +648,7 @@ public:
 	void setPositionRestoreNeeded(bool val) { _positionRestoreNeeded = val; };
 	static HMODULE loadSciLexerDll();
 	void markedTextToClipboard(int indiStyle, bool doAll = false);
+	void removeAnyDuplicateLines();
 
 protected:
 	static HINSTANCE _hLib;

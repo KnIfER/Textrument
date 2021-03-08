@@ -1600,6 +1600,12 @@ void Notepad_plus::command(int id)
 			_pEditView->execute(SCI_ENDUNDOACTION);
 			break;
 
+		case IDM_EDIT_REMOVE_ANY_DUP_LINES:
+			_pEditView->execute(SCI_BEGINUNDOACTION);
+			_pEditView->removeAnyDuplicateLines();
+			_pEditView->execute(SCI_ENDUNDOACTION);
+			break;
+
 		case IDM_EDIT_SPLIT_LINES:
 		{
 			pair<int, int> lineRange = _pEditView->getSelectionLinesRange();
@@ -3641,6 +3647,7 @@ void Notepad_plus::command(int id)
 			case IDM_EDIT_RMV_TAB:
 			case IDM_EDIT_DUP_LINE:
 			case IDM_EDIT_REMOVE_DUP_LINES:
+			case IDM_EDIT_REMOVE_ANY_DUP_LINES:
 			case IDM_EDIT_TRANSPOSE_LINE:
 			case IDM_EDIT_SPLIT_LINES:
 			case IDM_EDIT_JOIN_LINES:
