@@ -473,6 +473,7 @@ public:
 	void checkUndoState();
 	void checkMacroState();
 	void checkSyncState();
+	void setupColorSampleBitmapsOnMainMenuItems();
 	void dropFiles(HDROP hdrop);
 	void checkModifiedDocument(bool bCheckOnlyCurrentBuffer);
 
