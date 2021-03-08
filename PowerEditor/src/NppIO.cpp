@@ -636,7 +636,7 @@ bool Notepad_plus::doSave(BufferID id, const TCHAR * filename, bool isCopy)
 		_pFuncList->reload();
 	}
 
-	return res;
+	return res == SavingStatus::SaveOK;
 }
 
 void Notepad_plus::doClose(BufferID id, int whichOne, bool doDeleteBackup)
