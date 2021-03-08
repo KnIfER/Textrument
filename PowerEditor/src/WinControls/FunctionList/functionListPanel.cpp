@@ -483,12 +483,12 @@ void FunctionListPanel::init(HINSTANCE hInst, HWND hPere, ScintillaEditView **pp
 	if (!doLocalConf)
 	{
 		generic_string funcListXmlPath = (NppParameters::getInstance()).getUserPath();
-		PathAppendCompat(funcListXmlPath, TEXT("functionList.xml"));
+		PathAppendCompat(funcListXmlPath, TEXT("functionList"));
 
 		if (!PathFileExists(funcListXmlPath.c_str()))
 		{
 			generic_string funcListDefaultXmlPath = (NppParameters::getInstance()).getNppPath();
-			PathAppendCompat(funcListDefaultXmlPath, TEXT("functionList.xml"));
+			PathAppendCompat(funcListDefaultXmlPath, TEXT("functionList"));
 			if (PathFileExists(funcListDefaultXmlPath.c_str()))
 			{
 				::CopyFile(funcListDefaultXmlPath.c_str(), funcListXmlPath.c_str(), TRUE);
@@ -503,7 +503,7 @@ void FunctionListPanel::init(HINSTANCE hInst, HWND hPere, ScintillaEditView **pp
 	else
 	{
 		generic_string funcListDefaultXmlPath = (NppParameters::getInstance()).getUserPath();
-		PathAppendCompat(funcListDefaultXmlPath, TEXT("functionList.xml"));
+		PathAppendCompat(funcListDefaultXmlPath, TEXT("functionList"));
 		if (PathFileExists(funcListDefaultXmlPath.c_str()))
 		{
 			_funcParserMgr.init(funcListDefaultXmlPath, ppEditView);
