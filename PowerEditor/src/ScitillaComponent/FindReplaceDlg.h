@@ -170,9 +170,7 @@ private:
 
 	bool _longLinesAreWrapped = false;
 
-	void setFinderReadOnly(bool isReadOnly) {
-		_scintView.execute(SCI_SETREADONLY, isReadOnly);
-	};
+	void setFinderReadOnly(bool isReadOnly);
 
 	bool isLineActualSearchResult(const generic_string & s) const;
 	generic_string & prepareStringForClipboard(generic_string & s) const;

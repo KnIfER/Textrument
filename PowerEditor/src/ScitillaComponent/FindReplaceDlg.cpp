@@ -33,6 +33,7 @@
 #include "UniConversion.h"
 #include "localization.h"
 #include "Notepad_plus.h"
+#include "Utf8.h"
 
 
 extern NppParameters *nppParms;
@@ -2133,15 +2134,15 @@ int FindReplaceDlg::processRange(ProcessOperation op, FindReplaceInfo & findRepl
 				int nbChar = lend - lstart;
 
 				// use the static buffer
-				TCHAR lineBuf[1024];
+				TCHAR lineBuf[SC_SEARCHRESULT_LINEBUFFERMAXLENGTH];
 
-				if (nbChar > 1024 - 3)
-					lend = lstart + 1020;
+				if (nbChar > SC_SEARCHRESULT_LINEBUFFERMAXLENGTH - 3)
+					lend = lstart + SC_SEARCHRESULT_LINEBUFFERMAXLENGTH - 4;
 
 				int start_mark = targetStart - lstart;
 				int end_mark = targetEnd - lstart;
 
-				pEditView->getGenericText(lineBuf, 1024, lstart, lend, &start_mark, &end_mark);
+				pEditView->getGenericText(lineBuf, SC_SEARCHRESULT_LINEBUFFERMAXLENGTH, lstart, lend, &start_mark, &end_mark);
 
 				generic_string line = lineBuf;
 				line += TEXT("\r\n");
@@ -2166,15 +2167,15 @@ int FindReplaceDlg::processRange(ProcessOperation op, FindReplaceInfo & findRepl
 				int nbChar = lend - lstart;
 
 				// use the static buffer
-				TCHAR lineBuf[1024];
+				TCHAR lineBuf[SC_SEARCHRESULT_LINEBUFFERMAXLENGTH];
 
-				if (nbChar > 1024 - 3)
-					lend = lstart + 1020;
+				if (nbChar > SC_SEARCHRESULT_LINEBUFFERMAXLENGTH - 3)
+					lend = lstart + SC_SEARCHRESULT_LINEBUFFERMAXLENGTH - 4;
 
 				int start_mark = targetStart - lstart;
 				int end_mark = targetEnd - lstart;
 
-				pEditView->getGenericText(lineBuf, 1024, lstart, lend, &start_mark, &end_mark);
+				pEditView->getGenericText(lineBuf, SC_SEARCHRESULT_LINEBUFFERMAXLENGTH, lstart, lend, &start_mark, &end_mark);
 
 				generic_string line = lineBuf;
 				line += TEXT("\r\n");
@@ -3577,10 +3578,12 @@ void Finder::add(FoundInfo fi, SearchResultMarking mi, const TCHAR* foundline)
 	mi._end += static_cast<int32_t>(str.length());
 	str += foundline;
 
+	// hmm...
+
 	if (str.length() >= SC_SEARCHRESULT_LINEBUFFERMAXLENGTH)
 	{
 		const TCHAR * endOfLongLine = TEXT("...\r\n");
-		str = str.substr(0, SC_SEARCHRESULT_LINEBUFFERMAXLENGTH - lstrlen(endOfLongLine) - 1);
+		str = str.substr(0, SC_SEARCHRESULT_LINEBUFFERMAXLENGTH - lstrlen(endOfLongLine) - 4);
 		str += endOfLongLine;
 	}
 	setFinderReadOnly(false);
@@ -3620,6 +3623,11 @@ void Finder::wrapLongLinesToggle()
 		nppGUI._finderLinesAreCurrentlyWrapped = _longLinesAreWrapped;
 	}
 }
+
+void Finder::setFinderReadOnly(bool isReadOnly) 
+{
+	_scintView.execute(SCI_SETREADONLY, isReadOnly);
+};
 
 bool Finder::isLineActualSearchResult(const generic_string & s) const
 {
