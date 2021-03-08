@@ -592,6 +592,16 @@ BEGIN
             MENUITEM "Find Style",                  IDM_SEARCH_GONEXTMARKER_DEF
         END
         MENUITEM SEPARATOR
+        POPUP "Copy Styled Text"
+            BEGIN
+            MENUITEM "1st Style",               IDM_SEARCH_STYLE1TOCLIP
+            MENUITEM "2nd Style",               IDM_SEARCH_STYLE2TOCLIP
+            MENUITEM "3rd Style",               IDM_SEARCH_STYLE3TOCLIP
+            MENUITEM "4th Style",               IDM_SEARCH_STYLE4TOCLIP
+            MENUITEM "5th Style",               IDM_SEARCH_STYLE5TOCLIP
+            MENUITEM "All Styles",              IDM_SEARCH_ALLSTYLESTOCLIP
+            MENUITEM "Find Style (Marked)",     IDM_SEARCH_MARKEDTOCLIP
+        END
         POPUP "Bookmark"
         BEGIN
             MENUITEM "Toggle Bookmark",             IDM_SEARCH_TOGGLE_BOOKMARK

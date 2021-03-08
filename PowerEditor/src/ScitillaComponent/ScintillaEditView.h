@@ -647,6 +647,8 @@ public:
 	bool isTextDirectionRTL() const;
 	void setPositionRestoreNeeded(bool val) { _positionRestoreNeeded = val; };
 	static HMODULE loadSciLexerDll();
+	void markedTextToClipboard(int indiStyle, bool doAll = false);
+
 protected:
 	static HINSTANCE _hLib;
 	static int _refCount;
