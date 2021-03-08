@@ -37,7 +37,7 @@ bool SplitterContainer::_isRegistered = false;
 extern bool bNewTabFarRight;
 
 
-void SplitterContainer::create(Window *pWin0, Window *pWin1, int splitterSize, SplitterMode mode, int ratio, int ratioBK, bool isVertical)
+void SplitterContainer::create(Window *pWin0, Window *pWin1, int splitterSize, SplitterMode mode, int ratio, int ratioBK, int rotation)
 {
 	//Window::init(hInst, parent);
 	_pWin0 = pWin0;
@@ -46,7 +46,8 @@ void SplitterContainer::create(Window *pWin0, Window *pWin1, int splitterSize, S
 	_splitterMode = mode;
 	_ratio = ratio;
 	_ratioBK = ratioBK;
-	_dwSplitterStyle |= isVertical?SV_VERTICAL:SV_HORIZONTAL;
+
+	_dwSplitterStyle |= SV_VERTICAL;
 
 	if (_splitterMode != SplitterMode::DYNAMIC)
 	{
@@ -85,8 +86,24 @@ void SplitterContainer::create(Window *pWin0, Window *pWin1, int splitterSize, S
 
 	if (!_hSelf)
 		throw std::runtime_error(" SplitterContainer::create : CreateWindowEx() function return null");
+
+	syncRotation(rotation);
 }
 
+void SplitterContainer::syncRotation(int rotation)
+{
+	if(rotation!=_rotation) {
+		while (rotation<0)
+		{
+			rotation+=4;
+		}
+		rotation%=4;
+		for (size_t i = 0; i < rotation; i++)
+		{
+			rotateTo(DIRECTION::RIGHT);
+		}
+	}
+}
 
 void SplitterContainer::destroy()
 {
@@ -131,6 +148,7 @@ void SplitterContainer::redraw(bool forceUpdate) const
 
 void SplitterContainer::rotateTo(DIRECTION direction)
 {
+	_rotation = (_rotation+(direction==DIRECTION::RIGHT?1:3))%4;
 	bool doSwitchWindow = false;
 	if (_dwSplitterStyle & SV_VERTICAL)
 	{

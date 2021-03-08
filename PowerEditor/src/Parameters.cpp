@@ -2093,7 +2093,7 @@ bool NppParameters::getSessionFromXmlTree(TiXmlDocument *pSessionDoc, Session *p
 
 	// this saves the ScintillaViewsSplitter
 	val = actView->Attribute(TEXT("pos"), &number);
-	if (val) _nppGUI._splitterPos = number==1;
+	if (val) _nppGUI._splitter_Rotation = number;
 
 	const size_t nbView = 2;
 	TiXmlNode *viewRoots[nbView];
@@ -3167,13 +3167,11 @@ void NppParameters::writeSession(const Session & session, const TCHAR *fileName)
 		(sessionNode->ToElement())->SetAttribute(TEXT("activeView"), static_cast<int32_t>(session._activeView));
 
 		//if(nppApp->_subEditView.isVisible())
-		{
-			auto & splitter = nppApp->_subSplitter;
-			splitter.syncSize();
-			(sessionNode->ToElement())->SetAttribute(TEXT("split"), splitter._ratio);
-			(sessionNode->ToElement())->SetAttribute(TEXT("tear"), splitter._ratioBK);
-		}
-		(sessionNode->ToElement())->SetAttribute(TEXT("Pos"), _nppGUI._splitterPos == POS_VERTICAL);
+		auto & splitter = nppApp->_subSplitter;
+		splitter.syncSize();
+		(sessionNode->ToElement())->SetAttribute(TEXT("split"), splitter._ratio);
+		(sessionNode->ToElement())->SetAttribute(TEXT("tear"), splitter._ratioBK);
+		(sessionNode->ToElement())->SetAttribute(TEXT("pos"), splitter._rotation);
 
 		struct ViewElem {
 			TiXmlNode *viewNode;

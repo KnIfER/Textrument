@@ -2233,9 +2233,11 @@ bool Notepad_plus::fileLoadSession(const TCHAR *fn)
 		else {
 			// todo save the session path
 			if(isEmptyNpp&&_subEditView.isVisible()&&nppGUI._splitter_isVisible) {
-				Splitter & sp = _pPublicInterface->_notepad_plus_plus_core._subSplitter._splitter;
+				SplitterContainer & spc = _pPublicInterface->_notepad_plus_plus_core._subSplitter;
+				Splitter & sp = spc._splitter;
 				sp._splitPercent = nppGUI._splitter_ratio;
 				sp._backupPercent = nppGUI._splitter_ratioBK;
+				spc.syncRotation(nppGUI._splitter_Rotation);
 				sp.resizeSpliter(0);
 			}
 		}

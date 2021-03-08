@@ -199,7 +199,15 @@ LRESULT Gripper::runProc(UINT message, WPARAM wParam, LPARAM lParam)
 		case WM_MOUSEMOVE:
 		case WM_NCMOUSEMOVE:
 		{
+			if(IsZoomed(_pCont->getHSelf())) {
+				ShowWindow(_pCont->getHSelf(), SW_NORMAL);
+				_ptOffset.x=_pCont->getWidth()/2;
+				_ptOffset.y=0;
+				//::MoveWindow(_pCont->getHSelf(), -10000, -10000, _pCont->getWidth(), _pCont->getHeight(), FALSE);
+			}
 			onMove();
+
+			//::MoveWindow(_pCont->getHSelf(), _ptOld.x, _ptOld.y, _ptOld.x+_pCont->getWidth(), _ptOld.y+_pCont->getHeight(), FALSE);
 			return TRUE;
 		}
 		case WM_LBUTTONUP:
@@ -301,6 +309,8 @@ void Gripper::create()
 		::ScreenToClient(_pCont->getHSelf(), &pt);
 	}
 
+	_drawPat = ::IsZoomed(_hParent);
+
 	_ptOffset.x	= pt.x - rc.left;
 	_ptOffset.y	= pt.y - rc.top;
 }
@@ -390,7 +400,11 @@ void Gripper::onButtonUp()
 		}
 
 		/* update window position */
-		::MoveWindow(pContMove->getHSelf(), rc.left, rc.top, rc.right, rc.bottom, TRUE);
+		if(pt.y<=0&&_pCont->isFloating()) {
+			ShowWindow(_pCont->getHSelf(), SW_MAXIMIZE);
+		} else {
+			::MoveWindow(pContMove->getHSelf(), rc.left, rc.top, rc.right, rc.bottom, TRUE);
+		}
 		::SendMessage(pContMove->getHSelf(), WM_SIZE, 0, 0);
 	}
 	else if (_pCont != pDockCont)
@@ -572,8 +586,7 @@ void Gripper::drawRectangle(const POINT* pPt)
 	// finally ::LockWindowUpdate(NULL) will be called, to enable drawing for others again.
 	if (!_hdc)
 	{
-		HWND hWnd= ::GetDesktopWindow();
-		hWnd=_hParent;
+		HWND hWnd=_drawPat?_hParent:GetDesktopWindow();
 		if (lock)
 		_hdc= ::GetDCEx(hWnd, NULL, ::LockWindowUpdate(hWnd) ? DCX_WINDOW|DCX_CACHE|DCX_LOCKWINDOWUPDATE : DCX_WINDOW|DCX_CACHE);
 		else

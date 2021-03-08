@@ -803,7 +803,8 @@ struct NppGUI final
 	// 0:don't draw; 1:draw top bar 2:draw inactive tabs 3:draw both 7:draw both+drag&drop
 	int _tabStatus = (TAB_DRAWTOPBAR | TAB_DRAGNDROP | TAB_CLOSEBUTTON | TAB_DRAWINACTIVETAB);
 
-	bool _splitterPos = POS_VERTICAL;
+	int _splitter_Rotation = 0;
+	//bool _splitterPos = POS_VERTICAL;
 	int _userDefineDlgStatus = UDD_DOCKED;
 
 	int _tabSize = 4;

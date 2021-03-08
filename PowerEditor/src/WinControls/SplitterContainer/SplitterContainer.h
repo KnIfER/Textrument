@@ -50,7 +50,9 @@ public :
 	virtual ~SplitterContainer() = default;
 
 	void create(Window *pWin0, Window *pWin1, int splitterSize = 4,
-		SplitterMode mode = SplitterMode::DYNAMIC, int ratio = 50, int ratioBK = 50, bool _isVertical = true);
+		SplitterMode mode = SplitterMode::DYNAMIC, int ratio = 50, int ratioBK = 50, int rotation = 0);
+
+	void syncRotation(int rotation);
 
 	void destroy();
 
@@ -83,6 +85,8 @@ public :
 	int _ratio = 50;
 
 	int _ratioBK = 0;
+
+	int _rotation = 0;
 
 //private :
 	Window* _pWin0 = nullptr; // left or top window

@@ -384,10 +384,9 @@ LRESULT Notepad_plus::init(HWND hwnd)
 	drawTabbarColoursFromStylerArray();
 
     //--Splitter Section--//
-	bool isVertical = (nppGUI._splitterPos == POS_VERTICAL);
 
     _subSplitter.init(_pPublicInterface->getHinst(), hwnd);
-    _subSplitter.create(&_mainDocTab, &_subDocTab, 8, SplitterMode::DYNAMIC, nppGUI._splitter_ratio, nppGUI._splitter_ratioBK, isVertical);
+    _subSplitter.create(&_mainDocTab, &_subDocTab, 8, SplitterMode::DYNAMIC, nppGUI._splitter_ratio, nppGUI._splitter_ratioBK, nppGUI._splitter_Rotation);
 
     //--Status Bar Section--//
 	bool willBeShown = nppGUI._statusBarShow;
@@ -1019,7 +1018,7 @@ bool Notepad_plus::saveGUIParams()
 						(nppGUI._tabStatus & TAB_HIDE) | \
 						(nppGUI._tabStatus & TAB_QUITONEMPTY) | \
 						(nppGUI._tabStatus & TAB_ALTICONS);
-	nppGUI._splitterPos = _subSplitter.isVertical()?POS_VERTICAL:POS_HORIZOTAL;
+	//nppGUI._splitterPos = _subSplitter.isVertical()?POS_VERTICAL:POS_HORIZOTAL;
 	UserDefineDialog *udd = _pEditView->getUserDefineDlg();
 	bool b = udd->isDocked();
 	nppGUI._userDefineDlgStatus = (b?UDD_DOCKED:0) | (udd->isVisible()?UDD_SHOW:0);
@@ -2814,10 +2813,13 @@ void Notepad_plus::addHotSpot(ScintillaEditView* view)
 	char ca;
 	char headQuart;
 	int lastPos;
+
+
 	while (posFound != -1 && posFound != -2)
 	{
 		lastPos=posFound;
-		while(posFound>0&&(ca=pDoc[posFound-1])>='A'&&ca<='z'&&lastPos<posFound+25) --posFound;
+		// schema pass.  abcdefg://
+		while(posFound>0&&((ca=pDoc[posFound-1])>='A'&&ca<='Z'||ca>='a'&&ca<='z')&&lastPos<posFound+25) --posFound;
 		headQuart=posFound<=0?0:pDoc[posFound-1];
 		int end = int(pView->execute(SCI_GETTARGETEND));
 		ca = pDoc[end-1];

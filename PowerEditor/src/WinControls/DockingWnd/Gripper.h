@@ -132,6 +132,8 @@ private:
 	// mouse offset in moving rectangle
 	POINT _ptOffset;
 
+	bool _drawPat;
+
 	// remembers old mouse point
 	POINT _ptOld;
 	BOOL _bPtOldValid;
