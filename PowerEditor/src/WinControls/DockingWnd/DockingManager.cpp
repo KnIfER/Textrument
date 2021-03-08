@@ -228,6 +228,9 @@ void DockingManager::showFloatingContainers(bool show)
 {
 	for (size_t i=0; i < _vContainer.size(); i++)
 	{
+		// fix crash issue.
+		// Note: close the floating panel, minify editor to tray and it'll evokes ghost window.
+		if(!_vContainer[i]->getDataOfActiveTb()) continue; 
 		size_t iElementCnt = _vContainer[i]->getElementCnt();
 		if (iElementCnt > 0)
 			_vContainer[i]->display(show);
