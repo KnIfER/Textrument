@@ -889,7 +889,7 @@ bool FileManager::backupCurrentBuffer()
 				::SetFileAttributes(fullpath, dwFileAttribs);
 			}
 
-			FILE *fp = UnicodeConvertor.fopen(fullpath, TEXT("wb"));
+			FILE *fp = UnicodeConvertor.fopen(fullpath, TEXT("wbc"));
 			if (fp)
 			{
 				int lengthDoc = _pNotepadPlus->_pEditView->getCurrentDocLen();
@@ -1014,7 +1014,7 @@ bool FileManager::saveBuffer(BufferID id, const TCHAR * filename, bool isCopy, g
 
 	int encoding = buffer->getEncoding();
 
-	FILE *fp = UnicodeConvertor.fopen(fullpath, TEXT("wb"));
+	FILE *fp = UnicodeConvertor.fopen(fullpath, TEXT("wbc"));
 	if (fp)
 	{
 		_pscratchTilla->execute(SCI_SETDOCPOINTER, 0, buffer->_doc);	//generate new document
@@ -1511,9 +1511,10 @@ BufferID FileManager::getBufferFromDocument(Document doc)
 
 bool FileManager::createEmptyFile(const TCHAR * path)
 {
-	FILE * file = generic_fopen(path, TEXT("wb"));
+	FILE * file = generic_fopen(path, TEXT("wbc"));
 	if (!file)
 		return false;
+	fflush(file);
 	fclose(file);
 	return true;
 }
