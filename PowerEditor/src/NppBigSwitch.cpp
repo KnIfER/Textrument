@@ -669,7 +669,6 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 		case WM_MENURBUTTONUP:
 		{
 			if((HMENU)lParam==_tabPopupMenu.getMenuHandle()) {
-				//::MessageBoxA(NULL, ("111"), (""), MB_OK);
 				auto id = GetMenuItemID((HMENU)lParam, wParam);
 				if(id==IDM_FILE_OPEN_DEFAULT_VIEWER) {
 					invokeCurrentFile(1);
