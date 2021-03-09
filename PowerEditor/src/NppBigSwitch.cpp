@@ -673,7 +673,7 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 				auto id = GetMenuItemID((HMENU)lParam, wParam);
 				if(id==IDM_FILE_OPEN_DEFAULT_VIEWER) {
 					invokeCurrentFile(1);
-					_tabPopupMenu.hide();
+					SendMessage(hwnd, WM_CANCELMODE, 0, 0);
 				}
 			}
 		}

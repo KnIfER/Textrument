@@ -74,8 +74,8 @@ public:
 	void hide() 
 	{
 		if(_hMenu) {
-			_hMenu = NULL;
 			DestroyMenu(_hMenu);
+			_hMenu = NULL;
 		}
 	}
 
