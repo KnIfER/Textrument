@@ -182,29 +182,7 @@ void Notepad_plus::command(int id)
 
 		case IDM_FILE_OPEN_DEFAULT_VIEWER:
 		{
-			// Opens file in its default viewer. 
-            // Has the same effect as double–clicking this file in Windows Explorer.
-            BufferID buf = _pEditView->getCurrentBufferID();
-			HINSTANCE res = ::ShellExecute(NULL, TEXT("open"), buf->getFullPathName(), NULL, NULL, SW_SHOW);
-
-			// As per MSDN (https://msdn.microsoft.com/en-us/library/windows/desktop/bb762153(v=vs.85).aspx)
-			// If the function succeeds, it returns a value greater than 32.
-			// If the function fails, it returns an error value that indicates the cause of the failure.
-			int retResult = static_cast<int>(reinterpret_cast<INT_PTR>(res));
-			if (retResult <= 32)
-			{
-				generic_string errorMsg;
-				errorMsg += GetLastErrorAsString(retResult);
-				errorMsg += TEXT("An attempt was made to execute the below command.");
-				errorMsg += TEXT("\n----------------------------------------------------------");
-				errorMsg += TEXT("\nCommand: ");
-				errorMsg += buf->getFullPathName();
-				errorMsg += TEXT("\nError Code: ");
-				errorMsg += intToString(retResult);
-				errorMsg += TEXT("\n----------------------------------------------------------");
-				
-				::MessageBox(_pPublicInterface->getHSelf(), errorMsg.c_str(), TEXT("ShellExecute - ERROR"), MB_ICONINFORMATION | MB_APPLMODAL);
-			}
+			invokeCurrentFile(0);
 		}
 		break;
 
@@ -3787,5 +3765,62 @@ void Notepad_plus::command(int id)
 				}
 				break;
 		}
+	}
+}
+
+void Notepad_plus::invokeCurrentFile(int source)
+{
+	BufferID buf = _pEditView->getCurrentBufferID();
+
+	if(buf->isUntitled()) {
+		// todo maybe open the backup file?
+		return;
+	}
+
+	auto path = buf->getFullPathName();
+	bool intentOpenWith = source==0;
+	if(intentOpenWith)
+	{
+		TCHAR systemDir[MAX_PATH] = { 0 };
+		if (GetSystemDirectory(systemDir, MAX_PATH))
+		{
+			PathAppend(systemDir, L"rundll32.exe");
+			generic_string strCmdLine = systemDir;
+			strCmdLine += L" ";
+			strCmdLine += L"shell32,OpenAs_RunDLL";
+			strCmdLine += L" ";
+			strCmdLine += path;
+			STARTUPINFO si = { 0 };
+			PROCESS_INFORMATION pi = { 0 };
+			if (CreateProcess(NULL, (TCHAR*)strCmdLine.c_str(), NULL, NULL, FALSE, 0, NULL, NULL, &si, &pi))
+			{
+				CloseHandle(pi.hThread);
+				CloseHandle(pi.hProcess);
+				return;
+			}
+		}
+	}
+
+	// Opens file in its default viewer. 
+	// Has the same effect as double–clicking this file in Windows Explorer.
+	HINSTANCE res = ::ShellExecute(NULL, TEXT("open"), buf->getFullPathName(), NULL, NULL, SW_SHOW);
+
+	// As per MSDN (https://msdn.microsoft.com/en-us/library/windows/desktop/bb762153(v=vs.85).aspx)
+	// If the function succeeds, it returns a value greater than 32.
+	// If the function fails, it returns an error value that indicates the cause of the failure.
+	int retResult = static_cast<int>(reinterpret_cast<INT_PTR>(res));
+	if (retResult <= 32)
+	{
+		generic_string errorMsg;
+		errorMsg += GetLastErrorAsString(retResult);
+		errorMsg += TEXT("An attempt was made to execute the below command.");
+		errorMsg += TEXT("\n----------------------------------------------------------");
+		errorMsg += TEXT("\nCommand: ");
+		errorMsg += buf->getFullPathName();
+		errorMsg += TEXT("\nError Code: ");
+		errorMsg += intToString(retResult);
+		errorMsg += TEXT("\n----------------------------------------------------------");
+
+		::MessageBox(_pPublicInterface->getHSelf(), errorMsg.c_str(), TEXT("ShellExecute - ERROR"), MB_ICONINFORMATION | MB_APPLMODAL);
 	}
 }

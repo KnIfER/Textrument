@@ -590,7 +590,7 @@ BOOL Notepad_plus::notify(SCNotification *notification)
 			_tabPopupMenu.enableItem(IDM_FILE_OPEN_FOLDER, isFileExisting);
 			_tabPopupMenu.enableItem(IDM_FILE_OPEN_CMD, isFileExisting);
 
-			_tabPopupMenu.enableItem(IDM_FILE_OPEN_DEFAULT_VIEWER, isAssoCommandExisting(buf->getFullPathName()));
+			//_tabPopupMenu.enableItem(IDM_FILE_OPEN_DEFAULT_VIEWER, isAssoCommandExisting(buf->getFullPathName()));
 
 			bool isDirty = buf->isDirty();
 			bool isUntitled = buf->isUntitled();

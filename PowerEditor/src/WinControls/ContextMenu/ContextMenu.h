@@ -71,6 +71,14 @@ public:
 		return _hMenu;
 	}
 
+	void hide() 
+	{
+		if(_hMenu) {
+			_hMenu = NULL;
+			DestroyMenu(_hMenu);
+		}
+	}
+
 private:
 	HWND _hParent = NULL;
 	HMENU _hMenu = NULL;

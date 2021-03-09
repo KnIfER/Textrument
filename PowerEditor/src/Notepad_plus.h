@@ -652,6 +652,8 @@ public:
 	TCHAR* DumpToolbarButtons();
 
 	void switchToIconMode(toolBarStatusType targetState, bool fromPrefDlg=false);
+
+	void invokeCurrentFile(int source);
 };
 
 
