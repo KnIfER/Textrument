@@ -842,7 +842,7 @@ void Notepad_plus::command(int id)
 			if(action) {
 				bool firstLaunch = _pFileBrowser == nullptr;
 				launchFileBrowser(firstLaunch? // first launch, check in params to open folders
-					&nppParms->getFileBrowserRoots() : nullptr);
+					nppParms->getFileBrowserRoots() : nullptr);
 				if(firstLaunch) {
 					NppParameters& nppParam = NppParameters::getInstance();
 					_pFileBrowser->selectItemFromPath(nppParam.getFileBrowserSelectedItemPath());

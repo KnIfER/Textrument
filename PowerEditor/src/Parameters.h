@@ -1558,7 +1558,7 @@ public:
 		return _workSpaceFilePathes[i].c_str();
 	};
 
-	const std::vector<generic_string> getFileBrowserRoots() const { return _fileBrowserRoot; };
+	const std::vector<generic_string>* getFileBrowserRoots() const { return &_fileBrowserRoot; };
 	generic_string getFileBrowserSelectedItemPath() const { return _fileBrowserSelectedItemPath; };
 
 	void setWorkSpaceFilePath(int i, const TCHAR *wsFile);
