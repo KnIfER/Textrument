@@ -50,16 +50,14 @@ static const WORD DotPattern[] =
 
 #define MDLG_CLASS_NAME TEXT("moveDlg")
 
+class DirectGripper;
 
 class Gripper
 {
 public:
 	Gripper();
-    
-	void init(HINSTANCE hInst, HWND hParent) {
-		_hInst   = hInst;	
-		_hParent = hParent;
-	};
+
+	void init(HINSTANCE hInst, HWND hParent);
 
 	void startGrip(DockingCont* pCont, DockingManager* pDockMgr);
 
@@ -92,6 +90,7 @@ public:
 
 	void doTabReordering(POINT pt);
 	void drawRectangle(const POINT* pPt);
+	void drawWindow(const POINT* pPt);
 	void getMousePoints(POINT* pt, POINT* ptPrev);
 	void getMovingRect(POINT pt, RECT *rc);
 	DockingCont * contHitTest(POINT pt);
@@ -153,7 +152,10 @@ private:
 	HBITMAP _hbm;
 	HBRUSH _hbrush;
 
+	DirectGripper * dGripper = NULL;
+
 	// is class registered
 	static BOOL _isRegistered;
+	bool oldSchoolDraw = false;
 };
 

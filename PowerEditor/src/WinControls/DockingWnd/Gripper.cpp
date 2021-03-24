@@ -25,12 +25,13 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-// Changed something around drawRectangle() (for details see there) to enhance
+// Changed something around drawWindow() (for details see there) to enhance
 // speed and consistency of the drag-rectangle - August 2010, Joern Gruel (jg)
 
 
 #include <stdexcept>
 #include "Gripper.h"
+#include "DirectGripper.h"
 #include "DockingManager.h"
 #include "Parameters.h"
 
@@ -119,6 +120,15 @@ Gripper::Gripper()
 }
 
 
+void Gripper::init(HINSTANCE hInst, HWND hParent) {
+	_hInst   = hInst;	
+	_hParent = hParent;
+	if(!dGripper)
+	{
+		dGripper = new DirectGripper(_hParent);
+	}
+};
+
 void Gripper::startGrip(DockingCont* pCont, DockingManager* pDockMgr)
 {
 	_pDockMgr   = pDockMgr;
@@ -164,6 +174,10 @@ void Gripper::startGrip(DockingCont* pCont, DockingManager* pDockMgr)
 	if (!_hSelf)
 	{
 		throw std::runtime_error("Gripper::startGrip : CreateWindowEx() function return null");
+	}
+	else
+	{
+		dGripper->show(true);
 	}
 }
 
@@ -235,7 +249,7 @@ LRESULT Gripper::runProc(UINT message, WPARAM wParam, LPARAM lParam)
 			getMousePoints(&pt, &ptBuf);
 
 			/* erase last drawn rectangle */
-			drawRectangle(NULL);
+			drawWindow(NULL);
 
 			/* end hooking */
 			::UnhookWindowsHookEx(hookMouse);
@@ -330,7 +344,7 @@ void Gripper::onMove()
 		doTabReordering(pt);
 	}
 
-	drawRectangle(&pt);
+	drawWindow(&pt);
 }
 
 
@@ -349,7 +363,7 @@ void Gripper::onButtonUp()
 		return;
 
 	// erase last drawn rectangle
-	drawRectangle(NULL);
+	drawWindow(NULL);
 
 	// look if current position is within dockable area
 	DockingCont*	pDockCont = contHitTest(pt);
@@ -376,6 +390,8 @@ void Gripper::onButtonUp()
 		DoCalcGripperRect(&rc, rcCorr, pt);
 
 		DockingCont* pContMove	= NULL;
+
+		bool fltOrig = _pCont->isFloating();
 		
 		/* change location of toolbars */
 		if (_startMovingFromTab == TRUE)
@@ -387,7 +403,7 @@ void Gripper::onButtonUp()
 				pContMove = _pDockMgr->toggleActiveTb(_pCont, DMM_FLOAT, TRUE, &rc);
 			}
 		}
-		else if (!_pCont->isFloating())
+		else if (!fltOrig)
 		{
 			/* when all windows are moved */
 			pContMove = _pDockMgr->toggleVisTb(_pCont, DMM_FLOAT, &rc);
@@ -399,12 +415,13 @@ void Gripper::onButtonUp()
 			pContMove = _pCont;
 		}
 
-		/* update window position */
-		if(pt.y<=0&&_pCont->isFloating()) {
-			ShowWindow(_pCont->getHSelf(), SW_MAXIMIZE);
-		} else {
+		if(pt.y>0||!fltOrig) {
 			::MoveWindow(pContMove->getHSelf(), rc.left, rc.top, rc.right, rc.bottom, TRUE);
 		}
+		/* update window position */
+		if(pt.y<=0) { // &&(!oldSchoolDraw||pContMove->isFloating())
+			ShowWindow(pContMove->getHSelf(), SW_MAXIMIZE);
+		} 
 		::SendMessage(pContMove->getHSelf(), WM_SIZE, 0, 0);
 	}
 	else if (_pCont != pDockCont)
@@ -539,6 +556,60 @@ void Gripper::doTabReordering(POINT pt)
 
 	::UpdateWindow(_hParent);
 }
+
+void Gripper::drawWindow(const POINT* pPt)
+{
+	if(oldSchoolDraw)
+	{
+		drawRectangle(pPt);
+		return;
+	}
+	RECT   rcNew	 = {0};
+	RECT   rcOld	 = _rcPrev;
+	bool lock=0;
+
+	if (pPt != NULL)
+	{
+		getMovingRect(*pPt, &rcNew);
+		if(rcNew.right==rcNew.left) 
+		{
+			return;
+		}
+		_rcPrev= rcNew;		// save the new drawn rcNew
+		if (_bPtOldValid)
+		{
+			//if (rcOld.left==rcNew.left && rcOld.right==rcNew.right && rcOld.top== rcNew.top && rcOld.bottom==rcNew.bottom)
+			//	return;
+		}
+	}
+
+	if(IsWindow(dGripper->_hSelf))
+	{
+		if (pPt != NULL)
+		{
+			MoveWindow(dGripper->_hSelf, rcNew.left, rcNew.top, rcNew.right, rcNew.bottom, false);
+		}
+		else
+		{
+			dGripper->show(false);
+		}
+	}
+
+	if (pPt == NULL)
+	{
+		if (lock)
+			::LockWindowUpdate(NULL);
+		else
+			_bPtOldValid= FALSE;
+		if (_hdc)
+		{
+			::ReleaseDC(0, _hdc);
+			_hdc= NULL;
+		}
+	}
+	else	_bPtOldValid= TRUE;
+}
+
 
 // Changed behaviour (jg): Now this function handles erasing of drag-rectangles and drawing of
 // new ones within one drawing step to the desktop. This is against flickering, but also it is
