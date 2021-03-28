@@ -33,12 +33,15 @@
 #include "DockingCont.h"
 #include "Gripper.h"
 #include "Parameters.h"
+#include "DirectGripper.h"
 
 using namespace std;
 
 BOOL DockingManager::_isRegistered = FALSE;
 
 extern HWND StatusBarHWND;
+
+extern DirectGripper * dGripper;
 
 //Window of event handling DockingManager (can only be one)
 static	HWND			hWndServer	= NULL;
@@ -182,6 +185,9 @@ void DockingManager::init(HINSTANCE hInst, HWND hWnd, Window ** ppWin)
 	{
 		throw std::runtime_error("DockingManager::init : SetWindowsHookEx() function return null");
 	}
+
+	dGripper = new DirectGripper(_hParent);
+	dGripper->create();
 
 	_dockData.hWnd = _hSelf;
 

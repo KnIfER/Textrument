@@ -1,10 +1,29 @@
-#include "DirectGripper.h"
+/* Copyright 2014 bapijun
+*
+* Licensed under the Apache License, Version 2.0 (the "License"); 
+* you may not use this file except in compliance with the License. 
+* You may obtain a copy of the License at
+* 
+* http://www.apache.org/licenses/LICENSE-2.0
+* 
+* Unless required by applicable law or agreed to in writing, 
+* software distributed under the License is distributed on an "AS IS" BASIS, 
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
+* See the License for the specific language governing permissions and limitations under the License.
+* 
+* from 
+* // draw a transparent window
+* // https://blog.csdn.net/u011822516/article/details/41946631
+*/
 
+#include "DirectGripper.h"
 
 
 #define WS_EX_LAYERED           0x00080000
 #define LWA_COLORKEY            0x00000001
 #define LWA_ALPHA               0x00000002
+
+#define kClassWindow L"DockingPrev"
 
 typedef BOOL (WINAPI *TRANFUNC)(HWND,COLORREF,BYTE,DWORD);
 
@@ -22,13 +41,10 @@ public:
 
 };
 
-
 HINSTANCE CTransparent::m_hInstance = NULL;
 TRANFUNC  CTransparent::m_pFunc = NULL;
 BOOL CTransparent::initialized = FALSE;
-//
-// Construction/Destruction
-//
+
 BOOL CTransparent::LoadUser32DLL()
 {
     BOOL bRet = FALSE;
@@ -49,6 +65,19 @@ BOOL CTransparent::LoadUser32DLL()
     return bRet ;
 }
 
+BOOL CTransparent::FreeUser32DLL()
+{   
+    if(m_hInstance != NULL)
+    {  
+        FreeLibrary(m_hInstance); 
+        if(m_pFunc != NULL) //置空
+            m_pFunc = NULL ;
+        if(initialized != NULL)       //置空
+            initialized  = NULL ;
+    }
+    return TRUE;
+}
+
 BOOL CTransparent::ChangeTransparency(HWND hWnd, COLORREF crKey, UINT bAlpha, DWORD dwFlags)
 {
     //透明度Sp的值是0-255 
@@ -63,19 +92,6 @@ BOOL CTransparent::ChangeTransparency(HWND hWnd, COLORREF crKey, UINT bAlpha, DW
         bRet = TRUE;   
     }
     return bRet;
-}
-
-BOOL CTransparent::FreeUser32DLL()
-{   
-    if(m_hInstance != NULL)
-    {  
-        FreeLibrary(m_hInstance); 
-        if(m_pFunc != NULL) //置空
-            m_pFunc = NULL ;
-        if(initialized != NULL)       //置空
-            initialized  = NULL ;
-    }
-    return TRUE;
 }
 
 BOOL CTransparent::SetTransparentWnd(HWND hWnd, COLORREF crKey, UINT cAlpha, BOOL dwFlags)
@@ -98,9 +114,8 @@ BOOL CTransparent::SetTransparentWnd(HWND hWnd, COLORREF crKey, UINT cAlpha, BOO
     return bRet;
 }
 
-#define kClassWindow L"TestMbWindow"
 
-LRESULT WINAPI testWindowProc(
+LRESULT WINAPI transparentWndProc(
 	__in HWND hWnd,
 	__in UINT msg,
 	__in WPARAM wParam,
@@ -151,26 +166,6 @@ LRESULT WINAPI testWindowProc(
 	return ::DefWindowProc(hWnd, msg, wParam, lParam);
 }
 
-BOOL regWndClass(LPCTSTR lpcsClassName, DWORD dwStyle)
-{
-    WNDCLASS wndclass = { 0 };
-
-    wndclass.style = dwStyle;
-    wndclass.lpfnWndProc = testWindowProc;
-    wndclass.cbClsExtra = 200;
-    wndclass.cbWndExtra = 200;
-    wndclass.hInstance = ::GetModuleHandle(NULL);
-    wndclass.hIcon = NULL;
-    //wndclass.hCursor = LoadCursor(NULL, IDC_ARROW);
-    wndclass.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
-    wndclass.lpszMenuName = NULL;
-    wndclass.lpszClassName = lpcsClassName;
-
-    ::RegisterClass(&wndclass);
-    return TRUE;
-}
-
-
 void DirectGripper::show(bool doshow)
 {
     if(!IsWindow(_hSelf))
@@ -178,11 +173,31 @@ void DirectGripper::show(bool doshow)
     ::ShowWindow(_hSelf, doshow?SW_SHOWNA:SW_HIDE);
 }
 
-
 void DirectGripper::create()
 {
+    if (!isRegistered)
+    {
+        LPCTSTR lpcsClassName = kClassWindow;
+        DWORD dwStyle = CS_HREDRAW | CS_VREDRAW;
+        // regWndClass
+        WNDCLASS wndclass = { 0 };
 
-    regWndClass(kClassWindow, CS_HREDRAW | CS_VREDRAW);
+        wndclass.style = dwStyle;
+        wndclass.lpfnWndProc = transparentWndProc;
+        wndclass.cbClsExtra = 200;
+        wndclass.cbWndExtra = 200;
+        wndclass.hInstance = ::GetModuleHandle(NULL);
+        wndclass.hIcon = NULL;
+        //wndclass.hCursor = LoadCursor(NULL, IDC_ARROW);
+        wndclass.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
+        wndclass.lpszMenuName = NULL;
+        wndclass.lpszClassName = lpcsClassName;
+
+        ::RegisterClass(&wndclass);
+        isRegistered = true;
+    }
+
+    // Windows of style WS_EX_NOACTIVATE still require focus when it's first created.
 
     _hSelf = ::CreateWindowEx(WS_EX_NOACTIVATE|WS_EX_LAYERED , kClassWindow , NULL
         , WS_CHILD |WS_POPUP|WS_VISIBLE , 0 , 0 , 0 , 0 , _hParent , NULL , ::GetModuleHandle(NULL), NULL);
@@ -191,5 +206,4 @@ void DirectGripper::create()
 
     //在这里注册一个窗口第三个参数表示窗口的类型
     CTransparent::SetTransparentWnd((HWND)_hSelf, 0xffff3333, 100, 1); //设置窗口透明
-
 }
