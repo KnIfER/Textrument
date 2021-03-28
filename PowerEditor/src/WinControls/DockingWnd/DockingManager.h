@@ -70,8 +70,8 @@ public :
 
 	DockingCont* toggleActiveTb(DockingCont* pContSrc, UINT message, BOOL bNew = FALSE, LPRECT rcFloat = NULL);
 	DockingCont* toggleVisTb(DockingCont* pContSrc, UINT message, LPRECT rcFloat = NULL);
-	void		 toggleActiveTb(DockingCont* pContSrc, DockingCont* pContTgt);
-	void		 toggleVisTb(DockingCont* pContSrc, DockingCont* pContTgt);
+	void		 toggleActiveTbWnd(DockingCont* pContSrc, DockingCont* pContTgt);
+	void		 toggleVisTbWnd(DockingCont* pContSrc, DockingCont* pContTgt);
 
 	// get number of container
 	int  GetContainer(DockingCont* pCont); 

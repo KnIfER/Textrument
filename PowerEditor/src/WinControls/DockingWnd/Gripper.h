@@ -59,7 +59,9 @@ public:
 
 	void init(HINSTANCE hInst, HWND hParent);
 
-	void startGrip(DockingCont* pCont, DockingManager* pDockMgr);
+	void startGrip(DockingCont* pCont, DockingManager* pDockMgr, bool create=true);
+
+	bool stopGrip();
 
 	~Gripper() {
 		if (_hdc) {
@@ -86,7 +88,7 @@ public:
 	LRESULT runProc(UINT Message, WPARAM wParam, LPARAM lParam);
 
 	void onMove();
-	void onButtonUp();
+	bool onButtonUp();
 
 	void doTabReordering(POINT pt);
 	void drawRectangle(const POINT* pPt);
@@ -94,6 +96,7 @@ public:
 	void getMousePoints(POINT* pt, POINT* ptPrev);
 	void getMovingRect(POINT pt, RECT *rc);
 	DockingCont * contHitTest(POINT pt);
+	DockingCont * dlgsHitTest(POINT pt);
 	DockingCont * workHitTest(POINT pt, RECT *rcCont = NULL);
 
 	void initTabInformation();
@@ -117,7 +120,7 @@ public:
 			rc->top  += rcCorr.bottom - rc->bottom;
 	};
 
-private:
+//private:
 	// Handle
 	HINSTANCE _hInst;
 	HWND _hParent;
@@ -143,7 +146,10 @@ private:
 	// for sorting tabs
 	HWND _hTab;
 	HWND _hTabSource;
+
+	//  Move From Tab / 或者当前容器只有一个成员
 	BOOL _startMovingFromTab;
+	BOOL _startMoveFromTab;
 	int	_iItem;
 	RECT _rcItem;
 	TCITEM _tcItem;
@@ -152,10 +158,10 @@ private:
 	HBITMAP _hbm;
 	HBRUSH _hbrush;
 
-	DirectGripper * dGripper = NULL;
 
 	// is class registered
 	static BOOL _isRegistered;
 	bool oldSchoolDraw = false;
+	bool isCreated=false;
 };
 

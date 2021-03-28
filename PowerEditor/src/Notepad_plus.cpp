@@ -1132,8 +1132,16 @@ void Notepad_plus::saveDockingParams()
 		// save the position, when container is a floated one
 		if (i >= DOCKCONT_MAX)
 		{
-			RECT	rc;
-			vCont[i]->getWindowRect(rc);
+			RECT	rc{0,0,0,0};
+			// saving the docking data parameters
+			if (vCont[i]->isCreated()&&memcmp(&vCont[i]->_rcFloat, &rc, sizeof(RECT))!=0)
+			{
+				rc = vCont[i]->_rcFloat;
+			}
+			else
+			{
+				vCont[i]->getWindowRect(rc);
+			}
 			FloatingWindowInfo fwi(int32_t(i), rc.left, rc.top, rc.right, rc.bottom);
 			vFloatingWindowInfo.push_back(fwi);
 		}
@@ -5809,6 +5817,7 @@ std::vector<generic_string> Notepad_plus::loadCommandlineParams(const TCHAR * co
 	BufferID lastOpened = BUFFER_INVALID;
 	for (int i = 0, len = fnss.size(); i < len ; ++i)
 	{
+		bNewTabFarRight = 1;
 		const TCHAR *pFn = fnss.getFileName(i);
 		if (!pFn) return std::vector<generic_string>();
 
@@ -5849,6 +5858,7 @@ std::vector<generic_string> Notepad_plus::loadCommandlineParams(const TCHAR * co
 			switchEditViewTo(iView);	//restore view
 		}
 	}
+	bNewTabFarRight=0;
 	if (lastOpened != BUFFER_INVALID)
     {
 		switchToFile(lastOpened);

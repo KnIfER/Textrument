@@ -33,6 +33,7 @@
 #include "StaticDialog.h"
 #include "Common.h"
 
+class Gripper;
 
 enum eMousePos {
 	posOutside,
@@ -136,9 +137,13 @@ public:
 		::DestroyWindow(_hSelf);
 	};
 
+	clock_t lastMovedTm;
 	BOOL					_isActive;
-
+	RECT _rcFloat{0,0,0,0};
+	//RECT _rcFloatPlace{0,0,0,0};
 	void doCloseOneTab();
+
+	POINT releasePt;
 protected :
 
 	// Subclassing caption
@@ -152,6 +157,12 @@ protected :
 	static LRESULT CALLBACK wndTabProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam) {
 		return (((DockingCont *)(::GetWindowLongPtr(hwnd, GWLP_USERDATA)))->runProcTab(hwnd, Message, wParam, lParam));
 	};
+
+	LRESULT runProc1(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam);
+	static LRESULT CALLBACK wndProc1(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam) {
+		return (((DockingCont *)(::GetWindowLongPtr(hwnd, GWLP_USERDATA)))->runProc1(hwnd, Message, wParam, lParam));
+	};
+	WNDPROC					_hDefaultProc1;
 
     virtual INT_PTR CALLBACK run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam);
 
@@ -231,5 +242,9 @@ private:
 
 	// data of added windows
 	std::vector<tTbData *>		_vTbData;
+
+	Gripper* _pGripper;
+
+	bool _toDock;
 };
 

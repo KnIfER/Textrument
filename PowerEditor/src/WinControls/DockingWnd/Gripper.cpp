@@ -46,11 +46,17 @@ using namespace std;
 #endif
 
 
+#include "Notepad_plus.h"
+
+extern Notepad_plus *nppApp;
+
 BOOL Gripper::_isRegistered	= FALSE;
 
 static HWND		hWndServer		= NULL;
 static HHOOK	hookMouse		= NULL;
 static HHOOK	hookKeyboard	= NULL;
+
+extern list<DockingCont*> dockingContsZOrder;
 
 static LRESULT CALLBACK hookProcMouse(int nCode, WPARAM wParam, LPARAM lParam)
 {
@@ -107,6 +113,7 @@ Gripper::Gripper()
 	_hTab			= NULL;
 	_hTabSource		= NULL;
 	_startMovingFromTab	= FALSE;
+	_startMoveFromTab	= FALSE;
 	_iItem			= 0;
 
 	_hdc			= NULL;
@@ -120,6 +127,8 @@ Gripper::Gripper()
 }
 
 
+DirectGripper * dGripper = NULL;
+
 void Gripper::init(HINSTANCE hInst, HWND hParent) {
 	_hInst   = hInst;	
 	_hParent = hParent;
@@ -127,58 +136,77 @@ void Gripper::init(HINSTANCE hInst, HWND hParent) {
 	{
 		dGripper = new DirectGripper(_hParent);
 	}
+	else
+	{
+		MoveWindow(dGripper->_hSelf, 0, 0, 0, 0, false);
+	}
 };
 
-void Gripper::startGrip(DockingCont* pCont, DockingManager* pDockMgr)
+void Gripper::startGrip(DockingCont* pCont, DockingManager* pDockMgr, bool create)
 {
 	_pDockMgr   = pDockMgr;
 	_pCont		= pCont;
 
 	_pDockMgr->getDockInfo(&_dockData);
 
-	if (!_isRegistered)
+	if(create)
 	{
-		WNDCLASS clz;
-
-		clz.style = 0;
-		clz.lpfnWndProc = staticWinProc;
-		clz.cbClsExtra = 0;
-		clz.cbWndExtra = 0;
-		clz.hInstance = _hInst;
-		clz.hIcon = NULL;
-		clz.hCursor = ::LoadCursor(NULL, IDC_ARROW);
-
-		clz.hbrBackground = NULL;
-		clz.lpszMenuName = NULL;
-		clz.lpszClassName = MDLG_CLASS_NAME;
-
-		if (!::RegisterClass(&clz))
+		if (!_isRegistered)
 		{
-			throw std::runtime_error("Gripper::startGrip : RegisterClass() function failed");
+			WNDCLASS clz;
+
+			clz.style = 0;
+			clz.lpfnWndProc = staticWinProc;
+			clz.cbClsExtra = 0;
+			clz.cbWndExtra = 0;
+			clz.hInstance = _hInst;
+			clz.hIcon = NULL;
+			clz.hCursor = ::LoadCursor(NULL, IDC_ARROW);
+
+			clz.hbrBackground = NULL;
+			clz.lpszMenuName = NULL;
+			clz.lpszClassName = MDLG_CLASS_NAME;
+
+			if (!::RegisterClass(&clz))
+			{
+				throw std::runtime_error("Gripper::startGrip : RegisterClass() function failed");
+			}
+			_isRegistered = TRUE;
 		}
-		_isRegistered = TRUE;
+
+		_hSelf = ::CreateWindowEx(
+						0,
+						MDLG_CLASS_NAME,
+						TEXT(""), 0,
+						CW_USEDEFAULT, CW_USEDEFAULT,
+						CW_USEDEFAULT, CW_USEDEFAULT,
+						NULL,
+						NULL,
+						_hInst,
+						(LPVOID)this);
+		hWndServer = _hSelf;
+
+		if (!_hSelf)
+		{
+			throw std::runtime_error("Gripper::startGrip : CreateWindowEx() function return null");
+			return;
+		}
+	}
+	
+	if(pCont->_rcFloat.right==0&&pCont->_rcFloat.left==0)
+	{ // sanity check( not ). initialize the saved float shape.
+		auto * data = pCont->getDataOfActiveTb();
+		if (!data)
+		{
+			data = pCont->getDataOfAllTb()[0];
+		}
+		if (data)
+		{
+			pCont->_rcFloat = data->rcFloat;
+		}
 	}
 
-	_hSelf = ::CreateWindowEx(
-					0,
-					MDLG_CLASS_NAME,
-					TEXT(""), 0,
-					CW_USEDEFAULT, CW_USEDEFAULT,
-					CW_USEDEFAULT, CW_USEDEFAULT,
-					NULL,
-					NULL,
-					_hInst,
-					(LPVOID)this);
-	hWndServer = _hSelf;
-
-	if (!_hSelf)
-	{
-		throw std::runtime_error("Gripper::startGrip : CreateWindowEx() function return null");
-	}
-	else
-	{
-		dGripper->show(true);
-	}
+	dGripper->show(true);
 }
 
 
@@ -276,6 +304,7 @@ LRESULT Gripper::runProc(UINT message, WPARAM wParam, LPARAM lParam)
 
 void Gripper::create()
 {
+	isCreated = true;
 	RECT		rc		= {0};
 	POINT		pt		= {0};
 
@@ -348,7 +377,7 @@ void Gripper::onMove()
 }
 
 
-void Gripper::onButtonUp()
+bool Gripper::onButtonUp()
 {
 	POINT			pt			= {0,0};
 	POINT			ptBuf		= {0,0};
@@ -360,13 +389,13 @@ void Gripper::onButtonUp()
 
 	// do nothing, when old point is not valid
 	if (_bPtOldValid == FALSE)
-		return;
+		return true;
 
 	// erase last drawn rectangle
 	drawWindow(NULL);
 
 	// look if current position is within dockable area
-	DockingCont*	pDockCont = contHitTest(pt);
+	DockingCont*	pDockCont = dlgsHitTest(pt);
 
 	if (pDockCont == NULL)
 	{
@@ -376,8 +405,18 @@ void Gripper::onButtonUp()
 	/* add dependency to other container class */
 	if (pDockCont == NULL)
 	{
+		// 当鼠标位置检测不到其他可停靠容器，可能需要：
+		//     将停靠窗口转换为浮动窗口；移动浮动口到新的位置。
+		// 调用的是返回 |pContMove| 的 toggleActiveTb（移动一个子元素） / 或者 toggleVisTb（移动整个容器）
+		// 返回值为需要移动的容器指针，空值用当前容器指针代替。
+		if (!isCreated)
+		{
+			return true;
+		}
 		/* calculate new position */
 		rc = _pCont->getDataOfActiveTb()->rcFloat;
+		RECT rc1 = rc;
+		//rc = _pCont->_rcFloat; // passing a copy of the float shape
 		_pCont->getClientRect(rcCorr);
 
 		CalcRectToScreen(_dockData.hWnd, &rc);
@@ -391,20 +430,29 @@ void Gripper::onButtonUp()
 
 		DockingCont* pContMove	= NULL;
 
-		bool fltOrig = _pCont->isFloating();
+		bool fAlready = _pCont->isFloating();
+
+		rc.right += rc.left;
+		rc.bottom += rc.top;
 		
 		/* change location of toolbars */
 		if (_startMovingFromTab == TRUE)
 		{
 			/* when tab is moved */
-			if ((!_pCont->isFloating()) ||
-				((_pCont->isFloating()) && (::SendMessage(_hTabSource, TCM_GETITEMCOUNT, 0, 0) > 1)))
+			// 若当前窗口已经是浮动窗口，且只有一元素，无需调用下面方法， 只需移动窗口本身即可。
+			if ((!fAlready) || // 若不是浮动窗口，只能 {解除停靠}
+				 // 若是浮动窗口，有多个成员，则需{将当前元素单独拎出，移到新的浮动窗口}。
+				 // ( moving from tab )
+				(fAlready && (::SendMessage(_hTabSource, TCM_GETITEMCOUNT, 0, 0) > 1)))
 			{
 				pContMove = _pDockMgr->toggleActiveTb(_pCont, DMM_FLOAT, TRUE, &rc);
+				//ShowWindow(pContMove->getHSelf(), SW_NORMAL);
 			}
 		}
-		else if (!fltOrig)
+		else if (!fAlready)
 		{
+			// 若当前容器已经是浮动窗口，则不存在解除停靠的可能，自然无需调用下面的方法。
+			//   否则，须 {转换容器中的全部元素到一个新的浮动容器窗口}。
 			/* when all windows are moved */
 			pContMove = _pDockMgr->toggleVisTb(_pCont, DMM_FLOAT, &rc);
 		}
@@ -415,31 +463,83 @@ void Gripper::onButtonUp()
 			pContMove = _pCont;
 		}
 
-		if(pt.y>0||!fltOrig) {
+		rc.right  -= rc.left;
+		rc.bottom -= rc.top;
+
+		//if(pt.y>0||!fAlready) 
+		{
 			::MoveWindow(pContMove->getHSelf(), rc.left, rc.top, rc.right, rc.bottom, TRUE);
 		}
+
+		// Debug Docking Preview
+		RECT rcPrint = pContMove->getDataOfActiveTb()->rcFloat;
+		rcPrint = pContMove->_rcFloat;
+		RECT rcPrint1 = rc1;
+		TCHAR buffer[256]={};
+		wsprintf(buffer,TEXT("onButtonUp floatSz =%d, %d, %d, %d    ---data.rc---    %d, %d, %d, %d ")
+			, rcPrint.left, rcPrint.right, rcPrint.top, rcPrint.bottom
+			, rcPrint1.left, rcPrint1.right, rcPrint1.top, rcPrint1.bottom
+		);
+		//::SendMessage(nppApp->_dockingManager.getHParent(), NPPM_SETSTATUSBAR, STATUSBAR_DOC_TYPE, (LPARAM)buffer);
+
+
+		//pContMove->_rcFloat = rc;
+
 		/* update window position */
 		if(pt.y<=0) { // &&(!oldSchoolDraw||pContMove->isFloating())
 			ShowWindow(pContMove->getHSelf(), SW_MAXIMIZE);
 		} 
 		::SendMessage(pContMove->getHSelf(), WM_SIZE, 0, 0);
+		return true;
 	}
 	else if (_pCont != pDockCont)
 	{
+		// 当检测到的鼠标下窗口与当前窗口不一致时，
+		//     移动元素到新的停靠窗口（已存在的、已关闭的） / 或者悬浮对话框（已存在的）
+		// 调用的是无返回值的 toggleActiveTb（移动一个子元素） / 或者 toggleVisTb（移动整个容器）
+		// passsing a copy of the float shape. 
+		RECT rcPrint = _pCont->getDataOfActiveTb()->rcFloat;
+		//rcPrint = pDockCont->getDataOfActiveTb()->rcFloat;
+		if (!pDockCont->isVisible())
+		{ 
+			// the docking panel |pDockCont| now remembers it's new floating position.
+			pDockCont->_rcFloat = _pCont->_rcFloat;
+		}
 		/* change location of toolbars */
 		if ((_startMovingFromTab == TRUE) && (::SendMessage(_hTabSource, TCM_GETITEMCOUNT, 0, 0) != 1))
 		{
 			/* when tab is moved */
-			_pDockMgr->toggleActiveTb(_pCont, pDockCont);
+			_pDockMgr->toggleActiveTbWnd(_pCont, pDockCont);
 		}
 		else
 		{
 			/* when all windows are moved */
-			_pDockMgr->toggleVisTb(_pCont, pDockCont);
+			_pDockMgr->toggleVisTbWnd(_pCont, pDockCont);
 		}
+
+		// Debug Docking Preview
+		RECT rcPrint1 = pDockCont->getDataOfActiveTb()->rcFloat;
+		TCHAR buffer[256]={};
+		wsprintf(buffer,TEXT("onButtonUp1 floatSz =%d, %d, %d, %d    ---data.rc---    %d, %d, %d, %d ")
+			, rcPrint.left, rcPrint.right, rcPrint.top, rcPrint.bottom
+			, rcPrint1.left, rcPrint1.right, rcPrint1.top, rcPrint1.bottom
+		);
+		//::SendMessage(nppApp->_dockingManager.getHParent(), NPPM_SETSTATUSBAR, STATUSBAR_DOC_TYPE, (LPARAM)buffer);
+
+
+		return false;
 	}
+
+
 }
 
+// 返回true：代表非窗口间移动
+bool Gripper::stopGrip()
+{
+	bool ret = onButtonUp();
+	::DestroyWindow(_hSelf);
+	return ret;
+}
 
 void Gripper::doTabReordering(POINT pt)
 {
@@ -557,6 +657,8 @@ void Gripper::doTabReordering(POINT pt)
 	::UpdateWindow(_hParent);
 }
 
+// Draw a transparent window to represent the docking target.
+// Inspaired by duilib.
 void Gripper::drawWindow(const POINT* pPt)
 {
 	if(oldSchoolDraw)
@@ -571,7 +673,7 @@ void Gripper::drawWindow(const POINT* pPt)
 	if (pPt != NULL)
 	{
 		getMovingRect(*pPt, &rcNew);
-		if(rcNew.right==rcNew.left) 
+		if(rcNew.right==rcNew.left&&rcNew.left==0) 
 		{
 			return;
 		}
@@ -587,7 +689,7 @@ void Gripper::drawWindow(const POINT* pPt)
 	{
 		if (pPt != NULL)
 		{
-			MoveWindow(dGripper->_hSelf, rcNew.left, rcNew.top, rcNew.right, rcNew.bottom, false);
+			MoveWindow(dGripper->_hSelf, rcNew.left, rcNew.top, rcNew.right, rcNew.bottom, TRUE);
 		}
 		else
 		{
@@ -610,36 +712,7 @@ void Gripper::drawWindow(const POINT* pPt)
 	else	_bPtOldValid= TRUE;
 }
 
-
-// Changed behaviour (jg): Now this function handles erasing of drag-rectangles and drawing of
-// new ones within one drawing step to the desktop. This is against flickering, but also it is
-// necessary for the Vista Aero style - because in this case the control is given so much to
-// the graphics driver, that accesses (especially read accesses) to the desktop window become
-// too expensive to access it more than absolutely necessary. Besides, usage of the function
-// ::LockWindowUpdate() was added, because with often redrawn windows in the background we had
-// inconsistencies while erasing our drag-rectangle (because it could already have been erased
-// on some places).
-//
-// Parameter pPt==NULL says that only erasing is wanted and the drag-rectangle is no more needed,
-// thatswhy this also leads to a call of ::LockWindowUpdate(NULL) to enable drawing by others again.
-// The previously drawn rectangle is memoried within _rectPrev (and _bPtOldValid says if it already
-// is valid - did not change this members name because didn't want change too much at once).
-//
-// I was too lazy to always draw four rectangles for the four edges of the drag-rectangle - it seems
-// that drawing an outer rectangle first and then erasing the inner stuff by drawing a second,
-// smaller rectangle inside seems to be not slower - wich comes not unawaited, because it is mostly
-// hardware-driven and each single draw has its own fixed costs.
-//
-// I am more lazy. I choose to erase & paint one single rectangle on the background window.
-//
-// For further solutions I think we should leave this classic way of dragging and better use
-// alpha-blending and always move the whole content of the toolbars - so we could leave the
-// ::LockWindowUpdate() behind us.
-//
-// Besides, while debugging into the dragging process please let the ::LockWindowUpdate() out,
-// by #undef the USE_LOCKWINDOWUPDATE in gripper.h, because it works for your debugging window
-// as well, of course. Or just try by this #define what difference it makes.
-//
+// deprecated, painting on the desktop HDC is not smooth and dirty when the rect is not small.
 void Gripper::drawRectangle(const POINT* pPt)
 {
 	HBRUSH hbrushOrig= NULL;
@@ -757,13 +830,11 @@ void Gripper::drawRectangle(const POINT* pPt)
 	else	_bPtOldValid= TRUE;
 }
 
-
 void Gripper::getMousePoints(POINT* pt, POINT* ptPrev)
 {
 	*ptPrev	= _ptOld;
 	_ptOld	= *pt;
 }
-
 
 void Gripper::getMovingRect(POINT pt, RECT *rc)
 {
@@ -771,7 +842,8 @@ void Gripper::getMovingRect(POINT pt, RECT *rc)
 	DockingCont*	pContHit		= NULL;
 
 	/* test if mouse hits a container */
-	pContHit = contHitTest(pt);
+	pContHit = dlgsHitTest(pt);
+	//pContHit = contHitTest(pt);
 
 	if (pContHit != NULL)
 	{
@@ -780,7 +852,8 @@ void Gripper::getMovingRect(POINT pt, RECT *rc)
 
 		/* get rect for correction */
 		if (_pCont->isFloating() == TRUE)
-			rcCorr = _pCont->getDataOfActiveTb()->rcFloat;
+			//rcCorr = _pCont->getDataOfActiveTb()->rcFloat;
+			rcCorr = _pCont->_rcFloat;
 		else
 			_pCont->getClientRect(rcCorr);
 
@@ -798,11 +871,35 @@ void Gripper::getMovingRect(POINT pt, RECT *rc)
 		/* calcutlates the rect and its position */
 		if (pContHit == NULL)
 		{
+			//if(false) // 无事不绘制
+			if(!isCreated&&!oldSchoolDraw)
+			{
+				rc->left = rc->right = -1;
+				return;
+			}
 			/* calcutlates the rect and draws it */
 			if (!_pCont->isFloating())
-				*rc = _pCont->getDataOfActiveTb()->rcFloat;
+			{
+				if (_startMovingFromTab)
+				{
+					*rc = _pCont->getDataOfActiveTb()->rcFloat;
+				}
+				else
+				{
+					*rc = _pCont->_rcFloat;
+				}
+			}
 			else
-				_pCont->getWindowRect(*rc);
+			{
+				if (_startMoveFromTab)
+				{
+					*rc = _pCont->getDataOfActiveTb()->rcFloat;
+				}
+				else
+				{
+					_pCont->getWindowRect(*rc);
+				}
+			}
 			_pCont->getClientRect(rcCorr);
 
 			CalcRectToScreen(_dockData.hWnd, rc);
@@ -817,14 +914,77 @@ void Gripper::getMovingRect(POINT pt, RECT *rc)
 	}
 }
 
+// fix: return |HTTRANSPARENT| int the |dialog| callback |case WM_NCHITTEST| is invalid! 
+//   So It's impossible to exclude the dragging dialog from being returned by |WindowFromPoint|.
+//   Don't be panic, we can loop the |dockingContsZOrder| to figure out where to place our floating dialog.
+DockingCont* Gripper::dlgsHitTest(POINT pt)
+{ 
+	if(!_pCont->isFloating())
+	{
+		return contHitTest(pt);
+	}
+
+	RECT	rc	= {0};
+
+	auto iter = dockingContsZOrder.begin();
+	//if(0)
+	while(iter!=dockingContsZOrder.end())
+	{ 
+		// first loop, check for floating dialogs
+		auto cI = iter._Ptr->_Myval;
+		if((_startMoveFromTab||cI!=_pCont)&&cI->isFloating()&&cI->isVisible())
+		{
+			cI->getWindowRect(rc);
+			if(rc.left<=pt.x&&rc.right>=pt.x&&rc.top<=pt.y&&rc.bottom>=pt.y)
+			{
+				// todo is 24px too small?
+				if (pt.y<(rc.top + 24))
+				{
+					return cI;
+				}
+				if(_startMoveFromTab)
+				{
+					::GetWindowRect(cI->getTabWnd(), &rc);
+					if (::PtInRect(&rc, pt))
+					{
+						return cI;
+					}
+				}
+				return NULL;
+			}
+		}
+		iter++;
+	} 
+	iter = dockingContsZOrder.begin();
+	while(iter!=dockingContsZOrder.end())
+	{ 
+		// second loop, check for docked dialogs
+		auto cI = iter._Ptr->_Myval;
+		if(!cI->isFloating()&&cI->isVisible())
+		{
+			//cI->getWindowRect(rc);
+			GetWindowRect(cI->getCaptionWnd(), &rc);
+			if(rc.left<=pt.x&&rc.right>=pt.x&&rc.top<=pt.y&&rc.bottom>=pt.y)
+			{
+				return cI;
+			}
+		}
+		iter++;
+	}
+
+	/* doesn't hit a container */
+	return NULL;
+}
 
 DockingCont* Gripper::contHitTest(POINT pt)
 {
 	vector<DockingCont*>	vCont	= _pDockMgr->getContainerInfo();
 	HWND					hWnd	= ::WindowFromPoint(pt);
+	//HWND					hWnd	= ::ChildWindowFromPointEx(_pCont->getHParent(), pt, CWP_SKIPDISABLED|CWP_SKIPINVISIBLE);
 
 	for (size_t iCont = 0, len = vCont.size(); iCont < len; ++iCont)
 	{
+		//if(vCont[iCont]==_pCont&&!isCreated) continue;
 		/* test if within caption */
 		if (hWnd == vCont[iCont]->getCaptionWnd())
 		{
@@ -873,6 +1033,7 @@ DockingCont* Gripper::contHitTest(POINT pt)
 
 DockingCont* Gripper::workHitTest(POINT pt, RECT *rc)
 {
+	//if(1) return NULL;
 	RECT					rcCont	= {0};
 	vector<DockingCont*>	vCont	= _pDockMgr->getContainerInfo();
 
@@ -886,7 +1047,7 @@ DockingCont* Gripper::workHitTest(POINT pt, RECT *rc)
 			if (::PtInRect(&rcCont, pt) == TRUE)
 			{
 				/* when it does, return with non found docking area */
-				return NULL;
+				//return NULL;
 			}
 		}
 	}
@@ -894,7 +1055,7 @@ DockingCont* Gripper::workHitTest(POINT pt, RECT *rc)
 	/* now search if cusor hits a possible docking area */
 	for (int iWork = 0; iWork < DOCKCONT_MAX; ++iWork)
 	{
-		if (!vCont[iWork]->isVisible())
+		if (vCont[iWork]!=_pCont&&!vCont[iWork]->isVisible())
 		{
 			rcCont = _dockData.rcRegion[iWork];
 			rcCont.right  += rcCont.left;
@@ -954,6 +1115,7 @@ void Gripper::initTabInformation()
 	/* remember handle */
 	_hTabSource = _pCont->getTabWnd();
 	_startMovingFromTab	= _pCont->startMovingFromTab();
+	_startMoveFromTab	= _startMovingFromTab;
 	if ((_startMovingFromTab == FALSE) && (::SendMessage(_hTabSource, TCM_GETITEMCOUNT, 0, 0) == 1))
 	{
 		_startMovingFromTab = TRUE;

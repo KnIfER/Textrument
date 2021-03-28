@@ -369,6 +369,15 @@ TCHAR PluginsAdminDlg::_updaterFullPath[MAX_PATH];
 
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE, PWSTR pCmdLine, int)
 {
+	//::MessageBox(NULL, pCmdLine, TEXT("args"), MB_OK);
+	//if(wcsncmp(pCmdLine, TEXT("--type"), 5)==0) 
+	//{
+	//	::MessageBox(NULL, pCmdLine, TEXT("args1"), MB_OK);
+	//	return 0;
+	//}
+
+	//if (::MessageBox(NULL, pCmdLine, TEXT("args?"), MB_YESNO) == IDYES) return 0;
+
 	ParamVector params = parseCommandLine(pCmdLine);
 	PWSTR pCmdLineWithoutIgnores = stripIgnoredParams(params, pCmdLine);
 

@@ -32,6 +32,14 @@
 #include "ToolTip.h"
 #include "Parameters.h"
 
+#include "Gripper.h"
+
+#include "Notepad_plus.h"
+
+extern Notepad_plus *nppApp;
+
+Gripper* pGripper_;
+
 using namespace std;
 
 #ifndef WH_MOUSE_LL
@@ -59,7 +67,6 @@ static LRESULT CALLBACK hookProcMouse(int nCode, WPARAM wParam, LPARAM lParam)
 		case WM_NCMOUSEMOVE:
 			::PostMessage(hWndServer, UINT(wParam), 0, 0);
 			break;
-
 		case WM_LBUTTONUP:
 		case WM_NCLBUTTONUP:
 			::PostMessage(hWndServer, UINT(wParam), 0, 0);
@@ -392,10 +399,24 @@ LRESULT DockingCont::runProcCaption(HWND hwnd, UINT Message, WPARAM wParam, LPAR
 		}
 		case WM_LBUTTONDBLCLK:
 		{
+			// 双击标题栏
+
 			if (isInRect(hwnd, LOWORD(lParam), HIWORD(lParam)) == posCaption)
+			if (!isFloating())
+			{
+				auto data = getDataOfActiveTb();
+				//nppApp->_dockingManager.toggleActiveTb(this, DMM_FLOAT, TRUE, NULL);
+				RECT rcFloat;
+				if(DMM_FLOATALL) rcFloat = data->rcFloat;
+				nppApp->_dockingManager.toggleVisTb(this, DMM_FLOAT, NULL);
+			}
+			else
+			{
 				::SendMessage(_hParent, DMM_FLOATALL, 0, reinterpret_cast<LPARAM>(this));
+			}
 
 			focusClient();
+
 			return TRUE;
 		}
 		case WM_MOUSEMOVE:
@@ -455,7 +476,8 @@ LRESULT DockingCont::runProcCaption(HWND hwnd, UINT Message, WPARAM wParam, LPAR
 				toolTip.destroy();
 				_bCapTTHover = FALSE;
 			}
-			return TRUE;
+			//return TRUE;
+			break;
 		}
 		case WM_MOUSEHOVER:
 		{
@@ -819,6 +841,7 @@ LRESULT DockingCont::runProcTab(HWND hwnd, UINT Message, WPARAM wParam, LPARAM l
 				_beginDrag = FALSE;
 			}
 			return TRUE;
+			break;
 		}
 
 		case WM_MOUSEHOVER:
@@ -877,6 +900,23 @@ LRESULT DockingCont::runProcTab(HWND hwnd, UINT Message, WPARAM wParam, LPARAM l
 	}
 
 	return ::CallWindowProc(_hDefaultTabProc, hwnd, Message, wParam, lParam);
+}
+
+
+LRESULT DockingCont::runProc1(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
+{
+
+	switch (Message) 
+	{
+		case WM_NCHITTEST:
+		{
+			return HTTRANSPARENT;
+			break;
+		}
+	}
+	//return run_dlgProc(Message, wParam, lParam);
+
+	return ::CallWindowProc(_hDefaultProc1, hwnd, Message, wParam, lParam);
 }
 
 void DockingCont::drawTabItem(DRAWITEMSTRUCT *pDrawItemStruct)
@@ -961,6 +1001,12 @@ void DockingCont::drawTabItem(DRAWITEMSTRUCT *pDrawItemStruct)
 	::RestoreDC(hDc, nSavedDC);
 }
 
+//std::vector<DockingCont*> dockingContsZOrder;
+
+list<DockingCont*> dockingContsZOrder;
+
+
+ bool fuck=false;
 
 //----------------------------------------------
 //    Process function of dialog
@@ -975,6 +1021,11 @@ INT_PTR CALLBACK DockingCont::run_dlgProc(UINT Message, WPARAM wParam, LPARAM lP
 			if (static_cast<int>(lParam) != -1)
 			{
 				::SendMessage(_hParent, WM_NCACTIVATE, wParam, 0);
+			}
+			if(LOWORD(wParam)==WA_ACTIVE)
+			{
+				dockingContsZOrder.remove(this);
+				dockingContsZOrder.push_front(this);
 			}
 			break;
 		}
@@ -991,16 +1042,13 @@ INT_PTR CALLBACK DockingCont::run_dlgProc(UINT Message, WPARAM wParam, LPARAM lP
 			::SetWindowLongPtr(_hContTab, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(this));
 			_hDefaultTabProc = reinterpret_cast<WNDPROC>(::SetWindowLongPtr(_hContTab, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(wndTabProc)));
 
+			//_hDefaultProc1 = reinterpret_cast<WNDPROC>(::SetWindowLongPtr(_hSelf, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(wndProc1)));
+
+
 			// set min tab width
 			int tabDpiDynamicalMinWidth = NppParameters::getInstance()._dpiManager.scaleY(24);
 			::SendMessage(_hContTab, TCM_SETMINTABWIDTH, 0, tabDpiDynamicalMinWidth);
 
-			break;
-		}
-		case WM_NCCALCSIZE:
-		case WM_SIZE:
-		{
-			onSize();
 			break;
 		}
 		case WM_DRAWITEM :
@@ -1018,7 +1066,56 @@ INT_PTR CALLBACK DockingCont::run_dlgProc(UINT Message, WPARAM wParam, LPARAM lP
 			}
 			break;
 		}
-		case WM_NCLBUTTONDBLCLK :
+
+		case WM_CONTEXTMENU:
+		{
+			fuck=true;
+
+			// Debug Docking Preview
+			RECT rcPrint = getDataOfActiveTb()->rcFloat;
+			RECT rc1 = _rcFloat;
+			TCHAR buffer[256]={};
+			wsprintf(buffer,TEXT("WM_CONTEXTMENU data.floatSz =%d, %d, %d, %d  ---rcFloat--- %d, %d, %d, %d  ---name---  %s")
+				, rcPrint.left, rcPrint.right, rcPrint.top, rcPrint.bottom
+				, rc1.left, rc1.right, rc1.top, rc1.bottom
+				//, rc.left, rc.right, rc.top, rc.bottom
+				, getDataOfActiveTb()->pszName
+			);
+			::SendMessage(nppApp->_dockingManager.getHParent(), NPPM_SETSTATUSBAR, STATUSBAR_DOC_TYPE, (LPARAM)buffer);
+
+
+			if (true)
+			{
+				break;
+			}
+			//if (wParam==VK_ESCAPE)
+			{
+				RECT rc;
+				if (!isFloating())
+				{
+					auto data = getDataOfActiveTb();
+					//nppApp->_dockingManager.toggleActiveTb(this, DMM_FLOAT, TRUE, NULL);
+					RECT rcFloat;
+					if(DMM_FLOATALL) rcFloat = data->rcFloat;
+					rc = rcFloat;
+					nppApp->_dockingManager.toggleVisTb(this, DMM_FLOAT, &data->rcFloat);
+				}
+				else
+				{
+					::SendMessage(_hParent, DMM_FLOATALL, 0, reinterpret_cast<LPARAM>(this));
+					GetWindowRect(getHSelf(), &rc);
+
+				}
+
+				::MoveWindow(getHSelf(), rc.left, rc.top, rc.right, rc.bottom, TRUE);
+
+				::SendMessage(getHSelf(), WM_SIZE, 0, 0);
+
+				focusClient();
+			}
+			break;
+		}
+		case WM_NCLBUTTONDBLCLK:
 		{
 			RECT	rcWnd		= {0};
 			RECT	rcClient	= {0};
@@ -1033,16 +1130,185 @@ INT_PTR CALLBACK DockingCont::run_dlgProc(UINT Message, WPARAM wParam, LPARAM lP
 			if ((rcWnd.top  < pt.x) && (rcWnd.bottom > pt.x) &&
 				(rcWnd.left < pt.y) && (rcWnd.right  > pt.y))
 			{
+				_toDock = _isFloating;
+				onSize();
 				NotifyParent(DMM_DOCKALL);
+
+				if(pGripper_)
+				{
+					pGripper_->drawWindow(NULL);
+					delete pGripper_;
+					pGripper_ = NULL;
+				}
+
 				return TRUE;
 			}
 			break;
 		}
+		case WM_NCCALCSIZE:
+		case WM_SIZE:
+		{
+			onSize();
+
+			if (_isFloating)
+			{
+				// todo .. save when the user resize the Aero Snap Mode.
+			}
+
+			// Debug Docking Preview
+			RECT rcPrint = _rcFloat;
+			TCHAR buffer[256]={};
+			wsprintf(buffer,TEXT("onSize floatSz =%d, %d, %d, %d :: ")
+				, rcPrint.left, rcPrint.right, rcPrint.top, rcPrint.bottom);
+			//::SendMessage(nppApp->_dockingManager.getHParent(), NPPM_SETSTATUSBAR, STATUSBAR_DOC_TYPE, (LPARAM)buffer);
+
+
+			break;
+		}
+		case WM_MOVE:
+			if(pGripper_)
+			{
+				pGripper_->onMove();
+			}
+		break;
+		//case DMM_CANCEL_MOVE:
+		case WM_EXITSIZEMOVE:
+			// https://docs.microsoft.com/en-us/windows/win32/winmsg/wm-exitsizemove
+			lastMovedTm = clock();
+			_toDock = false;
+			if(pGripper_)
+			{
+				RECT rc=_rcFloat;
+
+				releasePt = pGripper_->_ptOld;
+
+				if (pGripper_->stopGrip()&&_isFloating)
+				{
+					RECT rc;
+					GetWindowRect(_hSelf, &rc); // rcplace
+					// 此处，抓起缩放完毕，…… 的大小。
+
+					WINDOWPLACEMENT placement = {};
+					GetWindowPlacement(_hSelf, &placement);
+
+					RECT & rc1 = placement.rcNormalPosition; 
+					bool AeroSnap = rc1.left-rc1.right!=rc.left-rc.right
+						||rc1.top-rc1.bottom!=rc.top-rc.bottom;
+					if (!AeroSnap)
+					{
+						// todo , move should not affect the floating sz of all children.
+						_rcFloat = rc;
+						for (size_t iTb = 0, len = _vTbData.size(); iTb < len; ++iTb)
+						{
+							_vTbData[iTb]->rcFloat = rc;
+						}
+					}
+
+					// Debug Docking Preview
+					RECT rcPrint = _rcFloat;
+					TCHAR buffer[256]={};
+					wsprintf(buffer,TEXT("WM_EXITSIZEMOVE floatSz =%d, %d, %d, %d :: ")
+						, rcPrint.left, rcPrint.right, rcPrint.top, rcPrint.bottom);
+					::SendMessage(nppApp->_dockingManager.getHParent(), NPPM_SETSTATUSBAR, STATUSBAR_DOC_TYPE, (LPARAM)buffer);
+
+				}
+
+				delete pGripper_;
+				pGripper_ = NULL;
+			}
+			else if (_isFloating)
+			{
+				// relase mouse, Aero snap, Sz changed.
+				// doule click, Sz changed.
+				RECT rc;
+				GetWindowRect(_hSelf, &rc); // rcplace
+											//  _rcFloat = _rcFloatPlace;
+				bool updateCurrentAsNormalRect = true;
+				WINDOWPLACEMENT placement = {};
+				GetWindowPlacement(_hSelf, &placement);
+
+				RECT & rc1 = placement.rcNormalPosition; 
+				bool AeroSnap = rc1.left-rc1.right!=rc.left-rc.right
+					||rc1.top-rc1.bottom!=rc.top-rc.bottom;
+				if (!AeroSnap)
+				{
+					// todo , move should not affect the floating sz of all children.
+					_rcFloat = rc;
+					for (size_t iTb = 0, len = _vTbData.size(); iTb < len; ++iTb)
+					{
+						_vTbData[iTb]->rcFloat = rc;
+					}
+				}
+
+			}
+
+
+
+			{
+				// Debug Docking Preview
+				//RECT rcPrint = _rcFloat;
+				//TCHAR buffer[256]={};
+				//wsprintf(buffer,TEXT("WM_EXITSIZEMOVE 2 floatSz =%d, %d, %d, %d :: ")
+				//	, rcPrint.left, rcPrint.right, rcPrint.top, rcPrint.bottom);
+				//::SendMessage(nppApp->_dockingManager.getHParent(), NPPM_SETSTATUSBAR, STATUSBAR_DOC_TYPE, (LPARAM)buffer);
+			}
+
+
+		break;
 		case WM_SYSCOMMAND :
 		{
 			switch (wParam & 0xfff0)
 			{
-				case SC_MOVE:
+					case SC_MOVE:
+					//if(true) break;
+					if(_toDock = _isFloating) 
+					{
+
+						if (!IsZoomed(_hSelf))
+						{
+							RECT rc;
+							GetWindowRect(_hSelf, &rc); // rcplace
+															  //  WINDOWPLACEMENT you ***** ！
+							WINDOWPLACEMENT placement = {};
+							GetWindowPlacement(_hSelf, &placement);
+
+							RECT & rc1 = placement.rcNormalPosition;
+
+							// 此处，抓起窗口标题，不应记录 Aero Snap状态下的大小。
+
+							bool AeroSnap = rc1.left-rc1.right!=rc.left-rc.right
+								||rc1.top-rc1.bottom!=rc.top-rc.bottom;
+
+							if (!AeroSnap)
+							{
+								_rcFloat = rc;
+							}
+
+							GetWindowPlacement(_hSelf, &placement);
+							placement.rcNormalPosition = rc; // rcplace
+							SetWindowPlacement(_hSelf, &placement);
+
+							// Debug Docking Preview
+							RECT rcPrint = _rcFloat;
+							TCHAR buffer[256]={};
+							wsprintf(buffer,TEXT("SC_MOVE floatSz =%d, %d, %d, %d    ---plc---    %d, %d, %d, %d    ---now---    %d, %d, %d, %d")
+								, rcPrint.left, rcPrint.right, rcPrint.top, rcPrint.bottom
+								, rc1.left, rc1.right, rc1.top, rc1.bottom
+								, rc.left, rc.right, rc.top, rc.bottom
+							);
+							::SendMessage(nppApp->_dockingManager.getHParent(), NPPM_SETSTATUSBAR, STATUSBAR_DOC_TYPE, (LPARAM)buffer);
+
+						}
+
+						if(!pGripper_)
+						{
+							pGripper_=new Gripper();
+							pGripper_->init(_hInst, nppApp->_dockingManager.getHParent());
+						}
+						pGripper_->startGrip(this, &nppApp->_dockingManager, false);
+						_pGripper = pGripper_;
+						break;
+					}
 					NotifyParent(DMM_MOVE);
 					// SC_MOVE
 					return TRUE;
@@ -1072,6 +1338,7 @@ INT_PTR CALLBACK DockingCont::run_dlgProc(UINT Message, WPARAM wParam, LPARAM lP
 
 void DockingCont::onSize()
 {
+	//if(1) return;
 	TCITEM tcItem = {0};
 	RECT rc = {0};
 	RECT rcTemp = {0};
@@ -1084,8 +1351,8 @@ void DockingCont::onSize()
 	{
 		// resize to docked window
 		int tabDpiDynamicalHeight = NppParameters::getInstance()._dpiManager.scaleY(24);
-		if (_isFloating == false)
-		{
+		if (_isFloating == false) // 停靠窗口改变大小
+		{ 
 			// draw caption
 			if (_isTopCaption == TRUE)
 			{
@@ -1134,34 +1401,68 @@ void DockingCont::onSize()
 							SWP_NOZORDER | SWP_NOACTIVATE);
 		}
 		// resize to float window
-		else
-		{
-			// update floating size
-			for (size_t iTb = 0, len = _vTbData.size(); iTb < len; ++iTb)
+		else // 浮动窗口改变大小
+		{ 
+			if (!IsZoomed(_hSelf))
 			{
-				getWindowRect(_vTbData[iTb]->rcFloat);
+				RECT rcw{0,0,0,0};
+
+
+				if(_toDock)
+				{
+					if(memcmp(&_rcFloat, &rcw, sizeof(RECT))==0) // rcplace
+					{
+						GetWindowRect(_hSelf, &rcw);
+						_rcFloat = rcw;  // rcplace
+					}
+					rcw = _rcFloat; // rcplace
+				}
+				else
+				{
+					rcw = _rcFloat; // rcplace
+					//GetWindowRect(_hSelf, &rcw);
+				}
+
+				//if(rcw.left<rcw.right&&rcw.top<rcw.bottom&&rcw.right>0&&rcw.bottom>0)
+				if(0)
+				{
+					_rcFloat = rcw;
+					// update floating size
+					for (size_t iTb = 0, len = _vTbData.size(); iTb < len; ++iTb)
+					{
+						//getWindowRect(_vTbData[iTb]->rcFloat);
+						_vTbData[iTb]->rcFloat = rcw;
+						//_vTbData[iTb]->rcFloat = rcplc;
+					}
+				}
+
+
+
 			}
 
-			// draw caption
-			if (iItemCnt >= 2)
+			if(1)
 			{
-				// resize tab if size of elements exceeds one
+				// draw caption
+				if (iItemCnt >= 2)
+				{
+					// resize tab if size of elements exceeds one
+					rcTemp = rc;
+					rcTemp.top = rcTemp.bottom - (tabDpiDynamicalHeight + _captionGapDynamic);
+					rcTemp.bottom = tabDpiDynamicalHeight;
+
+					::SetWindowPos(_hContTab, NULL,
+						rcTemp.left, rcTemp.top, rcTemp.right, rcTemp.bottom, 
+						SWP_NOZORDER | SWP_SHOWWINDOW);
+				}
+
+				// resize client area for plugin
 				rcTemp = rc;
-				rcTemp.top = rcTemp.bottom - (tabDpiDynamicalHeight + _captionGapDynamic);
-				rcTemp.bottom = tabDpiDynamicalHeight;
+				rcTemp.bottom -= ((iItemCnt == 1)?0:tabDpiDynamicalHeight);
 
-				::SetWindowPos(_hContTab, NULL,
-								rcTemp.left, rcTemp.top, rcTemp.right, rcTemp.bottom, 
-								SWP_NOZORDER | SWP_SHOWWINDOW);
+				::SetWindowPos(::GetDlgItem(_hSelf, IDC_CLIENT_TAB), NULL,
+					rcTemp.left, rcTemp.top, rcTemp.right, rcTemp.bottom, 
+					SWP_NOZORDER | SWP_NOACTIVATE);
 			}
-
-			// resize client area for plugin
-			rcTemp = rc;
-			rcTemp.bottom -= ((iItemCnt == 1)?0:tabDpiDynamicalHeight);
-
-			::SetWindowPos(::GetDlgItem(_hSelf, IDC_CLIENT_TAB), NULL,
-							rcTemp.left, rcTemp.top, rcTemp.right, rcTemp.bottom, 
-							SWP_NOZORDER | SWP_NOACTIVATE);
 		}
 		
 

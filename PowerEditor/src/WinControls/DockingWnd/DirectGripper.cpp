@@ -84,9 +84,7 @@ BOOL CTransparent::SetTransparentWnd(HWND hWnd, COLORREF crKey, UINT cAlpha, BOO
 
     //要使使窗体拥有透明效果,首先要有WS_EX_LAYERED扩展属性 WS_EX_LAYERED = 0x80000 
     //SetWindowLong(this->GetSafeHwnd(),GWL_EXSTYLE,GetWindowLong(this->GetSafeHwnd(),GWL_EXSTYLE)^0x80000);
-    SetWindowLong(hWnd, 
-        GWL_EXSTYLE , 
-        GetWindowLong(hWnd, GWL_EXSTYLE) | WS_EX_LAYERED);  
+    //SetWindowLong(hWnd,  GWL_EXSTYLE , GetWindowLong(hWnd, GWL_EXSTYLE) | WS_EX_LAYERED);  
 
     if(dwFlags)
     {
@@ -112,10 +110,44 @@ LRESULT WINAPI testWindowProc(
     {
         return true;
     }
+    if (msg==WM_ACTIVATE )
+    {
+        return true;
+    }
+    if (msg==WM_PAINT)
+    {
+        //if (WS_EX_LAYERED == (WS_EX_LAYERED & GetWindowLong(hWnd, GWL_EXSTYLE))) break;;
+
+        RECT rcClient;
+        ::GetClientRect(hWnd, &rcClient);
+
+        PAINTSTRUCT ps = { 0 };
+        HDC hdc = ::BeginPaint(hWnd, &ps);
+
+        RECT rect = rcClient;  
+
+        //rect.right = rect.left+(rect.right-rect.left)/2;
+
+       HBRUSH hbrush = CreateSolidBrush(0xafafaf);
+        
+
+
+        FillRect(hdc, &rect, hbrush);
+
+
+        ::EndPaint(hWnd, &ps);
+        return 1;
+    }
     if (msg==WM_NCHITTEST)
     {
         return HTTRANSPARENT;
     }
+    //if (msg==WM_NCACTIVATE)
+    //{
+    //
+    //    return (wParam == 0) ? TRUE : FALSE;
+    //}
+    //return true;
 	return ::DefWindowProc(hWnd, msg, wParam, lParam);
 }
 
@@ -143,7 +175,7 @@ void DirectGripper::show(bool doshow)
 {
     if(!IsWindow(_hSelf))
         create();
-    ::ShowWindow(_hSelf, doshow?SW_SHOW:SW_HIDE);
+    ::ShowWindow(_hSelf, doshow?SW_SHOWNA:SW_HIDE);
 }
 
 
@@ -151,10 +183,13 @@ void DirectGripper::create()
 {
 
     regWndClass(kClassWindow, CS_HREDRAW | CS_VREDRAW);
-    _hSelf = ::CreateWindowEx(0 , kClassWindow , NULL
-        , WS_POPUP|WS_DLGFRAME|WS_VISIBLE , 0 , 0 , 0 , 0 , _hParent , NULL , ::GetModuleHandle(NULL), NULL);
+
+    _hSelf = ::CreateWindowEx(WS_EX_NOACTIVATE|WS_EX_LAYERED , kClassWindow , NULL
+        , WS_CHILD |WS_POPUP|WS_VISIBLE , 0 , 0 , 0 , 0 , _hParent , NULL , ::GetModuleHandle(NULL), NULL);
+
+    //SetWindowLongPtr(_hSelf, GWLP_USERDATA, (LONG_PTR)this);
 
     //在这里注册一个窗口第三个参数表示窗口的类型
-    CTransparent::SetTransparentWnd((HWND)_hSelf, 0x00003333, 180, 2); //设置窗口透明
+    CTransparent::SetTransparentWnd((HWND)_hSelf, 0xffff3333, 100, 1); //设置窗口透明
 
 }
