@@ -1143,7 +1143,7 @@ INT_PTR CALLBACK DockingCont::run_dlgProc(UINT Message, WPARAM wParam, LPARAM lP
 
 			#if DEBUG_DOCKING_PREVIEW
 			RECT rcPrint = _rcFloat;
-			LogIs(true, (HWND)-1 , TEXT("onSize floatSz =%d, %d, %d, %d :: ")
+			LogIs(false, (HWND)-1 , TEXT("onSize floatSz =%d, %d, %d, %d :: ")
 				, rcPrint.left, rcPrint.right, rcPrint.top, rcPrint.bottom);
 			#endif
 
@@ -1404,7 +1404,7 @@ void DockingCont::onSize()
 					//GetWindowRect(_hSelf, &rcw);
 				}
 
-				if(DockingPreviewMethod==0)
+				if(DockingPreviewMethod<=0)
 				{
 					GetWindowRect(_hSelf, &rcw);
 					_rcFloat = rcw;

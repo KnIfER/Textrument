@@ -400,7 +400,7 @@ bool Gripper::onButtonUp()
 	POINT			pt			= {0,0};
 	POINT			ptBuf		= {0,0};
 	RECT			rc			= {0};
-	RECT			rcCorr		= {0};
+	RECT			rcRect		= {0};
 
 	::GetCursorPos(&pt);
 	getMousePoints(&pt, &ptBuf);
@@ -435,23 +435,24 @@ bool Gripper::onButtonUp()
 		rc = _pCont->getDataOfActiveTb()->rcFloat;
 		RECT rc1 = rc;
 		//rc = _pCont->_rcFloat; // passing a copy of the float shape
-		_pCont->getClientRect(rcCorr);
+		_pCont->getClientRect(rcRect);
 
 		CalcRectToScreen(_dockData.hWnd, &rc);
-		CalcRectToScreen(_dockData.hWnd, &rcCorr);
+		CalcRectToScreen(_dockData.hWnd, &rcRect);
 
 		rc.left    = pt.x - _ptOffset.x;
 		rc.top     = pt.y - _ptOffset.y;
 
 		/* correct rectangle position when mouse is not within */
-		DoCalcGripperRect(&rc, rcCorr, pt);
+		DoCalcGripperRect(&rc, rcRect, pt);
 
 		DockingCont* pContMove	= NULL;
 
 		bool fAlready = _pCont->isFloating();
 
-		rc.right += rc.left;
-		rc.bottom += rc.top;
+		rcRect = rc;
+		rcRect.right += rc.left;
+		rcRect.bottom += rc.top;
 		
 		/* change location of toolbars */
 		if (_startMovingFromTab == TRUE)
@@ -463,7 +464,7 @@ bool Gripper::onButtonUp()
 				 // ( moving from tab )
 				(fAlready && (::SendMessage(_hTabSource, TCM_GETITEMCOUNT, 0, 0) > 1)))
 			{
-				pContMove = _pDockMgr->toggleActiveTb(_pCont, DMM_FLOAT, TRUE, &rc);
+				pContMove = _pDockMgr->toggleActiveTb(_pCont, DMM_FLOAT, TRUE, &rcRect);
 				//ShowWindow(pContMove->getHSelf(), SW_NORMAL);
 			}
 		}
@@ -472,7 +473,7 @@ bool Gripper::onButtonUp()
 			// 若当前容器已经是浮动窗口，则不存在解除停靠的可能，自然无需调用下面的方法。
 			//   否则，须 {转换容器中的全部元素到一个新的浮动容器窗口}。
 			/* when all windows are moved */
-			pContMove = _pDockMgr->toggleVisTb(_pCont, DMM_FLOAT, &rc);
+			pContMove = _pDockMgr->toggleVisTb(_pCont, DMM_FLOAT, &rcRect);
 		}
 
 		/* set moving container */
@@ -480,9 +481,6 @@ bool Gripper::onButtonUp()
 		{
 			pContMove = _pCont;
 		}
-
-		rc.right  -= rc.left;
-		rc.bottom -= rc.top;
 
 		//if(pt.y>0||!fAlready) 
 		{
@@ -497,9 +495,25 @@ bool Gripper::onButtonUp()
 			, rcPrint.left, rcPrint.right, rcPrint.top, rcPrint.bottom
 			, rcPrint1.left, rcPrint1.right, rcPrint1.top, rcPrint1.bottom
 		);
+		WINDOWPLACEMENT placement = {};
+		GetWindowPlacement(_hSelf, &placement);
+		rcPrint = placement.rcNormalPosition;
+		GetWindowRect(pContMove->getHSelf(), &rcPrint1);
+		LogIs(2, (HWND)-2 , TEXT("onButtonUp pContMove.plc =%d, %d, %d, %d    ---pContMove.now---    %d, %d, %d, %d")
+			, rcPrint.left, rcPrint.right, rcPrint.top, rcPrint.bottom
+			, rcPrint1.left, rcPrint1.right, rcPrint1.top, rcPrint1.bottom
+		);
 		#endif
 
-		//pContMove->_rcFloat = rc;
+		if (DockingPreviewMethod==2)
+		{
+			WINDOWPLACEMENT placement = {};
+			GetWindowPlacement(pContMove->getHSelf(), &placement);
+			placement.rcNormalPosition = rcRect; // rcplace
+			SetWindowPlacement(pContMove->getHSelf(), &placement);
+		}
+
+		//pContMove->_rcFloat = rcRect;
 
 		/* update window position */
 		if(pt.y<=0) { // &&(!oldSchoolDraw||pContMove->isFloating())
@@ -674,7 +688,7 @@ void Gripper::doTabReordering(POINT pt)
 // Inspaired by duilib.
 void Gripper::drawWindow(const POINT* pPt)
 {
-	if(DockingPreviewMethod==0)
+	if(DockingPreviewMethod<=0)
 	{
 		drawRectangle(pPt);
 		return;
@@ -864,7 +878,7 @@ void Gripper::getMovingRect(POINT pt, RECT *rc)
 	DockingCont*	pContHit		= NULL;
 
 	/* test if mouse hits a container */
-	if (DockingPreviewMethod==0)
+	if (DockingPreviewMethod<=0)
 	{
 		pContHit = contHitTest(pt);
 	}
@@ -900,7 +914,7 @@ void Gripper::getMovingRect(POINT pt, RECT *rc)
 		if (pContHit == NULL)
 		{
 			//if(false) // 无事不绘制
-			if(!isCreated&&DockingPreviewMethod!=0)
+			if(!isCreated&&DockingPreviewMethod>0)
 			{
 				rc->left = rc->right = -1;
 				return;
@@ -1071,7 +1085,7 @@ DockingCont* Gripper::workHitTest(POINT pt, RECT *rc)
 	vector<DockingCont*>	vCont	= _pDockMgr->getContainerInfo();
 
 	/* at first test if cursor points into a visible container */
-	if(DockingPreviewMethod!=2)
+	if(DockingPreviewMethod<2)
 	for (size_t iCont = 0, len = vCont.size(); iCont < len; ++iCont)
 	{
 		if (vCont[iCont]->isVisible())
