@@ -15,13 +15,19 @@
 
 #include <map>
 
+extern const TCHAR* configFileName;
+
 __declspec(selectany) std::map<std::string, std::string> Profile;
+
+__declspec(selectany) std::map<std::string, std::string> localizefile;
 
 __declspec(selectany) bool ProfDirty=false;
 
 __declspec(selectany) TCHAR			g_IniFilePath[MAX_PATH]{0};
 
 std::string* GetProfString(char* name);
+
+std::string* GetLocalText(std::map<std::string, std::string> & m, char* name);
 
 int GetProfInt(char* name, int defVal);
 
@@ -30,5 +36,7 @@ bool PutProfString(char* name, char* data);
 bool PutProfInt(char* name, int val);
 
 void loadProf(TCHAR* path, const TCHAR* name);
+
+void loadLanguge(TCHAR* path);
 
 void saveProf(TCHAR* path, const TCHAR* name);

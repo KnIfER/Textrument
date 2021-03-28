@@ -21,6 +21,8 @@
 
 using namespace std;
 
+extern HWND mainAppWnd;
+
 string* GetProfString(char* name)
 {
 	auto idx = Profile.find(name);
@@ -29,6 +31,20 @@ string* GetProfString(char* name)
 		return &(*idx).second;
 	}
 	return 0;
+}
+
+string* GetLocalText(std::map<std::string, std::string> & m, char* name)
+{
+	if(!m.size())
+	{
+		return NULL;
+	}
+	auto idx = m.find(name);
+	if(idx!=m.end())
+	{		
+		return &(*idx).second;
+	}
+	return NULL;
 }
 
 int GetProfInt(char* name, int defVal)
@@ -93,27 +109,56 @@ bool PutProfInt(char* name, int val)
 	return PutProfString(name, buffer);
 }
 
-void loadProfile(TCHAR* path)
+void loadProfile(TCHAR* path, std::map<std::string, std::string> & m, bool skipSpace)
 {
 	char buffer[256]; int len, i;
 	ifstream in(path, ios::in);
+	int error_code=0;
+	int curr=-1;
 	if (in.is_open())
 	{
 		while (!in.eof())
 		{
-			in.getline(buffer,255);
+			if(in.getline(buffer,255).fail())
+			{
+				// break dead loop
+				if(!in.eof()) error_code=-1;
+				break;
+			}
+			curr = in.cur;
+			buffer[255] = '\0';
 			if(buffer[0]!='[')
 			{
 				for(int i=0, len = strlen(buffer);i<len;i++) {
 					if(buffer[i]=='=')
 					{
 						buffer[i]='\0';
-						Profile[buffer]=buffer+i+1;
+						if(skipSpace)
+						{
+							for(int j=i-1;j>=0;j--) {
+								if(buffer[j]==' ')
+									buffer[j]='\0';
+								else break;
+							}
+							for(int j=i+1;j<len;j++) {
+								if(buffer[j]==' ')
+									i++;
+								else break;
+							}
+						}
+						m[buffer]=buffer+i+1;
+						break;
 					}
 				}
 			}
 		}
 		in.close();
+	}
+	if(error_code==-1) 
+	{
+		int len = WideCharToMultiByte(CP_ACP, 0, configFileName, lstrlen(configFileName), buffer, 255, 0, 0);
+		buffer[len]='\0';
+		::MessageBoxA(mainAppWnd, buffer, ("INI Parse Error!"), MB_OK);
 	}
 }
 
@@ -125,20 +170,29 @@ void loadProf(TCHAR* path, const TCHAR* name)
 		PathAppend(g_IniFilePath, name);
 		if (PathFileExists(g_IniFilePath))
 		{
-			loadProfile(g_IniFilePath);
+			loadProfile(g_IniFilePath, Profile, false);
 		}
-		auto len=lstrlen(g_IniFilePath);
-		lstrcpy(g_IniFilePath+len, TEXT(".update"));
-		if (PathFileExists(g_IniFilePath))
-		{
-			TCHAR* pathTmp=new TCHAR[MAX_PATH];
-			lstrcpy(pathTmp, g_IniFilePath);
-			loadProfile(pathTmp);
-			PathRenameExtension(pathTmp, TEXT(".done"));
-			MoveFile(g_IniFilePath, pathTmp);
-			delete[] pathTmp;
-			ProfDirty=true;
-		}
+		//auto len=lstrlen(g_IniFilePath);
+		//lstrcpy(g_IniFilePath+len, TEXT(".update"));
+		//if (PathFileExists(g_IniFilePath))
+		//{
+		//	TCHAR* pathTmp=new TCHAR[MAX_PATH];
+		//	lstrcpy(pathTmp, g_IniFilePath);
+		//	loadProfile(pathTmp);
+		//	PathRenameExtension(pathTmp, TEXT(".done"));
+		//	MoveFile(g_IniFilePath, pathTmp);
+		//	delete[] pathTmp;
+		//	ProfDirty=true;
+		//}
+	}
+}
+
+void loadLanguge(TCHAR* path)
+{
+	localizefile.clear();
+	if (PathFileExists(path))
+	{
+		loadProfile(path, localizefile, true);
 	}
 }
 
