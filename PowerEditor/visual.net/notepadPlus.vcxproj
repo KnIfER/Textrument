@@ -302,6 +302,7 @@ copy ..\src\contextMenu.xml ..\bin64\contextMenu.xml
     <ClCompile Include="..\src\ScitillaComponent\columnEditor.cpp" />
     <ClCompile Include="..\src\MISC\Common\Common.cpp" />
     <ClCompile Include="..\src\WinControls\ContextMenu\ContextMenu.cpp" />
+    <ClCompile Include="..\src\WinControls\InsituDebug.cpp" />
     <ClCompile Include="..\src\WinControls\PluginsAdmin\pluginsAdmin.cpp" />
     <ClCompile Include="..\src\WinControls\TabBar\ControlsTab.cpp" />
     <ClCompile Include="..\src\WinControls\DockingWnd\DockingCont.cpp" />
@@ -608,6 +609,7 @@ copy ..\src\contextMenu.xml ..\bin64\contextMenu.xml
     <ClInclude Include="..\src\WinControls\AnsiCharPanel\asciiListView.h" />
     <ClInclude Include="..\src\WinControls\ColourPicker\ColourPopupResource.h" />
     <ClInclude Include="..\src\WinControls\ColourPicker\WordStyleDlgRes.h" />
+    <ClInclude Include="..\src\WinControls\DockingDebug.h" />
     <ClInclude Include="..\src\WinControls\DockingWnd\DirectGripper.h" />
     <ClInclude Include="..\src\WinControls\DocumentMap\documentMap_rc.h" />
     <ClInclude Include="..\src\WinControls\DocumentMap\documentSnapshot.h" />
@@ -625,6 +627,7 @@ copy ..\src\contextMenu.xml ..\bin64\contextMenu.xml
     <ClInclude Include="..\src\ScitillaComponent\columnEditor.h" />
     <ClInclude Include="..\src\MISC\Common\Common.h" />
     <ClInclude Include="..\src\WinControls\ContextMenu\ContextMenu.h" />
+    <ClInclude Include="..\src\WinControls\InsituDebug.h" />
     <ClInclude Include="..\src\WinControls\PluginsAdmin\pluginsAdmin.h" />
     <ClInclude Include="..\src\WinControls\PluginsAdmin\pluginsAdminRes.h" />
     <ClInclude Include="..\src\WinControls\ReadDirectoryChanges\targetver.h" />

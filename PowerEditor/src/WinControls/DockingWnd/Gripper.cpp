@@ -45,10 +45,11 @@ using namespace std;
 #define WH_MOUSE_LL 14
 #endif
 
+#include "DockingDebug.h"
 
-#include "Notepad_plus.h"
 
-extern Notepad_plus *nppApp;
+// For the following #define see the comments at drawRectangle() definition. (jg)
+#define USE_LOCKWINDOWUPDATE
 
 BOOL Gripper::_isRegistered	= FALSE;
 
@@ -126,6 +127,25 @@ Gripper::Gripper()
 	memset(&_dockData, 0, sizeof(tDockMgr));
 }
 
+Gripper::~Gripper()
+{
+	{
+		if (_hdc) {
+			// usually this should already have been done by a call to drawRectangle(),
+			// here just for cases where usual handling was interrupted (jg)
+			#ifdef USE_LOCKWINDOWUPDATE
+			::LockWindowUpdate(NULL);
+			#endif
+			::ReleaseDC(0, _hdc);
+		}
+		if (_hbm) {
+			::DeleteObject(_hbm);
+		}
+		if (_hbrush) {
+			::DeleteObject(_hbrush);
+		}
+	};
+}
 
 DirectGripper * dGripper = NULL;
 
@@ -352,8 +372,6 @@ void Gripper::create()
 		::ScreenToClient(_pCont->getHSelf(), &pt);
 	}
 
-	_drawPat = ::IsZoomed(_hParent);
-
 	_ptOffset.x	= pt.x - rc.left;
 	_ptOffset.y	= pt.y - rc.top;
 }
@@ -471,17 +489,15 @@ bool Gripper::onButtonUp()
 			::MoveWindow(pContMove->getHSelf(), rc.left, rc.top, rc.right, rc.bottom, TRUE);
 		}
 
-		// Debug Docking Preview
+		#if DEBUG_DOCKING_PREVIEW
 		RECT rcPrint = pContMove->getDataOfActiveTb()->rcFloat;
 		rcPrint = pContMove->_rcFloat;
 		RECT rcPrint1 = rc1;
-		TCHAR buffer[256]={};
-		wsprintf(buffer,TEXT("onButtonUp floatSz =%d, %d, %d, %d    ---data.rc---    %d, %d, %d, %d ")
+		LogIs(true, (HWND)-1 , TEXT("onButtonUp floatSz =%d, %d, %d, %d    ---data.rc---    %d, %d, %d, %d")
 			, rcPrint.left, rcPrint.right, rcPrint.top, rcPrint.bottom
 			, rcPrint1.left, rcPrint1.right, rcPrint1.top, rcPrint1.bottom
 		);
-		//::SendMessage(nppApp->_dockingManager.getHParent(), NPPM_SETSTATUSBAR, STATUSBAR_DOC_TYPE, (LPARAM)buffer);
-
+		#endif
 
 		//pContMove->_rcFloat = rc;
 
@@ -517,16 +533,13 @@ bool Gripper::onButtonUp()
 			_pDockMgr->toggleVisTbWnd(_pCont, pDockCont);
 		}
 
-		// Debug Docking Preview
+		#if DEBUG_DOCKING_PREVIEW
 		RECT rcPrint1 = pDockCont->getDataOfActiveTb()->rcFloat;
-		TCHAR buffer[256]={};
-		wsprintf(buffer,TEXT("onButtonUp1 floatSz =%d, %d, %d, %d    ---data.rc---    %d, %d, %d, %d ")
+		LogIs(true, (HWND)-1 , TEXT("onButtonUp1 floatSz =%d, %d, %d, %d    ---data.rc---    %d, %d, %d, %d ")
 			, rcPrint.left, rcPrint.right, rcPrint.top, rcPrint.bottom
 			, rcPrint1.left, rcPrint1.right, rcPrint1.top, rcPrint1.bottom
 		);
-		//::SendMessage(nppApp->_dockingManager.getHParent(), NPPM_SETSTATUSBAR, STATUSBAR_DOC_TYPE, (LPARAM)buffer);
-
-
+		#endif
 		return false;
 	}
 
@@ -661,7 +674,7 @@ void Gripper::doTabReordering(POINT pt)
 // Inspaired by duilib.
 void Gripper::drawWindow(const POINT* pPt)
 {
-	if(oldSchoolDraw)
+	if(DockingPreviewMethod==0)
 	{
 		drawRectangle(pPt);
 		return;
@@ -712,6 +725,16 @@ void Gripper::drawWindow(const POINT* pPt)
 	else	_bPtOldValid= TRUE;
 }
 
+
+//WORD bit1 = 0x0055, bit2 = 0x00aa;
+
+// Used by getRectAndStyle() to draw the drag rectangle
+static const WORD DotPattern[] = 
+{
+	0x00aa, 0x0055, 0x00aa, 0x0055, 0x00aa, 0x0055, 0x00aa, 0x0055
+	//bit1, bit2, bit1, bit2, bit1, bit2, bit1, bit2
+};
+
 // deprecated, painting on the desktop HDC is not smooth and dirty when the rect is not small.
 void Gripper::drawRectangle(const POINT* pPt)
 {
@@ -720,22 +743,20 @@ void Gripper::drawRectangle(const POINT* pPt)
 	RECT   rc	 = {0};
 	RECT   rcNew	 = {0};
 	RECT   rcOld	 = _rcPrev;
-	bool lock=0;
-#if defined (USE_LOCKWINDOWUPDATE)
-	lock=1;
-#endif
-	lock=0;
+
+
+	//lock=0;
 	// Get a screen device context with backstage redrawing disabled - to have a consistently
 	// and stable drawn rectangle while floating - keep in mind, that we must ensure, that
 	// finally ::LockWindowUpdate(NULL) will be called, to enable drawing for others again.
 	if (!_hdc)
 	{
-		HWND hWnd=_drawPat?_hParent:GetDesktopWindow();
-		if (lock)
+		HWND hWnd=GetDesktopWindow();
+		#if defined (USE_LOCKWINDOWUPDATE)
 		_hdc= ::GetDCEx(hWnd, NULL, ::LockWindowUpdate(hWnd) ? DCX_WINDOW|DCX_CACHE|DCX_LOCKWINDOWUPDATE : DCX_WINDOW|DCX_CACHE);
-		else
+		#else
 		_hdc= ::GetDCEx(hWnd, NULL, DCX_WINDOW|DCX_CACHE);
-		
+		#endif
 	}
 
 	// Create a brush with the appropriate bitmap pattern to draw our drag rectangle
@@ -817,10 +838,11 @@ void Gripper::drawRectangle(const POINT* pPt)
 
 	if (pPt == NULL)
 	{
-		if (lock)
+		#if defined (USE_LOCKWINDOWUPDATE)
 		::LockWindowUpdate(NULL);
-		else
+		#else
 		_bPtOldValid= FALSE;
+		#endif
 		if (_hdc)
 		{
 			::ReleaseDC(0, _hdc);
@@ -842,8 +864,14 @@ void Gripper::getMovingRect(POINT pt, RECT *rc)
 	DockingCont*	pContHit		= NULL;
 
 	/* test if mouse hits a container */
-	pContHit = dlgsHitTest(pt);
-	//pContHit = contHitTest(pt);
+	if (DockingPreviewMethod==0)
+	{
+		pContHit = contHitTest(pt);
+	}
+	else
+	{
+		pContHit = dlgsHitTest(pt);
+	}
 
 	if (pContHit != NULL)
 	{
@@ -872,12 +900,17 @@ void Gripper::getMovingRect(POINT pt, RECT *rc)
 		if (pContHit == NULL)
 		{
 			//if(false) // 无事不绘制
-			if(!isCreated&&!oldSchoolDraw)
+			if(!isCreated&&DockingPreviewMethod!=0)
 			{
 				rc->left = rc->right = -1;
 				return;
 			}
 			/* calcutlates the rect and draws it */
+			//if (DockingPreviewMethod==0)
+			//{
+			//	*rc = _pCont->getDataOfActiveTb()->rcFloat;
+			//	_pCont->getWindowRect(*rc);
+			//} else
 			if (!_pCont->isFloating())
 			{
 				if (_startMovingFromTab)
@@ -1038,6 +1071,7 @@ DockingCont* Gripper::workHitTest(POINT pt, RECT *rc)
 	vector<DockingCont*>	vCont	= _pDockMgr->getContainerInfo();
 
 	/* at first test if cursor points into a visible container */
+	if(DockingPreviewMethod!=2)
 	for (size_t iCont = 0, len = vCont.size(); iCont < len; ++iCont)
 	{
 		if (vCont[iCont]->isVisible())
@@ -1047,7 +1081,7 @@ DockingCont* Gripper::workHitTest(POINT pt, RECT *rc)
 			if (::PtInRect(&rcCont, pt) == TRUE)
 			{
 				/* when it does, return with non found docking area */
-				//return NULL;
+				return NULL;
 			}
 		}
 	}

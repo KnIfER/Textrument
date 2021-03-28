@@ -37,16 +37,6 @@
 class DockingCont;
 class DockingManager;
 
-// For the following #define see the comments at drawRectangle() definition. (jg)
-#define USE_LOCKWINDOWUPDATE
-
-
-// Used by getRectAndStyle() to draw the drag rectangle
-static const WORD DotPattern[] = 
-{
-	0x00aa, 0x0055, 0x00aa, 0x0055, 0x00aa, 0x0055, 0x00aa, 0x0055
-};
-
 
 #define MDLG_CLASS_NAME TEXT("moveDlg")
 
@@ -63,22 +53,7 @@ public:
 
 	bool stopGrip();
 
-	~Gripper() {
-		if (_hdc) {
-			// usually this should already have been done by a call to drawRectangle(),
-			// here just for cases where usual handling was interrupted (jg)
-			#ifdef USE_LOCKWINDOWUPDATE
-			::LockWindowUpdate(NULL);
-			#endif
-			::ReleaseDC(0, _hdc);
-		}
-		if (_hbm) {
-			::DeleteObject(_hbm);
-		}
-		if (_hbrush) {
-			::DeleteObject(_hbrush);
-		}
-	};
+	~Gripper();
 
 //protected :
 
@@ -133,8 +108,6 @@ public:
 
 	// mouse offset in moving rectangle
 	POINT _ptOffset;
-
-	bool _drawPat;
 
 	// remembers old mouse point
 	POINT _ptOld;

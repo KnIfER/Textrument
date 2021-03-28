@@ -43,6 +43,8 @@ using namespace std;
 
 extern Notepad_plus* nppApp;
 
+int DockingPreviewMethod = 2;
+
 namespace // anonymous namespace
 {
 

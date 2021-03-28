@@ -34,6 +34,8 @@
 
 #include "Gripper.h"
 
+#include "DockingDebug.h"
+
 #include "Notepad_plus.h"
 
 extern Notepad_plus *nppApp;
@@ -402,18 +404,7 @@ LRESULT DockingCont::runProcCaption(HWND hwnd, UINT Message, WPARAM wParam, LPAR
 			// 双击标题栏
 
 			if (isInRect(hwnd, LOWORD(lParam), HIWORD(lParam)) == posCaption)
-			if (!isFloating())
-			{
-				auto data = getDataOfActiveTb();
-				//nppApp->_dockingManager.toggleActiveTb(this, DMM_FLOAT, TRUE, NULL);
-				RECT rcFloat;
-				if(DMM_FLOATALL) rcFloat = data->rcFloat;
-				nppApp->_dockingManager.toggleVisTb(this, DMM_FLOAT, NULL);
-			}
-			else
-			{
 				::SendMessage(_hParent, DMM_FLOATALL, 0, reinterpret_cast<LPARAM>(this));
-			}
 
 			focusClient();
 
@@ -1001,12 +992,9 @@ void DockingCont::drawTabItem(DRAWITEMSTRUCT *pDrawItemStruct)
 	::RestoreDC(hDc, nSavedDC);
 }
 
-//std::vector<DockingCont*> dockingContsZOrder;
-
 list<DockingCont*> dockingContsZOrder;
 
-
- bool fuck=false;
+bool rcDebug=false;
 
 //----------------------------------------------
 //    Process function of dialog
@@ -1069,20 +1057,18 @@ INT_PTR CALLBACK DockingCont::run_dlgProc(UINT Message, WPARAM wParam, LPARAM lP
 
 		case WM_CONTEXTMENU:
 		{
-			fuck=true;
+			rcDebug=true;
 
-			// Debug Docking Preview
+			#if DEBUG_DOCKING_PREVIEW
 			RECT rcPrint = getDataOfActiveTb()->rcFloat;
 			RECT rc1 = _rcFloat;
-			TCHAR buffer[256]={};
-			wsprintf(buffer,TEXT("WM_CONTEXTMENU data.floatSz =%d, %d, %d, %d  ---rcFloat--- %d, %d, %d, %d  ---name---  %s")
+			LogIs(true, (HWND)-1 , TEXT("WM_CONTEXTMENU data.floatSz =%d, %d, %d, %d  ---rcFloat--- %d, %d, %d, %d  ---name---  %s")
 				, rcPrint.left, rcPrint.right, rcPrint.top, rcPrint.bottom
 				, rc1.left, rc1.right, rc1.top, rc1.bottom
 				//, rc.left, rc.right, rc.top, rc.bottom
 				, getDataOfActiveTb()->pszName
 			);
-			::SendMessage(nppApp->_dockingManager.getHParent(), NPPM_SETSTATUSBAR, STATUSBAR_DOC_TYPE, (LPARAM)buffer);
-
+			#endif
 
 			if (true)
 			{
@@ -1131,7 +1117,7 @@ INT_PTR CALLBACK DockingCont::run_dlgProc(UINT Message, WPARAM wParam, LPARAM lP
 				(rcWnd.left < pt.y) && (rcWnd.right  > pt.y))
 			{
 				_toDock = _isFloating;
-				onSize();
+				//onSize();
 				NotifyParent(DMM_DOCKALL);
 
 				if(pGripper_)
@@ -1155,13 +1141,11 @@ INT_PTR CALLBACK DockingCont::run_dlgProc(UINT Message, WPARAM wParam, LPARAM lP
 				// todo .. save when the user resize the Aero Snap Mode.
 			}
 
-			// Debug Docking Preview
+			#if DEBUG_DOCKING_PREVIEW
 			RECT rcPrint = _rcFloat;
-			TCHAR buffer[256]={};
-			wsprintf(buffer,TEXT("onSize floatSz =%d, %d, %d, %d :: ")
+			LogIs(true, (HWND)-1 , TEXT("onSize floatSz =%d, %d, %d, %d :: ")
 				, rcPrint.left, rcPrint.right, rcPrint.top, rcPrint.bottom);
-			//::SendMessage(nppApp->_dockingManager.getHParent(), NPPM_SETSTATUSBAR, STATUSBAR_DOC_TYPE, (LPARAM)buffer);
-
+			#endif
 
 			break;
 		}
@@ -1174,8 +1158,9 @@ INT_PTR CALLBACK DockingCont::run_dlgProc(UINT Message, WPARAM wParam, LPARAM lP
 		//case DMM_CANCEL_MOVE:
 		case WM_EXITSIZEMOVE:
 			// https://docs.microsoft.com/en-us/windows/win32/winmsg/wm-exitsizemove
-			lastMovedTm = clock();
+			//lastMovedTm = clock();
 			_toDock = false;
+			if(DockingPreviewMethod==2)
 			if(pGripper_)
 			{
 				RECT rc=_rcFloat;
@@ -1204,13 +1189,12 @@ INT_PTR CALLBACK DockingCont::run_dlgProc(UINT Message, WPARAM wParam, LPARAM lP
 						}
 					}
 
-					// Debug Docking Preview
+					#if DEBUG_DOCKING_PREVIEW
 					RECT rcPrint = _rcFloat;
-					TCHAR buffer[256]={};
-					wsprintf(buffer,TEXT("WM_EXITSIZEMOVE floatSz =%d, %d, %d, %d :: ")
-						, rcPrint.left, rcPrint.right, rcPrint.top, rcPrint.bottom);
-					::SendMessage(nppApp->_dockingManager.getHParent(), NPPM_SETSTATUSBAR, STATUSBAR_DOC_TYPE, (LPARAM)buffer);
-
+					LogIs(true, (HWND)-1 , TEXT("WM_EXITSIZEMOVE floatSz =%d, %d, %d, %d :: ")
+						, rcPrint.left, rcPrint.right, rcPrint.top, rcPrint.bottom
+					);
+					#endif
 				}
 
 				delete pGripper_;
@@ -1243,14 +1227,13 @@ INT_PTR CALLBACK DockingCont::run_dlgProc(UINT Message, WPARAM wParam, LPARAM lP
 			}
 
 
-
 			{
-				// Debug Docking Preview
-				//RECT rcPrint = _rcFloat;
-				//TCHAR buffer[256]={};
-				//wsprintf(buffer,TEXT("WM_EXITSIZEMOVE 2 floatSz =%d, %d, %d, %d :: ")
-				//	, rcPrint.left, rcPrint.right, rcPrint.top, rcPrint.bottom);
-				//::SendMessage(nppApp->_dockingManager.getHParent(), NPPM_SETSTATUSBAR, STATUSBAR_DOC_TYPE, (LPARAM)buffer);
+				#if DEBUG_DOCKING_PREVIEW
+				RECT rcPrint = _rcFloat;
+				LogIs(false, (HWND)-1 , TEXT("WM_EXITSIZEMOVE 2 floatSz =%d, %d, %d, %d :: ")
+					, rcPrint.left, rcPrint.right, rcPrint.top, rcPrint.bottom
+				);
+				#endif
 			}
 
 
@@ -1261,9 +1244,9 @@ INT_PTR CALLBACK DockingCont::run_dlgProc(UINT Message, WPARAM wParam, LPARAM lP
 			{
 					case SC_MOVE:
 					//if(true) break;
-					if(_toDock = _isFloating) 
+					if(_isFloating && DockingPreviewMethod==2) 
 					{
-
+						_toDock = true;
 						if (!IsZoomed(_hSelf))
 						{
 							RECT rc;
@@ -1282,22 +1265,20 @@ INT_PTR CALLBACK DockingCont::run_dlgProc(UINT Message, WPARAM wParam, LPARAM lP
 							if (!AeroSnap)
 							{
 								_rcFloat = rc;
+								GetWindowPlacement(_hSelf, &placement);
+								placement.rcNormalPosition = rc; // rcplace
+								SetWindowPlacement(_hSelf, &placement);
 							}
 
-							GetWindowPlacement(_hSelf, &placement);
-							placement.rcNormalPosition = rc; // rcplace
-							SetWindowPlacement(_hSelf, &placement);
 
-							// Debug Docking Preview
+							#if DEBUG_DOCKING_PREVIEW
 							RECT rcPrint = _rcFloat;
-							TCHAR buffer[256]={};
-							wsprintf(buffer,TEXT("SC_MOVE floatSz =%d, %d, %d, %d    ---plc---    %d, %d, %d, %d    ---now---    %d, %d, %d, %d")
+							LogIs(true, (HWND)-1 , TEXT("SC_MOVE floatSz =%d, %d, %d, %d    ---plc---    %d, %d, %d, %d    ---now---    %d, %d, %d, %d")
 								, rcPrint.left, rcPrint.right, rcPrint.top, rcPrint.bottom
 								, rc1.left, rc1.right, rc1.top, rc1.bottom
 								, rc.left, rc.right, rc.top, rc.bottom
-							);
-							::SendMessage(nppApp->_dockingManager.getHParent(), NPPM_SETSTATUSBAR, STATUSBAR_DOC_TYPE, (LPARAM)buffer);
-
+								);
+							#endif
 						}
 
 						if(!pGripper_)
@@ -1413,7 +1394,7 @@ void DockingCont::onSize()
 					if(memcmp(&_rcFloat, &rcw, sizeof(RECT))==0) // rcplace
 					{
 						GetWindowRect(_hSelf, &rcw);
-						_rcFloat = rcw;  // rcplace
+						//_rcFloat = rcw;  // rcplace
 					}
 					rcw = _rcFloat; // rcplace
 				}
@@ -1423,16 +1404,14 @@ void DockingCont::onSize()
 					//GetWindowRect(_hSelf, &rcw);
 				}
 
-				//if(rcw.left<rcw.right&&rcw.top<rcw.bottom&&rcw.right>0&&rcw.bottom>0)
-				if(0)
+				if(DockingPreviewMethod==0)
 				{
+					GetWindowRect(_hSelf, &rcw);
 					_rcFloat = rcw;
 					// update floating size
 					for (size_t iTb = 0, len = _vTbData.size(); iTb < len; ++iTb)
 					{
-						//getWindowRect(_vTbData[iTb]->rcFloat);
 						_vTbData[iTb]->rcFloat = rcw;
-						//_vTbData[iTb]->rcFloat = rcplc;
 					}
 				}
 
