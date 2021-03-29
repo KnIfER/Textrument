@@ -931,7 +931,7 @@ DockingCont* DockingManager::toggleVisTb(DockingCont* pContSrc, UINT message, LP
 		SendNotify(TbData.hClient, MAKELONG(message==DMM_DOCK?DMN_DOCK:DMN_FLOAT, GetContainer(pContTgt)));
 
 		// remove toolbar from anywhere
-		_vContainer[iContSrc]->removeToolbar(TbData);
+		_vContainer[iContSrc]->removeToolbar(TbData, iTb==len-1);
 	}
 
 	_vContainer[iContPrev]->setActiveTb(activeTb);
@@ -962,12 +962,12 @@ void DockingManager::toggleVisTbWnd(DockingCont* pContSrc, DockingCont* pContTgt
 	{
 		// get data one by another
 		tTbData		TbData = *vTbData[iTb];
-		toggleTb(pContSrc, pContTgt, TbData);
+		toggleTb(pContSrc, pContTgt, TbData, iTb==len-1);
 	}
 	pContTgt->setActiveTb(activeTb);
 }
 
-void DockingManager::toggleTb(DockingCont* pContSrc, DockingCont* pContTgt, tTbData TbData)
+void DockingManager::toggleTb(DockingCont* pContSrc, DockingCont* pContTgt, tTbData TbData, bool activate)
 {
 	//if (true) return;
 	int					iContSrc	= GetContainer(pContSrc);
@@ -993,7 +993,7 @@ void DockingManager::toggleTb(DockingCont* pContSrc, DockingCont* pContTgt, tTbD
 	//pContTgt->_rcFloat = pContSrc->_rcFloat;
 
 	// remove toolbar from source
-	_vContainer[iContSrc]->removeToolbar(TbData);
+	_vContainer[iContSrc]->removeToolbar(TbData, activate);
 }
 
 BOOL DockingManager::ContExists(size_t iCont)

@@ -106,7 +106,7 @@ private :
 	LRESULT runProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam);
 	void onSize();
 
-	void	toggleTb(DockingCont* pContSrc, DockingCont* pContTgt, tTbData TbData);
+	void	toggleTb(DockingCont* pContSrc, DockingCont* pContTgt, tTbData TbData, bool activate=true);
 
 	// test if container exists
 	BOOL ContExists(size_t iCont);

@@ -70,7 +70,7 @@ public:
 	};
 
 	tTbData* createToolbar(tTbData data);
-	void	 removeToolbar(tTbData data);
+	void	 removeToolbar(tTbData data, bool activate=true);
 	tTbData* findToolbarByWnd(HWND hClient);
 	tTbData* findToolbarByName(TCHAR* pszName);
 
@@ -181,7 +181,7 @@ protected :
 	int  searchPosInTab(tTbData* pTbData);
 	void selectTab(int iTab);
 
-	int  hideToolbar(tTbData* pTbData, BOOL hideClient = TRUE);
+	int  hideToolbar(tTbData* pTbData, BOOL hideClient = TRUE, bool activate=true);
 	void viewToolbar(tTbData *pTbData);
 	int  removeTab(tTbData* pTbData) {
 		return hideToolbar(pTbData, FALSE);

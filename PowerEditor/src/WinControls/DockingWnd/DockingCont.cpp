@@ -222,7 +222,7 @@ tTbData* DockingCont::createToolbar(tTbData data)
 }
 
 
-void DockingCont::removeToolbar(tTbData TbData)
+void DockingCont::removeToolbar(tTbData TbData, bool activate)
 {
 	// remove from list
 	// items in _vTbData are removed in the loop so _vTbData.size() should be checked in every iteration
@@ -231,7 +231,8 @@ void DockingCont::removeToolbar(tTbData TbData)
 		if (_vTbData[iTb]->hClient == TbData.hClient)
 		{
 			// remove tab
-			removeTab(_vTbData[iTb]);
+			//removeTab(_vTbData[iTb]);
+			hideToolbar(_vTbData[iTb], FALSE, activate);
 
 			// free resources
 			delete _vTbData[iTb];
@@ -1547,7 +1548,7 @@ void DockingCont::showToolbar(tTbData* pTbData, BOOL state)
 	}
 }
 
-int DockingCont::hideToolbar(tTbData *pTbData, BOOL hideClient)
+int DockingCont::hideToolbar(tTbData *pTbData, BOOL hideClient, bool activate)
 {
 	int iItem = searchPosInTab(pTbData);
 	BOOL hadFocus = ::IsChild (pTbData->hClient, ::GetFocus());
@@ -1566,6 +1567,8 @@ int DockingCont::hideToolbar(tTbData *pTbData, BOOL hideClient)
 
 			// activate new selected item and view plugin dialog
 			_prevItem = iItem;
+			
+			if(activate)
 			selectTab(iItem);
 
 			// hide tabs if only one element
@@ -1595,6 +1598,7 @@ int DockingCont::hideToolbar(tTbData *pTbData, BOOL hideClient)
 			::ShowWindow(pTbData->hClient, SW_HIDE);
 		}
 	}
+	if(activate)
 	onSize();
 
 	return iItem;
