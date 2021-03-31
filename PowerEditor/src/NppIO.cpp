@@ -1722,26 +1722,44 @@ bool Notepad_plus::fileRename(BufferID id)
 		StringDlg strDlg;
 		strDlg.init(_pPublicInterface->getHinst(), _pPublicInterface->getHSelf(), title.c_str(), staticName.c_str(), buf->getFileName(), 0, reservedChars.c_str(), true);
 
-		TCHAR *tabNewName = reinterpret_cast<TCHAR *>(strDlg.doDialog());
-		if (tabNewName)
+		TCHAR *tabNewName;
+		while (tabNewName = reinterpret_cast<TCHAR *>(strDlg.doDialog()))
 		{
-			success = true;
-			buf->setFileName(tabNewName);
-			bool isSnapshotMode = NppParameters::getInstance().getNppGUI().isSnapshotMode();
-			if (isSnapshotMode)
+			BufferID sameNamedBufferId = _pDocTab->findBufferByName(tabNewName);
+			if (sameNamedBufferId == BUFFER_INVALID)
 			{
-				generic_string oldBackUpFile = buf->getBackupFileName();
+				sameNamedBufferId = _pNonDocTab->findBufferByName(tabNewName);
+			}
 
-				// Change the backup file name and let MainFileManager decide the new filename
-				buf->setBackupFileName(TEXT(""));
+			if (sameNamedBufferId != BUFFER_INVALID)
+			{
+				_nativeLangSpeaker.messageBox("RenameTabTemporaryNameAlreadyInUse",
+					_pPublicInterface->getHSelf(),
+					TEXT("The specified name is already in use on another tab."),
+					TEXT("Rename failed"),
+					MB_OK | MB_ICONSTOP);
+			}
+			else
+			{
+				success = true;
+				buf->setFileName(tabNewName);
+				bool isSnapshotMode = NppParameters::getInstance().getNppGUI().isSnapshotMode();
+				if (isSnapshotMode)
+				{
+					generic_string oldBackUpFile = buf->getBackupFileName();
 
-				// Create new backup
-				buf->setModifiedStatus(true);
-				bool bRes = MainFileManager.backupCurrentBuffer();
+					// Change the backup file name and let MainFileManager decide the new filename
+					buf->setBackupFileName(TEXT(""));
 
-				// Delete old backup
-				if (bRes)
-					::DeleteFile(oldBackUpFile.c_str());
+					// Create new backup
+					buf->setModifiedStatus(true);
+					bool bRes = MainFileManager.backupCurrentBuffer();
+
+					// Delete old backup
+					if (bRes)
+						::DeleteFile(oldBackUpFile.c_str());
+				}
+				break;
 			}
 		}
 	}

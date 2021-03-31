@@ -297,6 +297,14 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 		case NPPM_DOOPEN:
 		case WM_DOOPEN:
 		{
+			if (wParam)
+			{
+				Buffer* bid = (Buffer*)wParam;
+				if (bid->getID()==bid)
+				{
+					return switchToFile(bid);
+				}
+			}
 			BufferID id = doOpen(reinterpret_cast<const TCHAR *>(lParam));
 			if (id != BUFFER_INVALID)
 				return switchToFile(id);
