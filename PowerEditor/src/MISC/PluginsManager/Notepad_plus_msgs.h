@@ -437,6 +437,13 @@ enum Platform { PF_UNKNOWN, PF_X86, PF_X64, PF_IA64 };
 	// Users should call it with pluginRootPath be NULL to get the required number of TCHAR (not including the terminating nul character),
 	// allocate pluginRootPath buffer with the return value + 1, then call it again to get the path.
 
+	#define NPPM_GETSETTINGSONCLOUDPATH (NPPMSG + 98)
+	// INT NPPM_GETSETTINGSCLOUDPATH(size_t strLen, TCHAR *settingsOnCloudPath)
+	// Get settings on cloud path. It's useful if plugins want to store its settings on Cloud, if this path is set.
+	// Returns the number of TCHAR copied/to copy. If the return value is 0, then this path is not set, or the "strLen" is not enough to copy the path.
+	// Users should call it with settingsCloudPath be NULL to get the required number of TCHAR (not including the terminating nul character),
+	// allocate settingsCloudPath buffer with the return value + 1, then call it again to get the path.
+
 	#define NPPM_GETNOTMADVERSION (NPPMSG + 666)
 	#define NPPM_SHOWBIGGERFONTS (NPPMSG + 667)
 	#define NPPM_SETTTINGSTO (NPPMSG + 668)
