@@ -37,6 +37,8 @@
 #include "UserDefineDialog.h"
 #include "Notepad_plus.h"
 
+#include "InsituDebug.h"
+
 #pragma warning(disable : 4996) // for GetVersionEx()
 
 using namespace std;
@@ -2046,13 +2048,46 @@ void NppParameters::setWorkingDir(const TCHAR * newPath)
 	}
 }
 
-
-bool NppParameters::loadSession(Session & session, const TCHAR *sessionFileName)
+bool NppParameters::loadSession(Session & session, const TCHAR *sessionFileName, bool intentToLoad)
 {
 	TiXmlDocument *pXmlSessionDocument = new TiXmlDocument(sessionFileName);
 	bool loadOkay = pXmlSessionDocument->LoadFile();
 	if (loadOkay)
 		loadOkay = getSessionFromXmlTree(pXmlSessionDocument, &session);
+
+	//LogIs(2, (HWND)-1, L"Read Session's Docking Manager! %s", sessionFileName);
+
+	if (intentToLoad && (!dockingParamsLoaded||bApplyLayoutFromSession))
+	{
+		feedFileBrowserParameters(pXmlSessionDocument);
+
+		TiXmlNode *root = pXmlSessionDocument->FirstChild(TEXT("GUIConfig"));
+		if (root)
+		{
+			TiXmlElement *element = root->ToElement();
+			const TCHAR* nm = element->Attribute(TEXT("name"));
+			if (!lstrcmp(nm, TEXT("DockingManager")))
+			{
+				int i;
+				if (element->Attribute(TEXT("sv2Config"), &i))
+					bSaveLayoutFromSession = i;
+
+				if (!dockingDataBackup)
+				{
+					dockingDataBackup = new DockingManagerData;
+					*dockingDataBackup = _nppGUI._dockingData; 
+				}
+
+				DockingManagerData* dockingData = new DockingManagerData();
+				feedDockingManager(element, *dockingData);
+				//LogIs(2, (HWND)-1, L"feedDockingManager:: %d, %d", data->_bottomHight, data->_topHeight);
+				nppApp->reInitDockingSystem(dockingData);
+
+				delete dockingData;
+			}
+			isLayoutFromSession = true;
+		}
+	}
 
 	delete pXmlSessionDocument;
 	return loadOkay;
@@ -2268,6 +2303,8 @@ void NppParameters::feedFileBrowserParameters(TiXmlNode *node)
 	{
 		_fileBrowserSelectedItemPath = selectedItemPath;
 	}
+
+	_fileBrowserRoot.resize(0);
 
 	for (TiXmlNode *childNode = fileBrowserRoot->FirstChildElement(TEXT("root"));
 		childNode;
@@ -3248,6 +3285,17 @@ void NppParameters::writeSession(const Session & session, const TCHAR *fileName)
 			}
 		}
 	}
+
+	//LogIs(2, (HWND)-1, L"Write Session's Docking Manager! %s", fileName);
+
+	// write to external session file.
+	if (bSaveLayoutToSession&&fileName)
+	{
+		nppApp->saveDockingParams();
+		nppApp->saveFileBrowserParam(_pXmlSessionDoc);
+		insertDockingParamNode(_pXmlSessionDoc, NULL);
+	}
+
 	_pXmlSessionDoc->SaveFile();
 }
 
@@ -3749,14 +3797,17 @@ bool NppParameters::writeProjectPanelsSettings() const
 	return true;
 }
 
-bool NppParameters::writeFileBrowserSettings(const vector<generic_string> & rootPaths, const generic_string & latestSelectedItemPath) const
+bool NppParameters::writeFileBrowserSettings(const vector<generic_string> & rootPaths, const generic_string & latestSelectedItemPath, TiXmlNode* nppRoot) const
 {
 	if (!_pXmlUserDoc) return false;
 
-	TiXmlNode *nppRoot = _pXmlUserDoc->FirstChild(TEXT("NotepadPlus"));
-	if (not nppRoot)
+	if (nppRoot==NULL)
 	{
-		nppRoot = _pXmlUserDoc->InsertEndChild(TiXmlElement(TEXT("NotepadPlus")));
+		nppRoot = _pXmlUserDoc->FirstChild(TEXT("NotepadPlus"));
+		if (not nppRoot)
+		{
+			nppRoot = _pXmlUserDoc->InsertEndChild(TiXmlElement(TEXT("NotepadPlus")));
+		}
 	}
 
 	TiXmlNode *oldFileBrowserRootNode = nppRoot->FirstChildElement(TEXT("FileBrowser"));
@@ -3785,7 +3836,7 @@ bool NppParameters::writeFileBrowserSettings(const vector<generic_string> & root
 	}
 
 	// (Re)Insert the file browser root
-	(nppRoot->ToElement())->InsertEndChild(fileBrowserRootNode);
+	nppRoot->InsertEndChild(fileBrowserRootNode);
 	return true;
 }
 
@@ -5032,7 +5083,7 @@ void NppParameters::feedGUIParameters(TiXmlNode *node)
 		}
 		else if (!lstrcmp(nm, TEXT("DockingManager")))
 		{
-			feedDockingManager(element);
+			feedDockingManager(element, _nppGUI._dockingData);
 		}
 
 		else if (!lstrcmp(nm, TEXT("globalOverride")))
@@ -5087,6 +5138,15 @@ void NppParameters::feedGUIParameters(TiXmlNode *node)
 		}
 		else if (!lstrcmp(nm, TEXT("sessionExt")))
 		{
+			int i;
+			if (element->Attribute(TEXT("rdLayout"), &i))
+			{
+				bApplyLayoutFromSession = i;
+			}
+			if (element->Attribute(TEXT("svLayout"), &i))
+			{
+				bSaveLayoutToSession = i;
+			}
 			TiXmlNode *n = childNode->FirstChild();
 			if (n)
 			{
@@ -5465,22 +5525,22 @@ void NppParameters::feedScintillaParam(TiXmlNode *node)
 }
 
 
-void NppParameters::feedDockingManager(TiXmlNode *node)
+void NppParameters::feedDockingManager(TiXmlNode *node, DockingManagerData & dockingData)
 {
 	TiXmlElement *element = node->ToElement();
 
 	int i;
 	if (element->Attribute(TEXT("leftWidth"), &i))
-		_nppGUI._dockingData._leftWidth = i;
+		dockingData._leftWidth = i;
 
 	if (element->Attribute(TEXT("rightWidth"), &i))
-		_nppGUI._dockingData._rightWidth = i;
+		dockingData._rightWidth = i;
 
 	if (element->Attribute(TEXT("topHeight"), &i))
-		_nppGUI._dockingData._topHeight = i;
+		dockingData._topHeight = i;
 
 	if (element->Attribute(TEXT("bottomHeight"), &i))
-		_nppGUI._dockingData._bottomHight = i;
+		dockingData._bottomHight = i;
 
 
 
@@ -5501,7 +5561,7 @@ void NppParameters::feedDockingManager(TiXmlNode *node)
 			floatElement->Attribute(TEXT("y"), &y);
 			floatElement->Attribute(TEXT("width"), &w);
 			floatElement->Attribute(TEXT("height"), &h);
-			_nppGUI._dockingData._flaotingWindowInfo.push_back(FloatingWindowInfo(cont, x, y, w, h));
+			dockingData._floatingWindowInfo.push_back(FloatingWindowInfo(cont, x, y, w, h));
 		}
 	}
 
@@ -5529,7 +5589,7 @@ void NppParameters::feedDockingManager(TiXmlNode *node)
 				isVisible = (lstrcmp(val, TEXT("yes")) == 0);
 			}
 
-			_nppGUI._dockingData._pluginDockInfo.push_back(PluginDlgDockingInfo(name, id, curr, prev, isVisible));
+			dockingData._pluginDockInfo.push_back(PluginDlgDockingInfo(name, id, curr, prev, isVisible));
 		}
 	}
 
@@ -5544,7 +5604,7 @@ void NppParameters::feedDockingManager(TiXmlNode *node)
 		{
 			int activeTab = 0;
 			dlgElement->Attribute(TEXT("activeTab"), &activeTab);
-			_nppGUI._dockingData._containerTabInfo.push_back(ContainerTabInfo(cont, activeTab));
+			dockingData._containerTabInfo.push_back(ContainerTabInfo(cont, activeTab));
 		}
 	}
 }
@@ -5944,6 +6004,8 @@ void NppParameters::createXmlTreeFromGUIParams()
 	{
 		TiXmlElement *GUIConfigElement = (newGUIRoot->InsertEndChild(TiXmlElement(TEXT("GUIConfig"))))->ToElement();
 		GUIConfigElement->SetAttribute(TEXT("name"), TEXT("sessionExt"));
+		GUIConfigElement->SetAttribute(TEXT("rdLayout"), bApplyLayoutFromSession);
+		GUIConfigElement->SetAttribute(TEXT("svLayout"), bSaveLayoutToSession);
 		GUIConfigElement->InsertEndChild(TiXmlText(_nppGUI._definedSessionExt.c_str()));
 	}
 
@@ -6109,7 +6171,17 @@ void NppParameters::createXmlTreeFromGUIParams()
 
 	// <GUIConfig name="DockingManager" leftWidth="328" rightWidth="359" topHeight="200" bottomHeight="436">
 	// ...
-	insertDockingParamNode(newGUIRoot);
+
+	if (isLayoutFromSession&&!bSaveLayoutFromSession)
+	{
+		// write layout backups.
+		insertDockingParamNode(newGUIRoot, dockingDataBackup);
+	}
+	else
+	{
+		// write current layouts.
+		insertDockingParamNode(newGUIRoot, NULL);
+	}
 }
 
 bool NppParameters::writeFindHistory()
@@ -6185,18 +6257,24 @@ bool NppParameters::writeFindHistory()
 	return true;
 }
 
-void NppParameters::insertDockingParamNode(TiXmlNode *GUIRoot)
+void NppParameters::insertDockingParamNode(TiXmlNode *GUIRoot, DockingManagerData*  dockingData)
 {
+	DockingManagerData & dmd = dockingData?*dockingData:_nppGUI._dockingData;
 	TiXmlElement DMNode(TEXT("GUIConfig"));
 	DMNode.SetAttribute(TEXT("name"), TEXT("DockingManager"));
-	DMNode.SetAttribute(TEXT("leftWidth"), _nppGUI._dockingData._leftWidth);
-	DMNode.SetAttribute(TEXT("rightWidth"), _nppGUI._dockingData._rightWidth);
-	DMNode.SetAttribute(TEXT("topHeight"), _nppGUI._dockingData._topHeight);
-	DMNode.SetAttribute(TEXT("bottomHeight"), _nppGUI._dockingData._bottomHight);
+	DMNode.SetAttribute(TEXT("leftWidth"), dmd._leftWidth);
+	DMNode.SetAttribute(TEXT("rightWidth"), dmd._rightWidth);
+	DMNode.SetAttribute(TEXT("topHeight"), dmd._topHeight);
+	DMNode.SetAttribute(TEXT("bottomHeight"), dmd._bottomHight);
 
-	for (size_t i = 0, len = _nppGUI._dockingData._flaotingWindowInfo.size(); i < len ; ++i)
+	if (isLayoutFromSession)
 	{
-		FloatingWindowInfo & fwi = _nppGUI._dockingData._flaotingWindowInfo[i];
+		DMNode.SetAttribute(TEXT("sv2Config"), bSaveLayoutFromSession);
+	}
+
+	for (size_t i = 0, len = dmd._floatingWindowInfo.size(); i < len ; ++i)
+	{
+		FloatingWindowInfo & fwi = dmd._floatingWindowInfo[i];
 		TiXmlElement FWNode(TEXT("FloatingWindow"));
 		FWNode.SetAttribute(TEXT("cont"), fwi._cont);
 		FWNode.SetAttribute(TEXT("x"), fwi._pos.left);
@@ -6207,9 +6285,9 @@ void NppParameters::insertDockingParamNode(TiXmlNode *GUIRoot)
 		DMNode.InsertEndChild(FWNode);
 	}
 
-	for (size_t i = 0, len = _nppGUI._dockingData._pluginDockInfo.size() ; i < len ; ++i)
+	for (size_t i = 0, len = dmd._pluginDockInfo.size() ; i < len ; ++i)
 	{
-		PluginDlgDockingInfo & pdi = _nppGUI._dockingData._pluginDockInfo[i];
+		PluginDlgDockingInfo & pdi = dmd._pluginDockInfo[i];
 		TiXmlElement PDNode(TEXT("PluginDlg"));
 		PDNode.SetAttribute(TEXT("pluginName"), pdi._name);
 		PDNode.SetAttribute(TEXT("id"), pdi._internalID);
@@ -6220,9 +6298,9 @@ void NppParameters::insertDockingParamNode(TiXmlNode *GUIRoot)
 		DMNode.InsertEndChild(PDNode);
 	}
 
-	for (size_t i = 0, len = _nppGUI._dockingData._containerTabInfo.size(); i < len ; ++i)
+	for (size_t i = 0, len = dmd._containerTabInfo.size(); i < len ; ++i)
 	{
-		ContainerTabInfo & cti = _nppGUI._dockingData._containerTabInfo[i];
+		ContainerTabInfo & cti = dmd._containerTabInfo[i];
 		TiXmlElement CTNode(TEXT("ActiveTabs"));
 		CTNode.SetAttribute(TEXT("cont"), cti._cont);
 		CTNode.SetAttribute(TEXT("activeTab"), cti._activeTab);

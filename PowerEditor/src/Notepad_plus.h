@@ -205,7 +205,7 @@ public:
 
 	bool saveGUIParams();
 	bool saveProjectPanelsParams();
-	bool saveFileBrowserParam();
+	bool saveFileBrowserParam(TiXmlNode* svRoot);
 	void saveDockingParams();
     void saveUserDefineLangs();
     void saveShortcuts();
@@ -229,6 +229,8 @@ public:
 
     void loadLastSession();
 	bool loadSession(Session & session, bool isSnapshotMode = false);
+
+	void reInitDockingSystem(DockingManagerData* dockingData);
 
 	void prepareBufferChangedDialog(Buffer * buffer);
 	void notifyBufferChanged(Buffer * buffer, int mask);
@@ -612,7 +614,7 @@ public:
 	void launchProjectPanel(int cmdID, ProjectPanel ** pProjPanel, int panelID);
 	void launchDocMap();
 	void launchFunctionList(bool coldLaunch);
-	void launchFileBrowser(const std::vector<generic_string> * folders, bool fromScratch = false);
+	void launchFileBrowser(const std::vector<generic_string> * folders, bool fromScratch = false, bool display=true);
 	void showAllQuotes() const;
 	static DWORD WINAPI threadTextPlayer(void *text2display);
 	static DWORD WINAPI threadTextTroller(void *params);

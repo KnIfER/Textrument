@@ -193,7 +193,7 @@ void DockingCont::doDialog(bool willBeShown, bool isFloating)
 }
 
 
-tTbData* DockingCont::createToolbar(tTbData data)
+tTbData* DockingCont::createToolbar(tTbData data, bool visible)
 {
 	tTbData *pTbData = new tTbData;
 
@@ -212,6 +212,7 @@ tTbData* DockingCont::createToolbar(tTbData data)
 	// set attached child window
     ::SetParent(pTbData->hClient, ::GetDlgItem(_hSelf, IDC_CLIENT_TAB));
 
+	if(visible)
 	// set names for captions and view toolbar
 	viewToolbar(pTbData);
 

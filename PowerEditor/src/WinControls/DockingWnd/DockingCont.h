@@ -69,7 +69,7 @@ public:
 			return _hSelf;
 	};
 
-	tTbData* createToolbar(tTbData data);
+	tTbData* createToolbar(tTbData data, bool visible=true);
 	void	 removeToolbar(tTbData data, bool activate=true);
 	tTbData* findToolbarByWnd(HWND hClient);
 	tTbData* findToolbarByName(TCHAR* pszName);
@@ -143,6 +143,9 @@ public:
 	//RECT _rcFloatPlace{0,0,0,0};
 	void doCloseOneTab();
 
+	// handling of toolbars
+	void doClose();
+
 	POINT releasePt;
 protected :
 
@@ -174,9 +177,6 @@ protected :
 	// functions for caption handling and drawing
 	eMousePos isInRect(HWND hwnd, int x, int y);
 
-	// handling of toolbars
-	void doClose();
-
 	// return new item
 	int  searchPosInTab(tTbData* pTbData);
 	void selectTab(int iTab);
@@ -190,8 +190,8 @@ protected :
 	bool updateCaption();
 	LPARAM NotifyParent(UINT message);
 
-
-private:
+public:
+//private:
 	// handles
 	bool					_isFloating;
 	HWND					_hCaption;

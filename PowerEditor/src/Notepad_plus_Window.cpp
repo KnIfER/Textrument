@@ -249,13 +249,20 @@ void Notepad_plus_Window::init(HINSTANCE hInst, HWND parent, const TCHAR *cmdLin
 		}
 	}
 
-	// Restore all dockable panels from the last session
-	for (size_t i = 0, len = _notepad_plus_plus_core._internalFuncIDs.size() ; i < len ; ++i)
-		::SendMessage(_hSelf, WM_COMMAND, _notepad_plus_plus_core._internalFuncIDs[i], 0);
 
 	std::vector<generic_string> fns;
 	if (cmdLine)
 		fns = _notepad_plus_plus_core.loadCommandlineParams(cmdLine, cmdLineParams);
+
+	// todo optimise
+	// load layout from config.xml
+	if (!nppParams.dockingParamsLoaded)
+	{
+		_notepad_plus_plus_Kore->reInitDockingSystem(NULL);
+		// Restore all dockable panels from the last session
+		for (size_t i = 0, len = _notepad_plus_plus_core._internalFuncIDs.size() ; i < len ; ++i)
+			::SendMessage(_hSelf, WM_COMMAND, _notepad_plus_plus_core._internalFuncIDs[i], 0);
+	}
 
 	// Launch folder as workspace after all this dockable panel being restored from the last session
 	// To avoid dockable panel toggle problem.

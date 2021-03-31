@@ -2217,7 +2217,7 @@ bool Notepad_plus::fileLoadSession(const TCHAR *fn)
 			bool isAllSuccessful = true;
 			Session session2Load;
 
-			if ((NppParameters::getInstance()).loadSession(session2Load, sessionFileName))
+			if ((NppParameters::getInstance()).loadSession(session2Load, sessionFileName, true))
 			{
 				isAllSuccessful = loadSession(session2Load);
 				result = true;

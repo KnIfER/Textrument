@@ -1079,7 +1079,7 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 			if ((!sessionFileName) || (sessionFileName[0] == '\0'))
 				return 0;
 			Session session2Load;
-			if (nppParam.loadSession(session2Load, sessionFileName))
+			if (nppParam.loadSession(session2Load, sessionFileName, false))
 				return session2Load.nbMainFiles() + session2Load.nbSubFiles();
 			return 0;
 		}
@@ -1093,7 +1093,7 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 				return FALSE;
 
 			Session session2Load;
-			if (nppParam.loadSession(session2Load, sessionFileName))
+			if (nppParam.loadSession(session2Load, sessionFileName, false))
 			{
 				size_t i = 0;
 				for ( ; i < session2Load.nbMainFiles() ; )
@@ -2068,7 +2068,12 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 					_lastRecentFileList.setLock(false);	//only lock when the session is remembered
 
 				if (!saveProjectPanelsParams()) allClosed = false; //writeProjectPanelsSettings
-				saveFileBrowserParam();
+
+				if (!nppParam.isLayoutFromSession||nppParam.bSaveLayoutFromSession)
+				{
+					saveFileBrowserParam(NULL);
+				}
+				// else keeps the original fileBrowser data.
 
 				if (!allClosed)
 				{

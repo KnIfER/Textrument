@@ -51,6 +51,8 @@
 #include "Common.h"
 #include <set>
 
+#include "InsituDebug.h"
+
 using namespace std;
 
 enum tb_stat {tb_saved, tb_unsaved, tb_ro, tb_monitored};
@@ -850,30 +852,7 @@ LRESULT Notepad_plus::init(HWND hwnd)
 	//
 	// launch the plugin dlg memorized at the last session
 	//
-	DockingManagerData& dmd = nppGUI._dockingData;
-
-	_dockingManager.setDockedContSize(CONT_LEFT  , nppGUI._dockingData._leftWidth);
-	_dockingManager.setDockedContSize(CONT_RIGHT , nppGUI._dockingData._rightWidth);
-	_dockingManager.setDockedContSize(CONT_TOP	 , nppGUI._dockingData._topHeight);
-	_dockingManager.setDockedContSize(CONT_BOTTOM, nppGUI._dockingData._bottomHight);
-
-	for (size_t i = 0, len = dmd._pluginDockInfo.size(); i < len ; ++i)
-	{
-		PluginDlgDockingInfo& pdi = dmd._pluginDockInfo[i];
-		if (pdi._isVisible)
-		{
-			if (pdi._name == NPP_INTERNAL_FUCTION_STR)
-				_internalFuncIDs.push_back(pdi._internalID);
-			else
-				_pluginsManager.runPluginCommand(pdi._name.c_str(), pdi._internalID);
-		}
-	}
-
-	for (size_t i = 0, len = dmd._containerTabInfo.size(); i < len; ++i)
-	{
-		ContainerTabInfo & cti = dmd._containerTabInfo[i];
-		_dockingManager.setActiveTab(cti._cont, cti._activeTab);
-	}
+	//reInitDockingSystem(NULL);
 
 	//Load initial docs into doctab
 	loadBufferIntoView(_mainEditView.getCurrentBufferID(), MAIN_VIEW);
@@ -887,6 +866,109 @@ LRESULT Notepad_plus::init(HWND hwnd)
 
 	checkMenuItem(IDM_VIEW_SWOGGLE, nppGUI._swiggle);
 	return TRUE;
+}
+
+void Notepad_plus::reInitDockingSystem(DockingManagerData* dockingData)
+{
+	auto & nppGUI = *nppUIParms;
+
+	nppParms->dockingParamsLoaded = true;
+
+	DockingManagerData& dmd = dockingData?*dockingData:nppGUI._dockingData;
+
+	_dockingManager.setDockedContSize(CONT_LEFT  , dmd._leftWidth);
+	_dockingManager.setDockedContSize(CONT_RIGHT , dmd._rightWidth);
+	_dockingManager.setDockedContSize(CONT_TOP	 , dmd._topHeight);
+	_dockingManager.setDockedContSize(CONT_BOTTOM, dmd._bottomHight);
+
+	std::map<int, PluginDlgDockingInfo*> addedDlgMap;
+
+	if (dockingData)
+	{
+		nppGUI._dockingData = dmd;
+
+		for (size_t i = 0, len = dmd._pluginDockInfo.size(); i < len ; ++i)
+		{
+			PluginDlgDockingInfo& pdi = dmd._pluginDockInfo[i];
+			addedDlgMap[pdi._internalID] = &pdi;
+		}
+
+		std::vector<DockingCont*> & vCont =  _dockingManager.getContainerInfo();
+
+		for (size_t i = 0, len = vCont.size(); i < len ; ++i)
+		{
+			vector<tTbData *> & vData	= vCont[i]->_vTbData;
+
+			vCont[i]->doClose();
+
+			//vCont[i]->removeToolbar
+
+			//vCont[i]->_vTbData.
+
+			// re-initilize the created panels.
+			for (size_t jTab = 0, len2 = vData.size(); jTab < len2 ; ++jTab)
+			{
+				tTbData *pData = vData[jTab];
+				auto iter = addedDlgMap.find(pData->dlgID);
+				if (iter!=addedDlgMap.end())
+				{
+					//PluginDlgDockingInfo* item = iter->second;
+					vector<tTbData*>::iterator itr = vData.begin() + jTab;
+					vData.erase(itr);
+					len2--;
+					jTab--;
+
+					int		iCont	= -1;
+					bool	isVisible	= false;
+
+					getIntegralDockingData(*pData, iCont, isVisible);
+					_dockingManager.createDockableDlg(*pData, iCont, isVisible);
+
+					//LogIs(2, (HWND)-1 , TEXT("re-initilize panels isVisible=%d  ---name---  %s") , isVisible , pData->pszName);
+				
+				}
+			}
+		}
+
+		if (_pFileBrowser)
+		{
+			// re-Init the fileBrowser.
+			launchFileBrowser(nppParms->getFileBrowserRoots(), true, false);
+		}
+
+		_internalFuncIDs.resize(0);
+	}
+
+	//if (!dockingData)
+	for (size_t i = 0, len = dmd._pluginDockInfo.size(); i < len ; ++i)
+	{
+		PluginDlgDockingInfo& pdi = dmd._pluginDockInfo[i];
+		if (pdi._isVisible)
+		{
+			if (pdi._name == NPP_INTERNAL_FUCTION_STR)
+			{
+				if (dockingData)
+				{
+					::SendMessage(nppApp->_pPublicInterface->getHSelf(), WM_COMMAND, pdi._internalID, 0);
+				}
+				else
+				{
+					_internalFuncIDs.push_back(pdi._internalID);
+				}
+			}
+			else
+			{
+				_pluginsManager.runPluginCommand(pdi._name.c_str(), pdi._internalID);
+			}
+			pdi._currContainer;
+		}
+	}
+
+	for (size_t i = 0, len = dmd._containerTabInfo.size(); i < len; ++i)
+	{
+		ContainerTabInfo & cti = dmd._containerTabInfo[i];
+		_dockingManager.setActiveTab(cti._cont, cti._activeTab);
+	}
 }
 
 int Notepad_plus::getButtonCommand(POINT &pointer) {
@@ -1072,13 +1154,13 @@ bool Notepad_plus::saveProjectPanelsParams()
 	return (NppParameters::getInstance()).writeProjectPanelsSettings();
 }
 
-bool Notepad_plus::saveFileBrowserParam()
+bool Notepad_plus::saveFileBrowserParam(TiXmlNode* svRoot)
 {
 	if (_pFileBrowser)
 	{
 		vector<generic_string> rootPaths = _pFileBrowser->getRoots();
 		generic_string selectedItemPath = _pFileBrowser->getSelectedItemPath();
-		return (NppParameters::getInstance()).writeFileBrowserSettings(rootPaths, selectedItemPath);
+		return (NppParameters::getInstance()).writeFileBrowserSettings(rootPaths, selectedItemPath, svRoot);
 	}
 	return true; // nothing to save so true is returned
 }
@@ -1191,7 +1273,7 @@ void Notepad_plus::saveDockingParams()
 	}
 
 	nppGUI._dockingData._pluginDockInfo = vPluginDockInfo;
-	nppGUI._dockingData._flaotingWindowInfo = vFloatingWindowInfo;
+	nppGUI._dockingData._floatingWindowInfo = vFloatingWindowInfo;
 }
 
 
@@ -5792,7 +5874,7 @@ std::vector<generic_string> Notepad_plus::loadCommandlineParams(const TCHAR * co
 	if (pCmdParams->_isSessionFile && fnss.size() == 1)
 	{
 		Session session2Load;
-		if ((NppParameters::getInstance()).loadSession(session2Load, fnss.getFileName(0)))
+		if ((NppParameters::getInstance()).loadSession(session2Load, fnss.getFileName(0), true))
 		{
 			loadSession(session2Load);
 		}
@@ -6383,7 +6465,7 @@ void Notepad_plus::launchAnsiCharPanel()
 	_pAnsiCharPanel->display();
 }
 
-void Notepad_plus::launchFileBrowser(const vector<generic_string> * folders, bool fromScratch)
+void Notepad_plus::launchFileBrowser(const vector<generic_string> * folders, bool fromScratch, bool display)
 {
 	if (!_pFileBrowser)
 	{
@@ -6435,11 +6517,14 @@ void Notepad_plus::launchFileBrowser(const vector<generic_string> * folders, boo
 		_pFileBrowser->addRootFolder(folders->at(i));
 	}
 
-	_pFileBrowser->display();
+	if (display)
+	{
+		_pFileBrowser->display();
 
-	checkMenuItem(IDM_VIEW_FILEBROWSER, true);
-	_toolBar.setCheck(IDM_VIEW_FILEBROWSER, true);
-	_pFileBrowser->setClosed(false);
+		checkMenuItem(IDM_VIEW_FILEBROWSER, true);
+		_toolBar.setCheck(IDM_VIEW_FILEBROWSER, true);
+		_pFileBrowser->setClosed(false);
+	}
 }
 
 void Notepad_plus::checkProjectMenuItem()

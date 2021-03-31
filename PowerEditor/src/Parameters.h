@@ -335,20 +335,20 @@ struct DockingManagerData final
 	int _topHeight = 200;
 	int _bottomHight = 200;
 
-	std::vector<FloatingWindowInfo> _flaotingWindowInfo;
+	std::vector<FloatingWindowInfo> _floatingWindowInfo;
 	std::vector<PluginDlgDockingInfo> _pluginDockInfo;
 	std::vector<ContainerTabInfo> _containerTabInfo;
 
 	bool getFloatingRCFrom(int floatCont, RECT& rc) const
 	{
-		for (size_t i = 0, fwiLen = _flaotingWindowInfo.size(); i < fwiLen; ++i)
+		for (size_t i = 0, fwiLen = _floatingWindowInfo.size(); i < fwiLen; ++i)
 		{
-			if (_flaotingWindowInfo[i]._cont == floatCont)
+			if (_floatingWindowInfo[i]._cont == floatCont)
 			{
-				rc.left   = _flaotingWindowInfo[i]._pos.left;
-				rc.top	= _flaotingWindowInfo[i]._pos.top;
-				rc.right  = _flaotingWindowInfo[i]._pos.right;
-				rc.bottom = _flaotingWindowInfo[i]._pos.bottom;
+				rc.left   = _floatingWindowInfo[i]._pos.left;
+				rc.top	= _floatingWindowInfo[i]._pos.top;
+				rc.right  = _floatingWindowInfo[i]._pos.right;
+				rc.bottom = _floatingWindowInfo[i]._pos.bottom;
 				return true;
 			}
 		}
@@ -1431,7 +1431,7 @@ public:
 	bool writeHistory(const TCHAR *fullpath);
 
 	bool writeProjectPanelsSettings() const;
-	bool writeFileBrowserSettings(const std::vector<generic_string> & rootPath, const generic_string & latestSelectedItemPath) const;
+	bool writeFileBrowserSettings(const std::vector<generic_string> & rootPath, const generic_string & latestSelectedItemPath, TiXmlNode* nppRoot=NULL) const;
 
 	TiXmlNode* getChildElementByAttribut(TiXmlNode *pere, const TCHAR *childName, const TCHAR *attributName, const TCHAR *attributVal) const;
 
@@ -1583,7 +1583,7 @@ public:
 		return _doPrintAndExit;
 	};
 
-	bool loadSession(Session & session, const TCHAR *sessionFileName);
+	bool loadSession(Session & session, const TCHAR *sessionFileName, bool intentToLoad);
 	int langTypeToCommandID(LangType lt) const;
 	WNDPROC getEnableThemeDlgTexture() const {return _enableThemeDialogTextureFuncAddr;};
 
@@ -1741,6 +1741,15 @@ public:
 
 	FindHistory _findHistory;
 
+	bool bSaveLayoutToSession = true;
+	bool bSaveLayoutFromSession = true; // this parameter from and for session file.
+	bool bApplyLayoutFromSession = true;
+	bool isLayoutFromSession=false;
+
+	bool dockingParamsLoaded=false;
+
+	DockingManagerData* dockingDataBackup=NULL;
+
 	UserLangContainer *_userLangArray[NB_MAX_USER_LANG];
 	unsigned char _nbUserLang = 0; // won't be exceeded to 255;
 	generic_string _userDefineLangsFolderPath;
@@ -1865,7 +1874,7 @@ private:
 	void feedKeyWordsParameters(TiXmlNode *node);
 	void feedFileListParameters(TiXmlNode *node);
 	void feedScintillaParam(TiXmlNode *node);
-	void feedDockingManager(TiXmlNode *node);
+	void feedDockingManager(TiXmlNode *node, DockingManagerData & dockingData);
 	void feedFindHistoryParameters(TiXmlNode *node);
 	void feedProjectPanelsParameters(TiXmlNode *node);
 	void feedFileBrowserParameters(TiXmlNode *node);
@@ -1894,7 +1903,7 @@ private:
 	void stylerStrOp(bool op);
 	TiXmlElement * insertGUIConfigBoolNode(TiXmlNode *r2w, const TCHAR *name, bool bVal);
 	TiXmlElement * insertGUIConfigIntNode(TiXmlNode *r2w, const TCHAR *name, int val);
-	void insertDockingParamNode(TiXmlNode *GUIRoot);
+	void insertDockingParamNode(TiXmlNode *GUIRoot, DockingManagerData*  dockingData);
 	void writeExcludedLangList(TiXmlElement *element);
 	void writePrintSetting(TiXmlElement *element);
 	void initMenuKeys();		//initialise menu keys and scintilla keys. Other keys are initialized on their own

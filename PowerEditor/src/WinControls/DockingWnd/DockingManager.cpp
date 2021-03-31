@@ -699,7 +699,9 @@ void DockingManager::createDockableDlg(tTbData data, int iCont, bool isVisible)
 
 	// attach toolbar
 	if (_vContainer.size() > (size_t)iCont && _vContainer[iCont] != NULL)
-		_vContainer[iCont]->createToolbar(data);
+	{
+		_vContainer[iCont]->createToolbar(data, isVisible);
+	}
 
 	// notify client app
 	if (iCont < DOCKCONT_MAX)
