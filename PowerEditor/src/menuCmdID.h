@@ -137,6 +137,7 @@
 	#define    IDM_EDIT_SORTLINES_RANDOMLY          (IDM_EDIT + 78)
     #define    IDM_EDIT_SORTLINES_LEXICO_CASE_INSENS_ASCENDING	(IDM_EDIT + 80)
     #define    IDM_EDIT_SORTLINES_LEXICO_CASE_INSENS_DESCENDING	(IDM_EDIT + 81)
+    #define    IDM_EDIT_COPY_LINK                               (IDM_EDIT + 82)
 
 	#define    IDM_EDIT_OPENASFILE                   (IDM_EDIT + 73)
 	#define    IDM_EDIT_OPENINFOLDER                 (IDM_EDIT + 74)
