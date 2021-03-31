@@ -550,7 +550,7 @@ void Finder::gotoFoundLine()
 	const FoundInfo fInfo = *(_pMainFoundInfos->begin() + lno);
 
 	// Switch to another document
-	if (!::SendMessage(::GetParent(_hParent), WM_DOOPEN, 0, reinterpret_cast<LPARAM>(fInfo._fullPath.c_str()))) return;
+	if (!::SendMessage(_hParent, WM_DOOPEN, 0, reinterpret_cast<LPARAM>(fInfo._fullPath.c_str()))) return;
 
 	(*_ppEditView)->_positionRestoreNeeded = false;
 	Searching::displaySectionCentered(fInfo._start, fInfo._end, *_ppEditView);
@@ -2330,7 +2330,7 @@ void FindReplaceDlg::findAllIn(InWhat op)
 	if (!_pFinder)
 	{
 		_pFinder = new Finder();
-		_pFinder->init(_hInst, _hSelf, _ppEditView);
+		_pFinder->init(_hInst, (*_ppEditView)->getHParent(), _ppEditView);
 		_pFinder->setVolatiled(false);
 		
 		tTbData	data = {0};
@@ -2392,8 +2392,7 @@ void FindReplaceDlg::findAllIn(InWhat op)
 		_pFinder->_scintView.setMakerStyle(FOLDER_STYLE_SIMPLE);
 
 		_pFinder->_scintView.display();
-		_pFinder->display();
-		::SendMessage(_hParent, NPPM_DMMHIDE, 0, reinterpret_cast<LPARAM>(_pFinder->getHSelf()));
+		_pFinder->display(false);
 		::UpdateWindow(_hParent);
 		justCreated = true;
 	}
@@ -2433,7 +2432,7 @@ void FindReplaceDlg::findAllIn(InWhat op)
 		else
 		{
 			// Show finder
-			::SendMessage(_hParent, NPPM_DMMSHOW, 0, reinterpret_cast<LPARAM>(_pFinder->getHSelf()));
+			_pFinder->display();
 			getFocus(); // no hits
 		}
 	}
@@ -2445,7 +2444,7 @@ Finder * FindReplaceDlg::createFinder()
 {
 	Finder *pFinder = new Finder();
 
-	pFinder->init(_hInst, _hSelf, _ppEditView);
+	pFinder->init(_hInst, (*_ppEditView)->getHParent(), _ppEditView);
 	
 	tTbData	data = { 0 };
 	pFinder->create(&data, false);
@@ -2506,7 +2505,6 @@ Finder * FindReplaceDlg::createFinder()
 	pFinder->_scintView.setMakerStyle(FOLDER_STYLE_SIMPLE);
 
 	pFinder->_scintView.display();
-	pFinder->display();
 	::UpdateWindow(_hParent);
 	
 	pFinder->setFinderStyle();
@@ -2521,7 +2519,7 @@ Finder * FindReplaceDlg::createFinder()
 	::SendMessage(pFinder->getHSelf(), WM_SIZE, 0, 0);
 
 	// Show finder
-	::SendMessage(_hParent, NPPM_DMMSHOW, 0, reinterpret_cast<LPARAM>(pFinder->getHSelf()));
+	pFinder->display();
 	pFinder->_scintView.getFocus();
 
 	return pFinder;
@@ -3251,7 +3249,7 @@ LRESULT FAR PASCAL FindReplaceDlg::finderProc(HWND hwnd, UINT message, WPARAM wP
 		if (wParam == VK_RETURN)
 			pFinder->gotoFoundLine();
 		else if (wParam == VK_ESCAPE)
-			::SendMessage(::GetParent(pFinder->getHParent()), NPPM_DMMHIDE, 0, reinterpret_cast<LPARAM>(pFinder->getHSelf()));
+			pFinder->display(false);
 		else // VK_DELETE
 			pFinder->deleteResult();
 		return 0;
@@ -3609,7 +3607,7 @@ void Finder::openAll()
 
 	for (size_t i = 0; i < sz; ++i)
 	{
-		::SendMessage(::GetParent(_hParent), WM_DOOPEN, 0, reinterpret_cast<LPARAM>(_pMainFoundInfos->at(i)._fullPath.c_str()));
+		::SendMessage(_hParent, WM_DOOPEN, 0, reinterpret_cast<LPARAM>(_pMainFoundInfos->at(i)._fullPath.c_str()));
 	}
 }
 
@@ -3812,7 +3810,7 @@ INT_PTR CALLBACK Finder::run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam)
 			{
 				case NPPM_INTERNAL_FINDINFINDERDLG:
 				{
-					::SendMessage(::GetParent(_hParent), NPPM_INTERNAL_FINDINFINDERDLG, reinterpret_cast<WPARAM>(this), 0);
+					::SendMessage(_hParent, NPPM_INTERNAL_FINDINFINDERDLG, reinterpret_cast<WPARAM>(this), 0);
 					return TRUE;
 				}
 
@@ -3820,7 +3818,7 @@ INT_PTR CALLBACK Finder::run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam)
 				{
 					if (_canBeVolatiled)
 					{
-						::SendMessage(::GetParent(_hParent), NPPM_DMMHIDE, 0, reinterpret_cast<LPARAM>(_hSelf));
+						::SendMessage(_hParent, NPPM_DMMHIDE, 0, reinterpret_cast<LPARAM>(_hSelf));
 						setClosed(true);
 					}
 					return TRUE;
