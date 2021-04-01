@@ -1688,6 +1688,11 @@ public:
 	void setUseNewStyleSaveDlg(bool v) {
 		_nppGUI._useNewStyleSaveDlg = v;
 	}
+
+	void setCmdSettingsDir(const generic_string& settingsDir) {
+		_cmdSettingsDir = settingsDir;
+	};
+
 	DPIManager _dpiManager;
 
 	generic_string static getSpecialFolderLocation(int folderKind);
@@ -1728,7 +1733,7 @@ public:
 
 	NppGUI _nppGUI;
 	ScintillaViewParams _svp;
-	Lang *_langList[NB_LANG];
+	Lang *_langList[NB_LANG] = {};
 	int _nbLang = 0;
 
 	// Recent File History
@@ -1776,6 +1781,7 @@ public:
 	WNDPROC _enableThemeDialogTextureFuncAddr = nullptr;
 	bool _isLocal;
 	bool _isx64 = false; // by default 32-bit
+	generic_string _cmdSettingsDir;
 
 public:
 	void setShortcutDirty() { _isAnyShortcutModified = true; };

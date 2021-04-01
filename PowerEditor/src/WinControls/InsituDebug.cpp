@@ -3,12 +3,9 @@
 #include "Notepad_plus_msgs.h"
 #include <stdarg.h>
 
+extern HWND mainAppWnd;
 
-#include "Notepad_plus.h"
-
-extern Notepad_plus *nppApp;
-
-void LogIs(int show, HWND hWnd, const TCHAR* msg, ...)
+void LogIs(int show, HWND hWnd, const TCHAR* msg, va_list & args)
 {
 	if (hWnd==(HWND)-2)
 	{
@@ -18,10 +15,8 @@ void LogIs(int show, HWND hWnd, const TCHAR* msg, ...)
 	{
 		if (hWnd==(HWND)-1)
 		{
-			hWnd = nppApp->_dockingManager.getHParent();
+			hWnd = mainAppWnd;
 		}
-		va_list args = NULL;
-		va_start(args, msg);
 
 		TCHAR buffer[256]={};
 		_vstprintf(buffer,msg, args);
@@ -35,6 +30,18 @@ void LogIs(int show, HWND hWnd, const TCHAR* msg, ...)
 			::MessageBox(hWnd, buffer, TEXT(""), MB_OK);
 		}
 	}
+}
 
+void LogIs(int show, HWND hWnd, const TCHAR* msg, ...)
+{
+	va_list args = NULL;
+	va_start(args, msg);
+	LogIs(show, hWnd, msg, args);
+}
 
+void LogIs(int show, const TCHAR* msg, ...)
+{
+	va_list args = NULL;
+	va_start(args, msg);
+	LogIs(show, (HWND)-1, msg, args);
 }
