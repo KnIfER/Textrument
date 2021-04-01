@@ -1535,7 +1535,8 @@ bool Notepad_plus::fileSave(BufferID id)
 				}
 			}
 
-			if (!::CopyFile(fn, fn_bak.c_str(), FALSE))
+			BOOL stopGoing = FALSE;
+			if (!::CopyFileEx(fn, fn_bak.c_str(), nullptr, nullptr, &stopGoing, COPY_FILE_NO_BUFFERING))
 			{
 				int res = _nativeLangSpeaker.messageBox("FileBackupFailed",
 					_pPublicInterface->getHSelf(),
