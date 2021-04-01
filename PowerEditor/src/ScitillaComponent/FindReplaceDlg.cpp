@@ -2335,11 +2335,8 @@ void FindReplaceDlg::findAllIn(InWhat op)
 		_pFinder->init(_hInst, (*_ppEditView)->getHParent(), _ppEditView);
 		_pFinder->setVolatiled(false);
 
-		NativeLangSpeaker *pNativeSpeaker = (NppParameters::getInstance()).getNativeLangSpeaker();
-		bool isRTL = pNativeSpeaker->isRTL();
-
+		bool isRTL = (*_ppEditView)->isTextDirectionRTL();
 		tTbData	data = {0};
-
 		_pFinder->create(&data, isRTL);
 		::SendMessage(_hParent, NPPM_MODELESSDIALOG, MODELESSDIALOGREMOVE, reinterpret_cast<LPARAM>(_pFinder->getHSelf()));
 		// define the default docking behaviour
@@ -2353,6 +2350,7 @@ void FindReplaceDlg::findAllIn(InWhat op)
 		// in this case is DOCKABLE_DEMO_INDEX
 		data.dlgID = 0;
 		
+		NativeLangSpeaker *pNativeSpeaker = (NppParameters::getInstance()).getNativeLangSpeaker();
 		generic_string text = pNativeSpeaker->getLocalizedStrFromID("find-result-caption", TEXT(""));
 		
 		if (!text.empty())
