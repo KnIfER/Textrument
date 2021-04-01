@@ -1617,8 +1617,9 @@ bool Notepad_plus::fileSaveAs(BufferID id, bool isSaveCopy, bool forbidSaveAsOpe
 	LangType langType = buf->getLangType();
 
 	int langTypeIndex = 0;
-	if (!((NppParameters::getInstance()).getNppGUI()._setSaveDlgExtFiltToAllTypes && 
-		buf->isUntitled() && langType == L_TEXT))
+	if (!((NppParameters::getInstance()).getNppGUI()._setSaveDlgExtFiltToAllTypes
+		//&&  buf->isUntitled() && langType == L_TEXT
+		))
 	{
 		langTypeIndex = setFileOpenSaveDlgFilters(fDlg, false, langType);
 	}
