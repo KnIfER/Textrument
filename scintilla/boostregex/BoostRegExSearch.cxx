@@ -11,7 +11,6 @@
 
 #include <stdlib.h>
 #include <iterator> 
-#include <vector>
 
 #include "Scintilla.h"
 #include "Platform.h"

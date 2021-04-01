@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ImportGroup Label="PropertySheets" />
+  <PropertyGroup Label="UserMacros">
+    <BoostSlib>$(BOOST)\bin.v2\libs\regex\build\msvc-14.2\release\address-model-64\link-static\runtime-link-static\threading-multi</BoostSlib>
+    <PostSciBuild>cleanup.bat ../../PowerEditor\bin64\tools\cleandll.bat ../../PowerEditor\bin64\$(TargetName)$(TargetExt)</PostSciBuild>
+    <BoostLibs_32>$(BOOST)\bin.v2\libs\regex\build\msvc-14.2\release\link-static\runtime-link-static\threading-multi</BoostLibs_32>
+    <BoostLibs_32r>$(BOOST)\bin.v2\libs\regex\build\msvc-14.2\release\link-static\runtime-link-static\threading-multi</BoostLibs_32r>
+  </PropertyGroup>
+  <PropertyGroup />
+  <ItemDefinitionGroup>
+    <Link>
+      <AdditionalDependencies>libboost_regex-vc142-mt-s-x64-1_74.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(BOOST)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>SCI_OWNREGEX</PreprocessorDefinitions>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <BuildMacro Include="BoostSlib">
+      <Value>$(BoostSlib)</Value>
+    </BuildMacro>
+    <BuildMacro Include="PostSciBuild">
+      <Value>$(PostSciBuild)</Value>
+    </BuildMacro>
+    <BuildMacro Include="BoostLibs_32">
+      <Value>$(BoostLibs_32)</Value>
+    </BuildMacro>
+    <BuildMacro Include="BoostLibs_32r">
+      <Value>$(BoostLibs_32r)</Value>
+    </BuildMacro>
+  </ItemGroup>
+</Project>
