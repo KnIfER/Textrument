@@ -11,7 +11,7 @@
 
 #include <stdlib.h>
 #include <iterator> 
-
+#include <vector>
 #include "Scintilla.h"
 #include "Platform.h"
 #include "ILoader.h"
@@ -250,6 +250,8 @@ RegexSearchBase *CreateRegexSearch(CharClassify* /* charClassTable */)
 #endif
 }
 
+std::string g_exceptionMessage;
+
 /**
  * Find text in document, supporting both forward and backward
  * searches (just pass startPosition > endPosition to do a backward search).
@@ -258,6 +260,7 @@ RegexSearchBase *CreateRegexSearch(CharClassify* /* charClassTable */)
 Sci::Position BoostRegexSearch::FindText(Document* doc, Sci::Position startPosition, Sci::Position endPosition, const char *regexString,
                         bool caseSensitive, bool /*word*/, bool /*wordStart*/, int sciSearchFlags, Sci::Position *lengthRet) 
 {
+	g_exceptionMessage.clear();
 	try {
 		SearchParameters search;
 		
@@ -287,13 +290,8 @@ Sci::Position BoostRegexSearch::FindText(Document* doc, Sci::Position startPosit
 			regex_constants::ECMAScript
 			| (caseSensitive ? 0 : regex_constants::icase);
 		search._regexString = regexString;
-		
-		const bool starts_at_line_start = search.isLineStart(search._startPosition);
-		const bool ends_at_line_end     = search.isLineEnd(search._endPosition);
 		search._boostRegexFlags = 
-			  (starts_at_line_start ? regex_constants::match_default : regex_constants::match_not_bol)
-			| (ends_at_line_end     ? regex_constants::match_default : regex_constants::match_not_eol)
-			| ((sciSearchFlags & SCFIND_REGEXP_DOTMATCHESNL) ? regex_constants::match_default : regex_constants::match_not_dot_newline);
+			((sciSearchFlags & SCFIND_REGEXP_DOTMATCHESNL) ? regex_constants::match_default : regex_constants::match_not_dot_newline);
 		
 		const int empty_match_style = sciSearchFlags & SCFIND_REGEXP_EMPTYMATCH_MASK;
 		const int allow_empty_at_start = sciSearchFlags & SCFIND_REGEXP_EMPTYMATCH_ALLOWATSTART;
@@ -323,10 +321,23 @@ Sci::Position BoostRegexSearch::FindText(Document* doc, Sci::Position startPosit
 		}
 	}
 
-	catch(regex_error& /*ex*/)
+	catch(regex_error& ex)
 	{
 		// -1 is normally used for not found, -2 is used here for invalid regex
+		g_exceptionMessage = ex.what();
 		return -2;
+	}
+
+	catch(boost::wrapexcept<std::runtime_error>& ex)
+	{
+		g_exceptionMessage = ex.what();
+		return -3;
+	}
+
+	catch(...)
+	{
+		g_exceptionMessage = "Unexpected exception while searching";
+		return -3;
 	}
 }
 
@@ -343,15 +354,13 @@ template <class CharT, class CharacterIterator>
 BoostRegexSearch::Match BoostRegexSearch::EncodingDependent<CharT, CharacterIterator>::FindTextForward(SearchParameters& search)
 {
 	CharacterIterator endIterator(search._document, search._endPosition, search._endPosition);
+	CharacterIterator baseIterator(search._document, 0, search._endPosition);
 	Sci::Position next_search_from_position = search._startPosition;
 	bool found = false;
 	bool match_is_valid = false;
 	do {
-		search._boostRegexFlags = search.isLineStart(next_search_from_position)
-			? search._boostRegexFlags & ~regex_constants::match_not_bol
-			: search._boostRegexFlags |  regex_constants::match_not_bol;
 		const bool end_reached = next_search_from_position > search._endPosition;
-		found = !end_reached && boost::regex_search(CharacterIterator(search._document, next_search_from_position, search._endPosition), endIterator, _match, _regex, search._boostRegexFlags);
+		found = !end_reached && boost::regex_search(CharacterIterator(search._document, next_search_from_position, search._endPosition), endIterator, _match, _regex, search._boostRegexFlags, baseIterator);
 		if (found) {
 			const Sci::Position  position = _match[0].first.pos();
 			const Sci::Position  length   = _match[0].second.pos() - position;
