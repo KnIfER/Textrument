@@ -2402,8 +2402,8 @@ void Notepad_plus::command(int id)
 
 		case IDM_FORMAT_ANSI :
 		case IDM_FORMAT_UTF_8 :
-		case IDM_FORMAT_UCS_2BE :
-		case IDM_FORMAT_UCS_2LE :
+		case IDM_FORMAT_UTF_16BE :
+		case IDM_FORMAT_UTF_16LE :
 		case IDM_FORMAT_AS_UTF_8 :
 		{
 			Buffer * buf = _pEditView->getCurrentBuffer();
@@ -2421,11 +2421,11 @@ void Notepad_plus::command(int id)
 					um = uniUTF8;
 					break;
 
-				case IDM_FORMAT_UCS_2BE:
+				case IDM_FORMAT_UTF_16BE:
 					um = uni16BE;
 					break;
 
-				case IDM_FORMAT_UCS_2LE:
+				case IDM_FORMAT_UTF_16LE:
 					um = uni16LE;
 					break;
 
@@ -2597,8 +2597,8 @@ void Notepad_plus::command(int id)
 		case IDM_FORMAT_CONV2_ANSI:
 		case IDM_FORMAT_CONV2_AS_UTF_8:
 		case IDM_FORMAT_CONV2_UTF_8:
-		case IDM_FORMAT_CONV2_UCS_2BE:
-		case IDM_FORMAT_CONV2_UCS_2LE:
+		case IDM_FORMAT_CONV2_UTF_16BE:
+		case IDM_FORMAT_CONV2_UTF_16LE:
 		{
 			bSupressingMacroRecording=1;
 			int idEncoding = -1;
@@ -2671,7 +2671,7 @@ void Notepad_plus::command(int id)
 					break;
 				}
 
-				case IDM_FORMAT_CONV2_UCS_2BE:
+				case IDM_FORMAT_CONV2_UTF_16BE:
 				{
                     if (encoding != -1)
                     {
@@ -2681,7 +2681,7 @@ void Notepad_plus::command(int id)
 						goto HoLala;
                     }
 
-					idEncoding = IDM_FORMAT_UCS_2BE;
+					idEncoding = IDM_FORMAT_UTF_16BE;
 					if (um == uni16BE)
 						goto HoLala;
 
@@ -2694,7 +2694,7 @@ void Notepad_plus::command(int id)
 					break;
 				}
 
-				case IDM_FORMAT_CONV2_UCS_2LE:
+				case IDM_FORMAT_CONV2_UTF_16LE:
 				{
                     if (encoding != -1)
                     {
@@ -2704,7 +2704,7 @@ void Notepad_plus::command(int id)
 						goto HoLala;
                     }
 
-					idEncoding = IDM_FORMAT_UCS_2LE;
+					idEncoding = IDM_FORMAT_UTF_16LE;
 					if (um == uni16LE)
 						goto HoLala;
 					if (um != uni8Bit)

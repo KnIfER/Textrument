@@ -30,7 +30,6 @@
 #include "FindReplaceDlg.h"
 #include "ScintillaEditView.h"
 #include "Notepad_plus_msgs.h"
-#include "UniConversion.h"
 #include "localization.h"
 #include "Notepad_plus.h"
 #include "Utf8.h"
