@@ -850,6 +850,7 @@ struct NppGUI final
 	bool _enlargedFontFindDlg = false;
 	bool _findDlgAlwaysVisible = false;
 	bool _confirmReplaceInAllOpenDocs = true;
+	bool _muteSounds = false;
 	writeTechnologyEngine _writeTechnologyEngine = defaultTechnology;
 	bool _isWordCharDefault = true;
 	std::string _customWordChars;

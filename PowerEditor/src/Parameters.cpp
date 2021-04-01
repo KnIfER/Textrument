@@ -5305,6 +5305,7 @@ void NppParameters::feedGUIParameters(TiXmlNode *node)
 			watchBooleanField(element, TEXT("docPeekOnTab"), _nppGUI._isDocPeekOnTab);
 			watchBooleanField(element, TEXT("docPeekOnMap"), _nppGUI._isDocPeekOnMap);
 			watchBooleanField(element, TEXT("saveDlgExtFilterToAllTypes"), _nppGUI._setSaveDlgExtFiltToAllTypes);
+			watchBooleanField(element, TEXT("muteSounds"), _nppGUI._muteSounds);
 		}
 		else if (!lstrcmp(nm, TEXT("commandLineInterpreter")))
 		{
@@ -6134,6 +6135,7 @@ void NppParameters::createXmlTreeFromGUIParams()
 		GUIConfigElement->SetAttribute(TEXT("docPeekOnTab"), _nppGUI._isDocPeekOnTab ? TEXT("yes") : TEXT("no"));
 		GUIConfigElement->SetAttribute(TEXT("docPeekOnMap"), _nppGUI._isDocPeekOnMap ? TEXT("yes") : TEXT("no"));
 		GUIConfigElement->SetAttribute(TEXT("saveDlgExtFilterToAllTypes"), _nppGUI._setSaveDlgExtFiltToAllTypes ? TEXT("yes") : TEXT("no"));
+		GUIConfigElement->SetAttribute(TEXT("muteSounds"), _nppGUI._muteSounds ? TEXT("yes") : TEXT("no"));
 	}
 
 	{
