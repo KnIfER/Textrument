@@ -1980,7 +1980,23 @@ int FindReplaceDlg::processAll(ProcessOperation op, const FindOption *opt, bool 
 	findReplaceInfo._txt2replace = txt2replace;
 	findReplaceInfo._startRange = startPosition;
 	findReplaceInfo._endRange = endPosition;
-	return processRange(op, findReplaceInfo, pFindersInfo, pOptions, colourStyleID);
+
+	int nbProcessed = processRange(op, findReplaceInfo, pFindersInfo, pOptions, colourStyleID);
+
+	if (nbProcessed > 0 && op == ProcessReplaceAll && pOptions->_isInSelection)
+	{
+		int newDocLength = static_cast<int>((*_ppEditView)->execute(SCI_GETLENGTH));
+		endPosition += newDocLength - docLength;
+		(*_ppEditView)->execute(SCI_SETSELECTION, endPosition, startPosition);
+		(*_ppEditView)->execute(SCI_SCROLLRANGE, startPosition, endPosition);
+		if (startPosition == endPosition)
+		{
+			::SendDlgItemMessage(_hSelf, IDC_IN_SELECTION_CHECK, BM_SETCHECK, BST_UNCHECKED, 0);
+			enableFindDlgItem(IDC_IN_SELECTION_CHECK, false);
+		}
+	}
+
+	return nbProcessed;
 }
 
 int FindReplaceDlg::processRange(ProcessOperation op, FindReplaceInfo & findReplaceInfo, const FindersInfo * pFindersInfo, const FindOption *opt, int colourStyleID, ScintillaEditView *view2Process)
@@ -2625,7 +2641,7 @@ void FindReplaceDlg::enableReplaceFunc(bool isEnable)
 	showFindDlgItem(IDREPLACE, isEnable);
 	showFindDlgItem(IDREPLACEWITH, isEnable);
 	showFindDlgItem(IDREPLACEALL, isEnable);
-	showFindDlgItem(IDREPLACEINSEL, isEnable);
+	//showFindDlgItem(IDREPLACEINSEL, isEnable);
 	showFindDlgItem(IDC_REPLACE_OPENEDFILES, isEnable);
 	showFindDlgItem(IDC_REPLACEINSELECTION);
 	showFindDlgItem(IDC_IN_SELECTION_CHECK);
@@ -3297,7 +3313,7 @@ void FindReplaceDlg::enableMarkFunc()
 	showFindDlgItem(IDREPLACE, false);
 	showFindDlgItem(IDREPLACEWITH, false);
 	showFindDlgItem(IDREPLACEALL, false);
-	showFindDlgItem(IDREPLACEINSEL, false);
+	//showFindDlgItem(IDREPLACEINSEL, false);
 	showFindDlgItem(IDC_REPLACE_OPENEDFILES, false);
 	showFindDlgItem(IDC_REPLACEINSELECTION, false);
 
