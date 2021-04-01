@@ -2308,7 +2308,9 @@ const TCHAR * Notepad_plus::fileSaveSession(size_t nbFile, TCHAR ** fileNames)
 		fDlg.setExtIndex(0);		// 0 index for "custom extension types"
 	}
 	fDlg.setExtFilter(TEXT("All types"), TEXT(".*"));
-	fDlg.setCheckbox(TEXT("Save Window Layout to Session"), nppParms->bSaveLayoutToSession);
+	const generic_string checkboxLabel = _nativeLangSpeaker.getLocalizedStrFromID("session-svlayout",
+		TEXT("Save Window Layout to Session"));
+	fDlg.setCheckbox(checkboxLabel.c_str(), nppParms->bSaveLayoutToSession);
 	sessionFileName = fDlg.doSaveDlg();
 
 	bool checked = fDlg.getCheckboxState();
