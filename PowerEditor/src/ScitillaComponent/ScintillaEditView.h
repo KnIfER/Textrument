@@ -325,7 +325,7 @@ public:
 
     void showMargin(int whichMarge, bool willBeShowed = true) {
         if (whichMarge == _SC_MARGE_LINENUMBER)
-			showLineNumbersMargin(willBeShowed);
+			updateLineNumbersMargin();
         else
 		{
 			int width = 3;
@@ -499,11 +499,9 @@ public:
 
 	void setLineIndent(int line, int indent) const;
 
-	void showLineNumbersMargin(bool show)
-	{
-		if (show == _lineNumbersShown) return;
-		_lineNumbersShown = show;
-		if (show)
+	void updateLineNumbersMargin() {
+		const ScintillaViewParams& svp = NppParameters::getInstance().getSVP();
+		if (svp._lineNumberMarginShow)
 		{
 			updateLineNumberWidth();
 		}
@@ -693,7 +691,6 @@ protected:
 	Buffer * _currentBuffer = nullptr;
 
 	int _codepage = CP_ACP;
-	bool _lineNumbersShown = false;
 	bool _wrapRestoreNeeded = false;
 	bool _positionRestoreNeeded = false;
 	uint32_t _restorePositionRetryCount = 0;

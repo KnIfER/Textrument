@@ -443,6 +443,19 @@ enum Platform { PF_UNKNOWN, PF_X86, PF_X64, PF_IA64 };
 	// Returns the number of TCHAR copied/to copy. If the return value is 0, then this path is not set, or the "strLen" is not enough to copy the path.
 	// Users should call it with settingsCloudPath be NULL to get the required number of TCHAR (not including the terminating nul character),
 	// allocate settingsCloudPath buffer with the return value + 1, then call it again to get the path.
+	
+	#define NPPM_SETLINENUMBERWIDTHMODE    (NPPMSG + 99)
+	#define LINENUMWIDTH_DYNAMIC     0
+	#define LINENUMWIDTH_CONSTANT    1
+		// BOOL NPPM_SETLINENUMBERWIDTHMODE(0, INT widthMode)
+		// Set line number margin width in dynamic width mode (LINENUMWIDTH_DYNAMIC) or constant width mode (LINENUMWIDTH_CONSTANT)
+		// It may help some plugins to disable non-dynamic line number margins width to have a smoothly visual effect while vertical scrolling the content in Notepad++
+		// If calling is successful return TRUE, otherwise return FALSE.
+
+	#define NPPM_GETLINENUMBERWIDTHMODE    (NPPMSG + 100)
+		// INT NPPM_GETLINENUMBERWIDTHMODE(0, 0)
+		// Get line number margin width in dynamic width mode (LINENUMWIDTH_DYNAMIC) or constant width mode (LINENUMWIDTH_CONSTANT)
+
 
 	#define NPPM_GETNOTMADVERSION (NPPMSG + 666)
 	#define NPPM_SHOWBIGGERFONTS (NPPMSG + 667)
