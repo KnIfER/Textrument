@@ -232,3 +232,5 @@ template<typename T> size_t vecRemoveDuplicates(std::vector<T>& vec, bool isSort
 	}
 	return vec.size();
 }
+
+void trim(generic_string& str);
