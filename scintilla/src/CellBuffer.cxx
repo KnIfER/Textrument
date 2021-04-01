@@ -483,6 +483,24 @@ void UndoHistory::DeleteUndoHistory() {
 	tentativePoint = -1;
 }
 
+void UndoHistory::DeleteUndoHistoryMinusOne() {
+	if(maxAction>2) {
+		actions[1].Clear();
+		actions[1].Create(actions[maxAction-1].at,
+			actions[maxAction-1].position,
+			actions[maxAction-1].data.get(),
+			actions[maxAction-1].lenData,
+			actions[maxAction-1].mayCoalesce);
+
+		for (int i = 2; i < maxAction-1; i++)
+			actions[i].Clear();
+		maxAction = 2;
+		currentAction = 1;
+		actions[0].Clear();
+		actions[0].Create(startAction);
+	}
+}
+
 void UndoHistory::SetSavePoint() noexcept {
 	savePoint = currentAction;
 }

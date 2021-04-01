@@ -1868,7 +1868,7 @@ void Editor::ChangeSize() {
 		PRectangle rcTextArea = GetClientRectangle();
 		rcTextArea.left = static_cast<XYPOSITION>(vs.textStart);
 		rcTextArea.right -= vs.rightMarginWidth;
-		if (wrapWidth != rcTextArea.Width()) {
+		if (rcTextArea.Width()>0 && wrapWidth != rcTextArea.Width()) {
 			NeedWrapping();
 			Redraw();
 		}
@@ -5835,6 +5835,13 @@ sptr_t Editor::WndProc(unsigned int iMessage, uptr_t wParam, sptr_t lParam) {
 
 	switch (iMessage) {
 
+	case SCI_GETRAWTEXT: {
+		if(wParam && wParam==lParam) {
+			return (sptr_t)((Document*)wParam)->GetCharPointer();
+		}
+		return (sptr_t)pdoc->GetCharPointer();
+	}
+
 	case SCI_GETTEXT: {
 			if (lParam == 0)
 				return pdoc->Length() + 1;
@@ -5858,8 +5865,12 @@ sptr_t Editor::WndProc(unsigned int iMessage, uptr_t wParam, sptr_t lParam) {
 			return 1;
 		}
 
-	case SCI_GETTEXTLENGTH:
+	case SCI_GETTEXTLENGTH: {
+		if(wParam && wParam==lParam) {
+			return ((Document*)wParam)->Length();
+		}
 		return pdoc->Length();
+	}
 
 	case SCI_CUT:
 		Cut();
@@ -5917,7 +5928,11 @@ sptr_t Editor::WndProc(unsigned int iMessage, uptr_t wParam, sptr_t lParam) {
 		return (pdoc->CanUndo() && !pdoc->IsReadOnly()) ? 1 : 0;
 
 	case SCI_EMPTYUNDOBUFFER:
-		pdoc->DeleteUndoHistory();
+		if(lParam==1&&wParam==1) {
+			pdoc->cb.uh.DeleteUndoHistoryMinusOne();
+		} else {
+			pdoc->DeleteUndoHistory();
+		}
 		return 0;
 
 	case SCI_GETFIRSTVISIBLELINE:

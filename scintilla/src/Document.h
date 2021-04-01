@@ -226,9 +226,9 @@ public:
 		}
 	};
 
+	CellBuffer cb;
 private:
 	int refCount;
-	CellBuffer cb;
 	CharClassify charClass;
 	CharacterCategoryMap charMap;
 	std::unique_ptr<CaseFolder> pcf;
@@ -389,6 +389,11 @@ public:
 	void DelCharBack(Sci::Position pos);
 
 	char CharAt(Sci::Position position) const noexcept { return cb.CharAt(position); }
+	char* SCI_METHOD GetCharPointer() {
+		//return (char*)cb.substance.body.data();
+		return (char*)cb.substance.BufferPointer();
+		//cb.GetCharRange(buffer, position, lengthRetrieve);
+	}
 	void SCI_METHOD GetCharRange(char *buffer, Sci_Position position, Sci_Position lengthRetrieve) const override {
 		cb.GetCharRange(buffer, position, lengthRetrieve);
 	}

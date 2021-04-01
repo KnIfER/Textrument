@@ -1083,7 +1083,7 @@ typedef sptr_t (*SciFnDirect)(sptr_t ptr, unsigned int iMessage, uptr_t wParam, 
 #define SC_MOD_CHANGETABSTOPS 0x200000
 #define SC_MOD_CHANGEEOLANNOTATION 0x400000
 #define SC_MODEVENTMASKALL 0x7FFFFF
-#define SC_SEARCHRESULT_LINEBUFFERMAXLENGTH 2048
+#define SC_SEARCHRESULT_LINEBUFFERMAXLENGTH 1024
 #define SC_UPDATE_CONTENT 0x1
 #define SC_UPDATE_SELECTION 0x2
 #define SC_UPDATE_V_SCROLL 0x4
@@ -1172,6 +1172,7 @@ typedef sptr_t (*SciFnDirect)(sptr_t ptr, unsigned int iMessage, uptr_t wParam, 
 #define SCI_LINEFROMINDEXPOSITION 2713
 #define SCI_INDEXPOSITIONFROMLINE 2714
 #endif
+#define SCI_GETRAWTEXT 5020
 
 #define SCI_GETBOOSTREGEXERRMSG 5000
 
