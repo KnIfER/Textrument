@@ -3337,6 +3337,7 @@ void ScintillaEditView::scrollPosToCenter(size_t pos)
 		middleLine = lastVisibleDocLine -  nbLine/2;
 	int nbLines2scroll =  line - middleLine;
 	scroll(0, nbLines2scroll);
+	execute(SCI_ENSUREVISIBLEENFORCEPOLICY, line);
 }
 
 void ScintillaEditView::hideLines()
