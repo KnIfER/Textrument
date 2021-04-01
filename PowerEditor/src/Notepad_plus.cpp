@@ -1900,7 +1900,9 @@ bool Notepad_plus::replaceInFiles()
 	{
 		if (filesCount >= 200)
 			filesPerPercent = filesCount / 100;
-		progress.open(_findReplaceDlg.getHSelf(), TEXT("Replace In Files progress..."));
+		generic_string msg = _nativeLangSpeaker.getLocalizedStrFromID(
+			"replace-in-files-progress-title", TEXT("Replace In Files progress..."));
+		progress.open(_findReplaceDlg.getHSelf(), msg.c_str());
 	}
 
 	for (size_t i = 0, updateOnCount = filesPerPercent; i < filesCount; ++i)
@@ -1995,7 +1997,10 @@ bool Notepad_plus::findInFinderFiles(FindersInfo *findInFolderInfo)
 	{
 		if (filesCount >= 200)
 			filesPerPercent = filesCount / 100;
-		progress.open(_findReplaceDlg.getHSelf(), TEXT("Find In Files progress..."));
+
+		generic_string msg = _nativeLangSpeaker.getLocalizedStrFromID(
+			"find-in-files-progress-title", TEXT("Find In Files progress..."));
+		progress.open(_findReplaceDlg.getHSelf(), msg.c_str());
 	}
 
 	for (size_t i = 0, updateOnCount = filesPerPercent; i < filesCount; ++i)
@@ -2090,7 +2095,10 @@ bool Notepad_plus::findInFiles()
 	{
 		if (filesCount >= 200)
 			filesPerPercent = filesCount / 100;
-		progress.open(_findReplaceDlg.getHSelf(), TEXT("Find In Files progress..."));
+
+		generic_string msg = _nativeLangSpeaker.getLocalizedStrFromID(
+			"find-in-files-progress-title", TEXT("Find In Files progress..."));
+		progress.open(_findReplaceDlg.getHSelf(), msg.c_str());
 	}
 
 	const bool isEntireDoc = true;
