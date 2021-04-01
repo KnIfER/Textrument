@@ -424,6 +424,7 @@ HWND mainAppWnd = NULL;
 
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE, PWSTR pCmdLine, int)
 {
+	generic_string cmdLineString = pCmdLine ? pCmdLine : _T("");
 	//::MessageBox(NULL, pCmdLine, TEXT("args"), MB_OK);
 	//if(wcsncmp(pCmdLine, TEXT("--type"), 5)==0) 
 	//{
@@ -476,6 +477,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE, PWSTR pCmdLine, int)
 	cmdLineParams._point.y = getNumberFromParam('y', params, cmdLineParams._isPointYValid);
 
 	NppParameters& nppParameters = NppParameters::getInstance();
+	nppParameters.setCmdLineString(cmdLineString);
 
 	generic_string path;
 	if (getParamValFromString(FLAG_SETTINGS_DIR, params, path))
