@@ -2449,12 +2449,9 @@ Finder * FindReplaceDlg::createFinder()
 {
 	Finder *pFinder = new Finder();
 	pFinder->init(_hInst, (*_ppEditView)->getHParent(), _ppEditView);
-	
-	NativeLangSpeaker *pNativeSpeaker = (NppParameters::getInstance()).getNativeLangSpeaker();
-	bool isRTL = pNativeSpeaker->isRTL();
 
 	tTbData	data = { 0 };
-
+	bool isRTL = (*_ppEditView)->isTextDirectionRTL();
 	pFinder->create(&data, isRTL);
 	::SendMessage(_hParent, NPPM_MODELESSDIALOG, MODELESSDIALOGREMOVE, reinterpret_cast<WPARAM>(pFinder->getHSelf()));
 	// define the default docking behaviour
@@ -2468,6 +2465,7 @@ Finder * FindReplaceDlg::createFinder()
 	// in this case is DOCKABLE_DEMO_INDEX
 	data.dlgID = 0;
 
+	NativeLangSpeaker *pNativeSpeaker = (NppParameters::getInstance()).getNativeLangSpeaker();
 	generic_string text = pNativeSpeaker->getLocalizedStrFromID("find-result-caption", TEXT(""));
 	if (!text.empty())
 	{
