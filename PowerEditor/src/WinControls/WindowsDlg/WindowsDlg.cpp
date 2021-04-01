@@ -723,6 +723,7 @@ void WindowsDlg::doRefresh(bool invalidate /*= false*/)
 
 			resetSelection();
 			updateButtonState();
+			doCount();
 		}
 	}
 }
@@ -865,6 +866,19 @@ void WindowsDlg::doClose()
 		}
 		ListView_SetItemCount(_hList, _idxMap.size());
 	}
+	doCount();
+}
+
+//this function will be called everytime when close is performed
+//as well as each time refresh is performed to keep updated
+void WindowsDlg::doCount()
+{
+	NativeLangSpeaker* pNativeSpeaker = (NppParameters::getInstance()).getNativeLangSpeaker();
+	generic_string msg = pNativeSpeaker->getAttrNameStr(TEXT("Windows"), "Dialog", "Window", "title");
+	msg += TEXT(" [ ");
+	msg += to_wstring(_idxMap.size());
+	msg += TEXT(" ] ");
+	SetWindowText(_hSelf,msg.c_str());
 }
 
 void WindowsDlg::doSortToTabs()
