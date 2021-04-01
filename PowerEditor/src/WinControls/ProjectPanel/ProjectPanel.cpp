@@ -202,13 +202,7 @@ bool ProjectPanel::checkIfNeedSave()
 		if (res == IDYES)
 		{
 			if (!saveWorkSpace())
-				pNativeSpeaker->messageBox("ProjectPanelChangedSaveError",
-					_hSelf,
-					TEXT("Your workspace has not been saved."),
-					TEXT("$STR_REPLACE$"),
-					MB_OK | MB_ICONERROR,
-					0,
-					title);
+				return false;
 		}
 		else if (res == IDNO)
 		{
@@ -447,7 +441,8 @@ bool ProjectPanel::saveWorkSpace()
 	}
 	else
 	{
-		writeWorkSpace();
+		if (!writeWorkSpace())
+			return false;
 		setWorkSpaceDirty(false);
 		return true;
 	} 
@@ -471,9 +466,6 @@ bool ProjectPanel::writeWorkSpace(TCHAR *projectFileName)
     if (!tvRoot)
       return false;
 
-	TCHAR * fileName = PathFindFileName(fn2write);
-	_treeView.renameItem(tvRoot, fileName);
-
     for (HTREEITEM tvProj = _treeView.getChildFrom(tvRoot);
         tvProj != NULL;
         tvProj = _treeView.getNextSibling(tvProj))
@@ -486,7 +478,22 @@ bool ProjectPanel::writeWorkSpace(TCHAR *projectFileName)
 		projRoot->ToElement()->SetAttribute(TEXT("name"), tvItem.pszText);
 		buildProjectXml(projRoot, tvProj, fn2write);
     }
-    projDoc.SaveFile();
+
+	if (!projDoc.SaveFile())
+	{
+		const TCHAR * title = _workSpaceFilePath.length() > 0 ? PathFindFileName (_workSpaceFilePath.c_str()) : _panelTitle.c_str();
+		NativeLangSpeaker *pNativeSpeaker = (NppParameters::getInstance()).getNativeLangSpeaker();
+		pNativeSpeaker->messageBox("ProjectPanelSaveError",
+			_hSelf,
+			TEXT("An error occurred while writing your workspace file.\nYour workspace has not been saved."),
+			TEXT("$STR_REPLACE$"),
+			MB_OK | MB_ICONERROR,
+			0,
+			title);
+		return false;
+	}
+	TCHAR * fileName = PathFindFileName(fn2write);
+	_treeView.renameItem(tvRoot, fileName);
 	return true;
 }
 
@@ -1242,7 +1249,8 @@ bool ProjectPanel::saveWorkSpaceAs(bool saveCopyAs)
 
 	if (TCHAR *fn = fDlg.doSaveDlg())
 	{
-		writeWorkSpace(fn);
+		if (!writeWorkSpace(fn))
+			return false;
 		if (!saveCopyAs)
 		{
 			_workSpaceFilePath = fn;
