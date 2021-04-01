@@ -173,7 +173,7 @@ void Shortcut::setName(const TCHAR * name)
 	lstrcpyn(_menuName, name, nameLenMax);
 	lstrcpyn(_name, name, nameLenMax);
 	int i = 0, j = 0;
-	while (name[j] != 0 && i < nameLenMax)
+	while (name[j] != 0 && i < (nameLenMax-1))
 	{
 		if (name[j] != '&')
 		{
