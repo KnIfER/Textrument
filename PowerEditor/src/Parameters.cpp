@@ -3224,7 +3224,7 @@ void NppParameters::insertScintKey(TiXmlNode *scintKeyRoot, const ScintillaKeyMa
 }
 
 
-void NppParameters::writeSession(const Session & session, const TCHAR *fileName)
+void NppParameters::writeSession(const Session & session, const TCHAR *fileName, bool saveLayoutToSession)
 {
 	const TCHAR *pathName = fileName?fileName:_sessionPath.c_str();
 
@@ -3318,7 +3318,7 @@ void NppParameters::writeSession(const Session & session, const TCHAR *fileName)
 	//LogIs(2, (HWND)-1, L"Write Session's Docking Manager! %s", fileName);
 
 	// write to external session file.
-	if (bSaveLayoutToSession&&fileName)
+	if (saveLayoutToSession&&fileName)
 	{
 		nppApp->saveDockingParams();
 		nppApp->saveFileBrowserParam(_pXmlSessionDoc);

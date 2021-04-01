@@ -1473,7 +1473,7 @@ public:
 	void writeNonDefaultUDL();
 	void writeNeed2SaveUDL();
 	void writeShortcuts();
-	void writeSession(const Session & session, const TCHAR *fileName = NULL);
+	void writeSession(const Session & session, const TCHAR *fileName = NULL, bool saveLayoutToSession=true);
 	bool writeFindHistory();
 
 	bool isExistingUserLangName(const TCHAR *newName) const

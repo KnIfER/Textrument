@@ -31,6 +31,7 @@
 #include <shlobj.h>
 #include "Notepad_plus_Window.h"
 #include "FileDialog.h"
+#include "CustomFileDialog.h"
 #include "EncodingMapper.h"
 #include "VerticalFileSwitcher.h"
 #include "functionListPanel.h"
@@ -2266,7 +2267,7 @@ bool Notepad_plus::fileLoadSession(const TCHAR *fn)
 	return result;
 }
 
-const TCHAR * Notepad_plus::fileSaveSession(size_t nbFile, TCHAR ** fileNames, const TCHAR *sessionFile2save)
+const TCHAR * Notepad_plus::fileSaveSession(size_t nbFile, TCHAR ** fileNames, const TCHAR *sessionFile2save, bool saveLayoutToSession)
 {
 	if (sessionFile2save)
 	{
@@ -2282,7 +2283,7 @@ const TCHAR * Notepad_plus::fileSaveSession(size_t nbFile, TCHAR ** fileNames, c
 		else
 			getCurrentOpenedFiles(currentSession);
 
-		(NppParameters::getInstance()).writeSession(currentSession, sessionFile2save);
+		(NppParameters::getInstance()).writeSession(currentSession, sessionFile2save, saveLayoutToSession);
 		return sessionFile2save;
 	}
 	return NULL;
@@ -2290,9 +2291,9 @@ const TCHAR * Notepad_plus::fileSaveSession(size_t nbFile, TCHAR ** fileNames, c
 
 const TCHAR * Notepad_plus::fileSaveSession(size_t nbFile, TCHAR ** fileNames)
 {
-	const TCHAR *sessionFileName = NULL;
+	generic_string sessionFileName;
 
-	FileDialog fDlg(_pPublicInterface->getHSelf(), _pPublicInterface->getHinst());
+	CustomFileDialog fDlg(_pPublicInterface->getHSelf());
 	const TCHAR *ext = NppParameters::getInstance().getNppGUI()._definedSessionExt.c_str();
 
 	generic_string sessionExt = TEXT("");
@@ -2301,14 +2302,17 @@ const TCHAR * Notepad_plus::fileSaveSession(size_t nbFile, TCHAR ** fileNames)
 		if (*ext != '.')
 			sessionExt += TEXT(".");
 		sessionExt += ext;
-		fDlg.setExtFilter(TEXT("Session file"), sessionExt.c_str(), NULL);
+		fDlg.setExtFilter(TEXT("Session file"), sessionExt.c_str());
 		fDlg.setDefExt(ext);
 		fDlg.setExtIndex(0);		// 0 index for "custom extension types"
 	}
-	fDlg.setExtFilter(TEXT("All types"), TEXT(".*"), NULL);
+	fDlg.setExtFilter(TEXT("All types"), TEXT(".*"));
+	fDlg.setCheckbox(TEXT("Save Window Layout to Session"), nppParms->bSaveLayoutToSession);
 	sessionFileName = fDlg.doSaveDlg();
 
-	return fileSaveSession(nbFile, fileNames, sessionFileName);
+	bool checked = fDlg.getCheckboxState();
+	//nppParms->bSaveLayoutToSession = checked;
+	return fileSaveSession(nbFile, fileNames, sessionFileName.c_str(), checked);
 }
 
 
