@@ -480,35 +480,11 @@ void FunctionListPanel::init(HINSTANCE hInst, HWND hPere, ScintillaEditView **pp
 	_ppEditView = ppEditView;
 	bool doLocalConf = (NppParameters::getInstance()).isLocal();
 
-	if (!doLocalConf)
-	{
-		generic_string funcListXmlPath = (NppParameters::getInstance()).getUserPath();
-		PathAppendCompat(funcListXmlPath, TEXT("functionList"));
-
-		if (!PathFileExists(funcListXmlPath.c_str()))
-		{
-			generic_string funcListDefaultXmlPath = (NppParameters::getInstance()).getNppPath();
-			PathAppendCompat(funcListDefaultXmlPath, TEXT("functionList"));
-			if (PathFileExists(funcListDefaultXmlPath.c_str()))
-			{
-				::CopyFile(funcListDefaultXmlPath.c_str(), funcListXmlPath.c_str(), TRUE);
-				_funcParserMgr.init(funcListXmlPath, ppEditView);
-			}
-		}
-		else
-		{
-			_funcParserMgr.init(funcListXmlPath, ppEditView);
-		}
-	}
-	else
-	{
-		generic_string funcListDefaultXmlPath = (NppParameters::getInstance()).getUserPath();
-		PathAppendCompat(funcListDefaultXmlPath, TEXT("functionList"));
-		if (PathFileExists(funcListDefaultXmlPath.c_str()))
-		{
-			_funcParserMgr.init(funcListDefaultXmlPath, ppEditView);
-		}
-	}
+	generic_string funcListXmlPath = (NppParameters::getInstance()).getUserPath();
+	generic_string funcListDefaultXmlPath = (NppParameters::getInstance()).getNppPath();
+	PathAppendCompat(funcListXmlPath, TEXT("functionList"));
+	PathAppendCompat(funcListDefaultXmlPath, TEXT("functionList"));
+	_funcParserMgr.init(funcListXmlPath, funcListDefaultXmlPath, ppEditView);
 }
 
 bool FunctionListPanel::openSelection(const TreeView & treeView)

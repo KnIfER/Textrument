@@ -158,13 +158,14 @@ class FunctionParsersManager final
 public:
 	~FunctionParsersManager();
 
-	bool init(const generic_string& xmlPath, ScintillaEditView ** ppEditView);
+	bool init(const generic_string& xmlPath, const generic_string& xmlDefPath, ScintillaEditView ** ppEditView);
 	bool parse(std::vector<foundInfo> & foundInfos, const AssociationInfo & assoInfo);
 	
 
 private:
 	ScintillaEditView **_ppEditView = nullptr;
 	generic_string _xmlDirPath;
+	generic_string _xmlDefPath;
 	ParserInfo* _parsers[L_EXTERNAL + nbMaxUserDefined] = {nullptr};
 	int _currentUDIndex = L_EXTERNAL;
 

@@ -41,10 +41,11 @@ FunctionParsersManager::~FunctionParsersManager()
 	}
 }
 
-bool FunctionParsersManager::init(const generic_string& xmlDirPath, ScintillaEditView ** ppEditView)
+bool FunctionParsersManager::init(const generic_string& xmlDirPath, const generic_string& xmlDefPath, ScintillaEditView ** ppEditView)
 {
 	_ppEditView = ppEditView;
 	_xmlDirPath = xmlDirPath;
+	_xmlDefPath = xmlDefPath;
 
 	return getOverrideMapFromXmlTree();
 }
@@ -146,39 +147,51 @@ bool FunctionParsersManager::getUnitPaserParameters(TiXmlNode *functionParser, g
 bool FunctionParsersManager::loadFuncListFromXmlTree(LangType lType, const generic_string& overrideId, int udlIndex)
 {
 	generic_string funcListRulePath = _xmlDirPath;
-	funcListRulePath += TEXT("\\");
 	int index = -1;
-	if (lType == L_USER) // UDL
+	for (byte i = 0; i < 2; i++)
 	{
-		if (overrideId.empty())
-			return false;
-		
-		if (udlIndex == -1)
-			return false;
-
-		index = udlIndex;
-		funcListRulePath += overrideId;
-	}
-	else // Supported Language
-	{
-		index = lType;
-		if (overrideId.empty())
+		if (i==1)
 		{
-			generic_string lexerName = ScintillaEditView::langNames[lType].lexerName;
-			funcListRulePath += lexerName;
-			funcListRulePath += TEXT(".xml");
+			funcListRulePath = _xmlDefPath;
 		}
-		else
+		funcListRulePath += TEXT("\\");
+		if (lType == L_USER) // UDL
 		{
+			if (overrideId.empty())
+				return false;
+
+			if (udlIndex == -1)
+				return false;
+
+			index = udlIndex;
 			funcListRulePath += overrideId;
 		}
+		else // Supported Language
+		{
+			index = lType;
+			if (overrideId.empty())
+			{
+				generic_string lexerName = ScintillaEditView::langNames[lType].lexerName;
+				funcListRulePath += lexerName;
+				funcListRulePath += TEXT(".xml");
+			}
+			else
+			{
+				funcListRulePath += overrideId;
+			}
+		}
+
+		if (index > _currentUDIndex)
+			return false;
+
+		if (_parsers[index] == nullptr)
+			return false;
+
+		if (i==0&&PathFileExists(funcListRulePath.c_str()))
+		{
+			break;
+		}
 	}
-
-	if (index > _currentUDIndex)
-		return false;
-
-	if (_parsers[index] == nullptr)
-		return false;
 
 	TiXmlDocument xmlFuncListDoc(funcListRulePath);
 	bool loadOK = xmlFuncListDoc.LoadFile();
@@ -249,6 +262,12 @@ bool FunctionParsersManager::getOverrideMapFromXmlTree()
 {
 	generic_string funcListRulePath = _xmlDirPath;
 	funcListRulePath += TEXT("\\overrideMap.xml");
+
+	if (!PathFileExists(funcListRulePath.c_str()))
+	{
+		funcListRulePath = _xmlDefPath;
+		funcListRulePath += TEXT("\\overrideMap.xml");
+	}
 	
 	TiXmlDocument xmlFuncListDoc(funcListRulePath);
 	bool loadOK = xmlFuncListDoc.LoadFile();
