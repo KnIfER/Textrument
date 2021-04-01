@@ -1723,7 +1723,6 @@ public:
 	std::vector<UdlXmlFileState> _pXmlUserLangsDoc;
 	TiXmlDocument *_pXmlToolIconsDoc = nullptr;
 	TiXmlDocument *_pXmlShortcutDoc = nullptr;
-	TiXmlDocument *_pXmlSessionDoc = nullptr;
 	TiXmlDocument *_pXmlBlacklistDoc = nullptr;
 
 	TiXmlDocumentA *_pXmlNativeLangDocA = nullptr;
@@ -1874,7 +1873,7 @@ private:
 	bool getUserCmdsFromXmlTree();
 	bool getPluginCmdsFromXmlTree();
 	bool getScintKeysFromXmlTree();
-	bool getSessionFromXmlTree(TiXmlDocument *pSessionDoc = NULL, Session *session = NULL);
+	bool getSessionFromXmlTree(TiXmlDocument *pSessionDoc, Session & session);
 	bool getBlackListFromXmlTree();
 
 	void feedGUIParameters(TiXmlNode *node);
