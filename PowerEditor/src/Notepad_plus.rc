@@ -246,6 +246,7 @@ IDI_VIEW_MONITORING_OFF_ICON ICON                    "icons/monitoring_off.ico"
 
 IDR_PLUGIN_ICO          ICON                    "icons/plugin.ico"
 
+IDI_MORE_ON_TOOLTIP             ICON        "icons/MoreOnTooltip.ico"
 
 /////////////////////////////////////////////////////////////////////////////
 //

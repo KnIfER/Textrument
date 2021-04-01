@@ -409,7 +409,7 @@ void FunctionParser::funcParse(std::vector<foundInfo> & foundInfos, size_t begin
 	int targetEnd = 0;
 	
 	//foundInfos.clear();
-	while (targetStart != -1 && targetStart != -2)
+	while (targetStart >= 0)
 	{
 		targetStart = int((*ppEditView)->execute(SCI_GETTARGETSTART));
 		targetEnd = int((*ppEditView)->execute(SCI_GETTARGETEND));
@@ -488,7 +488,7 @@ generic_string FunctionParser::parseSubLevel(size_t begin, size_t end, std::vect
 	const TCHAR *regExpr2search = dataToSearch[0].c_str();
 	int targetStart = (*ppEditView)->searchInTarget(regExpr2search, lstrlen(regExpr2search), begin, end);
 
-	if (targetStart == -1 || targetStart == -2)
+	if (targetStart < 0)
 	{
 		foundPos = -1;
 		return generic_string();
@@ -549,7 +549,7 @@ size_t FunctionZoneParser::getBodyClosePos(size_t begin, const TCHAR *bodyOpenSy
 
 	do
 	{
-		if (targetStart != -1 && targetStart != -2) // found open or close symbol
+		if (targetStart >= 0) // found open or close symbol
 		{
 			targetEnd = (*ppEditView)->execute(SCI_GETTARGETEND);
 
@@ -558,7 +558,7 @@ size_t FunctionZoneParser::getBodyClosePos(size_t begin, const TCHAR *bodyOpenSy
 			{
 				// Now we determinate the symbol (open or close)
 				int tmpStart = (*ppEditView)->searchInTarget(bodyOpenSymbol, lstrlen(bodyOpenSymbol), targetStart, targetEnd);
-				if (tmpStart != -1 && tmpStart != -2) // open symbol found 
+				if (tmpStart >= 0) // open symbol found 
 				{
 					++cntOpen;
 				}
@@ -593,7 +593,7 @@ void FunctionZoneParser::classParse(vector<foundInfo> & foundInfos, vector< pair
 
 	int targetEnd = 0;
 	
-	while (targetStart != -1 && targetStart != -2)
+	while (targetStart >= 0)
 	{
 		targetEnd = int((*ppEditView)->execute(SCI_GETTARGETEND));
 
@@ -639,7 +639,7 @@ void FunctionParser::getCommentZones(vector< pair<int, int> > & commentZone, siz
 	int targetStart = (*ppEditView)->searchInTarget(_commentExpr.c_str(), _commentExpr.length(), begin, end);
 	int targetEnd = 0;
 	
-	while (targetStart != -1 && targetStart != -2)
+	while (targetStart >= 0)
 	{
 		targetStart = int((*ppEditView)->execute(SCI_GETTARGETSTART));
 		targetEnd = int((*ppEditView)->execute(SCI_GETTARGETEND));

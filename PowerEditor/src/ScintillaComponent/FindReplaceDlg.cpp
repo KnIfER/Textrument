@@ -1804,7 +1804,7 @@ bool FindReplaceDlg::processFindNext(const TCHAR *txt2find, const FindOption *op
 		}
 
 		if (posFind == -1)
-		{
+		{ // not found
 			if (oFindStatus)
 				*oFindStatus = FSNotFound;
 			//failed, or failed twice with wrap
@@ -1830,11 +1830,22 @@ bool FindReplaceDlg::processFindNext(const TCHAR *txt2find, const FindOption *op
 			return false;
 		}
 	}
-	else if (posFind == -2) // Invalid Regular expression
-	{
+	else if (posFind < -1) 
+	{ // error
 		NativeLangSpeaker *pNativeSpeaker = nppParms->getNativeLangSpeaker();
-		generic_string msg = pNativeSpeaker->getLocalizedStrFromID("find-status-invalid-re", TEXT("Find: Invalid regular expression"));
-		setStatusbarMessage(msg, FSNotFound);
+		generic_string  msgGeneral;
+		if (posFind == -2)
+		{
+			msgGeneral = pNativeSpeaker->getLocalizedStrFromID("find-status-invalid-re", TEXT("Find: Invalid regular expression"));
+		}
+		else
+		{
+			msgGeneral = pNativeSpeaker->getLocalizedStrFromID("find-status-search-failed", TEXT("Find: Search failed"));
+		}
+
+		char szMsg [511] = "";
+		(*_ppEditView)->execute (SCI_GETBOOSTREGEXERRMSG, _countof (szMsg), reinterpret_cast<LPARAM>(szMsg));
+		setStatusbarMessage(msgGeneral, FSNotFound, szMsg);
 		return false;
 	}
 
@@ -2166,7 +2177,7 @@ int FindReplaceDlg::processRange(ProcessOperation op, FindReplaceInfo & findRepl
 	
 	bool findAllFileNameAdded = false;
 
-	while (targetStart != -1 && targetStart != -2)
+	while (targetStart >= 0)
 	{
 		targetStart = pEditView->searchInTarget(pTextFind, stringSizeFind, findReplaceInfo._startRange, findReplaceInfo._endRange);
 
@@ -2883,8 +2894,15 @@ void FindReplaceDlg::saveInMacro(size_t cmd, int cmdType)
 	::SendMessage(_hParent, WM_FRSAVE_INT, IDC_FRCOMMAND_EXEC, cmd);
 }
 
-void FindReplaceDlg::setStatusbarMessage(const generic_string & msg, FindStatus staus)
+void FindReplaceDlg::setStatusbarMessage(const generic_string & msg, FindStatus staus, char const *pTooltipMsg)
 {
+	if (_statusbarTooltipWnd)
+	{
+		::DestroyWindow(_statusbarTooltipWnd);
+		_statusbarTooltipWnd = nullptr;
+	}
+	_statusbarTooltipMsg = (pTooltipMsg && (*pTooltipMsg)) ? s2ws(pTooltipMsg) : TEXT("");
+
 	if (staus == FSNotFound)
 	{
 		if (!NppParameters::getInstance().getNppGUI()._muteSounds)
@@ -3296,7 +3314,7 @@ void FindReplaceDlg::enableProjectCheckmarks()
 				}
 			}
 		}
-		enableFindDlgItem (IDD_FINDINFILES_FIND_BUTTON, enable);
+		enableFindDlgItem (IDD_FINDINFILES_FIND_BUTTON, enable || (_currentStatus != FINDINPROJECTS_DLG));
 		enableFindDlgItem (IDD_FINDINFILES_REPLACEINPROJECTS, enable);
 	}
 }
@@ -3650,6 +3668,41 @@ void FindReplaceDlg::drawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
 	RECT rect;
 	_statusBar.getClientRect(rect);
 	::DrawText(lpDrawItemStruct->hDC, ptStr, lstrlen(ptStr), &rect, DT_SINGLELINE | DT_VCENTER | DT_LEFT);
+
+	if (_statusbarTooltipMsg.length() == 0) return;
+
+	SIZE size;
+	::GetTextExtentPoint32(lpDrawItemStruct->hDC, ptStr, lstrlen(ptStr), &size);
+	int s = (rect.bottom - rect.top) & 0x70; // limit s to available icon sizes and avoid uneven scalings
+	if (s > 0)
+	{
+		if (_statusbarTooltipIcon && (_statusbarTooltipIconSize != s))
+		{
+			DestroyIcon (_statusbarTooltipIcon);
+			_statusbarTooltipIcon = nullptr;
+		}
+
+		if (!_statusbarTooltipIcon)
+			_statusbarTooltipIcon = (HICON)::LoadImage(_hInst, MAKEINTRESOURCE(IDI_MORE_ON_TOOLTIP), IMAGE_ICON, s, s, 0);
+
+		if (_statusbarTooltipIcon)
+		{
+			_statusbarTooltipIconSize = s;
+			rect.left = rect.left + size.cx + s / 2;
+			rect.top  = (rect.top + rect.bottom - s) / 2;
+			DrawIconEx (lpDrawItemStruct->hDC, rect.left, rect.top, _statusbarTooltipIcon, s, s, 0, NULL, DI_NORMAL);
+			if (!_statusbarTooltipWnd)
+			{
+				rect.right = rect.left + s;
+				rect.bottom = rect.top + s;
+				_statusbarTooltipWnd = CreateToolTipRect(1, _statusBar.getHSelf(), _hInst, const_cast<PTSTR>(_statusbarTooltipMsg.c_str()), rect);
+			}
+		}
+		else
+		{
+			_statusbarTooltipIconSize = 0;
+		}
+	}
 }
 
 bool FindReplaceDlg::replaceInFilesConfirmCheck(generic_string directory, generic_string fileTypes)
@@ -3690,7 +3743,7 @@ bool FindReplaceDlg::replaceInProjectsConfirmCheck()
 
 	generic_string title = pNativeSpeaker->getLocalizedStrFromID("replace-in-projects-confirm-title", TEXT("Are you sure?"));
 
-	generic_string msg = pNativeSpeaker->getLocalizedStrFromID("replace-in-files-confirm-message", TEXT("Do you want to replace all occurrences in all documents in the selected Project Panel(s)?"));
+	generic_string msg = pNativeSpeaker->getLocalizedStrFromID("replace-in-projects-confirm-message", TEXT("Do you want to replace all occurrences in all documents in the selected Project Panel(s)?"));
 	int res = ::MessageBox(NULL, msg.c_str(), title.c_str(), MB_OKCANCEL | MB_DEFBUTTON2 | MB_TASKMODAL);
 
 	if (res == IDOK)
@@ -4105,37 +4158,37 @@ INT_PTR CALLBACK Finder::run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam)
 					return TRUE;
 				}
 
-				case NPPM_INTERNAL_SCINTILLAFINFERCOLLAPSE :
+				case NPPM_INTERNAL_SCINTILLAFINDERCOLLAPSE :
 				{
 					_scintView.foldAll(fold_collapse);
 					return TRUE;
 				}
 
-				case NPPM_INTERNAL_SCINTILLAFINFERUNCOLLAPSE :
+				case NPPM_INTERNAL_SCINTILLAFINDERUNCOLLAPSE :
 				{
 					_scintView.foldAll(fold_uncollapse);
 					return TRUE;
 				}
 
-				case NPPM_INTERNAL_SCINTILLAFINFERCOPY :
+				case NPPM_INTERNAL_SCINTILLAFINDERCOPY :
 				{
 					copy();
 					return TRUE;
 				}
 
-				case NPPM_INTERNAL_SCINTILLAFINFERSELECTALL :
+				case NPPM_INTERNAL_SCINTILLAFINDERSELECTALL :
 				{
 					_scintView.execute(SCI_SELECTALL);
 					return TRUE;
 				}
 
-				case NPPM_INTERNAL_SCINTILLAFINFERCLEARALL:
+				case NPPM_INTERNAL_SCINTILLAFINDERCLEARALL:
 				{
 					removeAll();
 					return TRUE;
 				}
 
-				case NPPM_INTERNAL_SCINTILLAFINFEROPENALL:
+				case NPPM_INTERNAL_SCINTILLAFINDEROPENALL:
 				{
 					openAll();
 					return TRUE;
@@ -4179,14 +4232,14 @@ INT_PTR CALLBACK Finder::run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam)
 				if (_canBeVolatiled)
 					tmp.push_back(MenuItemUnit(NPPM_INTERNAL_REMOVEFINDER, closeThis));
 				tmp.push_back(MenuItemUnit(0, TEXT("Separator")));
-				tmp.push_back(MenuItemUnit(NPPM_INTERNAL_SCINTILLAFINFERCOLLAPSE, collapseAll));
-				tmp.push_back(MenuItemUnit(NPPM_INTERNAL_SCINTILLAFINFERUNCOLLAPSE, uncollapseAll));
+				tmp.push_back(MenuItemUnit(NPPM_INTERNAL_SCINTILLAFINDERCOLLAPSE, collapseAll));
+				tmp.push_back(MenuItemUnit(NPPM_INTERNAL_SCINTILLAFINDERUNCOLLAPSE, uncollapseAll));
 				tmp.push_back(MenuItemUnit(0, TEXT("Separator")));
-				tmp.push_back(MenuItemUnit(NPPM_INTERNAL_SCINTILLAFINFERCOPY, copy));
-				tmp.push_back(MenuItemUnit(NPPM_INTERNAL_SCINTILLAFINFERSELECTALL, selectAll));
-				tmp.push_back(MenuItemUnit(NPPM_INTERNAL_SCINTILLAFINFERCLEARALL, clearAll));
+				tmp.push_back(MenuItemUnit(NPPM_INTERNAL_SCINTILLAFINDERCOPY, copy));
+				tmp.push_back(MenuItemUnit(NPPM_INTERNAL_SCINTILLAFINDERSELECTALL, selectAll));
+				tmp.push_back(MenuItemUnit(NPPM_INTERNAL_SCINTILLAFINDERCLEARALL, clearAll));
 				tmp.push_back(MenuItemUnit(0, TEXT("Separator")));
-				tmp.push_back(MenuItemUnit(NPPM_INTERNAL_SCINTILLAFINFEROPENALL, openAll));
+				tmp.push_back(MenuItemUnit(NPPM_INTERNAL_SCINTILLAFINDEROPENALL, openAll));
 				tmp.push_back(MenuItemUnit(0, TEXT("Separator")));
 				tmp.push_back(MenuItemUnit(NPPM_INTERNAL_SCINTILLAFINDERWRAP, wrapLongLines));
 
