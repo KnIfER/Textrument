@@ -243,6 +243,11 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 			return findInFiles();
 		}
 
+		case WM_FINDINPROJECTS:
+		{
+			return findInProjects();
+		}
+
 		case WM_FINDALL_INCURRENTFINDER:
 		{
 			FindersInfo *findInFolderInfo = reinterpret_cast<FindersInfo *>(wParam);
@@ -259,6 +264,12 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 			return TRUE;
 		}
 
+		case WM_REPLACEINPROJECTS:
+		{
+			replaceInProjects();
+			return TRUE;
+		}
+
 		case NPPM_LAUNCHFINDINFILESDLG:
 		{
 			// Find in files function code should be here due to the number of parameters (2) cannot be passed via WM_COMMAND
@@ -271,6 +282,23 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 			_findReplaceDlg.launchFindInFilesDlg();
 			setFindReplaceFolderFilter(reinterpret_cast<const TCHAR*>(wParam), reinterpret_cast<const TCHAR*>(lParam));
 
+			return TRUE;
+		}
+
+		case NPPM_INTERNAL_FINDINPROJECTS:
+		{
+			const int strSize = FINDREPLACE_MAXLENGTH;
+			TCHAR str[strSize];
+
+			bool isFirstTime = not _findReplaceDlg.isCreated();
+			_findReplaceDlg.doDialog(FIND_DLG, _nativeLangSpeaker.isRTL());
+
+			_pEditView->getGenericSelectedText(str, strSize);
+			_findReplaceDlg.setSearchText(str);
+			if (isFirstTime)
+				_nativeLangSpeaker.changeDlgLang(_findReplaceDlg.getHSelf(), "Find");
+			_findReplaceDlg.launchFindInProjectsDlg();
+			_findReplaceDlg.setProjectCheckmarks(NULL, (int) wParam);
 			return TRUE;
 		}
 

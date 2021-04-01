@@ -40,14 +40,14 @@
 
 #define FINDREPLACE_MAXLENGTH 2048
 
-enum DIALOG_TYPE {FIND_DLG, REPLACE_DLG, FINDINFILES_DLG, MARK_DLG};
+enum DIALOG_TYPE {FIND_DLG, REPLACE_DLG, FINDINFILES_DLG, FINDINPROJECTS_DLG, MARK_DLG};
 
 #define DIR_DOWN true
 #define DIR_UP false
 
 //#define FIND_REPLACE_STR_MAX 256
 
-enum InWhat{ALL_OPEN_DOCS, FILES_IN_DIR, CURRENT_DOC, CURR_DOC_SELECTION};
+enum InWhat{ALL_OPEN_DOCS, FILES_IN_DIR, CURRENT_DOC, CURR_DOC_SELECTION, FILES_IN_PROJECTS};
 
 struct FoundInfo {
 	FoundInfo(int start, int end, size_t lineNumber, const TCHAR *fullPath)
@@ -84,6 +84,9 @@ struct FindOption
 	generic_string _directory;
 	bool _isRecursive = true;
 	bool _isInHiddenDir = false;
+	bool _isProjectPanel_1 = false;
+	bool _isProjectPanel_2 = false;
+	bool _isProjectPanel_3 = false;
 	bool _dotMatchesNewline = false;
 	bool _isMatchLineNumber = true; // only for Find in Folder
 };
@@ -273,12 +276,19 @@ public :
 	const TCHAR * getDir2Search() const {return _env->_directory.c_str();};
 
 	void getPatterns(std::vector<generic_string> & patternVect);
+	void getAndValidatePatterns(std::vector<generic_string> & patternVect);
 
 	void launchFindInFilesDlg() {
 		doDialog(FINDINFILES_DLG);
 	};
 
+	void launchFindInProjectsDlg() {
+		doDialog(FINDINPROJECTS_DLG);
+	};
+
 	void setFindInFilesDirFilter(const TCHAR *dir, const TCHAR *filters);
+	void setProjectCheckmarks(FindHistory *findHistory, int Msk);
+	void enableProjectCheckmarks();
 
 	generic_string getText2search() const {
 		return _env->_str2Search;
@@ -289,6 +299,9 @@ public :
 	const FindOption & getCurrentOptions() const {return *_env;};
 	bool isRecursive() const { return _env->_isRecursive; };
 	bool isInHiddenDir() const { return _env->_isInHiddenDir; };
+	bool isProjectPanel_1() const { return _env->_isProjectPanel_1; };
+	bool isProjectPanel_2() const { return _env->_isProjectPanel_2; };
+	bool isProjectPanel_3() const { return _env->_isProjectPanel_3; };
 	void saveFindHistory();
 	void changeTabName(DIALOG_TYPE index, const TCHAR *name2change) {
 		TCITEM tie;
@@ -352,6 +365,7 @@ public :
 	generic_string getScopeInfoForStatusBar(FindOption const *pFindOpt) const;
 	Finder * createFinder();
 	bool removeFinder(Finder *finder2remove);
+	DIALOG_TYPE getCurrentStatus() {return _currentStatus;};
 
 protected :
 	void resizeDialogElements(LONG newWidth);
@@ -407,8 +421,9 @@ private :
 	void showFindDlgItem(int dlgItemID, bool isShow = true);
 
 	void enableReplaceFunc(bool isEnable);
-	void enableFindInFilesControls(bool isEnable = true);
+	void enableFindInFilesControls(bool isEnable, bool projectPanels);
 	void enableFindInFilesFunc();
+	void enableFindInProjectsFunc();
 	void enableMarkAllControls(bool isEnable);
 	void enableMarkFunc();
 
@@ -434,9 +449,11 @@ private :
 	static const int FR_OP_REPLACE = 2;
 	static const int FR_OP_FIF = 4;
 	static const int FR_OP_GLOBAL = 8;
+	static const int FR_OP_FIP = 16;
 	void saveInMacro(size_t cmd, int cmdType);
 	void drawItem(LPDRAWITEMSTRUCT lpDrawItemStruct);
 	bool replaceInFilesConfirmCheck(generic_string directory, generic_string fileTypes);
+	bool replaceInProjectsConfirmCheck();
 	bool replaceInOpenDocsConfirmCheck(void);
 };
 

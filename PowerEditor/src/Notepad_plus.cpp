@@ -1414,6 +1414,16 @@ int Notepad_plus::getHtmlXmlEncoding(const TCHAR *fileName) const
 	}
 }
 
+void Notepad_plus::setCodePageForInvisibleView(Buffer const *pBuffer)
+{
+	int detectedCp = static_cast<int>(_invisibleEditView.execute(SCI_GETCODEPAGE));
+	int cp2set = SC_CP_UTF8;
+	if (pBuffer->getUnicodeMode() == uni8Bit)
+	{
+		cp2set = (detectedCp == SC_CP_UTF8 ? CP_ACP : detectedCp);
+	}
+	_invisibleEditView.execute(SCI_SETCODEPAGE, cp2set);
+}
 
 bool Notepad_plus::replaceInOpenedFiles()
 {
@@ -1855,42 +1865,79 @@ void Notepad_plus::getMatchedFileNames(const TCHAR *dir, const vector<generic_st
 	::FindClose(hFile);
 }
 
-std::mutex replaceInFiles_mutex;
-
-bool Notepad_plus::replaceInFiles()
+bool Notepad_plus::createFilelistForFiles(vector<generic_string> & fileNames)
 {
-	std::lock_guard<std::mutex> lock(replaceInFiles_mutex);
-
 	const TCHAR *dir2Search = _findReplaceDlg.getDir2Search();
 	if (!dir2Search[0] || !::PathFileExists(dir2Search))
 	{
 		return false;
 	}
 
+	vector<generic_string> patterns2Match;
+	_findReplaceDlg.getAndValidatePatterns(patterns2Match);
+
 	bool isRecursive = _findReplaceDlg.isRecursive();
 	bool isInHiddenDir = _findReplaceDlg.isInHiddenDir();
+	getMatchedFileNames(dir2Search, patterns2Match, fileNames, isRecursive, isInHiddenDir);
+	return true;
+}
+
+bool Notepad_plus::createFilelistForProjects(vector<generic_string> & fileNames)
+{
+	vector<generic_string> patterns2Match;
+	_findReplaceDlg.getAndValidatePatterns(patterns2Match);
+	bool somethingIsSelected = false; // at least one Project Panel is open and checked
+
+	if (_findReplaceDlg.isProjectPanel_1() && _pProjectPanel_1 && !_pProjectPanel_1->isClosed())
+	{
+		_pProjectPanel_1->enumWorkSpaceFiles (NULL, patterns2Match, fileNames);
+		somethingIsSelected = true;
+	}
+	if (_findReplaceDlg.isProjectPanel_2() && _pProjectPanel_2 && !_pProjectPanel_2->isClosed())
+	{
+		_pProjectPanel_2->enumWorkSpaceFiles (NULL, patterns2Match, fileNames);
+		somethingIsSelected = true;
+	}
+	if (_findReplaceDlg.isProjectPanel_3() && _pProjectPanel_3 && !_pProjectPanel_3->isClosed())
+	{
+		_pProjectPanel_3->enumWorkSpaceFiles (NULL, patterns2Match, fileNames);
+		somethingIsSelected = true;
+	}
+	return somethingIsSelected;
+}
+
+std::mutex replaceInFiles_mutex;
+
+bool Notepad_plus::replaceInFiles()
+{
+	std::lock_guard<std::mutex> lock(replaceInFiles_mutex);
+
+	std::vector<generic_string> fileNames;
+	if (!createFilelistForFiles(fileNames))
+		return false;
+
+	return replaceInFilelist(fileNames);
+}
+
+bool Notepad_plus::replaceInProjects()
+{
+	std::lock_guard<std::mutex> lock(replaceInFiles_mutex);
+
+	std::vector<generic_string> fileNames;
+	if (!createFilelistForProjects(fileNames))
+		return false;
+
+	return replaceInFilelist(fileNames);
+}
+
+bool Notepad_plus::replaceInFilelist(std::vector<generic_string> & fileNames)
+{
 	int nbTotal = 0;
 
 	ScintillaEditView *pOldView = _pEditView;
 	_pEditView = &_invisibleEditView;
 	Document oldDoc = _invisibleEditView.execute(SCI_GETDOCPOINTER);
 	Buffer * oldBuf = _invisibleEditView.getCurrentBuffer();	//for manually setting the buffer, so notifications can be handled properly
-
-	vector<generic_string> patterns2Match;
-	_findReplaceDlg.getPatterns(patterns2Match);
-	if (patterns2Match.size() == 0)
-	{
-		_findReplaceDlg.setFindInFilesDirFilter(NULL, TEXT("*.*"));
-		_findReplaceDlg.getPatterns(patterns2Match);
-	}
-	else if (allPatternsAreExclusion(patterns2Match))
-	{
-		patterns2Match.insert(patterns2Match.begin(), TEXT("*.*"));
-	}
-
-	vector<generic_string> fileNames;
-
-	getMatchedFileNames(dir2Search, patterns2Match, fileNames, isRecursive, isInHiddenDir);
 
 	Progress progress(_pPublicInterface->getHinst());
 	size_t filesCount = fileNames.size();
@@ -1900,6 +1947,7 @@ bool Notepad_plus::replaceInFiles()
 	{
 		if (filesCount >= 200)
 			filesPerPercent = filesCount / 100;
+
 		generic_string msg = _nativeLangSpeaker.getLocalizedStrFromID(
 			"replace-in-files-progress-title", TEXT("Replace In Files progress..."));
 		progress.open(_findReplaceDlg.getHSelf(), msg.c_str());
@@ -1922,13 +1970,8 @@ bool Notepad_plus::replaceInFiles()
 		{
 			Buffer * pBuf = MainFileManager.getBufferByID(id);
 			_invisibleEditView.execute(SCI_SETDOCPOINTER, 0, pBuf->getDocument());
-			int detectedCp = static_cast<int>(_invisibleEditView.execute(SCI_GETCODEPAGE));
-			int cp2set = SC_CP_UTF8;
-			if (pBuf->getUnicodeMode() == uni8Bit)
-			{
-				cp2set = (detectedCp == SC_CP_UTF8 ? CP_ACP : detectedCp);
-			}
-			_invisibleEditView.execute(SCI_SETCODEPAGE, cp2set);
+
+			setCodePageForInvisibleView(pBuf);
 
 			_invisibleEditView.setCurrentBuffer(pBuf);
 
@@ -2055,34 +2098,28 @@ bool Notepad_plus::findInFinderFiles(FindersInfo *findInFolderInfo)
 
 bool Notepad_plus::findInFiles()
 {
-	const TCHAR *dir2Search = _findReplaceDlg.getDir2Search();
-
-	if (not dir2Search[0] || not ::PathFileExists(dir2Search))
-	{
+	std::vector<generic_string> fileNames;
+	if (! createFilelistForFiles(fileNames))
 		return false;
-	}
 
-	bool isRecursive = _findReplaceDlg.isRecursive();
-	bool isInHiddenDir = _findReplaceDlg.isInHiddenDir();
+	return findInFilelist(fileNames);
+}
+
+bool Notepad_plus::findInProjects()
+{
+	vector<generic_string> fileNames;
+	if (! createFilelistForProjects(fileNames))
+		return false;
+
+	return findInFilelist(fileNames);
+}
+
+bool Notepad_plus::findInFilelist(std::vector<generic_string> & fileNames)
+{
 	int nbTotal = 0;
 	ScintillaEditView *pOldView = _pEditView;
 	_pEditView = &_invisibleEditView;
 	Document oldDoc = _invisibleEditView.execute(SCI_GETDOCPOINTER);
-
-	vector<generic_string> patterns2Match;
-	_findReplaceDlg.getPatterns(patterns2Match);
-	if (patterns2Match.size() == 0)
-	{
-		_findReplaceDlg.setFindInFilesDirFilter(NULL, TEXT("*.*"));
-		_findReplaceDlg.getPatterns(patterns2Match);
-	}
-	else if (allPatternsAreExclusion(patterns2Match))
-	{
-		patterns2Match.insert(patterns2Match.begin(), TEXT("*.*"));
-	}
-
-	vector<generic_string> fileNames;
-	getMatchedFileNames(dir2Search, patterns2Match, fileNames, isRecursive, isInHiddenDir);
 
 	_findReplaceDlg.beginNewFilesSearch();
 
@@ -2119,17 +2156,14 @@ bool Notepad_plus::findInFiles()
 		{
 			Buffer * pBuf = MainFileManager.getBufferByID(id);
 			_invisibleEditView.execute(SCI_SETDOCPOINTER, 0, pBuf->getDocument());
-			int detectedCp = static_cast<int>(_invisibleEditView.execute(SCI_GETCODEPAGE));
-			int cp2set = SC_CP_UTF8;
-			if (pBuf->getUnicodeMode() == uni8Bit)
-			{
-				cp2set = (detectedCp == SC_CP_UTF8 ? CP_ACP : detectedCp);
-			}
 
-			_invisibleEditView.execute(SCI_SETCODEPAGE, cp2set);
+			setCodePageForInvisibleView(pBuf);
+
 			FindersInfo findersInfo;
 			findersInfo._pFileName = fileNames.at(i).c_str();
+
 			nbTotal += _findReplaceDlg.processAll(ProcessFindAll, FindReplaceDlg::_env, isEntireDoc, &findersInfo);
+
 			if (closeBuf)
 				MainFileManager.closeBuffer(id, _pEditView);
 		}
@@ -2165,7 +2199,6 @@ bool Notepad_plus::findInFiles()
 
 	return true;
 }
-
 
 bool Notepad_plus::findInOpenedFiles()
 {
