@@ -28,8 +28,13 @@
 #include <stdexcept>
 #include "ToolBar.h"
 #include "shortcut.h"
+
+//strange, what happened?
+
+#ifndef PluginToolbar
 #include "FindReplaceDlg_rc.h"
 #include "Notepad_plus.h"
+#endif
 
 const int WS_TOOLBARSTYLE = WS_CHILD | WS_VISIBLE | WS_CLIPCHILDREN | WS_CLIPSIBLINGS | TBSTYLE_TOOLTIPS |TBSTYLE_FLAT | CCS_TOP | BTNS_AUTOSIZE | CCS_NOPARENTALIGN | CCS_NORESIZE | CCS_NODIVIDER;
 
@@ -364,7 +369,9 @@ void ToolBar::reset(bool create)
 			{
 				auto dynIconI = _vDynBtnReg.at(j);
 				if(dynIconI.hIcon==0 && dynIconI.ORH->magicNum!=0x666) {
+#ifndef PluginToolbar
 					if(PLUGIN_ICO==0) PLUGIN_ICO = ::LoadIcon(_hInst, MAKEINTRESOURCE(IDR_PLUGIN_ICO));
+#endif
 					dynIconI.hIcon = PLUGIN_ICO;
 				}
 				_toolBarIcons.addIcon(dynIconI);
@@ -790,6 +797,7 @@ bool ReBar::getIDVisible(int id)
 
 void ReBar::setGrayBackground(int id) 
 {
+#ifndef PluginToolbar
 	auto index = SendMessage(_hSelf, RB_IDTOINDEX, id, 0);
 	if (index == -1 )
 		return;	//error
@@ -799,6 +807,7 @@ void ReBar::setGrayBackground(int id)
 	rbBand.fMask = RBBIM_BACKGROUND;
 	rbBand.hbmBack = LoadBitmap((HINSTANCE)::GetModuleHandle(NULL), MAKEINTRESOURCE(IDB_INCREMENTAL_BG));
 	::SendMessage(_hSelf, RB_SETBANDINFO, index, reinterpret_cast<LPARAM>(&rbBand));
+#endif
 }
 
 int ReBar::getNewID()

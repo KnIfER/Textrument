@@ -440,3 +440,27 @@ bool ReBar::isIDTaken(int id) {
 	return false;
 }
 
+void ToolBar::setCheck(int ID2Check, bool willBeChecked) const
+{
+	auto tbItem = const_cast<ToolBar*>(this)->getRecordedDataFromCMDID(ID2Check);
+	if(tbItem) {
+		tbItem->fsState&=~TBSTATE_CHECKED;
+		if(willBeChecked) {
+			tbItem->fsState|=TBSTATE_CHECKED;
+		}
+	}
+	::SendMessage(_hSelf, TB_CHECKBUTTON, ID2Check, MAKELONG(willBeChecked, 0));
+};
+
+void ToolBar::setEnable(int ID2Check, bool willBeChecked) const
+{
+	auto tbItem = const_cast<ToolBar*>(this)->getRecordedDataFromCMDID(ID2Check);
+	if(tbItem) {
+		tbItem->fsState&=~TBSTATE_ENABLED;
+		if(willBeChecked) {
+			tbItem->fsState|=TBSTATE_ENABLED;
+		}
+	}
+	::SendMessage(_hSelf, TB_ENABLEBUTTON, ID2Check, MAKELONG(willBeChecked, 0));
+};
+

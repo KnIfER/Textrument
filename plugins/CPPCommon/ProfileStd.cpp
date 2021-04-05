@@ -141,6 +141,11 @@ void loadProfile(TCHAR* path, std::map<std::string, std::string> & m, bool skipS
 								else break;
 							}
 							for(int j=i+1;j<len;j++) {
+								if (j==i+1 && buffer[j]=='\\')
+								{
+									i++;
+									break;
+								} 
 								if(buffer[j]==' ')
 									i++;
 								else break;

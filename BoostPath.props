@@ -12,6 +12,7 @@
   <ItemDefinitionGroup>
     <Link>
       <AdditionalDependencies>libboost_regex-vc142-mt-s-x64-1_74.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(BoostSlib);</AdditionalLibraryDirectories>
     </Link>
     <ClCompile>
       <AdditionalIncludeDirectories>$(BOOST);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
