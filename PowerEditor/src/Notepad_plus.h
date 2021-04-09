@@ -283,7 +283,7 @@ public:
 	ToolBar	_toolBar;
 //private:
 	DockingManager _dockingManager;
-	std::vector<int> _internalFuncIDs;
+	//std::vector<int> _internalFuncIDs;
 
 	AutoCompletion _autoCompleteMain;
 	AutoCompletion _autoCompleteSub; // each Scintilla has its own autoComplete

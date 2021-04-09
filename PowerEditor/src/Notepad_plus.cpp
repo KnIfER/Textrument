@@ -868,8 +868,11 @@ LRESULT Notepad_plus::init(HWND hwnd)
 	return TRUE;
 }
 
+extern bool bIsTabSelSupressed;
+
 void Notepad_plus::reInitDockingSystem(DockingManagerData* dockingData)
 {
+	bIsTabSelSupressed = 1;
 	auto & nppGUI = *nppUIParms;
 
 	nppParms->dockingParamsLoaded = true;
@@ -936,10 +939,8 @@ void Notepad_plus::reInitDockingSystem(DockingManagerData* dockingData)
 			launchFileBrowser(nppParms->getFileBrowserRoots(), true, false);
 		}
 
-		_internalFuncIDs.resize(0);
 	}
 
-	//if (!dockingData)
 	for (size_t i = 0, len = dmd._pluginDockInfo.size(); i < len ; ++i)
 	{
 		PluginDlgDockingInfo& pdi = dmd._pluginDockInfo[i];
@@ -947,14 +948,7 @@ void Notepad_plus::reInitDockingSystem(DockingManagerData* dockingData)
 		{
 			if (pdi._name == NPP_INTERNAL_FUCTION_STR)
 			{
-				if (dockingData)
-				{
-					::SendMessage(nppApp->_pPublicInterface->getHSelf(), WM_COMMAND, pdi._internalID, 0);
-				}
-				else
-				{
-					_internalFuncIDs.push_back(pdi._internalID);
-				}
+				::SendMessage(nppApp->_pPublicInterface->getHSelf(), WM_COMMAND, pdi._internalID, 0);
 			}
 			else
 			{
@@ -963,6 +957,8 @@ void Notepad_plus::reInitDockingSystem(DockingManagerData* dockingData)
 			pdi._currContainer;
 		}
 	}
+
+	bIsTabSelSupressed = 0;
 
 	for (size_t i = 0, len = dmd._containerTabInfo.size(); i < len; ++i)
 	{

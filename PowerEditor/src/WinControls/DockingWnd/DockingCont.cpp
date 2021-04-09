@@ -1605,6 +1605,8 @@ int DockingCont::hideToolbar(tTbData *pTbData, BOOL hideClient, bool activate)
 	return iItem;
 }
 
+bool bIsTabSelSupressed=false;
+
 void DockingCont::viewToolbar(tTbData *pTbData)
 {
 	TCITEM tcItem = {0};
@@ -1673,6 +1675,7 @@ int DockingCont::searchPosInTab(tTbData* pTbData)
 
 void DockingCont::selectTab(int iTab)
 {
+	if (!bIsTabSelSupressed)
 	if (iTab != -1)
 	{
 		const TCHAR	*pszMaxTxt	= NULL;
