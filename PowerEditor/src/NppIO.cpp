@@ -359,6 +359,13 @@ BufferID Notepad_plus::doOpen(const generic_string& fileName, bool isRecursive, 
                 ::SendMessage(_pPublicInterface->getHSelf(), WM_SIZE, 0, 0);
             }
         }
+
+		if (!buffer->isUntitled())
+		{
+			//_buffersMap.insert(longFileName, buffer->getID());
+			_buffersMap[longFileName] = buffer->getID();
+		}
+
         PathRemoveFileSpec(longFileName);
         _linkTriggered = true;
         _isFileOpening = false;
@@ -717,6 +724,7 @@ void Notepad_plus::doClose(BufferID id, int whichOne, bool doDeleteBackup)
 		scnN.nmhdr.code = NPPN_FILECLOSED;
 		_pluginsManager.notify(&scnN);
 
+		_buffersMap.erase(fileFullPath);
 
 		// Add to recent file only if file is removed and does not exist in any of the views
 		BufferID buffID = MainFileManager.getBufferFromName(fileFullPath.c_str());

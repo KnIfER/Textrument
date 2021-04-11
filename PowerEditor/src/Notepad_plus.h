@@ -57,6 +57,7 @@
 #include <vector>
 #include <iso646.h>
 
+#include <map>
 
 #define MENU 0x01
 #define TOOLBAR 0x02
@@ -281,6 +282,8 @@ public:
 	Notepad_plus_Window *_pPublicInterface = nullptr;
 	Window *_pMainWindow = nullptr;
 	ToolBar	_toolBar;
+
+	std::map<std::wstring, BufferID> _buffersMap;
 //private:
 	DockingManager _dockingManager;
 	//std::vector<int> _internalFuncIDs;

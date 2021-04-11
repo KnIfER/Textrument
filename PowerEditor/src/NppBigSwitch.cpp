@@ -493,6 +493,20 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 			return 0;
 		}
 
+		case NPPM_GETBUFFERIDFROMPATH:
+		{
+			if(wParam)
+			{
+				BufferID val;
+				auto iter = _buffersMap.find((TCHAR*)wParam);
+				if (iter!=_buffersMap.end())
+				{
+					return (LONG_PTR)iter->second;
+				}
+			}
+			return 0;
+		}
+
 		case NPPM_RELOADBUFFERID:
 		{
 			if (!wParam)
@@ -1833,7 +1847,7 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 				}
 			}
 
-			if (notification->nmhdr.code == SCN_UPDATEUI)
+			if (code == SCN_UPDATEUI)
 			{
 				checkClipboard(); //6
 				checkUndoState(); //4
