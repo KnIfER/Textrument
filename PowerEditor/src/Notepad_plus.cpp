@@ -886,6 +886,8 @@ void Notepad_plus::reInitDockingSystem(DockingManagerData* dockingData)
 
 	std::map<int, PluginDlgDockingInfo*> addedDlgMap;
 
+	std::vector<DockingCont*> & vCont =  _dockingManager.getContainerInfo();
+
 	if (dockingData)
 	{
 		nppGUI._dockingData = dmd;
@@ -896,18 +898,10 @@ void Notepad_plus::reInitDockingSystem(DockingManagerData* dockingData)
 			addedDlgMap[pdi._internalID] = &pdi;
 		}
 
-		std::vector<DockingCont*> & vCont =  _dockingManager.getContainerInfo();
-
 		for (size_t i = 0, len = vCont.size(); i < len ; ++i)
 		{
 			vector<tTbData *> & vData	= vCont[i]->_vTbData;
-
 			vCont[i]->doClose();
-
-			//vCont[i]->removeToolbar
-
-			//vCont[i]->_vTbData.
-
 			// re-initilize the created panels.
 			for (size_t jTab = 0, len2 = vData.size(); jTab < len2 ; ++jTab)
 			{
@@ -928,7 +922,6 @@ void Notepad_plus::reInitDockingSystem(DockingManagerData* dockingData)
 					_dockingManager.createDockableDlg(*pData, iCont, isVisible);
 
 					//LogIs(2, (HWND)-1 , TEXT("re-initilize panels isVisible=%d  ---name---  %s") , isVisible , pData->pszName);
-				
 				}
 			}
 		}
@@ -954,7 +947,6 @@ void Notepad_plus::reInitDockingSystem(DockingManagerData* dockingData)
 			{
 				_pluginsManager.runPluginCommand(pdi._name.c_str(), pdi._internalID);
 			}
-			pdi._currContainer;
 		}
 	}
 
@@ -963,7 +955,7 @@ void Notepad_plus::reInitDockingSystem(DockingManagerData* dockingData)
 	for (size_t i = 0, len = dmd._containerTabInfo.size(); i < len; ++i)
 	{
 		ContainerTabInfo & cti = dmd._containerTabInfo[i];
-		_dockingManager.setActiveTab(cti._cont, cti._activeTab);
+		_dockingManager.setActiveTab(cti._cont, cti._activeTab, true);
 	}
 }
 

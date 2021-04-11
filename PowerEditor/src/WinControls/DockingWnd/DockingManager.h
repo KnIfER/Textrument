@@ -64,7 +64,7 @@ public :
 
 	void updateContainerInfo(HWND hClient);
 	void createDockableDlg(tTbData data, int iCont = CONT_LEFT, bool isVisible = false);
-	void setActiveTab(int iCont, int iItem);
+	void setActiveTab(int iCont, int iItem, bool bMustSet=false);
 	void showDockableDlg(HWND hDlg, BOOL view);
 	void showDockableDlg(TCHAR* pszName, BOOL view);
 

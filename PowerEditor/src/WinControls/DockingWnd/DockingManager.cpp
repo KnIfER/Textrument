@@ -710,11 +710,18 @@ void DockingManager::createDockableDlg(tTbData data, int iCont, bool isVisible)
 		SendNotify(data.hClient, MAKELONG(DMN_FLOAT, iCont));
 }
 
-void DockingManager::setActiveTab(int iCont, int iItem)
+void DockingManager::setActiveTab(int iCont, int iItem, bool bMustSet)
 {
 	if ((iCont == -1) || (_iContMap[iCont] == -1))
 		return;
-
+	if (bMustSet && iItem>0)
+	{
+		int elCnt = _vContainer[_iContMap[iCont]]->getElementCnt();
+		if (iItem>=elCnt)
+		{
+			iItem = elCnt-1;
+		}
+	}
 	_vContainer[_iContMap[iCont]]->setActiveTb(iItem);
 }
 
