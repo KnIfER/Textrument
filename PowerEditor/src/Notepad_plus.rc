@@ -16,8 +16,8 @@ LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 7,8,9,0
- PRODUCTVERSION 7,8,9,0
+ FILEVERSION 1,0,0,0
+ PRODUCTVERSION 1,0,0,0
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -38,12 +38,12 @@ BEGIN
         BEGIN
             VALUE "CompanyName", "knziha@gmail.com"
             VALUE "FileDescription", "Textrument : a free (GNU) text editor"
-            VALUE "FileVersion", "v0.1.1"
+            VALUE "FileVersion", "v1.0.0"
             VALUE "InternalName", "n1pd.exe"
             VALUE "LegalCopyright", "Copymiddle 1998-2020 by knziha"
             VALUE "OriginalFilename", "Textrument.exe"
             VALUE "ProductName", "Textrument"
-            VALUE "ProductVersion", "v0.1.1"
+            VALUE "ProductVersion", "v1.0.0"
         END
     END
 END
@@ -558,14 +558,6 @@ BEGIN
         MENUITEM "Select All Between Matching Braces", IDM_SEARCH_SELECTMATCHINGBRACES
         MENUITEM "Mar&k...",                    IDM_SEARCH_MARK
         MENUITEM SEPARATOR
-        POPUP "Mark One"
-            BEGIN
-            MENUITEM "Using 1st Style",    IDM_SEARCH_MARKONEEXT1
-            MENUITEM "Using 2nd Style",    IDM_SEARCH_MARKONEEXT2
-            MENUITEM "Using 3rd Style",    IDM_SEARCH_MARKONEEXT3
-            MENUITEM "Using 4th Style",    IDM_SEARCH_MARKONEEXT4
-            MENUITEM "Using 5th Style",    IDM_SEARCH_MARKONEEXT5
-        END
         POPUP "Mark All"
         BEGIN
             MENUITEM "Using 1st Style",             IDM_SEARCH_MARKALLEXT1
@@ -573,6 +565,14 @@ BEGIN
             MENUITEM "Using 3rd Style",             IDM_SEARCH_MARKALLEXT3
             MENUITEM "Using 4th Style",             IDM_SEARCH_MARKALLEXT4
             MENUITEM "Using 5th Style",             IDM_SEARCH_MARKALLEXT5
+        END
+        POPUP "Mark One"
+            BEGIN
+            MENUITEM "Using 1st Style",    IDM_SEARCH_MARKONEEXT1
+            MENUITEM "Using 2nd Style",    IDM_SEARCH_MARKONEEXT2
+            MENUITEM "Using 3rd Style",    IDM_SEARCH_MARKONEEXT3
+            MENUITEM "Using 4th Style",    IDM_SEARCH_MARKONEEXT4
+            MENUITEM "Using 5th Style",    IDM_SEARCH_MARKONEEXT5
         END
         POPUP "Unmark All"
         BEGIN
@@ -1095,8 +1095,8 @@ BEGIN
             MENUITEM "Import style theme(s)...",    IDM_SETTING_IMPORTSTYLETHEMS
         END
 
+        MENUITEM "Small Icons",        IDM_SETTING_SMALLICON
 		MENUITEM "Big Icons",          IDM_SETTING_BIGICON   
-		MENUITEM "Small Icons",        IDM_SETTING_SMALLICON
 		MENUITEM "Standard Icons",     IDM_SETTING_STANDARDICON 
 		MENUITEM "Customize Toolbar",  IDM_SETTING_CUSTTOOLS
 		MENUITEM "Wrap Toolbar",	   IDM_SETTING_WRAPTOOLS  
@@ -1178,7 +1178,7 @@ FONT 8, "MS Shell Dlg", 0, 0, 0x1
 BEGIN
     EDITTEXT        IDC_BUILD_DATETIME,150,2,150,10,ES_READONLY | NOT WS_BORDER
     CONTROL         "",IDI_FLAG,"Static",SS_OWNERDRAW,20,5,64,64
-    LTEXT           "Textrument v0.1.1",IDC_STATIC,70,15,140,11
+    LTEXT           "Textrument v1.0.0",IDC_STATIC,70,15,140,11
     LTEXT           "bit",IDC_VERSION_BIT,150,20,140,11
     LTEXT           "Under the same blue sky",IDC_AUTHOR_NAME,70,32,80,8
     LTEXT           "Home:",IDC_STATIC,21,52,47,8

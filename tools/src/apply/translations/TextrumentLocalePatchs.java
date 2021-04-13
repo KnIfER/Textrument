@@ -11,13 +11,10 @@ import org.junit.Test;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static apply.translations.Install.installXmlByLocale;
 import static apply.translations.Install.installXmlNativeByLocale;
 
 
@@ -26,6 +23,20 @@ public class TextrumentLocalePatchs {
 	static final int MODIFY = 1;
 	static final int INSERT = 2;
 	static final int EXTRACT = 3;
+	static final int MERGE = 4;
+	static final int MOVE = 5;
+	static final int RENAME = 6;
+	static String actionGetName(int action) {
+		switch (action) {
+			case DELETE:
+			return "DELETE";
+			case MODIFY:
+			return "MODIFY";
+			case INSERT:
+			return "INSERT";
+		}
+		return "EXTRACT";
+	}
 	/** 这是我们感兴趣的子资料文件夹*/
 	static String[] filters = new String[]{
 			"afrikaans.xml"
@@ -121,6 +132,8 @@ public class TextrumentLocalePatchs {
 			, "vietnamese.xml"
 			, "welsh.xml"
 			, "zulu.xml"
+			, "hongKongCantonese.xml"
+			, "abkhazian.xml"
 	};
 	
 	static LANG[] shortNames = new LANG[] {
@@ -128,13 +141,13 @@ public class TextrumentLocalePatchs {
 			, LANG.Albanian
 			, LANG.Arabic
 			, LANG.aragonese // "aragonese.xml"
-			, null//LANG.aranese // "aranese.xml"
+			, LANG.aranese//LANG.aranese // "aranese.xml"
 			, LANG.Azerbaijani
 			, LANG.Basque
 			, LANG.Belarusian
 			, LANG.Bengali
 			, LANG.Bosnian
-			, LANG.Portuguese //"brazilian_portuguese.xml"
+			, LANG.Portuguese_b //"brazilian_portuguese.xml"
 			, LANG.breton // "breton.xml"
 			, LANG.Bulgarian
 			, LANG.Catalan
@@ -149,8 +162,8 @@ public class TextrumentLocalePatchs {
 			, LANG.English1
 			, LANG.Esperanto
 			, LANG.Estonian
-			, null // "extremaduran.xml"
-			, null // "farsi.xml"
+			, LANG.extremaduran // "extremaduran.xml"
+			, LANG.farsi // "farsi.xml"
 			, LANG.Finnish
 			, LANG.French
 			, LANG.friulian // "friulian.xml"
@@ -173,7 +186,7 @@ public class TextrumentLocalePatchs {
 			, LANG.Kurdish
 			, LANG.Kyrgyz
 			, LANG.Latvian
-			, null // "ligurian.xml"
+			, LANG.ligurian // "ligurian.xml"
 			, LANG.Lithuanian
 			, LANG.Luxembourgish
 			, LANG.Macedonian
@@ -184,7 +197,7 @@ public class TextrumentLocalePatchs {
 			, LANG.Norwegian
 			, LANG.nynorsk // "nynorsk.xml"
 			, LANG.occitan // "occitan.xml"
-			, null // "piglatin.xml"
+			, LANG.piglatin // "piglatin.xml"
 			, LANG.Polish
 			, LANG.Portuguese
 			, LANG.Punjabi
@@ -193,30 +206,32 @@ public class TextrumentLocalePatchs {
 			, LANG.Samoan // "samogitian.xml"
 			, LANG.sardinian // "sardinian.xml"
 			, LANG.Serbian
-			, null // "serbianCyrillic.xml"
+			, LANG.serbianCyrillic // "serbianCyrillic.xml"
 			, LANG.Sinhala
 			, LANG.Slovak
 			, LANG.Slovenian
 			, LANG.Spanish
-			, null // "spanish_ar.xml"
+			, LANG.spanish_ar // "spanish_ar.xml"
 			, LANG.Swedish
-			, null // "tagalog.xml"
-			, null // "taiwanese.xml"
-			, null // "tajikCyrillic.xml"
+			, LANG.tagalog // "tagalog.xml"
+			, LANG.taiwanese // "taiwanese.xml"
+			, LANG.Tajik // "tajikCyrillic.xml"
 			, LANG.Tamil
-			, null // "tatar.xml"
+			, LANG.tatar // "tatar.xml"
 			, LANG.Telugu
 			, LANG.Thai
 			, LANG.Turkish
 			, LANG.Ukrainian
 			, LANG.Urdu
-			, null // "uyghur.xml"
+			, LANG.uyghur // "uyghur.xml"
 			, LANG.Uzbek
-			, LANG.Uzbek //"uzbekCyrillic.xml"
-			, null // "venetian.xml"
+			, LANG.Uzbek_b //"uzbekCyrillic.xml"
+			, LANG.venetian // "venetian.xml"
 			, LANG.Vietnamese
 			, LANG.Welsh
 			, LANG.Zulu
+			, LANG.hongKongCantonese
+			, LANG.abkhazian
 	};
 
 	static HashMap<String, Integer> shortName_id_table = new HashMap<>();
@@ -323,15 +338,22 @@ public class TextrumentLocalePatchs {
 			, "values-vi-rVN"
 			, "welsh.xml"
 			, "zulu.xml"
+			, null
+			, null
 	};
 
 	/** 这是我们的源文件夹*/
-	static File sourceFolder=new File("..\\PowerEditor\\installer\\nativeLang");
+	public static File sourceFolder=new File("..\\PowerEditor\\installer\\nativeLang");
 
 	/** Simply transfer key-values pair among xmls. */
     public static void main(String[] args) throws Exception {
-		new File(sourceFolder, "taiwaneseMandarin.xml").renameTo(new File(sourceFolder, "taiwanese.xml"));
-
+		File f = new File(sourceFolder, "taiwaneseMandarin.xml");
+		File t = new File(sourceFolder, "taiwanese.xml");
+		if (f.exists()&&t.exists()) {
+			t.delete();
+		}
+		f.renameTo(t);
+		
 		for(LANG idx:LANG.values()) {
 			processXmlFileByEnum(idx, false);
 		}
@@ -342,12 +364,19 @@ public class TextrumentLocalePatchs {
 		processXmlFileByEnum(LANG.ChineseSimplified, false);
 		installXmlNativeByLocale(LANG.ChineseSimplified);
 	}
+	
+	@Test
+	public void TestPatches() throws Exception {
+		processXmlFileByEnum(LANG.English, false);
+		processXmlFileByEnum(LANG.ChineseSimplified, false);
+	}
 
     static class Action {
 		/** 0=delete; 1=modify; 2=insert */
     	int type;
 		boolean mkdirs=false;
     	String[] XMLPath;
+    	String[] XMLPath1;
     	String[] values;// = new String[filters.length];
 		String tagName;
 		String idField="id";
@@ -381,7 +410,11 @@ public class TextrumentLocalePatchs {
 	}
 	
 	static ArrayList<Action> actions = new ArrayList<>(128);
-    
+
+	static {
+		Patches.pushAll();
+	}
+	
 	static void pushActionByPathIDForNameField(String jsonTrans, int type, int id, String...XMLPath) {
 		Action action = new Action(jsonTrans, type, XMLPath);
 		action.id = Integer.toString(id);
@@ -398,6 +431,16 @@ public class TextrumentLocalePatchs {
 		return action;
 	}
 	
+	static Action pushActionByPathFieldedIDForFieldInTag(String jsonTrans, int type, String idField, Object id, String nmF, String tagName, String...XMLPath) {
+		Action action = new Action(jsonTrans, type, XMLPath);
+		action.idField = idField;
+		action.id = id==null?null:""+id;
+		action.fieldName = nmF;
+		action.tagName = tagName;
+		actions.add(action);
+		return action;
+	}
+	
 
 	/** Process one xml file by id. */
 	public static void processXmlFileByEnum(LANG Enum, boolean test) throws Exception {
@@ -409,6 +452,8 @@ public class TextrumentLocalePatchs {
 		String xmlFileName = filters[id];
 
 		File file = new File(sourceFolder, xmlFileName);
+		
+		//Log(file.getPath());
 		
 		if(!file.exists()) {
 			return;
@@ -437,7 +482,10 @@ public class TextrumentLocalePatchs {
 		Matcher m = p.matcher(xmlText);
 		sb.setLength(0);
 		while(m.find()) {
-			m.appendReplacement(sb, m.group(0).replace("\r\n", "|LFCR|"));
+			//Log(m.groupCount()+""); Log(m.group());
+			// https://blog.csdn.net/qq_37502106/article/details/88642840
+			// for temporary replacements of wrapped comments( <!--***\n ).
+			m.appendReplacement(sb, java.util.regex.Matcher.quoteReplacement(m.group(0).replace("\r\n", "|LFCR|")));
 		}
 		m.appendTail(sb);
 		xmlText = sb.toString();
@@ -474,8 +522,20 @@ public class TextrumentLocalePatchs {
 				case DELETE: {
 					Element _toDel = getElementByPath(document.getRootElement(), aI.XMLPath);
 					if (_toDel != null) {
+						if (aI.id != null) {
+							List<Element> childs = _toDel.getChildren();
+							_toDel = null;
+							for (Element cI : childs) {
+								if (aI.id.equals(cI.getAttributeValue(aI.idField))) {
+									_toDel = cI;
+									break;
+								}
+							}
+						}
+					}
+					if (_toDel != null) {
 						Element toDelp = (Element) _toDel.getParent();
-						toDelp.removeChild(_toDel.getName());
+						toDelp.removeContent(_toDel);
 					}
 				} break;
 				case MODIFY: {
@@ -512,9 +572,14 @@ public class TextrumentLocalePatchs {
 							} else {
 								_toMod.setText(value);
 							}
+							break;
+						} else if(aI.values==null) {
+							break;
 						}
+						// else fallback to insert
+					} else {
+						break;
 					}
-					break;
 				}
 				case INSERT: {
 					String value = aI.values[id];
@@ -557,8 +622,74 @@ public class TextrumentLocalePatchs {
 					if(value!=null) {
 						buf.append(Enum.code);
 						buf.append(":'");
-						buf.append(value);
+						buf.append(value.replaceAll("'", "\\\\\\\\'"));
 						buf.append("', ");
+					}
+					break;
+				}
+				case MERGE: {
+					Element _toExt = getElementByPath(document.getRootElement(), aI.XMLPath);
+					Element _fromExt = getElementByPath(document.getRootElement(), aI.XMLPath1);
+					if (_toExt != null && _fromExt!=null) {
+						List<Element> childs = new ArrayList<>(_fromExt.getChildren());
+						for (Element child : childs) {
+							_fromExt.removeContent(child);
+							_toExt.addContent(child);
+						}
+						_fromExt.getParent().removeContent(_fromExt);
+					}
+					break;
+				}
+				case MOVE: {
+					Element _toExt = getElementByPath(document.getRootElement(), aI.XMLPath);
+					Element _fromExt = getElementByPath(document.getRootElement(), aI.XMLPath1);
+					if (_toExt != null) {
+						Element _toMod = _fromExt;
+						if (_toMod != null) {
+							if (aI.id != null) {
+								List<Element> childs = _toMod.getChildren();
+								_toMod = null;
+								for (Element cI : childs) {
+									if (aI.id.equals(cI.getAttributeValue(aI.idField))) {
+										_toMod = cI;
+										break;
+									}
+								}
+							}
+						}
+						//Log("moving... "+Arrays.asList(aI.XMLPath)+" -> "+Arrays.asList(aI.XMLPath1)+" "+aI.idField);
+						if (_toMod != null) {
+							_toMod.getParent().removeContent(_toMod);
+							_toExt.addContent(_toMod);
+						}
+					}
+					break;
+				}
+				case RENAME: {
+					String value= aI.tagName;
+					if (value != null) {
+						Element _toMod;
+						if (aI.XMLPath==null) {
+							_toMod = document.getRootElement();
+						}
+						else {
+							_toMod = getElementByPath(document.getRootElement(), aI.XMLPath);
+						}
+						if (_toMod != null) {
+							if (aI.id != null) {
+								List<Element> childs = _toMod.getChildren();
+								_toMod = null;
+								for (Element cI : childs) {
+									if (aI.id.equals(cI.getAttributeValue(aI.idField))) {
+										_toMod = cI;
+										break;
+									}
+								}
+							}
+						}
+						if (_toMod != null) {
+							_toMod.setName(value);
+						}
 					}
 					break;
 				}
@@ -569,7 +700,7 @@ public class TextrumentLocalePatchs {
 		
 		XMLOutputter xmlOutput = new XMLOutputter();
 		Format f = Format.getRawFormat();
-		f.setIndent("    "); // 文本缩进
+		f.setIndent("\t"); // 文本缩进
 		f.setLineSeparator("\r\n");
 		f.setTextMode(Format.TextMode.PRESERVE);
 		xmlOutput.setFormat(f);
@@ -586,6 +717,9 @@ public class TextrumentLocalePatchs {
 		xmlText = xmlText.replace("|LFCR|", "\r\n");
 		xmlText = xmlText.replaceAll(".*<!--LFCR-->\r\n", "\r\n");
 
+		xmlText = xmlText.replace("Notepad++", "Textrument");
+		
+		
 		
 		if(test) {
 			if(actions.get(0).type!=EXTRACT)Log(xmlText);
@@ -608,7 +742,12 @@ public class TextrumentLocalePatchs {
 	
 	private static Element getChildElementWithId(List<Element> children, String idField, String id) {
 		for (Element child : children) {
-			if (id.equals(child.getAttributeValue(idField))) {
+			if (idField==null) {
+				if (child.getName().equals(id)) {
+					return child;
+				}
+			}
+			else if (id.equals(child.getAttributeValue(idField))) {
 				return child;
 			}
 		}
@@ -754,8 +893,26 @@ public class TextrumentLocalePatchs {
 		, nynorsk("nno", "?", "?")
 		, occitan("oci", "?", "?")
 		, sardinian("sar", "?", "?")
+		, venetian("venetian", "?", "?")
+		, aranese("aranese", "?", "?")
+		, extremaduran("extremaduran", "?", "?")
+		, farsi("farsi", "?", "?")
+		, ligurian("ligurian", "?", "?")
+		, piglatin("piglatin", "?", "?")
+		, serbianCyrillic("serbianCyrillic", "?", "?")
+		, spanish_ar("spanish_ar", "?", "?")
+		, tagalog("tagalog", "?", "?")
+		, taiwanese("taiwanese", "?", "?")
+		, tatar("tatar", "?", "?")
+		, uyghur("uyghur", "?", "?")
+		, hongKongCantonese("hongKongCantonese", "?", "?")
+		, abkhazian("abkhazian", "?", "?")
+		, Uzbek_b("uz_b", "O'zbek", "Uzbek")
+		, Portuguese_b("pt_b", "Português", "Portuguese")
+
+				;
 		
-		;
+		
 		String code;
 		String name;
 		String englishName;
@@ -801,12 +958,13 @@ public class TextrumentLocalePatchs {
 		System.out.println(name);
 	}
 	
-	static {
-		new Patch_V1().pushActions();
-		new Patch_V2().pushActions();
-	}
-	
 	static StringBuilder buf = new StringBuilder();
+	static StringBuilder buf2 = new StringBuilder();
+	static String[] last_paths;
+	static String last_idF;
+	static String last_id;
+	static String last_nmF;
+	static int last_st;
 
 	private static void pushExtractAction(String idF, String id, String nmF, String...XMLPath) {
 		Action actionExt=new Action(null, EXTRACT, XMLPath);
@@ -815,24 +973,47 @@ public class TextrumentLocalePatchs {
 		actionExt.fieldName=nmF;
 		actions.add(actionExt);
 	}
+
+	static LANG[] _filterOnShot;
 	
-	private static void extractItem(String idF, String id, String nmF, String...XMLPath) throws Exception {
+	public static void extractItem(String idF, String id, String nmF, String...XMLPath) throws Exception {
 		actions.clear();
+		last_paths = XMLPath;
+		last_idF = idF;
+		last_id = id;
+		last_nmF = nmF;
+		last_st = buf.length();
 		buf.append("{");
 		pushExtractAction(idF, id, nmF, XMLPath);
-		for(LANG idx:LANG.values()) {
-			processXmlFileByEnum(idx, true);
+		HashSet<LANG> filterOnShot = null;
+		if (_filterOnShot!=null) {
+			filterOnShot = new HashSet<>(Arrays.asList(_filterOnShot));
+			_filterOnShot = null;
 		}
+		for(LANG idx:LANG.values()) {
+			if (filterOnShot==null || filterOnShot.contains(idx)) {
+				//Log("processing "+idx.code);
+				processXmlFileByEnum(idx, true);
+			}
+		}
+		int len = buf.length();
+		if (len>2 && buf.charAt(len-2)==',') {
+			buf.setLength(len-2);
+		}
+		
 		buf.append("}\r\n");
 	}
-	
+
 	@Test
 	public void simpleExtractorTest() throws Exception {
-		extractItem("id", "6103", "name", "Native-Langue", "Dialog", "Preference", "Global"); // 小图标
-		extractItem("id", "6104", "name", "Native-Langue", "Dialog", "Preference", "Global"); // 大图标
-		extractItem("id", "6105", "name", "Native-Langue", "Dialog", "Preference", "Global"); // 标准图标
-		
-		Log(buf.toString());
+		extractItem("id", "6103", "name", "Native-Langue", "Dialog", "Preference", "Global");
+		//wrapLastExtractedItem("小图标", MODIFY);
+		extractItem("id", "6104", "name", "Native-Langue", "Dialog", "Preference", "Global");
+		//wrapLastExtractedItem("大图标", MODIFY);
+		extractItem("id", "6105", "name", "Native-Langue", "Dialog", "Preference", "Global");
+		//wrapLastExtractedItem("标准图标", MODIFY);
+		//Log(buf.toString());
+		Log(buf2.toString());
 	}
 }
 

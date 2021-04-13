@@ -82,23 +82,23 @@ MenuPosition menuPos[] = {
 	{ 3, 19, -1, "view-uncollapseLevel" },
 	{ 3, 24, -1, "view-project" },
 
-	{ 4,  5, -1, "encoding-characterSets" },
-	{ 4,  5,  0, "encoding-arabic" },
-	{ 4,  5,  1, "encoding-baltic" },
-	{ 4,  5,  2, "encoding-celtic" },
-	{ 4,  5,  3, "encoding-cyrillic" },
-	{ 4,  5,  4, "encoding-centralEuropean" },
-	{ 4,  5,  5, "encoding-chinese" },
-	{ 4,  5,  6, "encoding-easternEuropean" },
-	{ 4,  5,  7, "encoding-greek" },
-	{ 4,  5,  8, "encoding-hebrew" },
-	{ 4,  5,  9, "encoding-japanese" },
-	{ 4,  5, 10, "encoding-korean" },
-	{ 4,  5, 11, "encoding-northEuropean" },
-	{ 4,  5, 12, "encoding-thai" },
-	{ 4,  5, 13, "encoding-turkish" },
-	{ 4,  5, 14, "encoding-westernEuropean" },
-	{ 4,  5, 15, "encoding-vietnamese" },
+	{ 4,  6, -1, "encoding-characterSets" },
+	{ 4,  6,  0, "encoding-arabic" },
+	{ 4,  6,  1, "encoding-baltic" },
+	{ 4,  6,  2, "encoding-celtic" },
+	{ 4,  6,  3, "encoding-cyrillic" },
+	{ 4,  6,  4, "encoding-centralEuropean" },
+	{ 4,  6,  5, "encoding-chinese" },
+	{ 4,  6,  6, "encoding-easternEuropean" },
+	{ 4,  6,  7, "encoding-greek" },
+	{ 4,  6,  8, "encoding-hebrew" },
+	{ 4,  6,  9, "encoding-japanese" },
+	{ 4,  6, 10, "encoding-korean" },
+	{ 4,  6, 11, "encoding-northEuropean" },
+	{ 4,  6, 12, "encoding-thai" },
+	{ 4,  6, 13, "encoding-turkish" },
+	{ 4,  6, 14, "encoding-westernEuropean" },
+	{ 4,  6, 15, "encoding-vietnamese" },
 
 	{ 5, 25, -1, "language-userDefinedLanguage" },
 
@@ -113,7 +113,7 @@ void NativeLangSpeaker::init(TiXmlDocumentA *nativeLangDocRootA, bool loadIfEngl
 {
 	if (nativeLangDocRootA)
 	{
-		_nativeLangA =  nativeLangDocRootA->FirstChild("NotepadPlus");
+		_nativeLangA =  nativeLangDocRootA->FirstChildElement();
 		if (_nativeLangA)
 		{
 			_nativeLangA = _nativeLangA->FirstChild("Native-Langue");
@@ -183,6 +183,11 @@ TCHAR* NativeLangSpeaker::getNativeLangMenuString(int itemID) const
 {
 	if (!_nativeLangA)
 		return 0;
+
+	//if (itemID>=43062&&itemID<=43066)
+	//{
+	//	itemID=43022+(itemID-43062)*2;
+	//}
 
 	TiXmlNodeA *node = _nativeLangA->FirstChild("Menu");
 	if (!node) return 0;
@@ -353,6 +358,16 @@ void NativeLangSpeaker::changeMenuLang(HMENU menuHandle, generic_string & plugin
 
 		const wchar_t *nameW = wmc.char2wchar(name, _nativeLangEncoding);
 		::ModifyMenu(menuHandle, id, MF_BYCOMMAND, id, nameW);
+		if (id>=43022&&id<=43030)
+		{
+			int x = id-43022;
+			if (x%2==0)
+			{
+				id = 43062+x/2;
+				::ModifyMenu(menuHandle, id, MF_BYCOMMAND, id, nameW);
+			}
+		}
+		//todo restore checked state.
 	}
 
 	TiXmlNodeA *subEntriesRoot = mainMenu->FirstChild("SubEntries");
@@ -415,9 +430,9 @@ static const int tabContextMenuItemPos[] =
     10,  // 4 : Print
     25,  // 5 : Move to Other View
     26,  // 6 : Clone to Other View
-    23,  // 9 : Current Dir. Path to Clipboard
     21,  // 7 : Full File Path to Clipboard
     22,  // 8 : Filename to Clipboard
+	23,  // 9 : Directory to Clipboard
     7,   // 10: Rename
     8,   // 11: Move to Recycle Bin
     18,  // 12: Read-Only
@@ -432,7 +447,7 @@ static const int tabContextMenuItemPos[] =
     16,  // 21: Open in Default Viewer
     4,   // 22: Close ALL Unchanged
 	14,   // 23: Open Linked File
-	15,   // 24: Open Containing Folder as Workspace
+	14,   // 24: Open Containing Folder as Workspace
     -1   //-------End
 };
 
@@ -450,8 +465,6 @@ void NativeLangSpeaker::changeLangTabContextMenu(HMENU hCM, int CMIDToChange)
 			{
 				WcharMbcsConvertor& wmc = WcharMbcsConvertor::getInstance();
 				int nbCMItems = sizeof(tabContextMenuItemPos)/sizeof(int);
-
-				if(!CMIDToChange) nbCMItems--;
 
 				for (TiXmlNodeA *childNode = tabBarMenu->FirstChildElement("Item");
 					childNode ;

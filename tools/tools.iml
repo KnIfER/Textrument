@@ -7,7 +7,6 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="jdom-2.0.2" level="project" />
-    <orderEntry type="library" name="fastjson-1.2.73" level="project" />
+    <orderEntry type="library" name="libs" level="project" />
   </component>
 </module>
