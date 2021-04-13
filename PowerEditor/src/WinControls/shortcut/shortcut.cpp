@@ -625,11 +625,11 @@ void Accelerator::updateFullMenu()
 		updateMenuItemByCommand(ucommands[i]);
 	}
 
-	vector<PluginCmdShortcut> pcommands = nppParam.getPluginCommandList();
-	for (size_t i = 0; i < pcommands.size(); ++i)
-	{
-		updateMenuItemByCommand(pcommands[i]);
-	}
+	//vector<PluginCmdShortcut> pcommands = nppParam.getPluginCommandList();
+	//for (size_t i = 0; i < pcommands.size(); ++i)
+	//{
+	//	updateMenuItemByCommand(pcommands[i]);
+	//}
 
 	::DrawMenuBar(_hMenuParent);
 }
