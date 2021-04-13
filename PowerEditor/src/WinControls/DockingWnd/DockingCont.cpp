@@ -137,9 +137,7 @@ void DockingCont::putDocker(DockingCont* item) {
 	}
 	AllDockers[AllDockerLen++]=item;
 
-	TCHAR buffer[100]={0};
-	wsprintf(buffer,TEXT("dockercc=%d"), AllDockerLen);
-	SetWindowText(StatusBarHWND, buffer);
+	//LogIs("dockercc=%d", AllDockerLen);
 }
 
 void DockingCont::removeDocker(DockingCont* item){

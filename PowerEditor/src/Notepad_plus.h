@@ -59,6 +59,8 @@
 
 #include <map>
 
+#include "InsituDebug.h"
+
 #define MENU 0x01
 #define TOOLBAR 0x02
 

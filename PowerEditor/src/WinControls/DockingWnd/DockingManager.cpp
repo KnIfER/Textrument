@@ -763,6 +763,10 @@ LRESULT DockingManager::SendNotify(HWND hWnd, UINT message)
 
 void DockingManager::setDockedContSize(int iCont, int iSize)
 {
+	if (iSize==0)
+	{
+		iSize = 10;
+	}
 	if ((iCont == CONT_TOP) || (iCont == CONT_BOTTOM))
 		_dockData.rcRegion[iCont].bottom = iSize;
 	else if ((iCont == CONT_LEFT) || (iCont == CONT_RIGHT))

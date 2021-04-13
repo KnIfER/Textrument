@@ -653,8 +653,7 @@ void ProjectPanel::notified(LPNMHDR notification)
 {
 	if (notification->code == DMN_CLOSE)
 	{
-		::SendMessage(_hParent, WM_COMMAND, IDM_VIEW_PROJECT_PANEL_1 + _panelID, 0);
-		SetWindowLongPtr (getHSelf(), DWLP_MSGRESULT, _isClosed ? 0 : 1);
+		setClosed(1);
 	}
 	else if ((notification->hwndFrom == _treeView.getHSelf()))
 	{
@@ -812,6 +811,13 @@ void ProjectPanel::notified(LPNMHDR notification)
 			break;
 		}
 	}
+}
+
+void ProjectPanel::setClosed(bool toClose)
+{
+	DockingDlgInterface::setClosed(toClose);
+	::SendMessage(getHParent(), NPPM_SETMENUITEMCHECK, IDM_VIEW_PROJECT_PANEL_1 + _panelID, !toClose);
+	SetWindowLongPtr (getHSelf(), DWLP_MSGRESULT, _isClosed ? 0 : 1);
 }
 
 void ProjectPanel::setWorkSpaceDirty(bool isDirty)

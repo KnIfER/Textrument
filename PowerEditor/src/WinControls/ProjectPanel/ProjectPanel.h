@@ -115,6 +115,7 @@ public:
     };
 	bool enumWorkSpaceFiles(HTREEITEM tvFrom, const std::vector<generic_string> & patterns, std::vector<generic_string> & fileNames);
 
+	void setClosed(bool close);
 protected:
 	TreeView _treeView;
 	HIMAGELIST _hImaLst = nullptr;

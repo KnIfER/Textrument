@@ -357,6 +357,11 @@ void Notepad_plus_Window::init(HINSTANCE hInst, HWND parent, const TCHAR *cmdLin
 	if (nppParams.doPrintAndExit())
 		::SendMessage(_hSelf, NPPM_INTERNAL_PRNTANDQUIT, 0, 0);
 
+	if (TabBarPlus::isMultiLine())
+	{
+		::SendMessage(getHSelf(), WM_SIZE, 0, 0);
+	}
+
 	bSupressPrompt=0;
 }
 

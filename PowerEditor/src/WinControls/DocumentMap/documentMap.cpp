@@ -394,7 +394,7 @@ INT_PTR CALLBACK DocumentMap::run_dlgProc(UINT message, WPARAM wParam, LPARAM lP
 			{
 				case DMN_CLOSE:
 				{
-					::SendMessage(_hParent, WM_COMMAND, IDM_VIEW_DOC_MAP, 0);
+					setClosed(1);
 					return TRUE;
 				}
 

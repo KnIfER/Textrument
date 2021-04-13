@@ -568,7 +568,7 @@ void FileBrowser::notified(LPNMHDR notification)
 {			
 	if (notification->code == DMN_CLOSE)
 	{
-		::SendMessage(_hParent, WM_COMMAND, IDM_VIEW_FILEBROWSER, 0);
+		setClosed(1);
 	}
 	else if (notification->code == TTN_GETDISPINFO)
 	{
