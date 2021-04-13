@@ -752,7 +752,8 @@ The comments are here for explanation, it's not necessary to translate them.
 					<Item id="6126" name="Показати"/>
 					<Item id="6127" name="Включити стовпець розширення"/>
 
-					<Item id="6128" name="Змінювати піктограми"/>
+					<Item id="6128" name="Дисплей більше тексту"/>
+					<Item id="6129" name="Змінювати піктограми"/>
 				</Global>
 				<Scintillas title="Редагування">
 					<Item id="6216" name="Налаштування вставки"/>
@@ -786,7 +787,6 @@ The comments are here for explanation, it's not necessary to translate them.
 					<Item id="6235" name="Немає краю"/>
 					<Item id="6224" name="Налаштування мульти-редагування"/>
 				</Scintillas>
-
 
 				<NewDoc title="Створити документ">
 					<Item id="6401" name="Формат (Закінчення рядка)"/>
@@ -1311,9 +1311,7 @@ Textrument перезапуститься після завершення всі
 			<finder-close-this value="Закрити ці результати пошуку"/>
 			<finder-collapse-all value="Згорнути все"/>
 			<finder-uncollapse-all value="Розгорнути все"/>
-			<finder-copy value="Копіювати">
-				<Item value="Копіювати"/>
-			</finder-copy>
+			<finder-copy value="Копіювати"/>
 			<finder-select-all value="Вибрати все"/>
 			<finder-clear-all value="Очистити все"/>
 			<finder-open-all value="Відкрити все"/>

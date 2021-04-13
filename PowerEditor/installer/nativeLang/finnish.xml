@@ -1204,9 +1204,7 @@ Etsi kaikista tiedostoista paitsi exe, obj &amp;&amp; log:
 			<finder-close-this value="Sulje tämä haku"/>
 			<finder-collapse-all value="Tiivistä kaikki"/>
 			<finder-uncollapse-all value="Laajenna kaikki"/>
-			<finder-copy value="Kopioi">
-				<Item value="Kopioi"/>
-			</finder-copy>
+			<finder-copy value="Kopioi"/>
 			<finder-select-all value="Valitse kaikki"/>
 			<finder-clear-all value="Tyhjennä kaikki"/>
 			<finder-open-all value="Avaa kaikki"/>

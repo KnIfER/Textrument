@@ -745,7 +745,8 @@
 					<Item id="6126" name="Prikaži"/>
 					<Item id="6127" name="Omogoči stolpec razširitev"/>
 
-					<Item id="6128" name="Alternate icons"/>
+					<Item id="6128" name="Prikaži večji besedilo"/>
+					<Item id="6129" name="Alternate icons"/>
 				</Global>
 				<Scintillas title="Urejanje">
 					<Item id="6216" name="Nastavitve kazalca"/>
@@ -1299,9 +1300,7 @@ Najdi v vseh datotekah, razen exe, obj &amp;&amp; log:
 			<finder-close-this value="Zapri te rezultate iskanja"/>
 			<finder-collapse-all value="Strni vse"/>
 			<finder-uncollapse-all value="Razgrni vse"/>
-			<finder-copy value="Kopiraj">
-				<Item value="Kopiraj"/>
-			</finder-copy>
+			<finder-copy value="Kopiraj"/>
 			<finder-select-all value="Izberi vse"/>
 			<finder-clear-all value="Počisti vse"/>
 			<finder-open-all value="Odpri vse"/>

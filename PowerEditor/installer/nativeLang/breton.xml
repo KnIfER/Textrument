@@ -1233,9 +1233,7 @@ Klask en holl restroù paneve exe, obj &amp;&amp; log:
 			<finder-close-this value="Serriñ ar c'haver-mañ"/>
 			<finder-collapse-all value="Bihanaat pep-tra"/>
 			<finder-uncollapse-all value="Brasaat pep-tra"/>
-			<finder-copy value="Eilañ">
-				<Item value="Eilañ"/>
-			</finder-copy>
+			<finder-copy value="Eilañ"/>
 			<finder-select-all value="Diuzañ pep-tra"/>
 			<finder-clear-all value="Diverkañ pep-tra"/>
 			<finder-open-all value="Digeriñ pep-tra"/>

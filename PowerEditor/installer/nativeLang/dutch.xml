@@ -759,7 +759,8 @@ Last modified on 2021-03-07 by Thomas De Rocker (RockyTDR).
 					<Item id="6126" name="Weergeven"/>
 					<Item id="6127" name="Inschakelen verlengingskolom"/>
 
-					<Item id="6128" name="Alternatieve pictogrammen"/>
+					<Item id="6128" name="Toon grotere tekst"/>
+					<Item id="6129" name="Alternatieve pictogrammen"/>
 				</Global>
 				<Scintillas title="Bewerken">
 					<Item id="6216" name="Cursor-instellingen"/>
@@ -793,7 +794,6 @@ U kunt verschillende kolommarkeringen vastleggen door gebruik te maken van spati
 					<Item id="6235" name="Geen rand"/>
 					<Item id="6224" name="Meervoudig bewerken"/>
 				</Scintillas>
-
 
 				<NewDoc title="Nieuw document">
 					<Item id="6401" name="Formaat (regeleinde)"/>
@@ -1326,9 +1326,7 @@ In alle bestanden behalve exe, obj en log zoeken:
 			<finder-close-this value="Deze zoekresultaten sluiten"/>
 			<finder-collapse-all value="Alles samenvouwen"/>
 			<finder-uncollapse-all value="Alles uitvouwen"/>
-			<finder-copy value="Kopiëren">
-				<Item value="Kopiëren"/>
-			</finder-copy>
+			<finder-copy value="Kopiëren"/>
 			<finder-select-all value="Alles selecteren"/>
 			<finder-clear-all value="Alles wissen"/>
 			<finder-open-all value="Alles openen"/>

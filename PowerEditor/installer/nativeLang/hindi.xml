@@ -1234,9 +1234,7 @@
 			<finder-close-this value="इस फाइंडर को बंद करें"/>
 			<finder-collapse-all value="सभी को संकुचित (collapse) करें"/>
 			<finder-uncollapse-all value="सभी को विस्तृत (uncollapse) करें"/>
-			<finder-copy value="कॉपी करें">
-				<Item value="कॉपी करें"/>
-			</finder-copy>
+			<finder-copy value="कॉपी करें"/>
 			<finder-select-all value="सब सेलेक्ट करें"/>
 			<finder-clear-all value="सब क्लियर करें"/>
 			<finder-open-all value="सब ओपन करें"/>

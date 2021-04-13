@@ -1313,9 +1313,7 @@ Nađi u svim datotekama osim exe, obj &amp;&amp; log:
 			<finder-close-this value="Zatvori ovaj pretraživač"/>
 			<finder-collapse-all value="Suzi sve"/>
 			<finder-uncollapse-all value="Proširi sve"/>
-			<finder-copy value="Kopiraj">
-				<Item value="Kopiraj"/>
-			</finder-copy>
+			<finder-copy value="Kopiraj"/>
 			<finder-select-all value="Izaberi sve"/>
 			<finder-clear-all value="Očisti sve"/>
 			<finder-open-all value="Otvori sve"/>

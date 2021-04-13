@@ -1272,9 +1272,7 @@ Find i alle filer undtagen exe, obj og log:
 			<finder-close-this value="Luk denne finder"/>
 			<finder-collapse-all value="Sammenfold alle"/>
 			<finder-uncollapse-all value="Udfold alle"/>
-			<finder-copy value="Kopier">
-				<Item value="Kopier"/>
-			</finder-copy>
+			<finder-copy value="Kopier"/>
 			<finder-select-all value="Marker alle"/>
 			<finder-clear-all value="Ryd alle"/>
 			<finder-open-all value="Åbn alle"/>

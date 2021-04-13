@@ -1190,9 +1190,7 @@ Siz bir necha marker ustunlarini probellar orqali belgilashingiz mumkin."/>
 			<finder-close-this value="Ushbu qidiruvni yopmoq"/>
 			<finder-collapse-all value="Barini yig‘moq"/>
 			<finder-uncollapse-all value="Barini yoymoq"/>
-			<finder-copy value="Nusxalamoq">
-				<Item value="Nusxalamoq"/>
-			</finder-copy>
+			<finder-copy value="Nusxalamoq"/>
 			<finder-select-all value="Barini belgilamoq"/>
 			<finder-clear-all value="Barini tozalamoq"/>
 			<finder-open-all value="Barini ochmoq"/>

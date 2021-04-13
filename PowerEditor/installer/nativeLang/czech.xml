@@ -815,7 +815,8 @@
 					<Item id="6125" name="Přepínač dokumentů"/>
 					<Item id="6126" name="Zobrazit"/>
 					<Item id="6127" name="Aktivace rozšíření sloupec"/>
-					<Item id="6128" name="Alternativní ikony"/>
+					<Item id="6128" name="Zobrazit větší textu"/>
+					<Item id="6129" name="Alternativní ikony"/>
 				</Global>
 				<Scintillas title="Editace">
 					<Item id="6214" name="Zvýraznit aktivní řádek"/>
@@ -1318,9 +1319,7 @@ Najít ve všech souborech mimo exe, obj &amp;&amp; log:
 			<finder-close-this value="Zavřít tyto vyhledané výsledky"/>
 			<finder-collapse-all value="Sbalit vše"/>
 			<finder-uncollapse-all value="Rozbalit vše"/>
-			<finder-copy value="Kopírovat">
-				<Item value="Kopírovat"/>
-			</finder-copy>
+			<finder-copy value="Kopírovat"/>
 			<finder-select-all value="Vybrat vše"/>
 			<finder-clear-all value="Smazat vše"/>
 			<finder-open-all value="Otevřít vše"/>

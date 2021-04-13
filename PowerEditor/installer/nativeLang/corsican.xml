@@ -778,7 +778,8 @@ The comments are here for explanation, it's not necessary to translate them.
 					<Item id="6126" name="Affissà"/>
 					<Item id="6127" name="Attivati ​​Colonna allargamentu"/>
 
-					<Item id="6128" name="Icone alternative"/>
+					<Item id="6128" name="Affissà testu di più"/>
+					<Item id="6129" name="Icone alternative"/>
 				</Global>
 				<Scintillas title="Mudificazione">
 					<Item id="6216" name="Preferenze di cursore"/>
@@ -812,7 +813,6 @@ Pudete definisce parechji marcatori di culonna impieghendu un spaziu per staccà
 					<Item id="6235" name="Nisunu bordu"/>
 					<Item id="6224" name="Preferenze di multi-mudificazione"/>
 				</Scintillas>
-
 
 				<NewDoc title="Novu ducumentu">
 					<Item id="6401" name="Furmatu (fine di linea)"/>
@@ -1347,9 +1347,7 @@ Circà in tutti i schedarii fora di exe, obj è log :
 			<finder-close-this value="Chjode sti risultati di ricerca"/>
 			<finder-collapse-all value="Tuttu ripiegà"/>
 			<finder-uncollapse-all value="Tuttu spiegà"/>
-			<finder-copy value="Cupià">
-				<Item value="Cupià"/>
-			</finder-copy>
+			<finder-copy value="Cupià"/>
 			<finder-select-all value="Tuttu selezziunà"/>
 			<finder-clear-all value="Tuttu viutà"/>
 			<finder-open-all value="Tuttu apre"/>

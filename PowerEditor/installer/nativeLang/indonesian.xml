@@ -1093,9 +1093,7 @@
 			<finder-close-this value="Tutup pencari ini"/>
 			<finder-collapse-all value="Bentangkan semua"/>
 			<finder-uncollapse-all value="Ciutkan semua"/>
-			<finder-copy value="Salin">
-				<Item value="Salin"/>
-			</finder-copy>
+			<finder-copy value="Salin"/>
 			<finder-select-all value="Pilih semua"/>
 			<finder-clear-all value="Bersihkan semua"/>
 			<finder-open-all value="Buka semua"/>

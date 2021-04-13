@@ -1204,9 +1204,7 @@
 			<finder-close-this value="إغلاق هذا الباحث"/>
 			<finder-collapse-all value="طي الكل"/>
 			<finder-uncollapse-all value="إلغاء طي الكل"/>
-			<finder-copy value="نسخ">
-				<Item value="نسخ"/>
-			</finder-copy>
+			<finder-copy value="نسخ"/>
 			<finder-select-all value="تحديد الكل"/>
 			<finder-clear-all value="مسح الكل"/>
 			<finder-open-all value="فتح الكل"/>

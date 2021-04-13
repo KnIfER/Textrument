@@ -759,7 +759,8 @@ The comments are here for explanation, it's not necessary to translate them.
 					<Item id="6126" name="Show"/>
 					<Item id="6127" name="Show extension column"/>
 
-					<Item id="6128" name="Alternate icons"/>
+					<Item id="6128" name="Show big fonts"/>
+					<Item id="6129" name="Alternate icons"/>
 				</Global>
 				<Scintillas title="Editing">
 					<Item id="6216" name="Caret Settings"/>
@@ -797,7 +798,6 @@ You can define several column markers by using white space to separate the diffe
 					<Item id="6212" name="Distraction Free"/>
 					<Item id="6224" name="Multi-Editing Settings"/>
 				</Scintillas>
-
 
 				<NewDoc title="New Document">
 					<Item id="6401" name="Format (Line ending)"/>
@@ -1331,9 +1331,7 @@ Find in all files except exe, obj &amp;&amp; log:
 			<finder-close-this value="Close these search results"/>
 			<finder-collapse-all value="Collapse all"/>
 			<finder-uncollapse-all value="Uncollapse all"/>
-			<finder-copy value="Copy">
-				<Item value="Copy"/>
-			</finder-copy>
+			<finder-copy value="Copy"/>
 			<finder-select-all value="Select all"/>
 			<finder-clear-all value="Clear all"/>
 			<finder-open-all value="Open all"/>

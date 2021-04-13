@@ -749,7 +749,7 @@
 					<Item id="6126" name="Mostra"/>
 					<Item id="6127" name="Disabiƚita coƚona estension"/>
 
-					<Item id="6128" name="Alterna icone"/>
+					<Item id="6129" name="Alterna icone"/>
 				</Global>
 				<Scintillas title="Mostrar">
 					<Item id="6216" name="Cursore"/>
@@ -783,7 +783,6 @@ Te poi definire vari deƚimitatori de coƚona uxando spasi par spartire i divers
 					<Item id="6235" name="Nisun bordo"/>
 					<Item id="6224" name="Seƚesion Mùltipla"/>
 				</Scintillas>
-
 
 				<NewDoc title="Novo documento">
 					<Item id="6401" name="Formato (fine riga)"/>
@@ -1308,9 +1307,7 @@ Ruma en tuti i file a ecesion exe, obj &amp;&amp; log:
 			<finder-close-this value="Sara su i rixultadi"/>
 			<finder-collapse-all value="Coƚasa tuto cuanto\"/>
 			<finder-uncollapse-all value="Espandi tuto cuanto"/>
-			<finder-copy value="Còpia">
-				<Item value="Còpia"/>
-			</finder-copy>
+			<finder-copy value="Còpia"/>
 			<finder-select-all value="Seƚesion tuto cuanto"/>
 			<finder-clear-all value="Puƚisi tuto cuanto"/>
 			<finder-open-all value="Vèrxi tuto cuanto"/>

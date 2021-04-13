@@ -767,7 +767,7 @@
 					<Item id="6119" name="На повече редове"/>
 					<Item id="6120" name="Вертикално"/>
 					<Item id="6107" name="Малък размер"/>
-					<Item id="6128" name="Алтернативни икони"/>
+					<Item id="6128" name="Посочете по-голям текст"/>
 					<Item id="6108" name="Заключено (без влачене и пускане)"/>
 					<Item id="6109" name="Потъмняване на неактивните"/>
 					<Item id="6110" name="Цветна лента върху активния"/>
@@ -775,6 +775,7 @@
 					<Item id="6113" name="Двойно щракане за затваряне"/>
 					<Item id="6121" name="Изход при затваряне на последният раздел"/>
 					<Item id="6122" name="Скриване на менютата (Alt или F10 за показване)"/>
+					<Item id="6129" name="Алтернативни икони"/>
 				</Global>
 				<!-- Редактиране -->
 				<Scintillas title="Редактиране">
@@ -1278,9 +1279,7 @@
 			<finder-close-this value="Затваряне на това търсене"/>
 			<finder-collapse-all value="Свиване на всички"/>
 			<finder-uncollapse-all value="Разгъване на всички"/>
-			<finder-copy value="Копиране">
-				<Item value="Копиране"/>
-			</finder-copy>
+			<finder-copy value="Копиране"/>
 			<finder-select-all value="Избиране на всичко"/>
 			<finder-clear-all value="Изчистване на всичко"/>
 			<finder-open-all value="Отваряне на всички"/>

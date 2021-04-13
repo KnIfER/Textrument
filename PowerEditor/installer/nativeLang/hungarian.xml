@@ -1269,9 +1269,7 @@ Kereés minden fájlban, kivéve exe, obj  log:
 			<finder-close-this value="Keresés bezárása"/>
 			<finder-collapse-all value="Mind összecsukása"/>
 			<finder-uncollapse-all value="Mind kibontása"/>
-			<finder-copy value="Másolás">
-				<Item value="Másolás"/>
-			</finder-copy>
+			<finder-copy value="Másolás"/>
 			<finder-select-all value="Mind kijelölése"/>
 			<finder-clear-all value="Mind eltávolítása"/>
 			<finder-open-all value="Mind megnyitása"/>

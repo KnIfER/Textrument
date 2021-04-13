@@ -776,7 +776,8 @@ The comments are here for explanation, it's not necessary to translate them.
 					<Item id="6126" name="Pokazuj"/>
 					<Item id="6127" name="Włącz kolumnę przedłużacza"/>
 
-					<Item id="6128" name="Alternatywne ikony"/>
+					<Item id="6128" name="Wyświetl większą tekst"/>
+					<Item id="6129" name="Alternatywne ikony"/>
 				</Global>
 				<Scintillas title="Edycja">
 					<Item id="6216" name="Kursor"/>
@@ -810,7 +811,6 @@ Możesz zdefiniować kilka znaczników kolumn poprzez rozdzielenie różnych lic
 					<Item id="6235" name="Brak obrysu"/>
 					<Item id="6224" name="Edycja wieloliniowa"/>
 				</Scintillas>
-
 
 				<NewDoc title="Nowy dokument">
 					<Item id="6401" name="Format (koniec linii)"/>
@@ -1347,9 +1347,7 @@ Szukaj wśród wszystkich plików z wyjątkiem exe, obj i log:
 			<finder-close-this value="Zamknij te wyniki wyszukiwania"/>
 			<finder-collapse-all value="Zwiń wszystko"/>
 			<finder-uncollapse-all value="Rozwiń wszystko"/>
-			<finder-copy value="Kopiuj">
-				<Item value="Kopiuj"/>
-			</finder-copy>
+			<finder-copy value="Kopiuj"/>
 			<finder-select-all value="Zaznacz wszystko"/>
 			<finder-clear-all value="Odznacz wszystko"/>
 			<finder-open-all value="Otwórz wszystko"/>

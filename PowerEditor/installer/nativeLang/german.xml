@@ -766,7 +766,8 @@
 					<Item id="6126" name="Anzeigen"/>
 					<Item id="6127" name="Aktivieren Erweiterungsständer"/>
 
-					<Item id="6128" name="Alternative Symbole"/>
+					<Item id="6128" name="Anzeige größeren Text"/>
+					<Item id="6129" name="Alternative Symbole"/>
 				</Global>
 				<Scintillas title="Bearbeiten">
 					<Item id="6216" name="Cursoreinstellungen"/>
@@ -800,7 +801,6 @@ Mehrere Spaltenmarkierungen können definiert werden, indem die verschiedenen Za
 					<Item id="6235" name="Kein Rand"/>
 					<Item id="6224" name="Mehrfaches Editieren"/>
 				</Scintillas>
-
 
 				<NewDoc title="Neues Dokument">
 					<Item id="6401" name="Format (Zeilenende)"/>
@@ -1310,9 +1310,7 @@ Finde in allen Dateien außer exe, obj &amp;&amp; log:
 			<finder-close-this value="Diese Suche schließen"/>
 			<finder-collapse-all value="Alles einklappen"/>
 			<finder-uncollapse-all value="Alles aufmachen"/>
-			<finder-copy value="Kopieren">
-				<Item value="Kopieren"/>
-			</finder-copy>
+			<finder-copy value="Kopieren"/>
 			<finder-select-all value="Alles wählen"/>
 			<finder-clear-all value="Alles löschen"/>
 			<finder-open-all value="Alles öffnen"/>

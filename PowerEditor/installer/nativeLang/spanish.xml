@@ -730,7 +730,8 @@ The comments are here for explanation, it's not necessary to translate them.
 					<Item id="6125" name="Panel lista de documentos"/>
 					<Item id="6126" name="Mostrar"/>
 					<Item id="6127" name="Habilitar columna de extensión"/>
-					<Item id="6128" name="Iconos alternados"/>
+					<Item id="6128" name="Ver el texto más grande"/>
+					<Item id="6129" name="Iconos alternados"/>
 				</Global>
 				<Scintillas title="Edición">
 					<Item id="6216" name="Configuración del cursor"/>
@@ -1273,9 +1274,7 @@ Find in all files except exe, obj &amp;&amp; log:
 			<finder-close-this value="Cerrar el buscador"/>
 			<finder-collapse-all value="Contraer todo"/>
 			<finder-uncollapse-all value="No contraer nada"/>
-			<finder-copy value="Copiar">
-				<Item value="Copiar"/>
-			</finder-copy>
+			<finder-copy value="Copiar"/>
 			<finder-select-all value="Seleccionar todo"/>
 			<finder-clear-all value="Limpiar todo"/>
 			<finder-open-all value="Abrir todo"/>

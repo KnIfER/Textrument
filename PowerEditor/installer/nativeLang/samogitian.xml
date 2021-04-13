@@ -18,7 +18,6 @@
 				<!-- Sub Menu Entries -->
 				<SubEntries>
 
-
 				</SubEntries>
 
 				<!-- all menu item -->
@@ -52,14 +51,7 @@
 					<Item id="43008" name="Veait's Veasas Ozhmeaarshtea"/>
 
 
-
-
-
-
 					<Item id="44011" name="Long's kalbuos naujuos apeapreazheaama"/>
-
-
-
 
 					<Item id="44025" name="Zheaanklos tarpa ear tabuliaveaam ruodiit'"/>
 					<Item id="44026" name="Skeartoka eilooteas roudiit'"/>
@@ -87,8 +79,6 @@
 					<Item id="46001" name="Reankeaniis Steaalio..."/>
 
 					<Item id="47000" name="Apleank... F1"/>
-
-
 
 					<Item id="49000" name="&amp;Veakdiitea..."/>
 					<Item id="44070" name="Tab Lisi"/>

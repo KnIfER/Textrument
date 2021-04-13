@@ -1137,9 +1137,7 @@
 			<finder-close-this value="Oseclay isthay inderfay"/>
 			<finder-collapse-all value="Ollapsecay allyay"/>
 			<finder-uncollapse-all value="Uncollapseyay allyay"/>
-			<finder-copy value="Opycay">
-				<Item value="Opycay"/>
-			</finder-copy>
+			<finder-copy value="Opycay"/>
 			<finder-select-all value="Electsay allyay"/>
 			<finder-clear-all value="Earclay allyay"/>
 			<finder-open-all value="Openyay allyay"/>

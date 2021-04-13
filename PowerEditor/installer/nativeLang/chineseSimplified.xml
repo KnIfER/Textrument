@@ -756,7 +756,8 @@ The comments are here for explanation, it's not necessary to translate them.
 					<Item id="6126" name="显示"/>
 					<Item id="6127" name="显示扩展名栏"/>
 
-					<Item id="6128" name="自定义图标"/>
+					<Item id="6128" name="显示较大的字体"/>
+					<Item id="6129" name="另一套图标"/>
 				</Global>
 				<Scintillas title="编辑">
 					<Item id="6216" name="光标设置"/>
@@ -790,7 +791,6 @@ The comments are here for explanation, it's not necessary to translate them.
 					<Item id="6235" name="无边框"/>
 					<Item id="6224" name="多列编辑"/>
 				</Scintillas>
-
 
 				<NewDoc title="新建">
 					<Item id="6401" name="格式 (行尾)"/>
@@ -1323,9 +1323,7 @@ Textrument会在所有安装结束后重新启动。
 			<finder-close-this value="关闭此搜索结果"/>
 			<finder-collapse-all value="全部折叠"/>
 			<finder-uncollapse-all value="全部展开"/>
-			<finder-copy value="复制">
-				<Item value="复制"/>
-			</finder-copy>
+			<finder-copy value="复制"/>
 			<finder-select-all value="全部选择"/>
 			<finder-clear-all value="全部清除"/>
 			<finder-open-all value="全部打开"/>

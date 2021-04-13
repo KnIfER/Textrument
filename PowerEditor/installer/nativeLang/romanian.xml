@@ -1218,9 +1218,7 @@ Doriți să lansați Textrument în mod Administrator?"/>
 			<finder-close-this value="Închidere căutător"/>
 			<finder-collapse-all value="Restrângere toate"/>
 			<finder-uncollapse-all value="Extindere toate"/>
-			<finder-copy value="Copiere">
-				<Item value="Copiere"/>
-			</finder-copy>
+			<finder-copy value="Copiere"/>
 			<finder-select-all value="Selectare toate"/>
 			<finder-clear-all value="Golire toate"/>
 			<finder-open-all value="Deschidere toate"/>

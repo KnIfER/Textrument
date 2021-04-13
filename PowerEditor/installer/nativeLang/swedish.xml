@@ -1251,9 +1251,7 @@ Hitta i alla filer utom exe, obj &amp;&amp; log:
 			<finder-close-this value="Stäng denna sökning"/>
 			<finder-collapse-all value="Minimera alla"/>
 			<finder-uncollapse-all value="Expandera alla"/>
-			<finder-copy value="Kopiera">
-				<Item value="Kopiera"/>
-			</finder-copy>
+			<finder-copy value="Kopiera"/>
 			<finder-select-all value="Välj alla"/>
 			<finder-clear-all value="Rensa alla"/>
 			<finder-open-all value="Öppna alla"/>

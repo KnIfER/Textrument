@@ -1187,9 +1187,7 @@ Ar norite paleisti Textrument administratoriaus teisėmis?"/>
 			<finder-close-this value="Uždaryti paiešką"/>
 			<finder-collapse-all value="Suskleisti viską"/>
 			<finder-uncollapse-all value="Išskleisti viską"/>
-			<finder-copy value="Kopijuoti">
-				<Item value="Kopijuoti"/>
-			</finder-copy>
+			<finder-copy value="Kopijuoti"/>
 			<finder-select-all value="Pažymėti viską"/>
 			<finder-clear-all value="Išvalyti viską"/>
 			<finder-open-all value="Atidaryti viską"/>

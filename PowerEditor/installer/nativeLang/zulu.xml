@@ -1195,9 +1195,7 @@ Ingabe ufuna ukuqala i-Notepad ++ kwimodi ye-Administrator?"/>
 			<finder-close-this value="Vala lo mtholi"/>
 			<finder-collapse-all value="Yehla konke"/>
 			<finder-uncollapse-all value="Ungabuyi konke"/>
-			<finder-copy value="Kopisha">
-				<Item value="Kopisha"/>
-			</finder-copy>
+			<finder-copy value="Kopisha"/>
 			<finder-select-all value="Khetha konke"/>
 			<finder-clear-all value="Sula konke"/>
 			<finder-open-all value="Vula konke"/>

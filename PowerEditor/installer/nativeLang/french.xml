@@ -774,7 +774,6 @@ Vous pouvez définir plusieurs marqueurs de colonne en utilisant un espace pour 
 					<Item id="6224" name="Multi-édition"/>
 				</Scintillas>
 
-
 				<NewDoc title="Nouveau document">
 					<Item id="6401" name="Format des sauts de ligne"/>
 					<Item id="6402" name="Windows"/>
@@ -1269,9 +1268,7 @@ Rechercher dans tous les fichiers sauf exe, obj &amp;&amp; log:
 			<finder-close-this value="Fermer le dialogue des résultats"/>
 			<finder-collapse-all value="Replier tout"/>
 			<finder-uncollapse-all value="Déplier tout"/>
-			<finder-copy value="Copier">
-				<Item value="Copier"/>
-			</finder-copy>
+			<finder-copy value="Copier"/>
 			<finder-select-all value="Sélectionner tout"/>
 			<finder-clear-all value="Effacer tout"/>
 			<finder-open-all value="Ouvrir tout"/>

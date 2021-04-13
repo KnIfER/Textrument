@@ -756,7 +756,8 @@
 					<Item id="6126" name="Visualizza"/>
 					<Item id="6127" name="Abilita colonnina di estensione"/>
 
-					<Item id="6128" name="Alterna icone"/>
+					<Item id="6128" name="Visualizzare il testo più grande"/>
+					<Item id="6129" name="Alterna icone"/>
 				</Global>
 				<Scintillas title="Visualizzazione">
 					<Item id="6216" name="Cursore"/>
@@ -790,7 +791,6 @@ Puoi indicare serie di delimitatori di colonna usando degli spazi per separare i
 					<Item id="6235" name="Nessun bordo"/>
 					<Item id="6224" name="Selezione Multipla"/>
 				</Scintillas>
-
 
 				<NewDoc title="Nuovo documento">
 					<Item id="6401" name="Formato (fine riga)"/>
@@ -1306,9 +1306,7 @@ Cerca in tutti i file eccetto exe, obj &amp;&amp; log:
 			<finder-close-this value="Chiudi i risultati"/>
 			<finder-collapse-all value="Collassa tutto"/>
 			<finder-uncollapse-all value="Espandi tutto"/>
-			<finder-copy value="Copia">
-				<Item value="Copia"/>
-			</finder-copy>
+			<finder-copy value="Copia"/>
 			<finder-select-all value="Seleziona tutto"/>
 			<finder-clear-all value="Pulisci tutto"/>
 			<finder-open-all value="Apri tutto"/>

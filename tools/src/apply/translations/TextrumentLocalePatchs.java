@@ -26,6 +26,7 @@ public class TextrumentLocalePatchs {
 	static final int MERGE = 4;
 	static final int MOVE = 5;
 	static final int RENAME = 6;
+	static final int REMOVECONTENTS = 7;
 	static String actionGetName(int action) {
 		switch (action) {
 			case DELETE:
@@ -520,22 +521,25 @@ public class TextrumentLocalePatchs {
 			Action aI = actions.get(i);
 			switch (aI.type) {
 				case DELETE: {
-					Element _toDel = getElementByPath(document.getRootElement(), aI.XMLPath);
-					if (_toDel != null) {
-						if (aI.id != null) {
-							List<Element> childs = _toDel.getChildren();
-							_toDel = null;
-							for (Element cI : childs) {
-								if (aI.id.equals(cI.getAttributeValue(aI.idField))) {
-									_toDel = cI;
-									break;
+					if (aI.values==null||aI.values[id]!=null) {
+						// deletion filters
+						Element _toDel = getElementByPath(document.getRootElement(), aI.XMLPath);
+						if (_toDel != null) {
+							if (aI.id != null) {
+								List<Element> childs = _toDel.getChildren();
+								_toDel = null;
+								for (Element cI : childs) {
+									if (aI.id.equals(cI.getAttributeValue(aI.idField))) {
+										_toDel = cI;
+										break;
+									}
 								}
 							}
 						}
-					}
-					if (_toDel != null) {
-						Element toDelp = (Element) _toDel.getParent();
-						toDelp.removeContent(_toDel);
+						if (_toDel != null) {
+							Element toDelp = (Element) _toDel.getParent();
+							toDelp.removeContent(_toDel);
+						}
 					}
 				} break;
 				case MODIFY: {
@@ -689,6 +693,30 @@ public class TextrumentLocalePatchs {
 						}
 						if (_toMod != null) {
 							_toMod.setName(value);
+						}
+					}
+					break;
+				}
+				case REMOVECONTENTS: {
+					String value= aI.tagName;
+					if (value != null) {
+						Element _toMod = getElementByPath(document.getRootElement(), aI.XMLPath);
+						if (_toMod != null) {
+							if (aI.id != null) {
+								List<Element> childs = _toMod.getChildren();
+								_toMod = null;
+								for (Element cI : childs) {
+									if (aI.id.equals(cI.getAttributeValue(aI.idField))) {
+										_toMod = cI;
+										break;
+									}
+								}
+							}
+						}
+						if (_toMod != null) {
+							for (int j = _toMod.getContentSize()-1; j >= 0; j--) {
+								_toMod.removeContent(j);
+							}
 						}
 					}
 					break;

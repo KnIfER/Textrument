@@ -787,7 +787,8 @@ Updated to v7.9.4:
 					<Item id="6125" name="Панель Списка Документов"/>
 					<Item id="6126" name="Отображать"/>
 					<Item id="6127" name="Включить столбец расширения"/>
-					<Item id="6128" name="Альтернативные иконки"/>
+					<Item id="6128" name="Дисплей больше текста"/>
+					<Item id="6129" name="Альтернативные иконки"/>
 				</Global>
 				<Scintillas title="Правка">
 					<Item id="6214" name="Подсветка текущей строки"/>
@@ -1273,9 +1274,7 @@ Updated to v7.9.4:
 			<finder-close-this value="Закрыть этот поиск"/>
 			<finder-collapse-all value="Свернуть всё"/>
 			<finder-uncollapse-all value="Развернуть всё"/>
-			<finder-copy value="Копировать">
-				<Item value="Копировать"/>
-			</finder-copy>
+			<finder-copy value="Копировать"/>
 			<finder-select-all value="Выделить всё"/>
 			<finder-clear-all value="Очистить всё"/>
 			<finder-open-all value="Открыть все файлы"/>

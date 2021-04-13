@@ -735,7 +735,8 @@
 					<Item id="6125" name="Panel prepínača dokumentov"/>
 					<Item id="6126" name="Zobraziť"/>
 					<Item id="6127" name="Aktivácia rozšírenie stĺpec"/>
-					<Item id="6128" name="Alternatívne ikony"/>
+					<Item id="6128" name="Zobraziť väčší textu"/>
+					<Item id="6129" name="Alternatívne ikony"/>
 				</Global>
 				<Scintillas title="Editor">
 					<Item id="6216" name="Nastavenie kurzora"/>
@@ -1214,9 +1215,7 @@
 			<finder-close-this value="Zatvoriť tieto výsledy vyhľadávania"/>
 			<finder-collapse-all value="Zbaliť všetko"/>
 			<finder-uncollapse-all value="Rozbaliť všetko"/>
-			<finder-copy value="Kopírovať">
-				<Item value="Kopírovať"/>
-			</finder-copy>
+			<finder-copy value="Kopírovať"/>
 			<finder-select-all value="Vybrať všetko"/>
 			<finder-clear-all value="Vymazať všetko"/>
 			<finder-open-all value="Otvoriť všetko"/>

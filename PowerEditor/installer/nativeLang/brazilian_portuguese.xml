@@ -1242,9 +1242,7 @@ Procurar em todos os arquivos, exceto exe, obj &amp;&amp; log:
 			<finder-close-this value="Fechar este localizador."/>
 			<finder-collapse-all value="Recolher tudo"/>
 			<finder-uncollapse-all value="Expandir tudo"/>
-			<finder-copy value="Copiar">
-				<Item value="Copiar"/>
-			</finder-copy>
+			<finder-copy value="Copiar"/>
 			<finder-select-all value="Selecionar tudo"/>
 			<finder-clear-all value="Limpar tudo"/>
 			<finder-open-all value="Abrir tudo"/>

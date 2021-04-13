@@ -758,7 +758,8 @@
 					<Item id="6125" name="文書一覧"/>
 					<Item id="6126" name="表示"/>
 					<Item id="6127" name="拡張列を有効に"/>
-					<Item id="6128" name="別デザインのアイコンを使用する"/>
+					<Item id="6128" name="大きなテキストを表示"/>
+					<Item id="6129" name="別デザインのアイコンを使用する"/>
 				</Global>
 				<Scintillas title="編集画面">
 					<Item id="6216" name="カーソル設定"/>
@@ -792,7 +793,6 @@
 					<Item id="6235" name="枠を非表示"/>
 					<Item id="6224" name="一括編集"/>
 				</Scintillas>
-
 
 				<NewDoc title="新規文書">
 					<Item id="6401" name="フォーマット(改行コード)"/>
@@ -1298,9 +1298,7 @@ Textrument を管理者権限で立ち上げますか？"/>
 			<finder-close-this value="この検索結果を閉じる"/>
 			<finder-collapse-all value="すべて折りたたむ"/>
 			<finder-uncollapse-all value="すべて展開する"/>
-			<finder-copy value="コピー">
-				<Item value="コピー"/>
-			</finder-copy>
+			<finder-copy value="コピー"/>
 			<finder-select-all value="すべて選択"/>
 			<finder-clear-all value="すべてクリア"/>
 			<finder-open-all value="すべて開く"/>

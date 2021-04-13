@@ -1251,9 +1251,7 @@
 			<finder-close-this value="Закрыць гэты пошукавік"/>
 			<finder-collapse-all value="Згарнуць усё"/>
 			<finder-uncollapse-all value="Разгарнуць усе"/>
-			<finder-copy value="Капіяваць">
-				<Item value="Капіяваць"/>
-			</finder-copy>
+			<finder-copy value="Капіяваць"/>
 			<finder-select-all value="Выбраць усе"/>
 			<finder-clear-all value="Ачысціць усе"/>
 			<finder-open-all value="Адкрыць усе"/>

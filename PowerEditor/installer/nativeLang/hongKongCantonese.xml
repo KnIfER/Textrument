@@ -827,6 +827,7 @@
 					<Item id="6127" name="停用副檔名欄"/>
 					<Item id="6128" name="另類圖示"/>
 					<!-- #new v7.9.1 -->
+					<Item id="6129" name="另類圖示"/>
 				</Global>
 
 				<Scintillas title="編輯">
@@ -869,7 +870,6 @@
 					<Item id="6231" name="邊框闊度"/>
 					<Item id="6235" name="無邊框"/>
 				</Scintillas>
-
 
 				<NewDoc title="新文件">
 					<Item id="6401" name="行尾格式（EOL）"/>

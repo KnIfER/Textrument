@@ -750,7 +750,8 @@
 					<Item id="6126" name="표시"/>
 					<Item id="6127" name="확장 열을 사용"/>
 
-					<Item id="6128" name="대체 아이콘"/>
+					<Item id="6128" name="더 큰 텍스트를 표시"/>
+					<Item id="6129" name="대체 아이콘"/>
 				</Global>
 				<Scintillas title="편집">
 					<Item id="6216" name="커서 설정"/>
@@ -784,7 +785,6 @@
 					<Item id="6235" name="가장자리 없음"/>
 					<Item id="6224" name="다중 편집 설정"/>
 				</Scintillas>
-
 
 				<NewDoc title="새 문서">
 					<Item id="6401" name="형식"/>
@@ -1314,9 +1314,7 @@ exe, obj &amp;&amp; log 파일을 제외한 모든 파일에서 찾기:
 			<finder-close-this value="다음의 찾기 결과들 닫기"/>
 			<finder-collapse-all value="모두 접기"/>
 			<finder-uncollapse-all value="모두 펼치기"/>
-			<finder-copy value="복사">
-				<Item value="복사"/>
-			</finder-copy>
+			<finder-copy value="복사"/>
 			<finder-select-all value="모두 선택"/>
 			<finder-clear-all value="모두 지우기"/>
 			<finder-open-all value="모두 열기"/>

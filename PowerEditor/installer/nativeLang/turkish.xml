@@ -752,7 +752,8 @@
 					<Item id="6125" name="Belge Listesi Paneli"/>
 					<Item id="6126" name="Göster"/>
 					<Item id="6127" name="Uzatma sütununu etkinleştirin"/>
-					<Item id="6128" name="Alternatif Simgeler"/>
+					<Item id="6128" name="Daha büyük metin görüntüleme"/>
+					<Item id="6129" name="Alternatif Simgeler"/>
 				</Global>
 				<Scintillas title="Düzenleme">
 					<Item id="6216" name="İmleç Ayarları"/>
@@ -786,7 +787,6 @@ Birden fazla sütun işaretçisi belirleyebilmek için, farklı sayılar arasın
 					<Item id="6231" name="Kenarlık Boyutu"/>
 					<Item id="6235" name="Kenarlık yok"/>
 				</Scintillas>
-
 
 				<NewDoc title="Yeni Belge">
 					<Item id="6401" name="Biçim (Satır sonu)"/>
@@ -1289,9 +1289,7 @@ Devam edilsin mi?"/>
 			<finder-close-this value="Bu arama sonuçlarını kapat"/>
 			<finder-collapse-all value="Tümünü Daralt"/>
 			<finder-uncollapse-all value="Tümünü Genişlet"/>
-			<finder-copy value="Kopyala">
-				<Item value="Kopyala"/>
-			</finder-copy>
+			<finder-copy value="Kopyala"/>
 			<finder-select-all value="Tümünü Seç"/>
 			<finder-clear-all value="Tümünü Temizle"/>
 			<finder-open-all value="Tümünü Aç"/>

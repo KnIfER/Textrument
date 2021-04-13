@@ -1263,9 +1263,7 @@ Find in all files except exe, obj &amp;&amp; log:
 			<finder-close-this value="Dún an t-aimsitheoir seo"/>
 			<finder-collapse-all value="Collapse all"/>
 			<finder-uncollapse-all value="Uncollapse all"/>
-			<finder-copy value="Cóipeáil">
-				<Item value="Cóipeáil"/>
-			</finder-copy>
+			<finder-copy value="Cóipeáil"/>
 			<finder-select-all value="Roghnaigh uile"/>
 			<finder-clear-all value="Glan uile"/>
 			<finder-open-all value="Oscail uile"/>

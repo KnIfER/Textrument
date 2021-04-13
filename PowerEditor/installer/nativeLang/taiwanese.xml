@@ -764,7 +764,6 @@
 					<Item id="6224" name="多個位置同時編輯"/>
 				</Scintillas>
 
-
 				<NewDoc title="新文件預設設定">
 					<Item id="6401" name="格式（EOF）"/>
 					<Item id="6402" name="Windows（CR LF）"/>
@@ -1227,9 +1226,7 @@
 			<finder-close-this value="關閉這個搜尋結果"/>
 			<finder-collapse-all value="層數全部收折"/>
 			<finder-uncollapse-all value="層數全部展開"/>
-			<finder-copy value="複製">
-				<Item value="複製"/>
-			</finder-copy>
+			<finder-copy value="複製"/>
 			<finder-select-all value="全部選取"/>
 			<finder-clear-all value="全部清除"/>
 			<finder-open-all value="全部開啟"/>
