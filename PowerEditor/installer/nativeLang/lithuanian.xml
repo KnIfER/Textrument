@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-	Lithuanian localization for Notepad++
-	=====================================
-	2012.11.05 - v. 6.2   - Dmitrijus Skunčikas (dmitrijus.skuncikas@gmail.com)
-	2018.07.11 - v. 7.5.7 - Andrius Burokas
+    Lithuanian localization for Textrument
+    =====================================
+    2012.11.05 - v. 6.2   - Dmitrijus Skunčikas (dmitrijus.skuncikas@gmail.com)
+    2018.07.11 - v. 7.5.7 - Andrius Burokas
 -->
-<NotepadPlus>
-	<Native-Langue name="Lithuanian" filename="Lithuanian.xml" version="7.5.5">
+<Textrument>
+	<Native-Langue name="Lithuanian" filename="Lithuanian.xml" version="v1.0.0">
 		<Menu>
 			<Main>
 				<!-- Main Menu Entries -->
@@ -286,14 +286,14 @@
 					<Item id="46180" name="Vartotojo apibrėžta"/>
 					<Item id="47000" name="Apie Textrument..."/>
 					<Item id="47010" name="Komandų eilutės parametrai..."/>
-					<Item id="47001" name="Notepad++ tinklapis"/>
-					<Item id="47002" name="Notepad++ projekto puslapis"/>
+					<Item id="47001" name="Textrument tinklapis"/>
+					<Item id="47002" name="Textrument projekto puslapis"/>
 					<Item id="47003" name="Dokumentacija internete"/>
 					<Item id="47004" name="Forumas"/>
 					<Item id="47011" name="Pagalba gyvai"/>
 					<Item id="47012" name="Derinimo informacija..."/>
 					<Item id="47005" name="Daugiau priedų"/>
-					<Item id="47006" name="Atnaujinti Notepad++"/>
+					<Item id="47006" name="Atnaujinti Textrument"/>
 					<Item id="47009" name="Nustatyti įgaliotąjį serverį..."/>
 					<Item id="48005" name="Importuoti priedą(us) ..."/>
 					<Item id="48006" name="Importuoti temą(as) ..."/>
@@ -319,10 +319,14 @@
 					<Item id="48100" name="Mažos piktogramos"/>
 					<Item id="48101" name="Didelės piktogramos"/>
 					<Item id="48102" name="Įprastinės piktogramos"/>
+					<Item id="45014" name="dvejetainiai režimas"/>
+					<Item id="48105" name="Pritaikyti įrankių juostą"/>
+					<Item id="48106" name="įvyniojimas &quot;įrankių juosta"/>
+					<Item id="48107" name="Kelių linijų Skirtukai"/>
 				</Commands>
 			</Main>
 			<Splitter>
-			</Splitter>
+            </Splitter>
 			<TabBar>
 				<Item CMID="0" name="Uždaryti"/>
 				<Item CMID="1" name="Uždaryti visus dokumentus išskyrus šį"/>
@@ -477,6 +481,9 @@
 				<ScintillaCommandsTab name="Scintilla komandos"/>
 				<ConflictInfoOk name="Nėra sparčiųjų klavišų konfliktų."/>
 				<ConflictInfoEditing name="Nėra konfliktų . . ."/>
+				<MainCommandNames>
+					<Item id="2147483547" name="Tuščia"/>
+				</MainCommandNames>
 			</ShortcutMapper>
 			<ShortcutMapperSubDialg title="Spartusis klavišas">
 				<Item id="1" name="Gerai"/>
@@ -687,6 +694,7 @@
 					<Item id="6125" name="Dokumentų sąrašas"/>
 					<Item id="6126" name="Rodyti"/>
 					<Item id="6127" name="Įgalinti prailginimo stulpelį"/>
+					<Item id="6128" name="Rodyti didesnį tekstą"/>
 				</Global>
 				<Scintillas title="Redagavimas">
 					<Item id="6216" name="Intarpo ženklo nustatymai"/>
@@ -745,11 +753,11 @@
 					<Item id="6413" name="Numatytas katalogas (Atidarymui/Išsaugojimui)"/>
 					<Item id="6414" name="Naudoti dokumento katalogą"/>
 					<Item id="6415" name="Įsiminti paskutinį naudotą katalogą"/>
-					<Item id="6430" name="Naudoti naują lango stilių"/>
 					<Item id="6431" name="Įvelkant katalogą, nekurti darbo aplinkos, bet atverti visus failus iš to katalogo"/>
 					<Item id="6433" name="Filtrai"/>
 					<Item id="6432" name="Tempti ir paleisti"/>
 					<Item id="6434" name="rekursyviai"/>
+					<Item id="6430" name="Naudoti naują lango stilių"/>
 				</DefaultDir>
 
 				<FileAssoc title="Failų asociacija">
@@ -1045,10 +1053,10 @@ pakeiskite jį kitu."/>
 			<SCMapperDoDeleteOrNot title="Sparčiojo klavišo šalinimas" message="Ar norite pašalintį spartųjį klavišą?"/>
 			<FindCharRangeValueError title="Ženklų sekos klaida" message="Leidžiama reikšmės yra tarp 0 ir 255."/>
 			<OpenInAdminMode title="Išsaugojimo klaida" message="Failo nepavyko išsaugoti, gali trūkti teisių.
-Ar norite paleisti Notepad++ administratoriaus teisėmis?"/>
+Ar norite paleisti Textrument administratoriaus teisėmis?"/>
 			<OpenInAdminModeWithoutCloseCurrent title="Išsaugojimo klaida" message="Failo nepavyko išsaugoti, gali trūkti teisių.
-Ar norite paleisti Notepad++ administratoriaus teisėmis?"/>
-			<OpenInAdminModeFailed title="Notepad++ paleidimo klaida" message="Notepad++ negali būti paleistas administratoriaus teisėmis."/>
+Ar norite paleisti Textrument administratoriaus teisėmis?"/>
+			<OpenInAdminModeFailed title="Textrument paleidimo klaida" message="Textrument negali būti paleistas administratoriaus teisėmis."/>
 		</MessageBox>
 		<ClipboardHistory>
 			<PanelTitle name="Mainų srities istorija"/>
@@ -1146,7 +1154,7 @@ Ar norite paleisti Notepad++ administratoriaus teisėmis?"/>
 			<word-chars-list-tab-warning value="$INT_REPLACE$ tabuliatorius(iai)"/>
 			<word-chars-list-warning-end value="  ženklų sąraše."/>
 			<cloud-invalid-warning value="Neteisingas kelias."/>
-			<cloud-restart-warning value="Norėdami pritaikyti pakeitimus, paleiskite Notepad++ iš naujo."/>
+			<cloud-restart-warning value="Norėdami pritaikyti pakeitimus, paleiskite Textrument iš naujo."/>
 			<cloud-select-folder value="Pasirinkite katalogą kuriame bus saugomi debesijos nustatymai"/>
 			<shift-change-direction-tip value="Naudokite Shift+Enter paieškai atvirkštine kryptimi"/>
 			<two-find-buttons-tip value="2 paieškos mygtukų režimas"/>
@@ -1179,10 +1187,12 @@ Ar norite paleisti Notepad++ administratoriaus teisėmis?"/>
 			<finder-close-this value="Uždaryti paiešką"/>
 			<finder-collapse-all value="Suskleisti viską"/>
 			<finder-uncollapse-all value="Išskleisti viską"/>
-			<finder-copy value="Kopijuoti"/>
+			<finder-copy value="Kopijuoti">
+				<Item value="Kopijuoti"/>
+			</finder-copy>
 			<finder-select-all value="Pažymėti viską"/>
 			<finder-clear-all value="Išvalyti viską"/>
 			<finder-open-all value="Atidaryti viską"/>
 		</MiscStrings>
 	</Native-Langue>
-</NotepadPlus>
+</Textrument>

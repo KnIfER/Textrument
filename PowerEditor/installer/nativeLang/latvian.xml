@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Translated by Arvis Lācis (http://twitter.com/arvislacis) v10.7.8 -->
 <!-- Aditional translations by Kārlis Kalviškis (eko@lanet.lv) 2014.12.16. -->
-<NotepadPlus>
-	<Native-Langue name="Latviešu" filename="latvian.xml">
+<Textrument>
+	<Native-Langue name="Latviešu" filename="latvian.xml" version="v1.0.0">
 		<Menu>
 			<Main>
 				<!-- Main Menu Entries -->
@@ -259,12 +259,12 @@
 					<Item id="46180" name="Lietotāja definēta"/>
 					<Item id="47000" name="Par Textrument..."/>
 					<Item id="47010" name="Komandrindas parametri..."/>
-					<Item id="47001" name="Notepad++ mājaslapa"/>
-					<Item id="47002" name="Notepad++ projekta lapa"/>
+					<Item id="47001" name="Textrument mājaslapa"/>
+					<Item id="47002" name="Textrument projekta lapa"/>
 					<Item id="47003" name="NpWiki++ (tiešsaistes palīdzība)"/>
 					<Item id="47004" name="Forums"/>
 					<Item id="47005" name="Iegūt citus spraudņus"/>
-					<Item id="47006" name="Atjaunināt Notepad++"/>
+					<Item id="47006" name="Atjaunināt Textrument"/>
 					<Item id="47008" name="Lietotāja pamācība"/>
 					<Item id="47009" name="Proxy serveris atjauninājumiem ..."/>
 					<Item id="48005" name="Importēt spradni(ņus) ..."/>
@@ -288,6 +288,10 @@
 					<Item id="48100" name="Mazās ikonas"/>
 					<Item id="48101" name="Lielās ikonas"/>
 					<Item id="48102" name="Parastas ikonas"/>
+					<Item id="45014" name="Binary Mode"/>
+					<Item id="48105" name="pielāgot rīkjoslu"/>
+					<Item id="48106" name="wrap rīkjosla"/>
+					<Item id="48107" name="Multi-line Tabs"/>
 				</Commands>
 			</Main>
 			<Splitter>
@@ -619,6 +623,7 @@
 					<Item id="6125" name="Failu saraksts"/>
 					<Item id="6126" name="Rādīt"/>
 					<Item id="6127" name="Iespējot paplašinājuma kolonnu"/>
+					<Item id="6128" name="Parādīt lielāku tekstu"/>
 				</Global>
 				<Scintillas title="Labošana">
 					<Item id="6216" name="Kursora iestatījumi"/>
@@ -792,10 +797,9 @@
 				<Cloud title="Mākoņošana">
 					<Item id="6262" name="Mākoņu iestatījumi"/>
 					<Item id="6263" name="Neizmantot mākoņus"/>
-					<Item id="6264" name="Dropbox"/>
 					<Item id="6265" name="OneDrive"/>
 					<Item id="6266" name="Google Drive"/>
-					<!--Item id="6261" name="Būs spēkā tikai tad, kad tiks aizvērts un par jaunu atvērts Notepad++."/-->
+					<!--Item id="6261" name="Būs spēkā tikai tad, kad tiks aizvērts un par jaunu atvērts Textrument."/-->
 				</Cloud>
 
 				<MISC title="Citi">
@@ -854,6 +858,11 @@
 				<Item id="1" name="Labi"/>
 				<Item id="2" name="Atcelt"/>
 			</ColumnEditor>
+			<ShortcutMapper>
+				<MainCommandNames>
+					<Item id="2147483547" name="tukšs"/>
+				</MainCommandNames>
+			</ShortcutMapper>
 		</Dialog>
 		<MessageBox>
 			<ContextMenuXmlEditWarning title="Peles izvēlnes labošana" message="„Textrument” peles izvēlnes izmaina labojot failu „contextMenu.xml”. Lai izdarītas izmaiņas stātos spēkā, fails „contextMenu.xml” jāsaglabā, savukārt programma „Textrument” jāaizver un jāatver."/>
@@ -938,4 +947,4 @@
 			</Menus>
 		</ProjectManager>
 	</Native-Langue>
-</NotepadPlus>
+</Textrument>

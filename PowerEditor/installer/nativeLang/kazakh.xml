@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<NotepadPlus>
-	<Native-Langue name="Қазақша" filename="kazakh.xml">
+<Textrument>
+	<Native-Langue name="Қазақша" filename="kazakh.xml" version="v1.0.0">
 		<Menu>
 			<Main>
 				<!-- Main Menu Entries -->
@@ -9,13 +9,13 @@
 					<Item menuId="edit" name="Өңдеу"/>
 					<Item menuId="search" name="Іздеу"/>
 					<Item menuId="view" name="Көрініс"/>
-					<Item menuId="encoding" name="Пішім"/>
+					<Item menuId="encoding" name="Кодтау"/>
 					<Item menuId="language" name="Бағдарламалық тіл"/>
 					<Item menuId="settings" name="Теңшеу"/>
 					<Item menuId="macro" name="Макростар"/>
 					<Item menuId="run" name="Жегу"/>
 					<Item idName="Plugins" name="Қондырмалар"/>
-					<Item idName="Window" name="Терезелер"/>
+					<Item idName="Window" name="Терезе"/>
 				</Entries>
 
 				<!-- Sub Menu Entries -->
@@ -187,6 +187,10 @@
 					<Item id="48100" name="Ұсақ белгішелер"/>
 					<Item id="48101" name="Ірі белгішелер"/>
 					<Item id="48102" name="Әдепкі белгішелер"/>
+					<Item id="45014" name="екілік режимі"/>
+					<Item id="48105" name="Құралдар тақтасын теңшеу"/>
+					<Item id="48106" name="Wrap құралдар тақтасы"/>
+					<Item id="48107" name="Мульти желісі қойындылар"/>
 				</Commands>
 			</Main>
 			<Splitter>
@@ -284,7 +288,7 @@
 					<Item id="2208" name="Қаріп:"/>
 					<Item id="2209" name="Өлшемі:"/>
 					<!--
-					<Item id = "2210" name = "Attention : The definition of this style will be the default definition for all non defined styles"/>\
+                    <Item id = "2210" name = "Attention : The definition of this style will be the default definition for all non defined styles"/>\
 					-->
 					<Item id="2211" name="Мәнер сипаттамасы:"/>
 					<Item id="2212" name="Түс мәнері"/>
@@ -385,6 +389,7 @@
 					<Item id="6121" name="Мәзір жолағы"/>
 					<Item id="6122" name="Жасыру (Alt не F10 пернесін қолданыңыз)"/>
 					<Item id="6123" name="Жерсіндіру тілі"/>
+					<Item id="6128" name="үлкен мәтінді көрсету"/>
 				</Global>
 				<Scintillas title="Өңдеу құраластары">
 					<Item id="6216" name="Жүгіргі теңшелімдері"/>
@@ -542,7 +547,12 @@
 				<Item id="1" name="Жарайды"/>
 				<Item id="2" name="Болдырмау"/>
 			</ColumnEditor>
+			<ShortcutMapper>
+				<MainCommandNames>
+					<Item id="2147483547" name="Бос"/>
+				</MainCommandNames>
+			</ShortcutMapper>
 		</Dialog>
 	</Native-Langue>
-</NotepadPlus>
+</Textrument>
 <!-- Kazakh translation by Askar M. v. 1.01 -->

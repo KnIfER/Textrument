@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
--    Traducerea în română pentru Notepad++ 7.6.6
+-    Traducerea în română pentru Textrument 7.6.6
 -    Ultima modificare 30 Ianuarie 2019 de către Barna Cosmin Marian
-	 Pentru actualizări vizitați: https://github.com/notepad-plus-plus/notepad-plus-plus/tree/master/PowerEditor/installer/nativeLang
+     Pentru actualizări vizitați: https://github.com/notepad-plus-plus/notepad-plus-plus/tree/master/PowerEditor/installer/nativeLang
  -->
-<NotepadPlus>
-	<Native-Langue name="Romanian" filename="romanian.xml" version="7.6.6">
+<Textrument>
+	<Native-Langue name="Romanian" filename="romanian.xml" version="v1.0.0">
 		<Menu>
 			<Main>
 				<!-- Main Menu Entries -->
@@ -288,14 +288,14 @@
 					<Item id="46180" name="Definit de utilizator"/>
 					<Item id="47000" name="Despre Textrument"/>
 					<Item id="47010" name="Argumente linie de comandă..."/>
-					<Item id="47001" name="Pagină web Notepad++"/>
-					<Item id="47002" name="Pagină proiect Notepad++"/>
+					<Item id="47001" name="Pagină web Textrument"/>
+					<Item id="47002" name="Pagină proiect Textrument"/>
 					<Item id="47003" name="Documentație online"/>
-					<Item id="47004" name="Comunitatea Notepad++ (Forum)"/>
+					<Item id="47004" name="Comunitatea Textrument (Forum)"/>
 					<Item id="47011" name="Suport Live"/>
 					<Item id="47012" name="Informații depanare"/>
 					<Item id="47005" name="Descărcaţi mai multe module"/>
-					<Item id="47006" name="Actualizare Notepad++"/>
+					<Item id="47006" name="Actualizare Textrument"/>
 					<Item id="47009" name="Setare proxy actualizare..."/>
 					<Item id="48005" name="Importare modul(e) ..."/>
 					<Item id="48006" name="Importare temă(e) afișare..."/>
@@ -325,10 +325,14 @@
 					<Item id="48100" name="Pictograme mici"/>
 					<Item id="48101" name="Pictograme mari"/>
 					<Item id="48102" name="Pictograme standard"/>
+					<Item id="45014" name="Modul binar"/>
+					<Item id="48105" name="Personalizați Bara de instrumente"/>
+					<Item id="48106" name="Bara de instrumente Wrap"/>
+					<Item id="48107" name="Tab-uri cu mai multe linii"/>
 				</Commands>
 			</Main>
 			<Splitter>
-			</Splitter>
+            </Splitter>
 			<TabBar>
 				<Item CMID="0" name="Închidere"/>
 				<Item CMID="1" name="Închidere toate fără acesta"/>
@@ -506,6 +510,9 @@
 				<ScintillaCommandsTab name="Comenzi Scintilla"/>
 				<ConflictInfoOk name="Nu sunt conflicte pentru acest element."/>
 				<ConflictInfoEditing name="Nu sunt conflicte ..."/>
+				<MainCommandNames>
+					<Item id="2147483547" name="Gol"/>
+				</MainCommandNames>
 			</ShortcutMapper>
 			<ShortcutMapperSubDialg title="Combinație">
 				<Item id="1" name="OK"/>
@@ -714,6 +721,7 @@
 					<Item id="6125" name="Panou listă documente"/>
 					<Item id="6126" name="Afișare"/>
 					<Item id="6127" name="Activați coloană extensie"/>
+					<Item id="6128" name="Afișare text mai mare"/>
 				</Global>
 				<Scintillas title="Editare">
 					<Item id="6216" name="Setări cursor"/>
@@ -771,11 +779,11 @@
 					<Item id="6413" name="Folder implicit (Deschidere/Salvare)"/>
 					<Item id="6414" name="Folder document curent"/>
 					<Item id="6415" name="Memorare ultimul folder folosit"/>
-					<Item id="6430" name="Utilizare stil nou dialog salvare "/>
 					<Item id="6431" name="La plasarea unui folder, se deschid fișierele din el, fără a-l stabili ca spațiu de lucru"/>
 					<Item id="6433" name="Filtre"/>
 					<Item id="6432" name="Tragere și plasare"/>
 					<Item id="6434" name="recursiv"/>
+					<Item id="6430" name="Utilizare stil nou dialog salvare "/>
 				</DefaultDir>
 
 				<FileAssoc title="Asociere fișiere">
@@ -1075,10 +1083,10 @@ alegeți altul."/>
 			<SCMapperDoDeleteOrNot title="Sunteți sigur?" message="Sigur doriți să eliminați această combinație de taste?"/>
 			<FindCharRangeValueError title="Problemă valoare interval" message="Ar trebui să introduceți o valoare între 0 și 255."/>
 			<OpenInAdminMode title="Salvare eșuată" message="Fișierul nu poate fi salvat și s-ar putea să fie protejat.
-Doriți să lansați Notepad++ în mod Administrator?"/>
+Doriți să lansați Textrument în mod Administrator?"/>
 			<OpenInAdminModeWithoutCloseCurrent title="Salvare eșuată" message="Fișierul nu poate fi salvat și s-ar putea să fie protejat.
-Doriți să lansați Notepad++ în mod Administrator?"/>
-			<OpenInAdminModeFailed title="Deschidere în mod Administrator eșuat" message="Notepad++ nu poate fi deschis în mod Administrator."/>
+Doriți să lansați Textrument în mod Administrator?"/>
+			<OpenInAdminModeFailed title="Deschidere în mod Administrator eșuat" message="Textrument nu poate fi deschis în mod Administrator."/>
 			<ViewInBrowser title="Afişare fişier curent în navigator" message="Aplicaţia nu poate fi găsită în sistem."/>
 		</MessageBox>
 		<ClipboardHistory>
@@ -1177,8 +1185,8 @@ Doriți să lansați Notepad++ în mod Administrator?"/>
 			<word-chars-list-tab-warning value="$INT_REPLACE$ Tab(-uri)"/>
 			<word-chars-list-warning-end value="  în lista de caractere."/>
 			<cloud-invalid-warning value="Cale nevalidă."/>
-			<cloud-restart-warning value="Reporniți Notepad++ pentru aplicare modificări."/>
-			<cloud-select-folder value="Selectare folder din/în care Notepad++ citește/scrie setările sale"/>
+			<cloud-restart-warning value="Reporniți Textrument pentru aplicare modificări."/>
+			<cloud-select-folder value="Selectare folder din/în care Textrument citește/scrie setările sale"/>
 			<shift-change-direction-tip value="Folosiți Shift+Enter pentru a căuta în direcția opusă"/>
 			<two-find-buttons-tip value="Mod căutare cu 2 butoane"/>
 			<find-status-top-reached value="Căutare: S-a găsit prima potrivire de jos.S-a ajuns la începutul documentului."/>
@@ -1210,7 +1218,9 @@ Doriți să lansați Notepad++ în mod Administrator?"/>
 			<finder-close-this value="Închidere căutător"/>
 			<finder-collapse-all value="Restrângere toate"/>
 			<finder-uncollapse-all value="Extindere toate"/>
-			<finder-copy value="Copiere"/>
+			<finder-copy value="Copiere">
+				<Item value="Copiere"/>
+			</finder-copy>
 			<finder-select-all value="Selectare toate"/>
 			<finder-clear-all value="Golire toate"/>
 			<finder-open-all value="Deschidere toate"/>
@@ -1228,4 +1238,4 @@ Doriți să lansați Notepad++ în mod Administrator?"/>
 			<edit-verticaledge-nb-col value="Nr. coloane:"/>
 		</MiscStrings>
 	</Native-Langue>
-</NotepadPlus>
+</Textrument>

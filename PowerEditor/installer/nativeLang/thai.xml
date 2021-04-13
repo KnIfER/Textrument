@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<NotepadPlus>
-	<Native-Langue name="thai" filename="thai.xml">
+<Textrument>
+	<Native-Langue name="thai" filename="thai.xml" version="v1.0.0">
 		<Menu>
 			<Main>
 				<!-- Main Menu Entries -->
@@ -212,12 +212,12 @@
 					<Item id="46001" name="ตัวตั้งค่ารูปแบบ..."/>
 					<Item id="46180" name="ผู้ใช้กำหนดเอง"/>
 					<Item id="47000" name="เกี่ยวกับ Textrument..."/>
-					<Item id="47001" name="หน้าโฮมของ Notepad++"/>
-					<Item id="47002" name="หน้าโปรเจคของ Notepad++"/>
+					<Item id="47001" name="หน้าโฮมของ Textrument"/>
+					<Item id="47002" name="หน้าโปรเจคของ Textrument"/>
 					<Item id="47003" name="เอกสารการใช้งานออนไลน์"/>
 					<Item id="47004" name="กระดานข่าว"/>
 					<Item id="47005" name="หาปลั๊กอินเพิ่มเติม"/>
-					<Item id="47006" name="อัพเดท Notepad++"/>
+					<Item id="47006" name="อัพเดท Textrument"/>
 					<Item id="47008" name="หัวข้อตัวช่วยเหลือ"/>
 
 					<Item id="48005" name="นำเข้าปลั๊กอิน..."/>
@@ -246,6 +246,10 @@
 					<Item id="48100" name="ไอคอนขนาดเล็ก"/>
 					<Item id="48101" name="ไอคอนขนาดใหญ่"/>
 					<Item id="48102" name="ไอคอนมาตรฐาน"/>
+					<Item id="45014" name="โหมดไบนารี"/>
+					<Item id="48105" name="ปรับแต่งแถบเครื่องมือ"/>
+					<Item id="48106" name="ตัดแถบเครื่องมือ"/>
+					<Item id="48107" name="แท็บหลายสาย"/>
 				</Commands>
 			</Main>
 			<Splitter>
@@ -442,6 +446,7 @@
 					<Item id="6121" name="แถบเมนู"/>
 					<Item id="6122" name="ซ่อน (ใช้ปุ่ม Alt หรือ F10 ในการสลับ)"/>
 					<Item id="6123" name="การแปลตามท้องถิ่น"/>
+					<Item id="6128" name="แสดงข้อความที่มีขนาดใหญ่"/>
 				</Global>
 				<Scintillas title="การแก้ไข">
 					<Item id="6216" name="ตั้งค่าเคอร์เซอร์"/>
@@ -607,6 +612,11 @@
 				<Item id="1" name="ตกลง"/>
 				<Item id="2" name="ยกเลิก"/>
 			</ColumnEditor>
+			<ShortcutMapper>
+				<MainCommandNames>
+					<Item id="2147483547" name="ว่างเปล่า"/>
+				</MainCommandNames>
+			</ShortcutMapper>
 		</Dialog>
 	</Native-Langue>
-</NotepadPlus>
+</Textrument>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-	::Marathi language file for Notepad++ ::
+	::Marathi language file for Textrument ::
 
 	** created By:- Nikhil Tamhankar **
 		Email- iamnik.mailme@gmail.com
@@ -9,8 +9,8 @@
 		Email-kumargagare1@gmail.com
 
 -->
-<NotepadPlus>
-	<Native-Langue name="मराठी" filename="marathi.xml">
+<Textrument>
+	<Native-Langue name="मराठी" filename="marathi.xml" version="v1.0.0">
 		<Menu>
 			<Main>
 				<!-- Main Menu Entries -->
@@ -252,10 +252,14 @@
 					<Item id="48100" name="छोटे आइकॉनस"/>
 					<Item id="48101" name="मोठे आइकॉनस"/>
 					<Item id="48102" name="आदर्श आइकॉन"/>
+					<Item id="45014" name="बायनरी मोड"/>
+					<Item id="48105" name="सानुकूलित टूलबार"/>
+					<Item id="48106" name="ओघ टूलबार"/>
+					<Item id="48107" name="मल्टी-लाइन टॅब"/>
 				</Commands>
 			</Main>
 			<Splitter>
-			</Splitter>
+            </Splitter>
 			<TabBar>
 				<Item CMID="0" name="बंद करा"/>
 				<Item CMID="1" name="हे वगळता सर्व बंद करा"/>
@@ -447,6 +451,7 @@
 					<Item id="6121" name="मेन्यू बार"/>
 					<Item id="6122" name="लपवा (टॉगल करण्यासाठी Alt किंवा F10 कळ वापरा)"/>
 					<Item id="6123" name="स्थानिकीकरण"/>
+					<Item id="6128" name="मोठ्या मजकूर प्रदर्शित"/>
 				</Global>
 				<Scintillas title="संपादन">
 					<Item id="6216" name="कैरेट (Caret) संरचना"/>
@@ -612,6 +617,11 @@
 				<Item id="1" name="ठीक"/>
 				<Item id="2" name="रद्द"/>
 			</ColumnEditor>
+			<ShortcutMapper>
+				<MainCommandNames>
+					<Item id="2147483547" name="रिक्त"/>
+				</MainCommandNames>
+			</ShortcutMapper>
 		</Dialog>
 	</Native-Langue>
-</NotepadPlus>
+</Textrument>

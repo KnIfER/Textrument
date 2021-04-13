@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<NotepadPlus>
-	<Native-Langue name="Srpski(Serbian)" filename="serbian.xml">
+<Textrument>
+	<Native-Langue name="Srpski(Serbian)" filename="serbian.xml" version="v1.0.0">
 		<Menu>
 			<Main>
 				<!-- Main Menu Entries -->
@@ -124,8 +124,8 @@
 
 					<Item id="46001" name="Postavke stilova..."/>
 					<Item id="47000" name="O programu... F1"/>
-					<Item id="47001" name="Notepad++ Internet stranica"/>
-					<Item id="47002" name="Notepad++ Stranica projekta"/>
+					<Item id="47001" name="Textrument Internet stranica"/>
+					<Item id="47002" name="Textrument Stranica projekta"/>
 					<Item id="47003" name="Pomoæ preko interneta"/>
 					<Item id="47004" name="Forum"/>
 					<Item id="47005" name="Dodaj nove prikljuèke"/>
@@ -144,10 +144,14 @@
 					<Item id="48100" name="Male ikone"/>
 					<Item id="48101" name="Velike ikone"/>
 					<Item id="48102" name="Male standardne ikone"/>
+					<Item id="45014" name="binarni режим"/>
+					<Item id="48105" name="Подешавање траке алата"/>
+					<Item id="48106" name="врап Тоолбар-"/>
+					<Item id="48107" name="Мулти-лине Картице"/>
 				</Commands>
 			</Main>
 			<Splitter>
-			</Splitter>
+            </Splitter>
 			<TabBar>
 				<Item CMID="0" name="Zatvori me"/>
 				<Item CMID="1" name="Zatvori sve osim mene"/>
@@ -319,6 +323,7 @@
 					<Item id="6115" name="Auto-poravnanje"/>
 					<Item id="6116" name="Zapamti zadnji folder koji je korišæen"/>
 					<Item id="6117" name="Omoguæi MRU ponašanje za promenu dokumenta"/>
+					<Item id="6128" name="Дисплаи већи текст"/>
 				</Global>
 				<Scintillas title="Komponente izmene">
 					<Item id="6201" name="Stil margina foldera"/>
@@ -447,6 +452,11 @@
 				<Item id="1" name="U redu"/>
 				<Item id="2" name="Otkaži"/>
 			</ColumnEditor>
+			<ShortcutMapper>
+				<MainCommandNames>
+					<Item id="2147483547" name="празан"/>
+				</MainCommandNames>
+			</ShortcutMapper>
 		</Dialog>
 	</Native-Langue>
-</NotepadPlus>
+</Textrument>

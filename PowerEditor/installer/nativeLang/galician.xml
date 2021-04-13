@@ -5,8 +5,8 @@
 <!-- 20111122 correccións realizadas por damufo. Proxecto Trasno (trasno.net) -->
 <!-- damufo. engadidos un par de novas traducións aínda -->
 <!-- damufo. faltan bastantes con respecto á version en inglés -->
-<NotepadPlus>
-	<Native-Langue name="Galego" filename="galician.xml">
+<Textrument>
+	<Native-Langue name="Galego" filename="galician.xml" version="v1.0.0">
 		<Menu>
 			<Main>
 				<!-- Entradas de menú principal -->
@@ -138,8 +138,8 @@
 
 					<Item id="46001" name="Configurador de estilo..."/>
 					<Item id="47000" name="Sobre o Textrument..."/>
-					<Item id="47001" name="Web de Notepad++"/>
-					<Item id="47002" name="Proxecto Notepad++ en Sourceforge"/>
+					<Item id="47001" name="Web de Textrument"/>
+					<Item id="47002" name="Proxecto Textrument en Sourceforge"/>
 					<Item id="47003" name="Axuda en liña"/>
 					<Item id="47004" name="Foro"/>
 					<Item id="47005" name="Descargar máis 'engadidos'"/>
@@ -160,10 +160,14 @@
 					<Item id="48100" name="Iconas pequenas"/>
 					<Item id="48101" name="Iconas grandes"/>
 					<Item id="48102" name="Iconas pequenas predeterminadas"/>
+					<Item id="45014" name="modo binario"/>
+					<Item id="48105" name="Personalizar barra de ferramentas"/>
+					<Item id="48106" name="envoltura Toolbar"/>
+					<Item id="48107" name="Tabs Múltiples liña"/>
 				</Commands>
 			</Main>
 			<Splitter>
-			</Splitter>
+            </Splitter>
 			<TabBar>
 				<Item CMID="0" name="Pechar"/>
 				<Item CMID="1" name="Pechar todos excepto o actual"/>
@@ -239,7 +243,7 @@
 					<Item id="2208" name="Tipo da tipografía:"/>
 					<Item id="2209" name="Tamaño da tipografía:"/>
 					<!--
-					<Item id = "2210" name = "Atención: esta será a definición predeterminada para tódolos estilos non definidos"/>\
+                    <Item id = "2210" name = "Atención: esta será a definición predeterminada para tódolos estilos non definidos"/>\
 					-->
 					<Item id="2211" name="Descripción do estilo:"/>
 					<Item id="2212" name="Cor"/>
@@ -336,6 +340,7 @@
 					<Item id="6118" name="Agochar"/>
 					<Item id="6119" name="Multi-liña"/>
 					<Item id="6120" name="Vertical"/>
+					<Item id="6128" name="Amosar texto máis"/>
 				</Global>
 				<Scintillas title="Opcións visuais">
 					<Item id="6201" name="Estilo visual dos niveis"/>
@@ -470,6 +475,11 @@
 				<Item id="1" name="Aceptar"/>
 				<Item id="2" name="Esquecer"/>
 			</ColumnEditor>
+			<ShortcutMapper>
+				<MainCommandNames>
+					<Item id="2147483547" name="branco"/>
+				</MainCommandNames>
+			</ShortcutMapper>
 		</Dialog>
 	</Native-Langue>
-</NotepadPlus>
+</Textrument>

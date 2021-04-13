@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<NotepadPlus>
-	<Native-Langue name="Français" filename="french.xml" version="7.9">
+<Textrument>
+	<Native-Langue name="français" filename="french.xml" version="v1.0.0">
 		<Menu>
 			<Main>
 				<!-- Main Menu Entries -->
@@ -80,6 +80,7 @@
 					<Item id="41002" name="&amp;Ouvrir..."/>
 					<Item id="41019" name="Explorateur Windows"/>
 					<Item id="41020" name="Invite de commande (cmd)"/>
+					<Item id="41025" name="Dossier en tant qu'espace de travail"/>
 					<Item id="41003" name="Fermer"/>
 					<Item id="41004" name="Fermer tout"/>
 					<Item id="41005" name="Fermer tout sauf le document actuel"/>
@@ -111,7 +112,8 @@
 					<Item id="42008" name="Augmenter l’indentation"/>
 					<Item id="42009" name="Réduire l’indentation"/>
 					<Item id="42010" name="Dupliquer la ligne actuelle"/>
-					<Item id="42077" name="Supprimer la ligne en double consécutives"/>
+					<Item id="42079" name="Supprimer les lignes en double"/>
+					<Item id="42077" name="Supprimer les lignes en double consécutives"/>
 					<Item id="42012" name="Séparer en plusieurs lignes"/>
 					<Item id="42013" name="Joindre plusieurs lignes"/>
 					<Item id="42014" name="Déplacer la ligne actuelle vers le haut"/>
@@ -175,6 +177,7 @@
 					<Item id="42048" name="Copier du contenu Binaire"/>
 					<Item id="42049" name="Couper du contenu Binaire"/>
 					<Item id="42050" name="Coller du contenu Binaire"/>
+					<Item id="42082" name="Copier le lien"/>
 					<Item id="42051" name="Panneau des caractères ASCII"/>
 					<Item id="42052" name="Panneau historique du presse-papiers"/>
 					<Item id="43001" name="&amp;Rechercher..."/>
@@ -230,6 +233,7 @@
 					<Item id="43054" name="Marquer..."/>
 					<Item id="44009" name="Post-it"/>
 					<Item id="44010" name="Replier tous les blocs"/>
+					<Item id="44011" name="Mode sans distraction"/>
 					<Item id="44019" name="Afficher tous les caractères"/>
 					<Item id="44020" name="Afficher le guide d'indentation"/>
 					<Item id="44022" name="Retour automatique à la ligne"/>
@@ -290,15 +294,15 @@
 					<Item id="45056" name="OEM 863: français"/>
 					<Item id="46001" name="Configurateur de coloration syntaxique..."/>
 					<Item id="46250" name="Définir votre langage..."/>
-					<Item id="46300" name="Ovrir le dossier des Langages utilisateur..."/>
+					<Item id="46300" name="Ouvrir le dossier des Langages utilisateur..."/>
 					<Item id="46180" name="Langage utilisateur"/>
 					<Item id="47000" name="À propos de Textrument..."/>
-					<Item id="47001" name="Site officiel Notepad++"/>
-					<Item id="47002" name="Projet de développement de Notepad++"/>
+					<Item id="47001" name="Site officiel Textrument"/>
+					<Item id="47002" name="Projet de développement de Textrument"/>
 					<Item id="47003" name="Aide en ligne"/>
 					<Item id="47004" name="Forum"/>
 					<Item id="47005" name="Obtenir d'autres compléments"/>
-					<Item id="47006" name="Mettre à jour Notepad++"/>
+					<Item id="47006" name="Mettre à jour Textrument"/>
 					<Item id="47009" name="Paramétrer le proxy de mise à jour..."/>
 					<Item id="47010" name="Arguments de la ligne de commande..."/>
 					<Item id="47011" name="Support en direct"/>
@@ -329,10 +333,14 @@
 					<Item id="48100" name="Petites icônes"/>
 					<Item id="48101" name="Grandes icônes"/>
 					<Item id="48102" name="Icônes standards"/>
+					<Item id="45014" name="mode binaire"/>
+					<Item id="48105" name="Personnaliser la barre d&amp;#39;outils"/>
+					<Item id="48106" name="Barre d&amp;#39;outils wrap"/>
+					<Item id="48107" name="Les onglets multilignes"/>
 				</Commands>
 			</Main>
 			<Splitter>
-			</Splitter>
+            </Splitter>
 			<TabBar>
 				<Item CMID="0" name="Fermer"/>
 				<Item CMID="1" name="Fermer tout sauf ce fichier"/>
@@ -358,10 +366,11 @@
 				<Item CMID="21" name="Ouvrir dans l'application par défaut"/>
 				<Item CMID="22" name="Fermer tous les documents non-modifiés"/>
 				<Item CMID="23" name="Ouvrez le fichier lié / Directory"/>
+				<Item CMID="24" name="Ouvrir le répertoire du fichier en cours en tant qu'espace de travail"/>
 			</TabBar>
 		</Menu>
 		<Dialog>
-			<Find title="" titleFind="Rechercher" titleReplace="Remplacer" titleFindInFiles="Rechercher dans les fichiers d'un dossier" titleMark="Marquer">
+			<Find title="" titleFind="Rechercher" titleReplace="Remplacer" titleFindInFiles="Rechercher dans les fichiers" titleFindInProjects="Rechercher dans les projets" titleMark="Marquer">
 				<Item id="1" name="Suivant"/>
 				<Item id="1722" name="Rechercher vers l'arrière"/>
 				<Item id="1603" name="Mot entier &amp;uniquement"/>
@@ -390,7 +399,11 @@
 				<Item id="1658" name="Sous-dossiers"/>
 				<Item id="1659" name="Dossiers cachés"/>
 				<Item id="1660" name="Remplacer tout"/>
+				<Item id="1665" name="Remplacer tout"/>
 				<Item id="1661" name="Suivre le doc. actuel"/>
+				<Item id="1662" name="Panneau de Projet #1"/>
+				<Item id="1663" name="Panneau de Projet #2"/>
+				<Item id="1664" name="Panneau de Projet #3"/>
 				<Item id="1686" name="Transparence"/>
 				<Item id="1687" name="à la perte du focus"/>
 				<Item id="1688" name="persistante"/>
@@ -510,6 +523,9 @@
 				<ScintillaCommandsTab name="Commandes de Scintilla "/>
 				<ConflictInfoOk name="Pas de conflit pour cet élément."/>
 				<ConflictInfoEditing name="Pas de conflit . . ."/>
+				<MainCommandNames>
+					<Item id="2147483547" name="Vide"/>
+				</MainCommandNames>
 			</ShortcutMapper>
 			<ShortcutMapperSubDialg title="Raccourcis clavier">
 				<Item id="1" name="OK"/>
@@ -716,22 +732,11 @@
 					<Item id="6125" name="Commutateur de documents"/>
 					<Item id="6126" name="Montrer"/>
 					<Item id="6127" name="Activer colonne d&amp;#39;extension"/>
+					<Item id="6128" name="Afficher le texte plus"/>
 				</Global>
+
 				<Scintillas title="Zones d'édition">
-					<Item id="6201" name="Contrôle de repli de bloc"/>
-					<Item id="6202" name="Simple"/>
-					<Item id="6203" name="Flèche"/>
-					<Item id="6204" name="Cercle"/>
-					<Item id="6205" name="Carré"/>
-					<Item id="6206" name="Afficher la numérotation des lignes"/>
-					<Item id="6207" name="Afficher la marge de signet"/>
-					<Item id="6208" name="Afficher la marge droite"/>
-					<Item id="6234" name="Désactiver le défilement avancé
-(en cas de problème du pavé tactile)"/>
-					<Item id="6211" name="Marqueur de colonne"/>
-					<Item id="6213" name="Colorer l’arrière-plan"/>
-					<Item id="6237" name="Ajoutez votre marqueur de colonne en indiquant sa position avec un nombre entier.
-Vous pouvez définir plusieurs marqueurs de colonne en utilisant un espace pour séparer les différents nombres."/>
+					<Item id="6234" name="Désactiver le défilement avancé en cas de problème du pavé tactile"/>
 					<Item id="6214" name="Surligner la ligne actuelle"/>
 					<Item id="6215" name="Activer le lissage de police"/>
 					<Item id="6216" name="Curseur"/>
@@ -741,18 +746,35 @@ Vous pouvez définir plusieurs marqueurs de colonne en utilisant un espace pour 
 					<!-- Rapide -->
 					<Item id="6222" name="Zen"/>
 					<!-- Lent -->
-					<Item id="6224" name="Multi-édition"/>
 					<Item id="6225" name="Activer (Ctrl+Clic/sélection)"/>
-					<Item id="6226" name="Aucun"/>
 					<Item id="6227" name="Ligne pliée"/>
 					<Item id="6228" name="Défaut"/>
 					<Item id="6229" name="Aligné"/>
 					<Item id="6230" name="Indenté"/>
-					<Item id="6231" name="Largeur de la bordure"/>
-					<Item id="6235" name="Pas de bordure"/>
 					<Item id="6236" name="Activer le défilement au-delà de la dernière ligne"/>
 					<Item id="6239" name="Conserver la sélection lors d'un clic droit en dehors de la sélection"/>
+					<Item id="6201" name="Contrôle de repli de bloc"/>
+					<Item id="6202" name="Simple"/>
+					<Item id="6203" name="Flèche"/>
+					<Item id="6204" name="Cercle"/>
+					<Item id="6205" name="Carré"/>
+					<Item id="6226" name="Aucun"/>
+					<Item id="6211" name="Marqueur de colonne"/>
+					<Item id="6213" name="Colorer l’arrière-plan"/>
+					<Item id="6237" name="Ajoutez votre marqueur de colonne en indiquant sa position avec un nombre entier.
+Vous pouvez définir plusieurs marqueurs de colonne en utilisant un espace pour séparer les différents nombres."/>
+					<Item id="6231" name="Largeur de la bordure"/>
+					<Item id="6235" name="Pas de bordure"/>
+					<Item id="6206" name="Afficher la numérotation des lignes"/>
+					<Item id="6207" name="Afficher la marge de signet"/>
+					<Item id="6208" name="Padding"/>
+					<Item id="6209" name="Gauche"/>
+					<Item id="6210" name="Droite"/>
+					<Item id="6212" name="Sans distraction"/>
+					<Item id="6224" name="Multi-édition"/>
 				</Scintillas>
+
+
 				<NewDoc title="Nouveau document">
 					<Item id="6401" name="Format des sauts de ligne"/>
 					<Item id="6402" name="Windows"/>
@@ -770,14 +792,14 @@ Vous pouvez définir plusieurs marqueurs de colonne en utilisant un espace pour 
 				</NewDoc>
 
 				<DefaultDir title="Annuaire">
-					<Item id="6413" name="Dossier par défaut (ouvrir/enregistrer)"/>
+					<Item id="6413" name="Dossier par défaut pour ouvrir/enregistrer les fichiers"/>
 					<Item id="6414" name="Utiliser celui du document actuel"/>
 					<Item id="6415" name="Mémoriser le dernier dossier utilisé"/>
-					<Item id="6430" name="Activer le nouveau style de dialogue "/>
 					<Item id="6431" name="Lors de glisser-déposer d'un dossier, ouvrir tous les fichiers dans le dossier"/>
 					<Item id="6433" name="filtres"/>
 					<Item id="6432" name="Glisser déposer"/>
 					<Item id="6434" name="récursive"/>
+					<Item id="6430" name="Activer le nouveau style de dialogue "/>
 				</DefaultDir>
 
 				<FileAssoc title="Extensions de fichier">
@@ -941,21 +963,23 @@ Vous pouvez définir plusieurs marqueurs de colonne en utilisant un espace pour 
 					<Item id="6308" name="Réduire dans la barre de notifications"/>
 					<Item id="6312" name="Surveillance de l’état des fichiers"/>
 					<Item id="6313" name="Mise à jour sans alerte"/>
-					<Item id="6318" name="Paramétrage de lien cliquable"/>
-					<Item id="6319" name="Activer"/>
-					<Item id="6320" name="Ne pas souligner"/>
 					<Item id="6322" name="Ext. fichier session :"/>
 					<Item id="6323" name="Activer la mise à jour automatique"/>
+					<Item id="6351" name="Definir *.* comme le seul filtre d'extension dans la boite de dialogue Enregistrer"/>
 					<Item id="6324" name="Commutateur de documents (Ctrl+Tab)"/>
 					<Item id="6325" name="Aller à la dernière ligne après mise à jour"/>
 					<Item id="6331" name="Afficher seulement le nom du fichier dans la barre de titre"/>
 					<Item id="6334" name="Détecter l'encodage automatiquement"/>
 					<Item id="6349" name="Utiliser &quot;DirectWrite&quot; (il pourrait améliorer le rendu des caractères spéciaux. Nécessité de redémarrage)"/>
-					<Item id="6350" name="Activer la mode d'arrière-plan"/>
 					<Item id="6337" name="Ext. fichier espace de travail :"/>
 					<Item id="6344" name="Aperçu du document"/>
 					<Item id="6345" name="Aperçu à onglet"/>
 					<Item id="6346" name="Aperçu à commutateur de documents"/>
+					<Item id="6360" name="Chut !"/>
+					<Item id="6318" name="Paramétrage de lien cliquable"/>
+					<Item id="6319" name="Activer"/>
+					<Item id="6320" name="Ne pas souligner"/>
+					<Item id="6350" name="Activer la mode d'arrière-plan"/>
 				</MISC>
 			</Preference>
 			<MultiMacro title="Exécuter une macro en boucle">
@@ -1024,7 +1048,6 @@ Vous pouvez définir plusieurs marqueurs de colonne en utilisant un espace pour 
 			<SettingsOnCloudError title="Les paramètres dans le cloud" message="Il semble que les paramètres dans le cloud se trouve sur un lecteur en lecture seule,
 ou à un dossier restreint. Votre paramètres dans le cloud seront annulés.
 Veuillez réinitialiser une valeur cohérente au dialogue Préférences."/>
-			<NppHelpAbsentWarning title="Le fichier n'existe pas" message=" n'existe pas. Veuillez le télécharger sur le site de Textrument."/>
 			<SaveCurrentModifWarning title="Sauvegarder la modification en cours" message="Vous devez enregistrer la modification en cours. Toutes les modifications enregistrées ne peuvent pas être annulées. Continuer ?"/>
 			<FilePathNotFoundWarning title="Ouvrir" message="Le fichier que vous essayez d'ouvrir n'existe pas."/>
 			<SessionFileInvalidError title="Impossible de charger la session" message="Le fichier de session est endommagé ou non valide."/>
@@ -1070,7 +1093,7 @@ Voulez-vous récupérer &quot;langs.xml&quot; ?"/>
 Veuillez supprimer le sous-dossier avant d'ajouter &quot;$STR_REPLACE$&quot;."/>
 
 			<ProjectPanelChanged title="$STR_REPLACE$" message="L'espace de travail a été modifié. Voulez-vous l'enregistrer ?"/>
-			<ProjectPanelChangedSaveError title="$STR_REPLACE$" message="Votre espace de travail n'a pas encore été enregistré."/>
+			<ProjectPanelSaveError title="$STR_REPLACE$" message="Une erreur s'est produite lors de l'écriture de votre fichier d'espace de travail. Votre espace de travail n'a pas encore été sauvegardé."/>
 			<ProjectPanelOpenDoSaveDirtyWsOrNot title="Ouvrir espace de travail" message="L'espace de travail actuel a été modifié. Voulez-vous enregistrer le projet actuel ?"/>
 			<ProjectPanelNewDoSaveDirtyWsOrNot title="Nouvel espace de travail" message="L'espace de travail actuel a été modifié. Voulez-vous enregistrer le projet actuel ?"/>
 			<ProjectPanelOpenFailed title="Ouvrir espace de travail" message="L'espace de travail n'a pas pu être ouvert.
@@ -1087,15 +1110,15 @@ veuillez en donner un autre."/>
 			<SCMapperDoDeleteOrNot title="Supprimer un raccourci clavier" message="Êtes-vous sûr de vouloir supprimer ce raccourci clavier ?"/>
 			<FindCharRangeValueError title="Valeur en dehors des limites" message="Veuillez entrer une valeur entre 0 et 255."/>
 			<OpenInAdminMode title="L'enregistrement a échoué" message="Le fichier ne peut pas être enregistré et il est peut-être protégé.
-Voulez-vous lancer Notepad++ en mode Administrateur ?"/>
+Voulez-vous lancer Textrument en mode Administrateur ?"/>
 			<OpenInAdminModeWithoutCloseCurrent title="L'enregistrement a échoué" message="Le fichier ne peut pas être enregistré et il est peut-être protégé.
-Voulez-vous lancer Notepad++ en mode Administrateur ?"/>
-			<OpenInAdminModeFailed title="L'ouverture en mode Administrateur a échoué" message="Notepad++ ne peut pas être lancé en mode Administrateur."/>
+Voulez-vous lancer Textrument en mode Administrateur ?"/>
+			<OpenInAdminModeFailed title="L'ouverture en mode Administrateur a échoué" message="Textrument ne peut pas être lancé en mode Administrateur."/>
 			<ViewInBrowser title="Afficher le fichier actuel dans le navigateur" message="Application introuvable sur votre ordinateur."/>
-			<ExitToUpdatePlugins title="Notepad++ sera fermé" message="Si vous cliquez Oui, vous allez quitter Notepad++ pour poursuivre les opérations.
-Notepad++ sera relancé après.
+			<ExitToUpdatePlugins title="Textrument sera fermé" message="Si vous cliquez Oui, vous allez quitter Textrument pour poursuivre les opérations.
+Textrument sera relancé après.
 Voulez-vous les poursuivez ?"/>
-			<NeedToRestartToLoadPlugins title="Vous devez redémarrer Notepad++" message="Vous devez redémarrer Notepad++ pour charger les modules d'extension installés."/>
+			<NeedToRestartToLoadPlugins title="Vous devez redémarrer Textrument" message="Vous devez redémarrer Textrument pour charger les modules d'extension installés."/>
 		</MessageBox>
 		<ClipboardHistory>
 			<PanelTitle name="Historique du presse-papiers"/>
@@ -1130,6 +1153,9 @@ Voulez-vous les poursuivez ?"/>
 		<FolderAsWorkspace>
 			<PanelTitle name="Dossier en tant qu'Espace de travail"/>
 			<SelectFolderFromBrowserString name="Sélectionner un dossier pour ajouter dans Dossier en tant qu'Espace de travail"/>
+			<ExpandAllFoldersTip name="Déplier tous les dossiers"/>
+			<CollapseAllFoldersTip name="Replier tous les dossiers"/>
+			<LocateCurrentFileTip name="Localiser le fichier courant"/>
 			<Menus>
 				<Item id="3511" name="Effacer"/>
 				<Item id="3512" name="Effacer Tout"/>
@@ -1161,6 +1187,7 @@ Voulez-vous les poursuivez ?"/>
 					<Item id="3125" name="Enregistrer"/>
 					<Item id="3126" name="Enregistrer sous..."/>
 					<Item id="3127" name="Enregistrer une copie..."/>
+					<Item id="3128" name="Rechercher dans les projets..."/>
 				</WorkspaceMenu>
 				<ProjectMenu>
 					<Item id="3111" name="Renommer"/>
@@ -1198,7 +1225,7 @@ Voulez-vous les poursuivez ?"/>
 			<word-chars-list-tab-warning value="$INT_REPLACE$ TAB(s)"/>
 			<word-chars-list-warning-end value="  dans votre liste des caractères."/>
 			<cloud-invalid-warning value="Chemin invalide."/>
-			<cloud-restart-warning value="Veuillez redémarrer Notepad++ afin que le changement prenne effet."/>
+			<cloud-restart-warning value="Veuillez redémarrer Textrument afin que le changement prenne effet."/>
 			<shift-change-direction-tip value="Utilisez Shift + Entrée pour rechercher dans le sens inverse"/>
 			<two-find-buttons-tip value="2 boutons Recherche"/>
 			<find-in-files-filter-tip value="Rechercher dans cpp, cxx, h, hxx &amp;&amp; hpp:
@@ -1206,7 +1233,7 @@ Voulez-vous les poursuivez ?"/>
 
 Rechercher dans tous les fichiers sauf exe, obj &amp;&amp; log:
 *.* !*.exe !*.obj !*.log"/>
-			<cloud-select-folder value="Sélectionner un répertoire où Notepad++ lit ou écrit ses paramètres"/>
+			<cloud-select-folder value="Sélectionner un répertoire où Textrument lit ou écrit ses paramètres"/>
 			<find-status-top-reached value="Rechercher : La 1ère occurrence a été trouvée depuis le bas. Le début du document a été atteint"/>
 			<find-status-end-reached value="Rechercher : La 1ère occurrence a été trouvée depuis le haut. La fin du document a été atteinte"/>
 			<find-status-replaceinfiles-1-replaced value="Remplacer dans les fichiers : 1 occurrence a été remplacée"/>
@@ -1237,10 +1264,14 @@ Rechercher dans tous les fichiers sauf exe, obj &amp;&amp; log:
 			<find-status-scope-backward value="du début du fichier au curseur"/>
 			<find-status-scope-forward value="du curseur à la fin du fichier"/>
 			<finder-find-in-finder value="Rechercher dans les résultats..."/>
+			<replace-in-projects-confirm-title value="Confirmation"/>
+			<replace-in-projects-confirm-message value="Voulez-vous remplacer toutes les occurrences dans tous les documents de(s) projet(s) sélectionné(s) ?"/>
 			<finder-close-this value="Fermer le dialogue des résultats"/>
 			<finder-collapse-all value="Replier tout"/>
 			<finder-uncollapse-all value="Déplier tout"/>
-			<finder-copy value="Copier"/>
+			<finder-copy value="Copier">
+				<Item value="Copier"/>
+			</finder-copy>
 			<finder-select-all value="Sélectionner tout"/>
 			<finder-clear-all value="Effacer tout"/>
 			<finder-open-all value="Ouvrir tout"/>
@@ -1250,6 +1281,8 @@ Rechercher dans tous les fichiers sauf exe, obj &amp;&amp; log:
 			<common-name value="Nom : "/>
 			<tabrename-title value="Renommer onglet actuel"/>
 			<tabrename-newname value="Nom nouveau : "/>
+			<splitter-rotate-left value="Tourner vers la gauche"/>
+			<splitter-rotate-right value="Tourner vers la droite"/>
 			<recent-file-history-maxfile value="Max. fichier : "/>
 			<language-tabsize value="Taille tabulation : "/>
 			<userdefined-title-new value="Langage nouveau..."/>
@@ -1268,17 +1301,23 @@ Rechercher dans tous les fichiers sauf exe, obj &amp;&amp; log:
 			<summary-nbsel1 value=" caractères sélectionnés ("/>
 			<summary-nbsel2 value=" octets) dans "/>
 			<summary-nbrange value=" sélections"/>
+			<find-in-files-progress-title value="Rechercher dans les fichiers en cours..."/>
 			<replace-in-files-confirm-title value="Confirmation"/>
 			<replace-in-files-confirm-directory value="Voulez-vous remplacer toutes les occurrences dans :"/>
 			<replace-in-files-confirm-filetype value="Pour le(s) type(s) de fichier :"/>
+			<replace-in-files-progress-title value="Remplacer dans les fichiers en cours..."/>
 			<replace-in-open-docs-confirm-title value="Confirmation"/>
 			<replace-in-open-docs-confirm-message value="Voulez-vous vraiment remplacer toutes les occurrences dans tous les documents ouverts ?"/>
 			<find-result-caption value="Résultats de recherche"/>
 			<find-result-title value="Rechercher"/>
+			<!-- Must not begin with space or tab character -->
 			<find-result-title-info value="($INT_REPLACE1$ résultats dans $INT_REPLACE2$ documents depuis $INT_REPLACE3$ documents recherchés)"/>
 			<find-result-title-info-extra value=" - Mode de filtre de ligne : affiche uniquement les résultats filtrés"/>
 			<find-result-hits value="($INT_REPLACE$ résultats)"/>
+			<find-result-line-prefix value="Ligne"/>
+			<!-- Must not begin with space or tab character -->
 			<find-regex-zero-length-match value="la chaîne vide trouvée"/>
+			<tab-untitled-string value="nouveau "/>
 		</MiscStrings>
 	</Native-Langue>
-</NotepadPlus>
+</Textrument>

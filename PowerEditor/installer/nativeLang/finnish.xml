@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<NotepadPlus>
-	<Native-Langue name="Finnish" filename="finnish.xml" version="7.8.2">
+<Textrument>
+	<Native-Langue name="Finnish" filename="finnish.xml" version="v1.0.0">
 		<Menu>
 			<Main>
 				<!-- Main Menu Entries -->
@@ -286,8 +286,8 @@
 					<Item id="46250" name="Määrittele oma kieli..."/>
 					<Item id="46300" name="Avaa käyttäjän määrittämä kielikansio..."/>
 					<Item id="47000" name="Tietoja ohjelmasta"/>
-					<Item id="47001" name="Notepad++ Kotisivu"/>
-					<Item id="47002" name="Notepad++ Projektisivu"/>
+					<Item id="47001" name="Textrument Kotisivu"/>
+					<Item id="47002" name="Textrument Projektisivu"/>
 					<Item id="47003" name="Dokumentaatio verkossa"/>
 					<Item id="47004" name="Keskustelupalsta"/>
 					<Item id="47005" name="Lataa liitännäisiä"/>
@@ -324,6 +324,10 @@
 					<Item id="48100" name="Pienet kuvakkeet"/>
 					<Item id="48101" name="Isot kuvakkeet"/>
 					<Item id="48102" name="Normaalikuvakkeet"/>
+					<Item id="45014" name="binäärimuodossa"/>
+					<Item id="48105" name="Muokkaa työkalupalkkia"/>
+					<Item id="48106" name="wrap Toolbar"/>
+					<Item id="48107" name="Multi-line välilehdet"/>
 				</Commands>
 			</Main>
 			<Splitter/>
@@ -391,7 +395,7 @@
 				<Item id="1703" name="Uusilla riveillä"/>
 				<Item id="1721" name="▲"/>
 				<Item id="1722" name="Taaksepäin"/>
-				<Item id="1723" name="▼ Etsi seuraava"/>
+				<Item id="1723" name="▼ Seuraava"/>
 			</Find>
 			<FindCharsInRange title="Etsi merkkejä">
 				<Item id="2" name="&amp;Sulje"/>
@@ -499,6 +503,9 @@
 				<ScintillaCommandsTab name="Scintilla komennot"/>
 				<ConflictInfoOk name="Tälle kohteelle ei ole pikavalintaristiriitoja."/>
 				<ConflictInfoEditing name="Ei ristiriitoja . . ."/>
+				<MainCommandNames>
+					<Item id="2147483547" name="Tyhjä"/>
+				</MainCommandNames>
 			</ShortcutMapper>
 			<ShortcutMapperSubDialg title="Pikanäppäin">
 				<Item id="1" name="OK"/>
@@ -705,6 +712,7 @@
 					<Item id="6125" name="Dokumenttiluettelo"/>
 					<Item id="6126" name="Näytä"/>
 					<Item id="6127" name="Laajentamista sarake"/>
+					<Item id="6128" name="Näyttö suurempi teksti"/>
 				</Global>
 				<Scintillas title="Muokkaus">
 					<Item id="6201" name="Kansiomarginaalin tyyli"/>
@@ -757,11 +765,11 @@
 					<Item id="6413" name="Oletuskansio avattaessa ja tallennettaessa"/>
 					<Item id="6414" name="Seuraa nykyistä asiakirjaa"/>
 					<Item id="6415" name="Muista viimeksi käytetty"/>
-					<Item id="6430" name="Käytä uutta tyyli-ikkunaa "/>
 					<Item id="6431" name="Avaa kaikki kansion tiedostot sen sijaan, että avaisit kansion työtilana kansiota pudotettaessa"/>
 					<Item id="6433" name="Suodattimet"/>
 					<Item id="6432" name="Raahaa ja pudota"/>
 					<Item id="6434" name="rekursiivisesti"/>
+					<Item id="6430" name="Käytä uutta tyyli-ikkunaa "/>
 				</DefaultDir>
 				<FileAssoc title="Tiedostokytkennät">
 					<Item id="4009" name="Tuetut päätteet:"/>
@@ -906,7 +914,7 @@
 					<Item id="6308" name="Pienennä ilmoitusalueelle"/>
 					<Item id="6312" name="Tiedostotilan automaattinen tunnistus"/>
 					<Item id="6313" name="Äänetön päivitys"/>
-					<Item id="6314" name="Käytä tasalevyistä fonttia hakuikkunassa (Notepad++ käynnistettävä uudelleen)"/>
+					<Item id="6314" name="Käytä tasalevyistä fonttia hakuikkunassa (Textrument käynnistettävä uudelleen)"/>
 					<Item id="6318" name="Klikattavien linkkien asetukset"/>
 					<Item id="6319" name="Käytä"/>
 					<Item id="6320" name="Ilman alleviivausta"/>
@@ -1049,15 +1057,15 @@ Haluatko jatkaa?"/>
 			<SCMapperDoDeleteOrNot title="Oletko varma?" message="Haluatko varmasti poistaa tämän pikakuvakkeen?"/>
 			<FindCharRangeValueError title="Alueen arvo-ongelma" message="Sinun pitäisi kirjoittaa luku välillä 0-255."/>
 			<OpenInAdminMode title="Tallennus epäonnistui" message="Tiedostoa ei voi tallentaa, se on ehkä suojattu.
-Haluatko käynnistää Notepad++ järjestelmänvalvojana?"/>
+Haluatko käynnistää Textrument järjestelmänvalvojana?"/>
 			<OpenInAdminModeWithoutCloseCurrent title="Tallennus epäonnistui" message="Tiedostoa ei voi tallentaa, se on ehkä suojattu.
-Haluatko käynnistää Notepad++ järjestelmänvalvojana?"/>
-			<OpenInAdminModeFailed title="Avaaminen järjestelmänvalvoja-tilassa epäonnistui" message="Notepad++ ei voi avata järjestelmänvalvoja-tilassa."/>
+Haluatko käynnistää Textrument järjestelmänvalvojana?"/>
+			<OpenInAdminModeFailed title="Avaaminen järjestelmänvalvoja-tilassa epäonnistui" message="Textrument ei voi avata järjestelmänvalvoja-tilassa."/>
 			<ViewInBrowser title="Näytä nykyinen tiedosto selaimessa" message="Sovellusta ei löydy järjestelmästäsi."/>
-			<ExitToUpdatePlugins title="Notepad++ on lopettamassa" message="Jos klikkaat Kyllä, pysäytät Notepad++:n toimintojen jatkamiseksi.
-Notepad++ käynnistetään uudelleen, kun kaikki toiminnot ovat valmistuneet.
+			<ExitToUpdatePlugins title="Textrument on lopettamassa" message="Jos klikkaat Kyllä, pysäytät Textrument:n toimintojen jatkamiseksi.
+Textrument käynnistetään uudelleen, kun kaikki toiminnot ovat valmistuneet.
 Jatketaanko?"/>
-			<NeedToRestartToLoadPlugins title="Notepad++ on käynnistettävä uudelleen" message="Sinun täytyy käynnistää Notepad++ uudelleen asennettujen liitännäisten lataamiseksi."/>
+			<NeedToRestartToLoadPlugins title="Textrument on käynnistettävä uudelleen" message="Sinun täytyy käynnistää Textrument uudelleen asennettujen liitännäisten lataamiseksi."/>
 		</MessageBox>
 		<ClipboardHistory>
 			<PanelTitle name="Leikepöydän historia"/>
@@ -1158,8 +1166,8 @@ Jatketaanko?"/>
 			<word-chars-list-tab-warning value="$INT_REPLACE$ TAB(t)"/>
 			<word-chars-list-warning-end value="  merkkiluettelossa."/>
 			<cloud-invalid-warning value="Virheellinen polku."/>
-			<cloud-restart-warning value="Käynnistä Notepad++ uudelleen, jotta vaikutus tulisi voimaan."/>
-			<cloud-select-folder value="Valitse kansio mistä/mihin Notepad++ lukee/kirjoittaa asetuksensa"/>
+			<cloud-restart-warning value="Käynnistä Textrument uudelleen, jotta vaikutus tulisi voimaan."/>
+			<cloud-select-folder value="Valitse kansio mistä/mihin Textrument lukee/kirjoittaa asetuksensa"/>
 			<shift-change-direction-tip value="Käytä Shift+Enteriä etsiäksesi vastakkaiseen suuntaan"/>
 			<two-find-buttons-tip value="2 etsi painikkeet-tila"/>
 			<find-in-files-filter-tip value="Etsi seuraavista cpp, cxx, h, hxx &amp;&amp; hpp:
@@ -1196,7 +1204,9 @@ Etsi kaikista tiedostoista paitsi exe, obj &amp;&amp; log:
 			<finder-close-this value="Sulje tämä haku"/>
 			<finder-collapse-all value="Tiivistä kaikki"/>
 			<finder-uncollapse-all value="Laajenna kaikki"/>
-			<finder-copy value="Kopioi"/>
+			<finder-copy value="Kopioi">
+				<Item value="Kopioi"/>
+			</finder-copy>
 			<finder-select-all value="Valitse kaikki"/>
 			<finder-clear-all value="Tyhjennä kaikki"/>
 			<finder-open-all value="Avaa kaikki"/>
@@ -1225,4 +1235,4 @@ Etsi kaikista tiedostoista paitsi exe, obj &amp;&amp; log:
 			<summary-nbrange value=" aluetta"/>
 		</MiscStrings>
 	</Native-Langue>
-</NotepadPlus>
+</Textrument>

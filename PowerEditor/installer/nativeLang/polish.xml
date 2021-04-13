@@ -1,9 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Translated by Patryk Skorupa (ppskorupa@outlook.com) and up-to-date as of version 7.7.2 (29/07/2019) -->
-<!-- Updated by Cezariusz Marek to version 7.8.3 (11.01.2020) -->
-<!-- Updated by Arkadiusz Michalski (webref.pl) to version 7.9 (09.09.2020) -->
-<NotepadPlus>
-	<Native-Langue name="polski" filename="polish.xml" version="7.9">
+<!--
+The comments are here for explanation, it's not necessary to translate them.
+-->
+<!--
+    History of Polish translation for Textrument:
+
+        - Updated by Arkadiusz Michalski (webref.pl) to version 7.9.4 (07.03.2021)
+        - Updated by Cezariusz Marek to version 7.8.3 (11.01.2020)
+        - Translated by Patryk Skorupa (ppskorupa@outlook.com) and up-to-date as of version 7.7.2 (29/07/2019)
+    
+    The most recent version of this file can usually be downloaded from:
+        https://github.com/notepad-plus-plus/notepad-plus-plus/blob/master/PowerEditor/installer/nativeLang/polish.xml
+-->
+<Textrument>
+	<Native-Langue name="polski" filename="polish.xml" version="v1.0.0">
 		<Menu>
 			<Main>
 				<!-- Główne menu -->
@@ -25,7 +35,7 @@
 				<SubEntries>
 					<Item subMenuId="file-openFolder" name="Otwórz folder zawierający"/>
 					<Item subMenuId="file-closeMore" name="Zamknij więcej"/>
-					<Item subMenuId="file-recentFiles" name="Ostatnie &amp;pliki"/>
+					<Item subMenuId="file-recentFiles" name="Ostatnio zamknięte &amp;pliki"/>
 					<Item subMenuId="edit-copyToClipboard" name="Kopiuj do schowka"/>
 					<Item subMenuId="edit-indent" name="Wcięcie"/>
 					<Item subMenuId="edit-convertCaseTo" name="Wielkość liter"/>
@@ -40,6 +50,7 @@
 					<Item subMenuId="search-unmarkAll" name="Odznacz wszystko"/>
 					<Item subMenuId="search-jumpUp" name="Przejdź wyżej"/>
 					<Item subMenuId="search-jumpDown" name="Przejdź niżej"/>
+					<Item subMenuId="search-copyStyledText" name="Kopiuj ostylowany tekst"/>
 					<Item subMenuId="search-bookmark" name="Zakładki"/>
 					<Item subMenuId="view-currentFileIn" name="Wyświetl obecny plik w..."/>
 					<Item subMenuId="view-showSymbol" name="Niewidoczne znaki"/>
@@ -75,9 +86,10 @@
 				<!-- Menu rozwijane, dokładniej -->
 				<Commands>
 					<Item id="41001" name="&amp;Nowy"/>
-					<Item id="41002" name="&amp;Otwórz"/>
-					<Item id="41019" name="Użyj domyślnego eksploratora"/>
-					<Item id="41020" name="Użyj wiersza poleceń"/>
+					<Item id="41002" name="&amp;Otwórz..."/>
+					<Item id="41019" name="W eksploratorze plików"/>
+					<Item id="41020" name="W wierszu poleceń"/>
+					<Item id="41025" name="W obszarze roboczym"/>
 					<Item id="41003" name="Za&amp;mknij"/>
 					<Item id="41004" name="Zamknij &amp;wszystko"/>
 					<Item id="41005" name="Zamknij wszystko prócz bieżącego pliku"/>
@@ -96,7 +108,7 @@
 					<Item id="41015" name="Zapisz kopię jako..."/>
 					<Item id="41016" name="Przenieś do kosza"/>
 					<Item id="41017" name="Zmień nazwę..."/>
-					<Item id="41021" name="Przywróć ostatni zamknięty plik"/>
+					<Item id="41021" name="Przywróć ostatnio zamknięty plik"/>
 					<Item id="41022" name="Dodaj folder do obszaru roboczego..."/>
 					<Item id="41023" name="Otwórz bieżący w domyślnym programie"/>
 					<Item id="42001" name="Wy&amp;tnij"/>
@@ -110,17 +122,18 @@
 					<Item id="42008" name="Zwiększ wcięcie"/>
 					<Item id="42009" name="Zmniejsz wcięcie"/>
 					<Item id="42010" name="Powtórz bieżącą linię"/>
-					<Item id="42077" name="Usuń linie powtórzone kolejno"/>
+					<Item id="42079" name="Usuń powtórzone linie"/>
+					<Item id="42077" name="Usuń przyległe powtórzone linie"/>
 					<Item id="42012" name="Podziel linię"/>
 					<Item id="42013" name="Połącz linie"/>
 					<Item id="42014" name="Przenieś bieżącą linię do góry"/>
 					<Item id="42015" name="Przenieś bieżącą linię w dół"/>
-					<Item id="42059" name="Sortuj linie rosnąco..."/>
-					<Item id="42060" name="Sortuj linie malejąco..."/>
+					<Item id="42059" name="Sortuj linie rosnąco"/>
+					<Item id="42060" name="Sortuj linie malejąco"/>
+					<Item id="42080" name="Sortuj rosnąco ignorując wielkość znaków"/>
+					<Item id="42081" name="Sortuj malejąco ignorując wielkość znaków"/>
 					<Item id="42061" name="Sortuj rosnąco jako liczby całkowite"/>
-					<!--Sort Lines As Integers Descending-->
 					<Item id="42062" name="Sortuj malejąco jako liczby całkowite"/>
-					<!--Sort Lines As Integers Descending-->
 					<Item id="42063" name="Sortuj rosnąco jako liczby dziesiętne z przecinkiem"/>
 					<Item id="42064" name="Sortuj malejąco jako liczby dziesiętne z przecinkiem"/>
 					<Item id="42065" name="Sortuj rosnąco jako liczby dziesiętne z kropką"/>
@@ -135,7 +148,7 @@
 					<Item id="42071" name="&amp;oDWRÓC wIELKOŚĆ lITER"/>
 					<Item id="42072" name="&amp;loSoWA WIelKość liTEr"/>
 					<Item id="42073" name="Otwórz plik"/>
-					<Item id="42074" name="Otwórz folder z plikiem w Eksploratorze"/>
+					<Item id="42074" name="Otwórz folder zawierający w eksploratorze plików"/>
 					<Item id="42075" name="Wyszukaj w Internecie"/>
 					<Item id="42076" name="Zmień wyszukiwarkę..."/>
 					<Item id="42018" name="Rozpocznij &amp;nagrywanie"/>
@@ -143,9 +156,7 @@
 					<Item id="42021" name="&amp;Odtwórz"/>
 					<Item id="42022" name="Przełącz komentarz liniowy"/>
 					<Item id="42023" name="Wstaw komentarz blokowy"/>
-					<!--Block Comment-->
 					<Item id="42047" name="Usuń komentarz blokowy"/>
-					<!--Block Unoomment-->
 					<Item id="42024" name="Usuń spacje na końcach linii"/>
 					<Item id="42042" name="Usuń spacje na początkach linii"/>
 					<Item id="42043" name="Usuń spacje na początkach i końcach linii"/>
@@ -159,6 +170,7 @@
 					<Item id="42048" name="Kopiuj treść binarną"/>
 					<Item id="42049" name="Wytnij treść binarną"/>
 					<Item id="42050" name="Wklej treść binarną"/>
+					<Item id="42082" name="Kopiuj hiperłącze"/>
 					<Item id="42037" name="Kolumnowy tryb zaznaczania"/>
 					<Item id="42034" name="Edycja kolumnowa..."/>
 					<Item id="42051" name="Tablica znaków"/>
@@ -221,18 +233,25 @@
 					<Item id="43031" name="Wyróżnienie 5."/>
 					<!-- odznacz > 'clear' -->
 					<Item id="43032" name="Wszystkie wyróżnienia"/>
-					<Item id="43033" name="1. styl"/>
-					<Item id="43034" name="2. styl"/>
-					<Item id="43035" name="3. styl"/>
-					<Item id="43036" name="4. styl"/>
-					<Item id="43037" name="5. styl"/>
-					<Item id="43038" name="Znajdź styl"/>
-					<Item id="43039" name="1. styl"/>
-					<Item id="43040" name="2. styl"/>
-					<Item id="43041" name="3. styl"/>
-					<Item id="43042" name="4. styl"/>
-					<Item id="43043" name="5. styl"/>
-					<Item id="43044" name="Znajdź styl"/>
+					<Item id="43033" name="Wyróżnienie 1."/>
+					<Item id="43034" name="Wyróżnienie 2."/>
+					<Item id="43035" name="Wyróżnienie 3."/>
+					<Item id="43036" name="Wyróżnienie 4."/>
+					<Item id="43037" name="Wyróżnienie 5."/>
+					<Item id="43038" name="Oznaczenie"/>
+					<Item id="43039" name="Wyróżnienie 1."/>
+					<Item id="43040" name="Wyróżnienie 2."/>
+					<Item id="43041" name="Wyróżnienie 3."/>
+					<Item id="43042" name="Wyróżnienie 4."/>
+					<Item id="43043" name="Wyróżnienie 5."/>
+					<Item id="43044" name="Oznaczenie"/>
+					<Item id="43055" name="Wyróżnienie 1."/>
+					<Item id="43056" name="Wyróżnienie 2."/>
+					<Item id="43057" name="Wyróżnienie 3."/>
+					<Item id="43058" name="Wyróżnienie 4."/>
+					<Item id="43059" name="Wyróżnienie 5."/>
+					<Item id="43060" name="Wszystkie wyróżnienia"/>
+					<Item id="43061" name="Wszystkie oznaczenia"/>
 					<Item id="43045" name="Okno wyników wyszukiwania"/>
 					<Item id="43046" name="Następny wynik wyszukiwania"/>
 					<Item id="43047" name="Poprzedni wynik wyszukiwania"/>
@@ -271,7 +290,6 @@
 					<Item id="44099" name="Przesuń kartę do tyłu"/>
 					<Item id="44032" name="Przełącz tryb pełnoekranowy"/>
 					<Item id="44033" name="Przywróć domyślne"/>
-					<!-- przybliżenie -->
 					<Item id="44034" name="Zawsze na wierzchu"/>
 					<Item id="44035" name="Synchronizuj przewijanie pionowe"/>
 					<Item id="44036" name="Synchronizuj przewijanie poziome"/>
@@ -318,7 +336,7 @@
 					<Item id="47011" name="Czat użytkowników"/>
 					<Item id="47012" name="Informacje o środowisku..."/>
 					<Item id="47005" name="Pobierz wtyczki"/>
-					<Item id="47006" name="Uaktualnij Notepad++"/>
+					<Item id="47006" name="Uaktualnij Textrument"/>
 					<Item id="47009" name="Ustaw proxy do aktualizacji..."/>
 					<Item id="48005" name="Importuj wtyczki..."/>
 					<Item id="48006" name="Importuj motywy..."/>
@@ -338,13 +356,11 @@
 					<Item id="50000" name="Uzupełnianie funkcji"/>
 					<Item id="50001" name="Uzupełnianie słów"/>
 					<Item id="50002" name="Podpowiadanie parametrów funkcji"/>
-					<Item id="50003" name="Przełącz na poprzedni dokument"/>
-					<Item id="50004" name="Przełącz na następny dokument"/>
 					<Item id="50005" name="Przełącz nagrywanie makra"/>
 					<Item id="50006" name="Uzupełnianie ścieżek"/>
 					<Item id="44042" name="Ukryj zaznaczone linie"/>
-					<Item id="42040" name="Otwórz wszystkie ostatnio otwarte pliki"/>
-					<Item id="42041" name="Wyczyść listę ostatnio otwartych plików"/>
+					<Item id="42040" name="Otwórz wszystkie ostatnio zamknięte pliki"/>
+					<Item id="42041" name="Wyczyść listę ostatnio zamkniętych plików"/>
 					<Item id="48016" name="Zmień skrót/Usuń makro..."/>
 					<Item id="48017" name="Zmień skrót/Usuń polecenie..."/>
 					<Item id="44070" name="Zakładka Lista"/>
@@ -352,22 +368,26 @@
 					<Item id="48100" name="Małe ikony"/>
 					<Item id="48101" name="Duże ikony"/>
 					<Item id="48102" name="Normalne ikony"/>
+					<Item id="45014" name="Tryb binarny"/>
+					<Item id="48105" name="Dostosuj pasek narzędzi"/>
+					<Item id="48106" name="Wrap Toolbar"/>
+					<Item id="48107" name="Multi-Tabs linia"/>
 				</Commands>
 			</Main>
 			<Splitter>
-			</Splitter>
+            </Splitter>
 			<TabBar>
 				<Item CMID="0" name="Zamknij"/>
 				<Item CMID="1" name="Zamknij wszystko PRÓCZ tego"/>
 				<Item CMID="2" name="Zapisz"/>
 				<Item CMID="3" name="Zapisz jako..."/>
-				<Item CMID="4" name="Drukuj"/>
+				<Item CMID="4" name="Drukuj..."/>
 				<Item CMID="5" name="Przenieś do drugiego widoku"/>
 				<Item CMID="6" name="Klonuj do drugiego widoku"/>
 				<Item CMID="7" name="Kopiuj ścieżkę tego pliku do schowka"/>
 				<Item CMID="8" name="Kopiuj nazwę pliku do schowka"/>
 				<Item CMID="9" name="Kopiuj ścieżkę katalogu pliku do schowka"/>
-				<Item CMID="10" name="Zmień nazwę"/>
+				<Item CMID="10" name="Zmień nazwę..."/>
 				<Item CMID="11" name="Przenieś do kosza"/>
 				<Item CMID="12" name="Blokada edycji"/>
 				<Item CMID="13" name="Wyłącz tryb „Tylko do odczytu”"/>
@@ -376,17 +396,18 @@
 				<Item CMID="16" name="Odśwież"/>
 				<Item CMID="17" name="Zamknij wszystko po lewej"/>
 				<Item CMID="18" name="Zamknij wszystko po prawej"/>
-				<Item CMID="19" name="Otwórz folder zawierający w Eksploratorze"/>
-				<Item CMID="20" name="Otwórz folder zawierający w Wierszu polecenia"/>
+				<Item CMID="19" name="Otwórz folder zawierający w eksploratorze plików"/>
+				<Item CMID="20" name="Otwórz folder zawierający w wierszu poleceń"/>
 				<Item CMID="21" name="Otwórz w domyślnym programie"/>
-				<Item CMID="22" name="Zamknij wszystko bez zapisywania"/>
+				<Item CMID="22" name="Zamknij wszystko niezmodyfikowane"/>
 				<Item CMID="23" name="Otwórz połączony plik / katalog"/>
+				<Item CMID="24" name="Otwórz folder zawierający w obszarze roboczym"/>
 			</TabBar>
 		</Menu>
 
 		<Dialog>
-			<Find title="" titleFind="Szukaj" titleReplace="Zastąp" titleFindInFiles="Szukaj w plikach" titleMark="Oznacz">
-				<Item id="1" name="Szukaj"/>
+			<Find title="" titleFind="Szukaj" titleReplace="Zastąp" titleFindInFiles="Szukaj w plikach" titleFindInProjects="Szukaj w projektach" titleMark="Oznacz">
+				<Item id="1" name="Znajdź następny"/>
 				<!-- Find Next -->
 				<Item id="1722" name="W tekście wyżej"/>
 				<Item id="2" name="Zamknij"/>
@@ -417,12 +438,17 @@
 				<Item id="1625" name="&amp;Normalny"/>
 				<Item id="1626" name="&amp;Rozszerzony (\n, \r, \t, \0, \x...)"/>
 				<Item id="1660" name="Zamień w plikach"/>
+				<Item id="1665" name="Zamień w projektach"/>
 				<Item id="1661" name="Ścieżka bież. dok."/>
+				<Item id="1662" name="Panel 1. projektu"/>
+				<Item id="1663" name="Panel 2. projektu"/>
+				<Item id="1664" name="Panel 3. projektu"/>
 				<Item id="1641" name="Znajdź w bieżącym dokumencie"/>
 				<Item id="1686" name="&amp;Przeźroczystość okna"/>
 				<Item id="1703" name="&amp;. jako nowa linia"/>
 				<Item id="1721" name="▲"/>
-				<Item id="1723" name="▼ Następne wystąpienie"/>
+				<Item id="1723" name="▼ Następne"/>
+				<Item id="1725" name="Kopiuj oznaczony tekst"/>
 			</Find>
 
 			<FindCharsInRange title="Zakres zestawu znaków...">
@@ -536,6 +562,9 @@
 				<ScintillaCommandsTab name="Polecenia Scintilli"/>
 				<ConflictInfoOk name="Brak sprzecznego skrótu dla tej pozycji."/>
 				<ConflictInfoEditing name="Brak sprzeczności."/>
+				<MainCommandNames>
+					<Item id="2147483547" name="Pusty"/>
+				</MainCommandNames>
 			</ShortcutMapper>
 			<ShortcutMapperSubDialg title="Skrót">
 				<Item id="1" name="OK"/>
@@ -738,7 +767,7 @@
 					<Item id="6118" name="Ukryty"/>
 					<Item id="6119" name="Wielolinowy"/>
 					<Item id="6120" name="Pionowy"/>
-					<Item id="6121" name="Zamknięcie ostatniej karty zamyka Notepad++"/>
+					<Item id="6121" name="Zamknięcie ostatniej karty zamyka Textrument"/>
 
 					<Item id="6122" name="Ukryj pasek menu (Alt lub F10 przełączają)"/>
 					<Item id="6123" name="Język interfejsu"/>
@@ -746,6 +775,8 @@
 					<Item id="6125" name="Lista dokumentów"/>
 					<Item id="6126" name="Pokazuj"/>
 					<Item id="6127" name="Włącz kolumnę przedłużacza"/>
+
+					<Item id="6128" name="Alternatywne ikony"/>
 				</Global>
 				<Scintillas title="Edycja">
 					<Item id="6216" name="Kursor"/>
@@ -753,36 +784,33 @@
 					<Item id="6219" name="Miganie:"/>
 					<Item id="6221" name="S"/>
 					<Item id="6222" name="W"/>
-					<Item id="6224" name="Edycja wieloliniowa"/>
 					<Item id="6225" name="Włącz (Ctrl+LPM/zaznaczanie)"/>
+					<Item id="6227" name="Zawijanie tekstu"/>
+					<Item id="6228" name="Domyślne"/>
+					<Item id="6229" name="Wyrównane"/>
+					<Item id="6230" name="Wcięte"/>
+					<Item id="6234" name="Wyłącz zaawansowane przewijanie (w razie problemów z touchpadem)"/>
+					<Item id="6214" name="Podświetlaj bieżącą linię"/>
+					<Item id="6215" name="Ujednolicaj czcionki"/>
+					<Item id="6236" name="Umożliwiaj przewijanie poza ostatnią linię"/>
+					<Item id="6239" name="Zachowaj zaznaczenie po kliku prawym przyciskiem myszy poza zaznaczeniem"/>
 					<Item id="6201" name="Styl marginesu"/>
 					<Item id="6202" name="Prosty"/>
 					<Item id="6203" name="Strzałki"/>
 					<Item id="6204" name="Kółka"/>
 					<Item id="6205" name="Kwadraty"/>
 					<Item id="6226" name="Żaden"/>
-
-					<Item id="6227" name="Zawijanie tekstu"/>
-					<Item id="6228" name="Domyślne"/>
-					<Item id="6229" name="Wyrównane"/>
-					<Item id="6230" name="Wcięte"/>
-
 					<Item id="6206" name="Pokazuj numer linii"/>
 					<Item id="6207" name="Pokazuj zakładki"/>
-					<Item id="6208" name="Pokazuj krawędź pionową"/>
-					<Item id="6234" name="Wyłącz zaawansowane przewijanie
-(w razie problemów z touchpadem)"/>
 					<Item id="6211" name="Ustawienia krawędzi pionowej"/>
 					<Item id="6213" name="Podświetlenie tła"/>
 					<Item id="6237" name="Dodaj znacznik kolumny wskazując jego pozycję za pomocą liczby dziesiętnej.
 Możesz zdefiniować kilka znaczników kolumn poprzez rozdzielenie różnych liczb znakami spacji."/>
-					<Item id="6214" name="Podświetlaj bieżącą linię"/>
-					<Item id="6215" name="Ujednolicaj czcionki"/>
 					<Item id="6231" name="Grubość ramki"/>
-					<Item id="6235" name="Brak ramki"/>
-					<Item id="6236" name="Umożliwiaj przewijanie poza ostatnią linię"/>
-					<Item id="6239" name="Zachowaj zaznaczenie po kliknięciu prawym przyciskiem myszy poza zaznaczeniem"/>
+					<Item id="6235" name="Brak obrysu"/>
+					<Item id="6224" name="Edycja wieloliniowa"/>
 				</Scintillas>
+
 
 				<NewDoc title="Nowy dokument">
 					<Item id="6401" name="Format (koniec linii)"/>
@@ -804,11 +832,11 @@ Możesz zdefiniować kilka znaczników kolumn poprzez rozdzielenie różnych lic
 					<Item id="6413" name="Domyślna ścieżka odczytu i zapisu"/>
 					<Item id="6414" name="Bieżącego pliku"/>
 					<Item id="6415" name="Pamiętaj ostatnio używaną"/>
-					<Item id="6430" name="Używaj nowego okna zapisu "/>
 					<Item id="6431" name="Nie traktuj przenoszonego folderu jako obszaru roboczego, tylko ładuj wszystkie jego pliki"/>
 					<Item id="6433" name="filtry"/>
 					<Item id="6432" name="Przeciągnij i upuść"/>
 					<Item id="6434" name="rekurencyjnie"/>
+					<Item id="6430" name="Używaj nowego okna zapisu "/>
 				</DefaultDir>
 
 				<FileAssoc title="Powiązania plików">
@@ -953,8 +981,9 @@ Możesz zdefiniować kilka znaczników kolumn poprzez rozdzielenie różnych lic
 					<Item id="6267" name="Ścieżka chmury:"/>
 				</Cloud>
 
-				<SearchEngine title="Wyszukiwarka internetowa">
-					<Item id="6271" name="Wyszukiwarka internetowa (dla opcji „Wyszukaj w Internecie”)"/>
+				<SearchEngine title="Wyszukiwarka WWW">
+					<!-- internetowa -->
+					<Item id="6271" name="Wyszukiwarka WWW (dla opcji „Wyszukaj w Internecie”)"/>
 					<Item id="6272" name="DuckDuckGo"/>
 					<Item id="6273" name="Google"/>
 					<Item id="6274" name="Bing"/>
@@ -973,24 +1002,25 @@ Możesz zdefiniować kilka znaczników kolumn poprzez rozdzielenie różnych lic
 					<Item id="6308" name="Minimalizuj do zasobnika systemowego"/>
 					<Item id="6312" name="Autowykrywanie stanu pliku"/>
 					<Item id="6313" name="Uaktualniaj po cichu"/>
-					<Item id="6318" name="Hiperłącza w treści"/>
 					<Item id="6325" name="Przewiń na koniec po uaktualnieniu"/>
-					<Item id="6319" name="Włącz"/>
-					<Item id="6320" name="Nie podkreślaj"/>
 					<Item id="6322" name="Rozszerzenie pliku sesji:"/>
 					<Item id="6323" name="Automatycznie aktualizuj Textrument"/>
+					<Item id="6351" name="W oknie zapisu ustaw filtr rozszerzenia pliku na *.*"/>
 					<Item id="6324" name="Przełączanie dokumentów (Ctrl+TAB)"/>
 					<Item id="6331" name="Pokazuj w pasku tytułu tylko nazwę pliku"/>
 					<Item id="6334" name="Automatycznie wykrywaj kodowanie"/>
 					<Item id="6349" name="Użyj DirectWrite (może poprawić wyświetlanie znaków specjalnych, wymagany restart Textrument)"/>
-					<Item id="6350" name="Włącz tryb fullbox"/>
 					<Item id="6337" name="Rozszerzenie pliku projektu:"/>
-					<!-- obszaru roboczego -->
 					<Item id="6114" name="Włącz"/>
 					<Item id="6117" name="Zgodnie z ostatnim użyciem (MRU)"/>
 					<Item id="6344" name="Podgląd dokumentów"/>
 					<Item id="6345" name="Po najechaniu na kartę"/>
 					<Item id="6346" name="Po najechaniu na mapę dokumentu"/>
+					<Item id="6360" name="Wycisz wszystkie dźwięki"/>
+					<Item id="6318" name="Hiperłącza w treści"/>
+					<Item id="6319" name="Włącz"/>
+					<Item id="6320" name="Nie podkreślaj"/>
+					<Item id="6350" name="Włącz tryb fullbox"/>
 				</MISC>
 			</Preference>
 			<MultiMacro title="Uruchom makro wielokrotnie">
@@ -1023,7 +1053,8 @@ Możesz zdefiniować kilka znaczników kolumn poprzez rozdzielenie różnych lic
 				<Item id="1" name="OK"/>
 				<Item id="2" name="Anuluj"/>
 			</ColumnEditor>
-			<FindInFinder title="Szukaj wśród znalezionych">
+			<FindInFinder title="Znajdź w wynikach wyszukiwania">
+				<!-- Szukaj wśród znalezionych -->
 				<Item id="1" name="Znajdź wszystkie"/>
 				<Item id="2" name="Zamknij"/>
 				<Item id="1711" name="Szukany &amp;tekst:"/>
@@ -1050,34 +1081,44 @@ Możesz zdefiniować kilka znaczników kolumn poprzez rozdzielenie różnych lic
 			<!-- $INT_REPLACE$ is a place holder, don't translate it -->
 			<ContextMenuXmlEditWarning title="Edycja menu kontekstowego" message="Edycja pliku contextMenu.xml pozwala na zmianę menu kontekstowego dostępnego w Textrument pod prawym przyciskiem myszy.
 Żeby zmiany dokonane contextMenu.xml weszły w życie, konieczne jest ponowne uruchomienie Textrument."/>
-			<NppHelpAbsentWarning title="Plik nie istnieje" message="
-nie istnieje. Można go pobrać ze strony internetowej Textrument."/>
 			<SaveCurrentModifWarning title="Zapis bieżących zmian" message="Bieżące zmiany muszą zostać zapisane.
 Po zapisaniu nie będzie można ich wycofać.
 
 Kontynuować?"/>
+			<!-- HowToReproduce: when you openned file is modified but unsaved yet, and you are changing file encoding. -->
 			<LoseUndoAbilityWarning title="Utrata możliwości cofania zmian" message="Bieżące zmiany muszą zostać zapisane.
 Po zapisaniu nie będzie można ich wycofać.
 
 Kontynuować?"/>
+			<!-- HowToReproduce: when you openned file is modified and saved, then you are changing file encoding. -->
 			<CannotMoveDoc title="Przeniesienie do nowej instancji Textrument" message="Dokument został zmodyfikowany. Zapisz go i spróbuj ponownie."/>
+			<!-- HowToReproduce: From your Textrument drag & drop a clean (not dirty) file to outside of Textrument, another instance of Textrument will be created. Then from your first Textrument drag & drop an unsaved file to the new instance. -->
 			<DocReloadWarning title="Ponowne załadowanie" message="Czy na pewno chcesz ponownie załadować bieżący plik i stracić wszystkie dokonane w nim zmiany?"/>
 			<FileLockedWarning title="Nieudany zapis" message="Plik może być obecnie otwarty w innym programie."/>
 			<FileAlreadyOpenedInNpp title="" message="Plik jest już otwarty w Textrument."/>
+			<!-- HowToReproduce: Open a new document and open a file "c:/tmp/foo", save this new document by choosing "c:/tmp/foo" as file to save, reply the override popup "yes", then this message appears. -->
+			<RenameTabTemporaryNameAlreadyInUse title="Nieudana zmiana nazwy" message="Podana nazwa jest używana przez inną kartę."/>
+			<!-- HowToReproduce: Rename the tab of an untitled document and provide a name that is the same as an already-existing tab of an untitled document. -->
 			<DeleteFileFailed title="Usuwanie pliku" message="Nie udało się usunąć pliku."/>
+			<!-- HowToReproduce: this message prevents from system failure. It's hard to reproduce. -->
 
 			<NbFileToOpenImportantWarning title="Otwarcie wielu plików" message="Liczba plików do otwarcia wynosi $INT_REPLACE$.
 Czy na pewno chcesz tyle otworzyć?"/>
+			<!-- HowToReproduce: Check "Open all files of folder instead of launching Folder as Workspace on folder dropping" in "Default Directory" of Preferences dialog, then drop a folder which contains more then 200 files into Textrument. -->
 			<SettingsOnCloudError title="Ustawienia chmury" message="Folder podany w ścieżce chmury dostępny jest tylko do odczytu
 lub potrzebuje specjalnych uprawnień do modyfikacji jego zawartości.
 Ustawienia chmury zostaną wycofane. Nową ścieżkę można podać w oknie preferencji."/>
 			<FilePathNotFoundWarning title="Otwarcie pliku" message="Wybrany plik nie istnieje."/>
+			<!-- HowToReproduce: this message prevents from system failure. It's hard to reproduce. -->
 			<SessionFileInvalidError title="Ładowanie sesji" message="Nie udało się załadować sesji. Plik sesji jest uszkodzony lub nieprawidłowy."/>
+			<!-- HowToReproduce: Save current session via menu "File -> Save Session...", use another editor to modify the session you saved to make it an invalid xml file. Then load this invalid session via menu "File -> Load Session...". -->
 			<DroppingFolderAsProjectModeWarning title="Nieprawidłowe działanie" message="Pliki i foldery muszą być przenoszone do programu osobno, ponieważ aktywny jest tryb „Folder jako Projekt”.
 Żeby to zmienić, należy włączyć opcję „Nie traktuj przenoszonego folderu jako obszaru roboczego, tylko ładuj wszystkie jego pliki” w zakładce „Domyślna ścieżka” w oknie preferencji."/>
 			<SortingError title="Błąd sortowania" message="Nie można wykonać sortowania przez linię numer $INT_REPLACE$."/>
+			<!-- HowToReproduce: this message prevents from system failure. It's hard to reproduce. -->
 			<ColumnModeTip title="Wskazówka dotycząca edycji kolumnowej" message="ALT+LPM oraz Alt+Shift+Strzałka przełączają tryb kolumnowy."/>
 			<BufferInvalidWarning title="Błąd zapisywania" message="Nie udało się zapisać. Błąd bufora."/>
+			<!-- HowToReproduce: this message prevents from system failure. It's hard to reproduce. -->
 			<DoCloseOrNot title="Zachowywanie nieistniejącego pliku" message="Plik „$STR_REPLACE$” nie istnieje.
 Czy mimo to zachować go w edytorze?"/>
 			<DoDeleteOrNot title="Usuwanie" message="Plik „$STR_REPLACE$”
@@ -1095,27 +1136,37 @@ Przeładować go?"/>
 został zmodyfikowany przez inny program.
 Przeładować go i stracić wszystkie zmiany dokonane w Textrument?"/>
 			<PrehistoricSystemDetected title="Antyczny system" message="Wykryto antyczny system operacyjny. Przepraszamy, ale ta funkcja działa jedynie na nowoczesnych systemach."/>
+			<!-- HowToReproduce: Launch "Document Map" under Windows XP. -->
 			<XpUpdaterProblem title="Samoaktualizacja Textrument" message="Automatyczne aktualizowanie Textrument jest niemożliwe w systemie Windows XP ze względu na przestarzałe sposoby ochrony systemu.
 Uruchomić stronę internetową Textrument z najnowszą wersją programu?"/>
+			<!-- HowToReproduce: Run menu "? -> Update Textrument" under Windows XP. -->
 			<GUpProxyConfNeedAdminMode title="Proxy Settings" message="Uruchom Textrument w trybie administratora aby skonfigurować proxy."/>
 			<DocTooDirtyToMonitor title="Problem z monitorowaniem" message="Plik został naruszony. Musi zostać pierw zapisany, żeby mógł być monitorowany."/>
 			<DocNoExistToMonitor title="Problem z monitorowaniem" message="Plik musi istnieć na dysku, żeby być monitorowany."/>
 			<FileTooBigToOpen title="Problem z rozmiarem" message="Plik jest zbyt duży, żeby mógł być otwarty przez Textrument."/>
+			<!-- HowToReproduce: Try to open a 4GB file (it's not easy to reproduce, it depends on your system). -->
 			<CreateNewFileOrNot title="Tworzenie nowego pliku" message="Plik „$STR_REPLACE$” nie istnieje. Utworzyć go?"/>
 			<CreateNewFileError title="Tworzenie nowego pliku" message="Nie można utworzyć pliku o nazwie „$STR_REPLACE$”."/>
+			<!-- HowToReproduce: this message prevents from system failure. It's hard to reproduce. -->
 			<OpenFileError title="Błąd" message="Nie można otworzyć pliku „$STR_REPLACE$”."/>
 			<FileBackupFailed title="Błąd kopii zapasowej" message="Nie udało się utworzyć kopii zapasowej poprzedniej wersji pliku w katalogu „$STR_REPLACE$”.
 
 Zapisać bieżący plik bez kopii?"/>
+			<!-- HowToReproduce: this message prevents from system failure. It's hard to reproduce. -->
 			<LoadStylersFailed title="Błąd pliku stylers.xml" message="Nie udało się załadować pliku „$STR_REPLACE$”!"/>
 			<LoadLangsFailed title="Konfigurator" message="Nie udało się załadować pliku „langs.xml”!
 Odzyskać go?"/>
+			<!-- HowToReproduce: Close Textrument. Use another editor to remove all content of "langs.xml" (0 length) then save it. Open Textrument. -->
 			<LoadLangsFailedFinal title="Konfigurator" message="Nie udało się załadować pliku „langs.xml”!"/>
+			<!-- HowToReproduce: Close Textrument. Use another editor to make "langs.xml" an invalid xml file then save it. Open Textrument. -->
 			<FolderAsWorspaceSubfolderExists title="Problem z obszarem roboczym" message="Przed dodaniem folderu „$STR_REPLACE$”
 należy usunąć z niego podfolder."/>
+			<!-- HowToReproduce: Add a folder like "c:\temp\aFolder\" into "Folder as Workspace" panel, then try to add "c:\temp\". -->
 
 			<ProjectPanelChanged title="$STR_REPLACE$" message="Obszar roboczy został zmodyfikowany. Zapisać go?"/>
-			<ProjectPanelChangedSaveError title="$STR_REPLACE$" message="Twój obszar roboczy nie został zapisany."/>
+			<ProjectPanelSaveError title="$STR_REPLACE$" message="Wystąpił błąd podczas zapisywania pliku projektu.
+Twój obszar roboczy nie został zapisany."/>
+			<!-- HowToReproduce: this message prevents from system failure. It's hard to reproduce. -->
 			<ProjectPanelOpenDoSaveDirtyWsOrNot title="Otwarcie obszaru roboczego" message="Bieżący obszar roboczy został zmodyfikowany. Zapisać bieżący projekt?"/>
 			<ProjectPanelNewDoSaveDirtyWsOrNot title="Nowy obszar roboczy" message="Bieżący obszar roboczy został zmodyfikowany. Zapisać bieżący projekt?"/>
 			<ProjectPanelOpenFailed title="Otwarcie obszaru roboczego" message="Nie udało się otworzyć projektu.
@@ -1132,15 +1183,17 @@ Proszę wybrać inną."/>
 			<SCMapperDoDeleteOrNot title="Na pewno?" message="Czy na pewno chcesz usunąć ten skrót?"/>
 			<FindCharRangeValueError title="Błąd zakresu wartości" message="Wartość musi się mieścić w przedziale liczbowym między 0 i 255."/>
 			<OpenInAdminMode title="Błąd zapisywania" message="Nie udało się zapisać pliku, ponieważ ten może być chroniony.
-Czy chcesz uruchomić Notepad++ jako Administrator?"/>
+Czy chcesz uruchomić Textrument jako Administrator?"/>
 			<OpenInAdminModeWithoutCloseCurrent title="Błąd zapisywania" message="Nie udało się zapisać pliku, ponieważ ten może być chroniony.
-Czy chcesz uruchomić Notepad++ jako Administrator?"/>
-			<OpenInAdminModeFailed title="Błąd uprawnień Administratora" message="Nie udało się otworzyć Notepad++ jako Administrator."/>
+Czy chcesz uruchomić Textrument jako Administrator?"/>
+			<OpenInAdminModeFailed title="Błąd uprawnień Administratora" message="Nie udało się otworzyć Textrument jako Administrator."/>
+			<!-- HowToReproduce: When you have no Admin privilege and you try to save a modified file in a protected location (for example: any file in sub-folder of "C:\Program Files\". This message will appear after replying "Yes" to "Open in Admin mode" dialog. -->
 			<ViewInBrowser title="Przeglądanie pliku w przeglądarce" message="Nie udało się odnaleźć powiązanego programu w systemie."/>
-			<ExitToUpdatePlugins title="Notepad++ musi zostać zamknięty" message="Kliknięcie TAK zamknie Notepad++.
-Notepad++ uruchomi się ponownie, kiedy tylko wszystkie działania zostaną zakończone.
+			<ExitToUpdatePlugins title="Textrument musi zostać zamknięty" message="Kliknięcie TAK zamknie Textrument.
+Textrument uruchomi się ponownie, kiedy tylko wszystkie działania zostaną zakończone.
 Kontynuować?"/>
-			<NeedToRestartToLoadPlugins title="Ponowne uruchomienie Notepad++" message="Notepad++ musi zostać ponownie uruchomiony, aby zainstalowane wtyczki mogły działać."/>
+			<NeedToRestartToLoadPlugins title="Ponowne uruchomienie Textrument" message="Textrument musi zostać ponownie uruchomiony, aby zainstalowane wtyczki mogły działać."/>
+			<!-- HowToReproduce: Import a plugin via menu "Settings->Import->Import Plugin(s)...". -->
 		</MessageBox>
 		<ClipboardHistory>
 			<PanelTitle name="Historia schowka"/>
@@ -1175,6 +1228,10 @@ Kontynuować?"/>
 		<FolderAsWorkspace>
 			<PanelTitle name="Obszar roboczy"/>
 			<SelectFolderFromBrowserString name="Wybierz folder do dodania do panelu obszaru roboczego."/>
+			<ExpandAllFoldersTip name="Rozwiń wszystkie foldery"/>
+			<CollapseAllFoldersTip name="Zwiń wszystkie foldery"/>
+			<LocateCurrentFileTip name="Zlokalizuj bieżący plik"/>
+			<!-- w obszarze roboczym -->
 			<Menus>
 				<Item id="3511" name="Usuń"/>
 				<Item id="3512" name="Usuń wszystkie"/>
@@ -1183,7 +1240,7 @@ Kontynuować?"/>
 				<Item id="3515" name="Otwórz"/>
 				<Item id="3516" name="Ścieżka do schowka"/>
 				<Item id="3517" name="Szukaj w plikach..."/>
-				<Item id="3518" name="Otwórz w Eksploratorze"/>
+				<Item id="3518" name="Otwórz w eksploratorze plików"/>
 				<Item id="3519" name="Otwórz w wierszu poleceń"/>
 				<Item id="3520" name="Nazwa pliku do schowka"/>
 			</Menus>
@@ -1206,6 +1263,7 @@ Kontynuować?"/>
 					<Item id="3126" name="Zapisz jako..."/>
 					<Item id="3127" name="Zapisz kopię jako..."/>
 					<Item id="3121" name="Dodaj nowy projekt"/>
+					<Item id="3128" name="Szukaj w projektach..."/>
 				</WorkspaceMenu>
 				<ProjectMenu>
 					<Item id="3111" name="Zmień nazwę"/>
@@ -1237,13 +1295,17 @@ Kontynuować?"/>
 		<MiscStrings>
 			<!-- $INT_REPLACE$  and $STR_REPLACE$ are a place holders, don't translate these place holders -->
 			<word-chars-list-tip value="Pozwala to włączać określone znaki do zaznaczenia powstałego w wyniku podwójnego kliknięcia LPM na słowo lub wyszukania frazy z zaznaczoną opcją „Patrz tylko na całe słowa”."/>
+			<!-- HowToReproduce: In "Delimiter" section of Preferences dialog, hover your mouse on the "?" button. -->
+
 			<word-chars-list-warning-begin value="Uwaga! W twojej liście są: "/>
-			<word-chars-list-space-warning value="spacja ($INT_REPLACE$)"/>
-			<word-chars-list-tab-warning value="tabulator ($INT_REPLACE$)"/>
+			<word-chars-list-space-warning value="spacje ($INT_REPLACE$)"/>
+			<word-chars-list-tab-warning value="tabulatory ($INT_REPLACE$)"/>
 			<word-chars-list-warning-end value="."/>
+			<!-- HowToReproduce: In "Delimiter" section of Preferences dialog, check "Add your character as part of word\r(don't choose it unless you know what you're doing)", then type a white-space in the text field. -->
 			<cloud-invalid-warning value="Nieprawidłowa ścieżka."/>
-			<cloud-restart-warning value="Wymagane ponowne uruchomienie Notepad++."/>
-			<cloud-select-folder value="Wybierz folder, który Notepad++ ma wykorzystywać do zapisu i odczytu swoich ustawień."/>
+			<cloud-restart-warning value="Wymagane ponowne uruchomienie Textrument."/>
+			<cloud-select-folder value="Wybierz folder, który Textrument ma wykorzystywać do zapisu i odczytu swoich ustawień."/>
+			<!-- HowToReproduce: In "Cloud" section of Preferences dialog, check "Set your cloud location path here: ", then click the button "...". This message is displayed in the "Browse For Folder" dialog. -->
 			<shift-change-direction-tip value="Shift+Enter pozwala wyszukiwać w drugą stronę."/>
 			<two-find-buttons-tip value="Tryb dwóch przycisków szukania"/>
 			<find-in-files-filter-tip value="Szukaj wśród plików cpp, cxx, h, hxx i hpp:
@@ -1251,6 +1313,7 @@ Kontynuować?"/>
 
 Szukaj wśród wszystkich plików z wyjątkiem exe, obj i log:
 *.* !*.exe !*.obj !*.log"/>
+			<!-- HowToReproduce: Tip of mouse hovered on "Filters" label in "Find in Files" secction of Find dialog. -->
 			<find-status-top-reached value="Szukanie: Plik przeszukano do góry. Znaleziono 1. wystąpienie od dołu."/>
 			<find-status-end-reached value="Szukanie: Plik przeszukano do dołu. Znaleziono 1. wystąpienie od góry."/>
 			<find-status-replaceinfiles-1-replaced value="Zamienianie w plikach: Zamieniono 1 wystąpienie"/>
@@ -1277,14 +1340,16 @@ Szukaj wśród wszystkich plików z wyjątkiem exe, obj i log:
 			<find-status-replace-readonly value="Zamienianie: Nie można zamienić. Plik jest dostępny tylko do odczytu."/>
 			<find-status-cannot-find value="Szukanie: Nie udało się znaleźć „$STR_REPLACE$”."/>
 			<find-status-scope-selection value="w zaznaczonym tekście"/>
-			<find-status-scope-all value="w cały pliku"/>
+			<find-status-scope-all value="w całym pliku"/>
 			<find-status-scope-backward value="od początku pliku do aktualnego położenia kursora"/>
 			<find-status-scope-forward value="od aktualnego położenia kursora do końca pliku"/>
-			<finder-find-in-finder value="Szukaj w wyszukanych..."/>
-			<finder-close-this value="Zamknij"/>
+			<finder-find-in-finder value="Znajdź w tych wynikach wyszukiwania..."/>
+			<finder-close-this value="Zamknij te wyniki wyszukiwania"/>
 			<finder-collapse-all value="Zwiń wszystko"/>
 			<finder-uncollapse-all value="Rozwiń wszystko"/>
-			<finder-copy value="Kopiuj"/>
+			<finder-copy value="Kopiuj">
+				<Item value="Kopiuj"/>
+			</finder-copy>
 			<finder-select-all value="Zaznacz wszystko"/>
 			<finder-clear-all value="Odznacz wszystko"/>
 			<finder-open-all value="Otwórz wszystko"/>
@@ -1294,6 +1359,8 @@ Szukaj wśród wszystkich plików z wyjątkiem exe, obj i log:
 			<common-name value="Nazwa: "/>
 			<tabrename-title value="Zmień nazwę bieżącej karty"/>
 			<tabrename-newname value="Nowa nazwa: "/>
+			<splitter-rotate-left value="Obróć w lewo"/>
+			<splitter-rotate-right value="Obróć w prawo"/>
 			<recent-file-history-maxfile value="Maks. plików: "/>
 			<language-tabsize value="Rozmiar tabulatora: "/>
 			<userdefined-title-new value="Nowy język..."/>
@@ -1312,18 +1379,25 @@ Szukaj wśród wszystkich plików z wyjątkiem exe, obj i log:
 			<summary-nbsel1 value=" zaznaczonych znaków ("/>
 			<summary-nbsel2 value=" bajtów) w "/>
 			<summary-nbrange value=" zakresach"/>
+			<find-in-files-progress-title value="Szukanie w plikach w toku..."/>
 			<replace-in-files-confirm-title value="Na pewno chcesz kontynuować?"/>
 			<replace-in-files-confirm-directory value="Czy na pewno chcesz zastąpić wszystkie wystąpienia w:"/>
 			<replace-in-files-confirm-filetype value="Dla plików pasujących do filtrów:"/>
+			<replace-in-files-progress-title value="Zastępowanie w plikach w toku..."/>
+			<replace-in-projects-confirm-title value="Na pewno chcesz kontynuować?"/>
+			<replace-in-projects-confirm-message value="Czy na pewno chcesz zastąpić wszystkie wystąpienia we wszystkich dokumentach w wybranych panelach projektów?"/>
 			<replace-in-open-docs-confirm-title value="Na pewno chcesz kontynuować?"/>
 			<replace-in-open-docs-confirm-message value="Czy na pewno chcesz zastąpić wszystkie wystąpienia we wszystkich otwartych plikach?"/>
-			<find-result-caption value="Wynik wyszukiwania"/>
+			<find-result-caption value="Wyniki wyszukiwania"/>
 			<find-result-title value="Wyszukanie"/>
+			<!-- Must not begin with space or tab character -->
 			<find-result-title-info value="($INT_REPLACE1$ trafień w $INT_REPLACE2$ plikach z $INT_REPLACE3$ przeszukiwanych)"/>
 			<find-result-title-info-selections value="($INT_REPLACE1$ trafień w $INT_REPLACE2$ zaznaczeniu z $INT_REPLACE3$ przeszukiwanych)"/>
 			<find-result-title-info-extra value=" - Tryb filtrowania linii: wyświetla tylko przefiltrowane wyniki"/>
 			<find-result-hits value="($INT_REPLACE$ trafień)"/>
+			<find-result-line-prefix value="Linia"/>
+			<!-- Must not begin with space or tab character -->
 			<find-regex-zero-length-match value="dopasowanie o zerowej długości"/>
 		</MiscStrings>
 	</Native-Langue>
-</NotepadPlus>
+</Textrument>

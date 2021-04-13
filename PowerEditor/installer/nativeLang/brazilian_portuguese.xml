@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!-- Brazilian Portuguese by Hélio de Souza  -->
-<!-- Updated: Jan 2020  |  For Notepad++ 7.8.3 -->
+<!-- Updated: Jan 2020  |  For Textrument 7.8.3 -->
 <!-- https://sway.office.com/RVue6qySNJ2DzYrs -->
-<NotepadPlus>
-	<Native-Langue name="Brazilian Portuguese" filename="brazilian_portuguese.xml" version="7.8.3">
+<Textrument>
+	<Native-Langue name="Brazilian Portuguese" filename="brazilian_portuguese.xml" version="v1.0.0">
 		<Menu>
 			<Main>
 				<!-- Main Menu Entries -->
@@ -294,16 +294,16 @@
 					<Item id="46250" name="Defina a sua linguagem..."/>
 					<Item id="46300" name="Pasta de Linguagens definidas pelo usuário..."/>
 					<Item id="46180" name="Definida pelo usuário"/>
-					<Item id="47000" name="Sobre o Notepad++..."/>
+					<Item id="47000" name="Sobre o Textrument..."/>
 					<Item id="47010" name="Argumentos de Linha de Comando..."/>
-					<Item id="47001" name="HomePage do Notepad++"/>
-					<Item id="47002" name="Página do Projeto Notepad++"/>
+					<Item id="47001" name="HomePage do Textrument"/>
+					<Item id="47002" name="Página do Projeto Textrument"/>
 					<Item id="47003" name="NpWiki++ (Ajuda Online)"/>
 					<Item id="47004" name="Fórum"/>
 					<Item id="47011" name="Suporte online"/>
 					<Item id="47012" name="Informação de depuração..."/>
 					<Item id="47005" name="Obter mais plugins"/>
-					<Item id="47006" name="Atualizar o Notepad++"/>
+					<Item id="47006" name="Atualizar o Textrument"/>
 					<Item id="47009" name="Configurar Atualizador Proxy..."/>
 					<Item id="48005" name="Importar Plugins..."/>
 					<Item id="48006" name="Importar Temas..."/>
@@ -335,7 +335,7 @@
 				</Commands>
 			</Main>
 			<Splitter>
-			</Splitter>
+            </Splitter>
 			<TabBar>
 				<Item CMID="0" name="Fechar esta aba"/>
 				<Item CMID="1" name="Fechar todas exceto esta"/>
@@ -400,7 +400,7 @@
 				<Item id="1686" name="Transparência"/>
 				<Item id="1703" name="Coin. quebra de linhas"/>
 				<Item id="1721" name="▲"/>
-				<Item id="1723" name="▼ Localizar próximo"/>
+				<Item id="1723" name="▼ Próximo"/>
 			</Find>
 
 			<FindCharsInRange title="Localizar Caracteres no Intervalo...">
@@ -783,12 +783,12 @@
 					<Item id="6413" name="Diretório padrão (Abrir/Salvar)"/>
 					<Item id="6414" name="De acordo com documento atual"/>
 					<Item id="6415" name="Lembrar último diretório"/>
-					<Item id="6430" name="Usar o novo estilo de diálogo Salvar (sem função de extensão de arquivo)"/>
 					<Item id="6431" name="Abrir todos os arquivos da pasta em vez de usar a pasta como espaço de trabalho"/>
+					<Item id="6430" name="Usar o novo estilo de diálogo Salvar"/>
 				</DefaultDir>
 
 				<FileAssoc title="Tipos de Arquivos">
-					<Item id="4008" name="Para usar este recurso, reinicie o Notepad++ como Administrador."/>
+					<Item id="4008" name="Para usar este recurso, reinicie o Textrument como Administrador."/>
 					<Item id="4009" name="Extensões suportadas :"/>
 					<Item id="4010" name="Extensões registradas :"/>
 				</FileAssoc>
@@ -896,10 +896,10 @@
 
 				<MultiInstance title="Múltiplas instâncias">
 					<Item id="6151" name="Configurações de múltiplas instâncias"/>
-					<Item id="6152" name="Abrir sessão em uma nova instância do Notepad++"/>
+					<Item id="6152" name="Abrir sessão em uma nova instância do Textrument"/>
 					<Item id="6153" name="Sempre usar o modo múltipla instância"/>
 					<Item id="6154" name="Padrão (somente uma instância)"/>
-					<Item id="6155" name="* Após alterar estas configurações será necessário reiniciar o Notepad++."/>
+					<Item id="6155" name="* Após alterar estas configurações será necessário reiniciar o Textrument."/>
 				</MultiInstance>
 
 				<Delimiter title="Delimitador">
@@ -944,11 +944,11 @@
 					<Item id="6319" name="Habilitar"/>
 					<Item id="6320" name="Não sublinhar"/>
 					<Item id="6322" name="Extensão da sessão:"/>
-					<Item id="6323" name="Habilitar auto-atualização do Notepad++"/>
+					<Item id="6323" name="Habilitar auto-atualização do Textrument"/>
 					<Item id="6324" name="Alternar documentos (Ctrl+Tab)"/>
 					<Item id="6331" name="Mostrar somente o nome do arquivo no título"/>
 					<Item id="6334" name="Autodetectar codificação do caractere"/>
-					<Item id="6314" name="Usar fonte monoespaçada na caixa de diálogo Localizar (Necessário reiniciar o Notepad++)"/>
+					<Item id="6314" name="Usar fonte monoespaçada na caixa de diálogo Localizar (Necessário reiniciar o Textrument)"/>
 					<Item id="6337" name="Extensão do espaço de trabalho:"/>
 					<Item id="6114" name="Habilitar"/>
 					<Item id="6117" name="Ordenar pelo mais recente"/>
@@ -1010,11 +1010,12 @@
 				<Item id="5" name="Nã&amp;o para todos"/>
 			</DoSaveOrNot>
 		</Dialog>
-		<MessageBox> <!-- $INT_REPLACE$ is a place holder, don't translate it -->
+		<MessageBox>
+			<!-- $INT_REPLACE$ is a place holder, don't translate it -->
 			<ContextMenuXmlEditWarning title="Editando contextMenu" message="Editar o arquivo contextMenu.xml permite que você modifique as mensagens do menu de contexto.
-Reinicie o Notepad++ para que as modificações tenham efeito."/>
+Reinicie o Textrument para que as modificações tenham efeito."/>
 			<NppHelpAbsentWarning title="Arquivo não existe" message="
-não existe. Por favor, baixe o arquivo no site do Notepad++."/>
+não existe. Por favor, baixe o arquivo no site do Textrument."/>
 			<SaveCurrentModifWarning title="Salvar modificações atuais" message="Você deve salvar a modificação atual.
 As modificações salvas não poderão ser desfeitas.
 
@@ -1023,10 +1024,10 @@ Deseja continuar?"/>
 As modificações salvas não poderão ser desfeitas.
 
 Deseja continuar?"/>
-			<CannotMoveDoc title="Mover para nova instância do Notepad++" message="Documento alterado, salve-o e tente novamente."/>
-			<DocReloadWarning title="Recarregar" message="Deseja recarregar o arquivo atual e perder as modificações feitas no Notepad++?"/>
+			<CannotMoveDoc title="Mover para nova instância do Textrument" message="Documento alterado, salve-o e tente novamente."/>
+			<DocReloadWarning title="Recarregar" message="Deseja recarregar o arquivo atual e perder as modificações feitas no Textrument?"/>
 			<FileLockedWarning title="Falha ao salvar" message="Por favor, verifique se este arquivo está aberto em outro programa"/>
-			<FileAlreadyOpenedInNpp title="" message="O arquivo já está aberto no Notepad++."/>
+			<FileAlreadyOpenedInNpp title="" message="O arquivo já está aberto no Textrument."/>
 			<DeleteFileFailed title="Excluir Arquivo" message="Falha ao excluir arquivo"/>
 
 			<NbFileToOpenImportantWarning title="A quantidade de arquivos a serem abertos é muito grande" message="$INT_REPLACE$ arquivos estão prestes a serem abertos.
@@ -1055,14 +1056,14 @@ Deseja recarregá-lo?"/>
 			<DoReloadOrNotAndLooseChange title="Recarregar" message="&quot;$STR_REPLACE$&quot;
 
 Este arquivo foi modificado por outro programa.
-Deseja recarregá-lo e perder as alterações feitas no Notepad++?"/>
+Deseja recarregá-lo e perder as alterações feitas no Textrument?"/>
 			<PrehistoricSystemDetected title="Sistema pré-histórico detectado" message="Parece que você ainda usa um sistema pré-histórico. Esse recurso funciona apenas em um sistema moderno. Desculpe."/>
-			<XpUpdaterProblem title="Atualizador do Notepad++" message="O atualizador do Notepad++ não é compatível com o Windows XP devido à camada de segurança obsoleta dele.
-Deseja ir para a página do Notepad++ e baixar a última versão?"/>
-			<GUpProxyConfNeedAdminMode title="Proxy Settings" message="Reinicie o Notepad++ como Admin para configurar o proxy."/>
+			<XpUpdaterProblem title="Atualizador do Textrument" message="O atualizador do Textrument não é compatível com o Windows XP devido à camada de segurança obsoleta dele.
+Deseja ir para a página do Textrument e baixar a última versão?"/>
+			<GUpProxyConfNeedAdminMode title="Proxy Settings" message="Reinicie o Textrument como Admin para configurar o proxy."/>
 			<DocTooDirtyToMonitor title="Problema de monitoramento" message="O documento está sujo. Por favor, salve a modificação antes de monitorá-lo."/>
 			<DocNoExistToMonitor title="Problema de monitoramento" message="O arquivo deve existir para ser monitorado."/>
-			<FileTooBigToOpen title="Problema no tamanho do arquivo" message="Arquivo é muito grande para ser aberto pelo Notepad++"/>
+			<FileTooBigToOpen title="Problema no tamanho do arquivo" message="Arquivo é muito grande para ser aberto pelo Textrument"/>
 			<CreateNewFileOrNot title="Criar novo arquivo" message="&quot;$STR_REPLACE$&quot; não existe. Deseja criá-lo?"/>
 			<CreateNewFileError title="Criar novo arquivo" message="Não é possível criar o arquivo &quot;$STR_REPLACE$&quot;."/>
 			<OpenFileError title="ERRO" message="Não pode abrir o arquivo &quot;$STR_REPLACE$&quot;."/>
@@ -1094,15 +1095,15 @@ Por favor, dê outro."/>
 			<SCMapperDoDeleteOrNot title="Você tem certeza?" message="Tem certeza de que deseja excluir este atalho?"/>
 			<FindCharRangeValueError title="Problema do Valor do intervalo" message="Você deve digitar entre 0 e 255."/>
 			<OpenInAdminMode title="Falha ao salvar" message="O arquivo não pode ser salvo e pode estar protegido.
-Deseja iniciar o Notepad++ no modo Administrador?"/>
+Deseja iniciar o Textrument no modo Administrador?"/>
 			<OpenInAdminModeWithoutCloseCurrent title="Falha ao salvar" message="O arquivo não pode ser salvo e pode estar protegido.
-Deseja iniciar o Notepad++ no modo Administrador?"/>
-			<OpenInAdminModeFailed title="Falha ao abrir no modo Administrador" message="O Notepad++ não pode ser aberto no modo Administrador."/>
+Deseja iniciar o Textrument no modo Administrador?"/>
+			<OpenInAdminModeFailed title="Falha ao abrir no modo Administrador" message="O Textrument não pode ser aberto no modo Administrador."/>
 			<ViewInBrowser title="Visualizar o arquivo atual no navegador" message="O aplicativo não pode ser encontrado em seu sistema."/>
-			<ExitToUpdatePlugins title="O Notepad++ será encerrado" message="Se você clicar em Sim, o Notepad++ será encerrado para continuar as operações.
-O Notepad++ será reiniciado depois que todas as operações forem concluídas.
+			<ExitToUpdatePlugins title="O Textrument será encerrado" message="Se você clicar em Sim, o Textrument será encerrado para continuar as operações.
+O Textrument será reiniciado depois que todas as operações forem concluídas.
 Deseja continuar?"/>
-			<NeedToRestartToLoadPlugins title="O Notepad++ precisa ser reiniciado" message="Reinicie o Notepad++ para carregar os plugins instalados."/>
+			<NeedToRestartToLoadPlugins title="O Textrument precisa ser reiniciado" message="Reinicie o Textrument para carregar os plugins instalados."/>
 		</MessageBox>
 		<ClipboardHistory>
 			<PanelTitle name="Histórico da área de transferência"/>
@@ -1203,8 +1204,8 @@ Deseja continuar?"/>
 			<word-chars-list-tab-warning value="$INT_REPLACE$ TAB(s)"/>
 			<word-chars-list-warning-end value="  em sua lista de caracteres."/>
 			<cloud-invalid-warning value="Caminho inválido."/>
-			<cloud-restart-warning value="Favor reiniciar o Notepad++ para entrar em vigor."/>
-			<cloud-select-folder value="Selecione uma pasta de/para onde o Notepad++ lê/grava suas configurações"/>
+			<cloud-restart-warning value="Favor reiniciar o Textrument para entrar em vigor."/>
+			<cloud-select-folder value="Selecione uma pasta de/para onde o Textrument lê/grava suas configurações"/>
 			<shift-change-direction-tip value="Usar Shift+Enter para pesquisar na direção oposta."/>
 			<two-find-buttons-tip value="Modo 2 botões"/>
 			<find-in-files-filter-tip value="Procurar em cpp, cxx, h, hxx &amp;&amp; hpp:
@@ -1241,7 +1242,9 @@ Procurar em todos os arquivos, exceto exe, obj &amp;&amp; log:
 			<finder-close-this value="Fechar este localizador."/>
 			<finder-collapse-all value="Recolher tudo"/>
 			<finder-uncollapse-all value="Expandir tudo"/>
-			<finder-copy value="Copiar"/>
+			<finder-copy value="Copiar">
+				<Item value="Copiar"/>
+			</finder-copy>
 			<finder-select-all value="Selecionar tudo"/>
 			<finder-clear-all value="Limpar tudo"/>
 			<finder-open-all value="Abrir tudo"/>
@@ -1270,4 +1273,4 @@ Procurar em todos os arquivos, exceto exe, obj &amp;&amp; log:
 			<summary-nbrange value=" intervalo"/>
 		</MiscStrings>
 	</Native-Langue>
-</NotepadPlus>
+</Textrument>

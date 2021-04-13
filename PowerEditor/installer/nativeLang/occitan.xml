@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<NotepadPlus>
-	<Native-Langue name="Occitan" filename="occitan.xml" version="7.5.5">
+<Textrument>
+	<Native-Langue name="Occitan" filename="occitan.xml" version="v1.0.0">
 		<Menu>
 			<Main>
 				<!-- Main Menu Entries -->
@@ -284,12 +284,12 @@
 					<Item id="46250" name="Definís lo lengage..."/>
 					<Item id="46180" name="Definit per l'utilizaire"/>
 					<Item id="47000" name="A prepaus de Textrument..."/>
-					<Item id="47001" name="Pagina web de Notepad++"/>
-					<Item id="47002" name="Pagina del projècte Notepad++"/>
+					<Item id="47001" name="Pagina web de Textrument"/>
+					<Item id="47002" name="Pagina del projècte Textrument"/>
 					<Item id="47003" name="Documentacion en linha"/>
-					<Item id="47004" name="Comunautat Notepad++ (Forum)"/>
+					<Item id="47004" name="Comunautat Textrument (Forum)"/>
 					<Item id="47005" name="Obténer mai d'ajustons"/>
-					<Item id="47006" name="Actualizar Notepad++"/>
+					<Item id="47006" name="Actualizar Textrument"/>
 					<Item id="47009" name="Configurar lo proxy d'actualizacion..."/>
 					<Item id="47010" name="Arguments en linha de comandas..."/>
 					<Item id="47011" name="Supòrt en dirècte"/>
@@ -732,8 +732,8 @@
 					<Item id="6413" name="Dorsièr per default (Dobertura/Enregistrament)"/>
 					<Item id="6414" name="Seguir lo document actiu"/>
 					<Item id="6415" name="Remembrar lo darrièr dorsièr utilizat"/>
-					<Item id="6430" name="Utilizar la nòva fenèstra d'enregistrement "/>
 					<Item id="6431" name="Dobrir totes los fichièrs del dorsièr al moment del rebalar-depausar"/>
+					<Item id="6430" name="Utilizar la nòva fenèstra d'enregistrement "/>
 				</DefaultDir>
 				<RecentFilesHistory title="Ictoric fichièrs recents">
 					<Item id="6304" name="Istoric de fichièrs recents"/>
@@ -1061,8 +1061,8 @@ Deuretz tornar lançar Textrument per que siá efectiu."/>
 			<word-chars-list-tab-warning value="$INT_REPLACE$ tabulacion(s)"/>
 			<word-chars-list-warning-end value="  dins la vòstra tièra de caractèrs."/>
 			<cloud-invalid-warning value="Camin invalid."/>
-			<cloud-restart-warning value="Mercés de tornar lançar Notepad++ per que siá efectiu."/>
-			<cloud-select-folder value="Seleccionar un dorsièr d'ont Notepad++ escriu/legís sos paramètres"/>
+			<cloud-restart-warning value="Mercés de tornar lançar Textrument per que siá efectiu."/>
+			<cloud-select-folder value="Seleccionar un dorsièr d'ont Textrument escriu/legís sos paramètres"/>
 			<shift-change-direction-tip value="Utilizar Maj. + Entradaper cercar dins l'autre sens"/>
 			<two-find-buttons-tip value="2 mòdes de boton Cercar"/>
 
@@ -1095,4 +1095,4 @@ Deuretz tornar lançar Textrument per que siá efectiu."/>
 			<find-status-cannot-find value="Recèrca : Impossible de trobar lo tèxt &quot;$STR_REPLACE$&quot;"/>
 		</MiscStrings>
 	</Native-Langue>
-</NotepadPlus>
+</Textrument>

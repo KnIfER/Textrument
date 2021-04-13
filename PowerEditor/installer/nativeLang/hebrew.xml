@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<NotepadPlus>
-	<Native-Langue name="Hebrew" RTL="yes" filename="hebrew.xml">
+<Textrument>
+	<Native-Langue name="Hebrew" RTL="yes" filename="hebrew.xml" version="v1.0.0">
 		<Menu>
 			<Main>
 				<!-- Main Menu Entries -->
@@ -238,6 +238,10 @@
 					<Item id="50002" name="רמז פרמטרים לפונקציה"/>
 
 					<Item id="44105" name="הפעל את הפאנל אבל לא לעבור אותו"/>
+					<Item id="45014" name="מצב בינארי"/>
+					<Item id="48105" name="סרגל הכלים התאמה אישית"/>
+					<Item id="48106" name="סרגל כלי גלישה"/>
+					<Item id="48107" name="טאבים רב-קוי"/>
 				</Commands>
 			</Main>
 			<Splitter>
@@ -417,7 +421,12 @@
 					<Item id="24101" name="מפעילים מופעלים"/>
 				</Operator>
 			</UserDefine>
+			<ShortcutMapper>
+				<MainCommandNames>
+					<Item id="2147483547" name="ריק"/>
+				</MainCommandNames>
+			</ShortcutMapper>
 		</Dialog>
 	</Native-Langue>
-</NotepadPlus>
+</Textrument>
 

@@ -1,6 +1,6 @@
-<?xml version="1.0" encoding="utf-8"?>
-<NotepadPlus>
-	<Native-Langue name="台灣繁體" filename="taiwaneseMandarin.xml" version="7.9">
+<?xml version="1.0" encoding="UTF-8"?>
+<Textrument>
+	<Native-Langue name="台灣繁體" filename="taiwaneseMandarin.xml" version="v1.0.0">
 		<Menu>
 			<Main>
 				<!-- Main Menu Entries -->
@@ -42,21 +42,21 @@
 					<Item subMenuId="view-showSymbol" name="特殊字元"/>
 					<Item subMenuId="view-zoom" name="縮放"/>
 					<Item subMenuId="view-moveCloneDocument" name="移動/複製此檔案至另一個視窗"/>
-					<Item subMenuId="view-tab"  name="頁籤"/>
+					<Item subMenuId="view-tab" name="頁籤"/>
 					<Item subMenuId="view-collapseLevel" name="收折層數"/>
 					<Item subMenuId="view-uncollapseLevel" name="展開層數"/>
 					<Item subMenuId="view-project" name="專案"/>
-					<Item subMenuId="encoding-characterSets"  name="字元集"/>
-					<Item subMenuId="encoding-arabic"  name="阿拉伯文"/>
-					<Item subMenuId="encoding-baltic"  name="波羅的海文"/>
-					<Item subMenuId="encoding-celtic"  name="凱爾特文"/>
-					<Item subMenuId="encoding-cyrillic"  name="斯拉夫文"/>
-					<Item subMenuId="encoding-centralEuropean"  name="中歐語系"/>
-					<Item subMenuId="encoding-chinese"  name="中文"/>
-					<Item subMenuId="encoding-easternEuropean"  name="東歐語系"/>
-					<Item subMenuId="encoding-greek"  name="希臘文"/>
-					<Item subMenuId="encoding-hebrew"  name="希伯來文"/>
-					<Item subMenuId="encoding-japanese"  name="日文"/>
+					<Item subMenuId="encoding-characterSets" name="字元集"/>
+					<Item subMenuId="encoding-arabic" name="阿拉伯文"/>
+					<Item subMenuId="encoding-baltic" name="波羅的海文"/>
+					<Item subMenuId="encoding-celtic" name="凱爾特文"/>
+					<Item subMenuId="encoding-cyrillic" name="斯拉夫文"/>
+					<Item subMenuId="encoding-centralEuropean" name="中歐語系"/>
+					<Item subMenuId="encoding-chinese" name="中文"/>
+					<Item subMenuId="encoding-easternEuropean" name="東歐語系"/>
+					<Item subMenuId="encoding-greek" name="希臘文"/>
+					<Item subMenuId="encoding-hebrew" name="希伯來文"/>
+					<Item subMenuId="encoding-japanese" name="日文"/>
 					<Item subMenuId="encoding-korean" name="韓文"/>
 					<Item subMenuId="encoding-northEuropean" name="北歐語系"/>
 					<Item subMenuId="encoding-thai" name="泰文"/>
@@ -64,9 +64,9 @@
 					<Item subMenuId="encoding-westernEuropean" name="西歐語系"/>
 					<Item subMenuId="encoding-vietnamese" name="越南文"/>
 					<Item subMenuId="language-userDefinedLanguage" name="自訂程式語言"/>
-					<Item subMenuId="settings-import"  name="匯入"/>
-					<Item subMenuId="tools-md5"  name="MD5"/>
-					<Item subMenuId="tools-sha256"  name="SHA-256"/>
+					<Item subMenuId="settings-import" name="匯入"/>
+					<Item subMenuId="tools-md5" name="MD5"/>
+					<Item subMenuId="tools-sha256" name="SHA-256"/>
 				</SubEntries>
 
 				<!-- All Menu Items -->
@@ -75,6 +75,7 @@
 					<Item id="41002" name="開啟舊檔(&amp;O)..."/>
 					<Item id="41019" name="在檔案總管內"/>
 					<Item id="41020" name="在 CMD 內"/>
+					<Item id="41025" name="在資料夾工作區內"/>
 					<Item id="41003" name="關閉此檔案"/>
 					<Item id="41004" name="關閉所有檔案"/>
 					<Item id="41005" name="除此檔案外，關閉所有檔案"/>
@@ -85,7 +86,7 @@
 					<Item id="41007" name="儲存所有檔案(&amp;E)"/>
 					<Item id="41008" name="另存新檔(&amp;A)..."/>
 					<Item id="41010" name="列印(&amp;P)..."/>
-					<Item id="1001"  name="立即列印"/>
+					<Item id="1001" name="立即列印"/>
 					<Item id="41011" name="結束(&amp;X)"/>
 					<Item id="41012" name="開啟工作階段..."/>
 					<Item id="41013" name="儲存目前工作階段..."/>
@@ -107,6 +108,7 @@
 					<Item id="42008" name="增加縮排"/>
 					<Item id="42009" name="減少縮排"/>
 					<Item id="42010" name="重複此行"/>
+					<Item id="42079" name="刪除重複行"/>
 					<Item id="42077" name="刪除連續的重複行"/>
 					<Item id="42011" name="調換此行"/>
 					<Item id="42012" name="分割此行"/>
@@ -144,6 +146,7 @@
 					<Item id="42048" name="複製 Binary 內容（包含 NULL 字元）"/>
 					<Item id="42049" name="剪下 Binary 內容（包含 NULL 字元）"/>
 					<Item id="42050" name="貼上 Binary 內容（包含 NULL 字元）"/>
+					<Item id="42082" name="複製連結"/>
 					<Item id="42037" name="多欄選取..."/>
 					<Item id="42034" name="多欄插入..."/>
 					<Item id="42051" name="顯示 ASCII 插入面板"/>
@@ -171,7 +174,7 @@
 					<Item id="42064" name="降冪排序小數（使用「,」作為小數點）"/>
 					<Item id="42065" name="升冪排序小數（使用「.」作為小數點）"/>
 					<Item id="42066" name="降冪排序小數（使用「.」作為小數點）"/>
-					<Item id="42078" name="隨機排序"/> 
+					<Item id="42078" name="隨機排序"/>
 					<Item id="43001" name="向上搜尋(&amp;F)..."/>
 					<Item id="43002" name="向下搜尋(&amp;N)"/>
 					<Item id="43003" name="取代..."/>
@@ -225,6 +228,7 @@
 					<Item id="43050" name="反向標記書籤"/>
 					<Item id="44009" name="便條模式"/>
 					<Item id="44010" name="折疊所有階層"/>
+					<Item id="44011" name="免干擾模式"/>
 					<Item id="44011" name="自訂語法對話方塊"/>
 					<Item id="44019" name="顯示所有字元"/>
 					<Item id="44020" name="顯示縮排輔助線"/>
@@ -280,27 +284,27 @@
 
 					<Item id="10001" name="移動此檔案至另一個視窗"/>
 					<Item id="10002" name="複製此檔案至另一個視窗"/>
-					<Item id="10003" name="移動此檔案至新啟動的 Notepad++"/>
-					<Item id="10004" name="複製此檔案至新啟動的 Notepad++"/>
+					<Item id="10003" name="移動此檔案至新啟動的 Textrument"/>
+					<Item id="10004" name="複製此檔案至新啟動的 Textrument"/>
 
 					<Item id="46001" name="設定程式語言格式..."/>
 					<Item id="46250" name="定義程式語言..."/>
 					<Item id="46300" name="開啟自訂程式語言資料夾..."/>
-					<Item id="46180" name="偏好設定"/>
-					<Item id="47000" name="關於 Notepad++..."/>
-					<Item id="47001" name="Notepad++ 官方網站"/>
-					<Item id="47002" name="Notepad++ GitHub 專案頁"/>
+					<Item id="46180" name="使用現行自訂"/>
+					<Item id="47000" name="關於 Textrument..."/>
+					<Item id="47001" name="Textrument 官方網站"/>
+					<Item id="47002" name="Textrument GitHub 專案頁"/>
 					<Item id="47003" name="網上支援"/>
 					<Item id="47004" name="網上論壇"/>
 					<Item id="47005" name="下載更多外掛模組"/>
-					<Item id="47006" name="檢查 Notepad++ 更新"/>
+					<Item id="47006" name="檢查 Textrument 更新"/>
 					<Item id="47008" name="使用說明"/>
 					<Item id="47009" name="設定更新程式代理伺服器..."/>
 					<Item id="47010" name="顯示 CMD 參數..."/>
 					<Item id="47011" name="技術支援論壇"/>
 					<Item id="47012" name="除錯資訊..."/>
 					<Item id="48005" name="匯入外掛模組..."/>
-					<Item id="48006" name="匯入 Notepad++ 主題..."/>
+					<Item id="48006" name="匯入 Textrument 主題..."/>
 					<Item id="48018" name="編輯快顯功能表"/>
 					<Item id="48009" name="管理快捷鍵..."/>
 					<Item id="48011" name="偏好設定..."/>
@@ -326,38 +330,39 @@
 				</Commands>
 			</Main>
 			<Splitter>
-			</Splitter>
+            </Splitter>
 			<TabBar>
-					<Item CMID="0"  name="關閉此檔案"/>
-					<Item CMID="1"  name="除此檔案外，關閉所有檔案"/>
-					<Item CMID="2"  name="儲存此檔案"/>
-					<Item CMID="3"  name="另存新檔..."/>
-					<Item CMID="4"  name="列印"/>
-					<Item CMID="5"  name="移動此檔案至另一個視窗"/>
-					<Item CMID="6"  name="複製此檔案至另一個視窗"/>
-					<Item CMID="7"  name="將資料夾路徑及檔案名稱複製到剪貼簿"/>
-					<Item CMID="8"  name="將檔案名稱複製到剪貼簿"/>
-					<Item CMID="9"  name="將資料夾路徑複製到剪貼簿"/>
-					<Item CMID="10" name="重新命名此檔案"/>
-					<Item CMID="11" name="刪除現有檔案"/>
-					<Item CMID="12" name="將此檔案設為唯讀"/>
-					<Item CMID="13" name="取消設定此檔案為唯讀"/>
-					<Item CMID="14" name="移動此檔案至新啟動的 Notepad++"/>
-					<Item CMID="15" name="複製此檔案至新啟動的 Notepad++"/>
-					<Item CMID="16" name="從電腦重新載入此檔案"/>
-					<Item CMID="17" name="關閉左側所有檔案"/>
-					<Item CMID="18" name="關閉右側所有檔案"/>
-					<Item CMID="19" name="於檔案總管開啟檔案位置"/>
-					<Item CMID="20" name="於 CMD 開啟檔案位置"/>
-					<Item CMID="21" name="在電腦預設顯示器中開啟"/>
-					<Item CMID="22" name="關閉所有已存檔未變更的檔案"/>
+				<Item CMID="0" name="關閉此檔案"/>
+				<Item CMID="1" name="除此檔案外，關閉所有檔案"/>
+				<Item CMID="2" name="儲存此檔案"/>
+				<Item CMID="3" name="另存新檔..."/>
+				<Item CMID="4" name="列印"/>
+				<Item CMID="5" name="移動此檔案至另一個視窗"/>
+				<Item CMID="6" name="複製此檔案至另一個視窗"/>
+				<Item CMID="7" name="將資料夾路徑及檔案名稱複製到剪貼簿"/>
+				<Item CMID="8" name="將檔案名稱複製到剪貼簿"/>
+				<Item CMID="9" name="將資料夾路徑複製到剪貼簿"/>
+				<Item CMID="10" name="重新命名此檔案"/>
+				<Item CMID="11" name="刪除現有檔案"/>
+				<Item CMID="12" name="將此檔案設為唯讀"/>
+				<Item CMID="13" name="取消設定此檔案為唯讀"/>
+				<Item CMID="14" name="移動此檔案至新啟動的 Textrument"/>
+				<Item CMID="15" name="複製此檔案至新啟動的 Textrument"/>
+				<Item CMID="16" name="從電腦重新載入此檔案"/>
+				<Item CMID="17" name="關閉左側所有檔案"/>
+				<Item CMID="18" name="關閉右側所有檔案"/>
+				<Item CMID="19" name="於檔案總管開啟檔案位置"/>
+				<Item CMID="20" name="於 CMD 開啟檔案位置"/>
+				<Item CMID="21" name="在電腦預設顯示器中開啟"/>
+				<Item CMID="22" name="關閉所有已存檔未變更的檔案"/>
+				<Item CMID="23" name="在資料夾工作區開啟檔案位置如同根目錄"/>
 			</TabBar>
 		</Menu>
 		<Dialog>
-			<Find title="" titleFind="尋找" titleReplace="取代" titleFindInFiles="在多個檔案中尋找" titleMark="標記">
-				<Item id="1"    name="找下一個"/>
+			<Find title="" titleFind="尋找" titleReplace="取代" titleFindInFiles="在多個檔案中尋找" titleFindInProjects="在專案中多個檔案中尋找" titleMark="標記">
+				<Item id="1" name="找下一個"/>
 				<Item id="1722" name="向上搜尋"/>
-				<Item id="2"    name="關閉"/>
+				<Item id="2" name="關閉"/>
 				<Item id="1620" name="尋找內容："/>
 				<Item id="1603" name="僅符合整個單字(&amp;W)"/>
 				<Item id="1604" name="區分大小寫(&amp;C)"/>
@@ -385,15 +390,19 @@
 				<Item id="1625" name="一般"/>
 				<Item id="1626" name="延伸（\n, \r, \t, \0, \x...）"/>
 				<Item id="1660" name="在多個檔案中取代"/>
+				<Item id="1665" name="在專案中多個檔案中取代"/>
 				<Item id="1661" name="使用目前文件資料夾位置"/>
+				<Item id="1662" name="專案管理員 1"/>
+				<Item id="1663" name="專案管理員 2"/>
+				<Item id="1664" name="專案管理員 3"/>
 				<Item id="1641" name="在目前文件中全部尋找"/>
 				<Item id="1686" name="透明"/>
-				<Item id="1703" name="「.」包含換行"/>
-				<Item id="1721" name="▲"/>
-				<Item id="1723" name="▼ 找下一個"/>
+				<Item id="1703" name="「.」包含換行字元"/>
+				<Item id="1721" name="▲ 上一個"/>
+				<Item id="1723" name="▼ 下一個"/>
 			</Find>
 			<FindCharsInRange title="以字元編號搜尋字元">
-				<Item id="2"    name="關閉"/>
+				<Item id="2" name="關閉"/>
 				<Item id="2901" name="非 ASCII 字元（128-255）"/>
 				<Item id="2902" name="ASCII 字元（0-127）"/>
 				<Item id="2903" name="自訂範圍（只支援 0-255）："/>
@@ -406,8 +415,8 @@
 			<GoToLine title="跳至...">
 				<Item id="2007" name="行號"/>
 				<Item id="2008" name="字元位置"/>
-				<Item id="1"    name="前往"/>
-				<Item id="2"    name="取消"/>
+				<Item id="1" name="前往"/>
+				<Item id="2" name="取消"/>
 				<Item id="2004" name="游標目前行號/字元位置："/>
 				<Item id="2005" name="要前往的行號/字元位置："/>
 				<Item id="2006" name="檔案結尾行號/字元位置："/>
@@ -415,48 +424,47 @@
 
 			<Run title="執行...">
 				<Item id="1903" name="要執行的程式"/>
-				<Item id="1"    name="執行"/>
-				<Item id="2"    name="取消"/>
+				<Item id="1" name="執行"/>
+				<Item id="2" name="取消"/>
 				<Item id="1904" name="儲存"/>
 			</Run>
 
 			<MD5FromFilesDlg title="從檔案產生 MD5">
 				<Item id="1922" name="從檔案產生 MD5..."/>
 				<Item id="1924" name="複製到剪貼簿"/>
-				<Item id="2"    name="關閉"/>
+				<Item id="2" name="關閉"/>
 			</MD5FromFilesDlg>
 
 			<MD5FromTextDlg title="產生 MD5">
 				<Item id="1932" name="將每一行視為獨立的字串"/>
 				<Item id="1934" name="複製到剪貼簿"/>
-				<Item id="2"    name="關閉"/>
+				<Item id="2" name="關閉"/>
 			</MD5FromTextDlg>
 
 			<SHA256FromFilesDlg title="從檔案產生 SHA-256">
 				<Item id="1922" name="從檔案產生 SHA-256..."/>
 				<Item id="1924" name="複製到剪貼簿"/>
-				<Item id="2"    name="關閉"/>
+				<Item id="2" name="關閉"/>
 			</SHA256FromFilesDlg>
 
 			<SHA256FromTextDlg title="產生 SHA-256">
 				<Item id="1932" name="將每一行視為獨立的字串"/>
 				<Item id="1934" name="複製到剪貼簿"/>
-				<Item id="2"    name="關閉"/>
+				<Item id="2" name="關閉"/>
 			</SHA256FromTextDlg>
-			
-			<PluginsAdminDlg title="外掛模組管理" titleAvailable = "可安裝" titleUpdates = "更新" titleInstalled = "已安裝">
-				<ColumnPlugin   name="外掛模組"/>
-				<ColumnVersion  name="版本"/>
+			<PluginsAdminDlg title="外掛模組管理" titleAvailable="可安裝" titleUpdates="更新" titleInstalled="已安裝">
+				<ColumnPlugin name="外掛模組"/>
+				<ColumnVersion name="版本"/>
 				<Item id="5501" name="搜尋："/>
 				<Item id="5503" name="安裝"/>
 				<Item id="5504" name="更新"/>
 				<Item id="5505" name="移除"/>
 				<Item id="5508" name="找下一個"/>
-				<Item id="2"    name="關閉"/>
+				<Item id="2" name="關閉"/>
 			</PluginsAdminDlg>
 
 			<StyleConfig title="色彩佈景主題設定">
-				<Item id="2"    name="取消"/>
+				<Item id="2" name="取消"/>
 				<Item id="2301" name="儲存並關閉"/>
 				<Item id="2303" name="透明"/>
 				<Item id="2306" name="選取主題："/>
@@ -490,87 +498,22 @@
 				<Item id="2603" name="刪除"/>
 				<Item id="2606" name="清除"/>
 				<Item id="2607" name="濾鏡："/>
-				<Item id="1"          name="關閉"/>
-				<ColumnName           name="名稱"/>
-				<ColumnShortcut       name="快捷鍵"/>
-				<ColumnCategory       name="類別"/>
-				<ColumnPlugin         name="外掛"/>
-				<MainMenuTab          name="主選單"/>
-				<MacrosTab            name="巨集"/>
-				<RunCommandsTab       name="自訂指令"/>
-				<PluginCommandsTab    name="外掛指令"/>
+				<Item id="1" name="關閉"/>
+				<ColumnName name="名稱"/>
+				<ColumnShortcut name="快捷鍵"/>
+				<ColumnCategory name="類別"/>
+				<ColumnPlugin name="外掛"/>
+				<MainMenuTab name="主選單"/>
+				<MacrosTab name="巨集"/>
+				<RunCommandsTab name="自訂指令"/>
+				<PluginCommandsTab name="外掛指令"/>
 				<ScintillaCommandsTab name="Scintilla 指令"/>
-				<ConflictInfoOk       name="沒有與此項目衝突的快捷鍵。"/>
-				<ConflictInfoEditing  name="沒有與此項目衝突的快捷鍵..."/>
-				<MainCommandNames>
-					<Item id="41019" name="在檔案總管內開啟檔案位置"/>
-					<Item id="41020" name="在 CMD 內開啟檔案位置"/>
-					<Item id="41021" name="重新開啟最近關閉的檔案"/>
-					<Item id="45001" name="轉換成 Windows 換行格式(CR LF)"/>
-					<Item id="45002" name="轉換成 UNIX 換行格式 (LF)"/>
-					<Item id="45003" name="轉換成 Macintosh 換行格式 (CR)"/>
-					<Item id="43022" name="使用格式一顏色標記"/>
-					<Item id="43024" name="使用格式二顏色標記"/>
-					<Item id="43026" name="使用格式三顏色標記"/>
-					<Item id="43028" name="使用格式四顏色標記"/>
-					<Item id="43030" name="使用格式五顏色標記"/>
-					<Item id="43023" name="清除格式一顏色標記"/>
-					<Item id="43025" name="清除格式二顏色標記"/>
-					<Item id="43027" name="清除格式三顏色標記"/>
-					<Item id="43029" name="清除格式四顏色標記"/>
-					<Item id="43031" name="清除格式五顏色標記"/>
-					<Item id="43032" name="清除所有格式顏色標記"/>
-					<Item id="43033" name="至上個格式一標記"/>
-					<Item id="43034" name="至上個格式二標記"/>
-					<Item id="43035" name="至上個格式三標記"/>
-					<Item id="43036" name="至上個格式四標記"/>
-					<Item id="43037" name="至上個格式五標記"/>
-					<Item id="43038" name="至上個格式搜尋標記"/>
-					<Item id="43039" name="至下個格式一標記"/>
-					<Item id="43040" name="至下個格式二標記"/>
-					<Item id="43041" name="至下個格式三標記"/>
-					<Item id="43042" name="至下個格式四標記"/>
-					<Item id="43043" name="至下個格式五標記"/>
-					<Item id="43044" name="至下個格式搜尋標記"/>
-					<Item id="44100" name="在 Firefox 中開啟此文件"/>
-					<Item id="44101" name="在 Chrome 中開啟此文件"/>
-					<Item id="44103" name="在 IE 中開啟此文件"/>
-					<Item id="44102" name="在 Edge 中開啟此文件"/>
-					<Item id="50003" name="切換到上一文件"/>
-					<Item id="50004" name="切換到下一文件"/>
-					<Item id="44051" name="收折層數 1"/>
-					<Item id="44052" name="收折層數 2"/>
-					<Item id="44053" name="收折層數 3"/>
-					<Item id="44054" name="收折層數 4"/>
-					<Item id="44055" name="收折層數 5"/>
-					<Item id="44056" name="收折層數 6"/>
-					<Item id="44057" name="收折層數 7"/>
-					<Item id="44058" name="收折層數 8"/>
-					<Item id="44061" name="展開層數 1"/>
-					<Item id="44062" name="展開層數 2"/>
-					<Item id="44063" name="展開層數 3"/>
-					<Item id="44064" name="展開層數 4"/>
-					<Item id="44065" name="展開層數 5"/>
-					<Item id="44066" name="展開層數 6"/>
-					<Item id="44067" name="展開層數 7"/>
-					<Item id="44068" name="展開層數 8"/>
-					<Item id="44081" name="切換開關專案管理員 1"/>
-					<Item id="44082" name="切換開關專案管理員 2"/>
-					<Item id="44083" name="切換開關專案管理員 3"/>
-					<Item id="44085" name="切換開關資料夾工作區"/>
-					<Item id="44080" name="切換開關文件導覽"/>
-					<Item id="44084" name="切換開關函式清單"/>
-					<Item id="50005" name="啟動/停止巨集錄製"/>
-					<Item id="44104" name="切換至專案管理員 1"/>
-					<Item id="44105" name="切換至專案管理員 2"/>
-					<Item id="44106" name="切換至專案管理員 3"/>
-					<Item id="44107" name="切換至資料夾工作區"/>
-					<Item id="44108" name="切換至函式清單"/>
-				</MainCommandNames>
+				<ConflictInfoOk name="沒有與此項目衝突的快捷鍵。"/>
+				<ConflictInfoEditing name="沒有與此項目衝突的快捷鍵..."/>
 			</ShortcutMapper>
 			<ShortcutMapperSubDialg title="快捷鍵設定">
-				<Item id="1"    name="確認"/>
-				<Item id="2"    name="取消"/>
+				<Item id="1" name="確認"/>
+				<Item id="2" name="取消"/>
 				<Item id="5006" name="名稱"/>
 				<Item id="5008" name="增加"/>
 				<Item id="5009" name="移除"/>
@@ -590,15 +533,15 @@
 				<Item id="20011" name="透明"/>
 				<Item id="20015" name="匯入..."/>
 				<Item id="20016" name="匯出..."/>
-				<Item id="0"     name="色彩格式"/>
-				<Item id="1"     name="字型色彩"/>
-				<Item id="2"     name="背景色彩"/>
-				<Item id="3"     name="字型格式"/>
-				<Item id="4"     name="字型名稱："/>
-				<Item id="5"     name="字型大小"/>
-				<Item id="6"     name="粗體"/>
-				<Item id="7"     name="斜體"/>
-				<Item id="8"     name="底線"/>
+				<Item id="0" name="色彩格式"/>
+				<Item id="1" name="字型色彩"/>
+				<Item id="2" name="背景色彩"/>
+				<Item id="3" name="字型格式"/>
+				<Item id="4" name="字型名稱："/>
+				<Item id="5" name="字型大小"/>
+				<Item id="6" name="粗體"/>
+				<Item id="7" name="斜體"/>
+				<Item id="8" name="底線"/>
 				<StylerDialog title="樣式設定">
 					<Item id="25030" name="字型"/>
 					<Item id="25006" name="字型色彩"/>
@@ -630,8 +573,8 @@
 					<Item id="25026" name="運算元 1"/>
 					<Item id="25027" name="運算元 2"/>
 					<Item id="25028" name="數字"/>
-					<Item id="1"     name="確定"/>
-					<Item id="2"     name="取消"/>
+					<Item id="1" name="確定"/>
+					<Item id="2" name="取消"/>
 				</StylerDialog>
 				<Folder title="摺疊設定與預設樣式">
 					<Item id="21101" name="預設樣式設定"/>
@@ -783,42 +726,45 @@
 					<Item id="6126" name="顯示"/>
 					<Item id="6127" name="停用副檔名欄"/>
 				</Global>
+
 				<Scintillas title="編輯">
 					<Item id="6216" name="游標設定"/>
 					<Item id="6217" name="寬度："/>
 					<Item id="6219" name="閃爍頻率："/>
 					<Item id="6221" name="快"/>
 					<Item id="6222" name="慢"/>
-					<Item id="6224" name="多個位置同時編輯"/>
 					<Item id="6225" name="啟用（Ctrl + 滑鼠點擊/選取）"/>
+					<Item id="6227" name="換行設定"/>
+					<Item id="6228" name="預設"/>
+					<Item id="6229" name="對齊"/>
+					<Item id="6230" name="縮排"/>
+					<Item id="6234" name="關閉進階捲動功能（若有觸控板問題）"/>
+					<Item id="6214" name="於游標行加上背景顏色"/>
+					<Item id="6215" name="啟用平滑字體"/>
+					<Item id="6236" name="允許捲動至超出最後一行"/>
+					<Item id="6239" name="在選擇範圍之外點擊滑鼠右鍵時仍保留選擇範圍"/>
 					<Item id="6201" name="摺疊符號"/>
 					<Item id="6202" name="精簡"/>
 					<Item id="6203" name="箭頭"/>
 					<Item id="6204" name="圓形"/>
 					<Item id="6205" name="方形"/>
 					<Item id="6226" name="無"/>
-
-					<Item id="6227" name="換行設定"/>
-					<Item id="6228" name="預設"/>
-					<Item id="6229" name="對齊"/>
-					<Item id="6230" name="縮排"/>
-
 					<Item id="6206" name="顯示行號"/>
 					<Item id="6207" name="顯示標記"/>
-					<Item id="6208" name="顯示邊界線"/>
-					<Item id="6234" name="關閉進階捲動功能
-（若有觸控板問題）"/>
-					<Item id="6211" name="邊緣線設定"/>
+					<Item id="6211" name="行界線設定"/>
 					<Item id="6213" name="背景色模式"/>
 					<Item id="6237" name="如欲添加列標記可以在下面以數字指示其列位置。
 使用空格分隔不同數字來定義多個列標記。"/>
-					<Item id="6214" name="於游標行加上背景顏色"/>
-					<Item id="6215" name="啟用平滑字體"/>
 					<Item id="6231" name="邊框寬度"/>
 					<Item id="6235" name="無邊框"/>
-					<Item id="6236" name="允許捲動至超出最後一行"/>
-					<Item id="6239" name="在選擇範圍之外點擊滑鼠右鍵時仍保留選擇範圍"/> 
+					<Item id="6208" name="填充"/>
+					<Item id="6209" name="左"/>
+					<Item id="6210" name="右"/>
+					<Item id="6212" name="免干擾模式"/>
+					<Item id="6224" name="多個位置同時編輯"/>
 				</Scintillas>
+
+
 				<NewDoc title="新文件預設設定">
 					<Item id="6401" name="格式（EOF）"/>
 					<Item id="6402" name="Windows（CR LF）"/>
@@ -836,15 +782,15 @@
 				</NewDoc>
 
 				<DefaultDir title="預設資料夾">
-					<Item id="6413" name="開啟/儲存預設資料夾"/>
+					<Item id="6413" name="開啟/儲存檔案預設資料夾"/>
 					<Item id="6414" name="使用目前文件資料夾位置"/>
 					<Item id="6415" name="記住上次使用的資料夾"/>
-					<Item id="6430" name="使用新式對話方塊（不含 UNIX 路徑支援）"/>
 					<Item id="6431" name="拖放資料夾時開啟資料夾中所有文件，而不啟動資料夾工作區"/>
+					<Item id="6430" name="使用新式對話方塊"/>
 				</DefaultDir>
 
 				<FileAssoc title="副檔名連結設定">
-					<Item id="4008" name="請關閉 Notepad++，並在系統管理員模式下重新啟動 Notepad++ 以使用此功能。"/>
+					<Item id="4008" name="請關閉 Textrument，並在系統管理員模式下重新啟動 Textrument 以使用此功能。"/>
 					<Item id="4009" name="支援的副檔名"/>
 					<Item id="4010" name="已連結的副檔名"/>
 				</FileAssoc>
@@ -904,7 +850,7 @@
 
 				<Searching title="尋找">
 					<Item id="6901" name="不用選取詞填充尋找與取代對話方塊中的尋找內容"/>
-					<Item id="6902" name="在尋找與取代對話方塊中使用等寬字型（需要重新啟動 Notepad++）"/>
+					<Item id="6902" name="在尋找與取代對話方塊中使用等寬字型（需要重新啟動 Textrument）"/>
 					<Item id="6903" name="搜尋結果輸出到結果視窗後，尋找與取代對話方塊繼續保持打開狀態"/>
 					<Item id="6904" name="確認「在所有開啟的文件中取代」"/>
 				</Searching>
@@ -956,11 +902,11 @@
 					<Item id="6866" name="自訂括弧 3："/>
 				</AutoCompletion>
 				<MultiInstance title="多重實體">
-					<Item id="6151" name="多重 Notepad++ 實體設定"/>
-					<Item id="6152" name="在新的 Notepad++ 實體開啟工作階段"/>
+					<Item id="6151" name="多重 Textrument 實體設定"/>
+					<Item id="6152" name="在新的 Textrument 實體開啟工作階段"/>
 					<Item id="6153" name="允許多重實體"/>
 					<Item id="6154" name="禁止多重實體（預設）"/>
-					<Item id="6155" name="（重新啟動 Notepad++ 以使變更生效。）"/>
+					<Item id="6155" name="（重新啟動 Textrument 以使變更生效。）"/>
 				</MultiInstance>
 
 				<Delimiter title="分隔字元">
@@ -977,7 +923,6 @@
 					<Item id="6262" name="雲端設定"/>
 					<Item id="6263" name="不使用雲端"/>
 					<Item id="6267" name="雲端路徑："/>
-					<!-- <Item id="6261" name="（重新啟動 Notepad++ 後生效）"/> -->
 				</Cloud>
 
 				<SearchEngine title="搜尋引擎">
@@ -1000,23 +945,25 @@
 					<Item id="6308" name="最小化至系統匣"/>
 					<Item id="6312" name="自動更新檔案狀態"/>
 					<Item id="6313" name="於背景自動更新"/>
-					<Item id="6318" name="連結設定"/>
 					<Item id="6325" name="更新後捲動至最後一行"/>
-					<Item id="6319" name="將連結設為可點擊"/>
-					<Item id="6320" name="隱藏連結底線"/>
 					<Item id="6322" name="工作階段檔案副檔名："/>
-					<Item id="6323" name="自動更新 Notepad++"/>
+					<Item id="6323" name="自動更新 Textrument"/>
+					<Item id="6351" name="將「保存」對話方塊的副檔名濾鏡設置為 *.*"/>
 					<Item id="6324" name="文件切換器（Ctrl + TAB）"/>
 					<Item id="6331" name="在標題列僅顯示檔案名稱（隱藏資料夾路徑）"/>
 					<Item id="6334" name="自動偵測檔案編碼"/>
-					<Item id="6349" name="使用 DirectWrite（可改善特殊字符的呈現，需要重新啟動 Notepad++）"/>
-					<Item id="6350" name="啟動背景模式"/>
+					<Item id="6349" name="使用 DirectWrite（可改善特殊字符的呈現，需要重新啟動 Textrument）"/>
 					<Item id="6337" name="資料夾工作區檔案副檔名："/>
 					<Item id="6114" name="啟動"/>
 					<Item id="6117" name="開啟「最近使用的檔案」功能"/>
 					<Item id="6344" name="窺視檔案"/>
 					<Item id="6345" name="於頁籤窺視檔案"/>
 					<Item id="6346" name="於文件導覽窺視檔案"/>
+					<Item id="6360" name="靜音"/>
+					<Item id="6318" name="連結設定"/>
+					<Item id="6319" name="將連結設為可點擊"/>
+					<Item id="6320" name="隱藏連結底線"/>
+					<Item id="6350" name="啟動背景模式"/>
 				</MISC>
 			</Preference>
 
@@ -1051,8 +998,8 @@
 				<Item id="2" name="取消"/>
 			</ColumnEditor>
 			<FindInFinder title="在搜尋結果中尋找">
-				<Item id="1"    name="尋找全部"/>
-				<Item id="2"    name="關閉"/>
+				<Item id="1" name="尋找全部"/>
+				<Item id="2" name="關閉"/>
 				<Item id="1711" name="尋找內容："/>
 				<Item id="1713" name="僅在找到的行中搜尋"/>
 				<Item id="1714" name="僅符合整個單字(&amp;W)"/>
@@ -1061,9 +1008,9 @@
 				<Item id="1717" name="一般"/>
 				<Item id="1719" name="規則運算式(&amp;E)"/>
 				<Item id="1718" name="延伸（\n, \r, \t, \0, \x...）"/>
-				<Item id="1720" name="「.」包含換行"/>
+				<Item id="1720" name="「.」包含換行字元"/>
 			</FindInFinder>
-			<DoSaveOrNot title="儲存檔案"> 
+			<DoSaveOrNot title="儲存檔案">
 				<Item id="1761" name="您要儲存「$STR_REPLACE$」嗎？"/>
 				<Item id="6" name="好吧(&amp;Y)"/>
 				<Item id="7" name="不要啦(&amp;N)"/>
@@ -1073,18 +1020,16 @@
 			</DoSaveOrNot>
 		</Dialog>
 		<MessageBox>
-			<ContextMenuXmlEditWarning title="編輯快顯功能表" message="編輯 contextMenu.xml 可以變更 Notepad++ 之快顯功能表。
-請於修改後重新啟動 Notepad++ 以使變更生效。"/>
-			<NppHelpAbsentWarning title="檔案不存在" message="
-不存在。請在 Notepad++ 網站上下載。"/>
+			<ContextMenuXmlEditWarning title="編輯快顯功能表" message="編輯 contextMenu.xml 可以變更 Textrument 之快顯功能表。
+請於修改後重新啟動 Textrument 以使變更生效。"/>
 			<SaveCurrentModifWarning title="警告" message="您必須儲存目前的修改，而儲存後將無法復原。
 您確定要繼續嗎？"/>
 			<LoseUndoAbilityWarning title="警告" message="您必須儲存目前的修改，而儲存後將無法復原。
 您確定要繼續嗎？"/>
-			<CannotMoveDoc title="移至新的 Notepad++ 實體" message="文件已被修改，請在儲存後再試一次。"/>
-			<DocReloadWarning title="重新載入" message="您確定要重新載入目前文件，並捨棄在 Notepad++ 中所做的修改嗎？"/>
+			<CannotMoveDoc title="移至新的 Textrument 實體" message="文件已被修改，請在儲存後再試一次。"/>
+			<DocReloadWarning title="重新載入" message="您確定要重新載入目前文件，並捨棄在 Textrument 中所做的修改嗎？"/>
 			<FileLockedWarning title="儲存失敗" message="請檢查其他應用程式是否已開啟此檔案。"/>
-			<FileAlreadyOpenedInNpp title="已開啟" message="這個檔案已在 Notepad++ 中開啟。"/>
+			<FileAlreadyOpenedInNpp title="已開啟" message="這個檔案已在 Textrument 中開啟。"/>
 			<DeleteFileFailed title="刪除失敗" message="檔案刪除失敗。"/>
 			<NbFileToOpenImportantWarning title="開啟檔案" message="您確定要開啟全數 $INT_REPLACE$ 個檔案嗎？"/>
 			<SettingsOnCloudError title="雲端設定" message="設定的雲端路徑位於一個唯讀的磁碟或未擁有寫入權限的資料夾，因此您的「雲端」設定將被清除。
@@ -1097,7 +1042,7 @@
 			<ColumnModeTip title="多欄選取提示" message="請使用「ALT + 滑鼠選擇」或「Alt + Shift + 方向鍵」以切換到多欄選取。"/>
 			<BufferInvalidWarning title="儲存失敗" message="緩衝區無效。"/>
 			<DoCloseOrNot title="保留文件" message="檔案「$STR_REPLACE$」已不存在。
-您在 Notepad++ 中保存這個文件嗎？"/>
+您要在 Textrument 中保留這個文件嗎？"/>
 			<DoDeleteOrNot title="刪除檔案" message="您確定要刪除並關閉「$STR_REPLACE$」嗎？"/>
 			<NoBackupDoSaveFile title="儲存" message="您的備份文件已從外部刪除。
 請儲存「$STR_REPLACE$」，否則您的數據將會遺失。
@@ -1105,14 +1050,14 @@
 			<DoReloadOrNot title="重新載入" message="「$STR_REPLACE$」已被其他程式修改。
 您要重新載入此文件嗎？"/>
 			<DoReloadOrNotAndLooseChange title="重新載入" message="「$STR_REPLACE$」已被其他程式修改。
-您要重新載入並捨棄在 Notepad++ 中所做的修改嗎？"/>
+您要重新載入並捨棄在 Textrument 中所做的修改嗎？"/>
 			<PrehistoricSystemDetected title="系統過舊" message="很抱歉，此功能不適用於過舊的系統。"/>
-			<XpUpdaterProblem title="Notepad++ 更新程式" message="由於 XP 的安全機制過舊，更新程式與 XP 並不兼容。
-您要直接到 Notepad++ 網站下載最新版本嗎？"/>
-			<GUpProxyConfNeedAdminMode title="代理伺服器設定" message="請關閉 Notepad++，並在系統管理員模式下重新啟動 Notepad++ 以設定代理伺服器。"/>
+			<XpUpdaterProblem title="Textrument 更新程式" message="由於 XP 的安全機制過舊，更新程式與 XP 並不兼容。
+您要直接到 Textrument 網站下載最新版本嗎？"/>
+			<GUpProxyConfNeedAdminMode title="代理伺服器設定" message="請關閉 Textrument，並在系統管理員模式下重新啟動 Textrument 以設定代理伺服器。"/>
 			<DocTooDirtyToMonitor title="監控錯誤" message="文件已被修改，請在監視前儲存文件。"/>
 			<DocNoExistToMonitor title="監控錯誤" message="文件不存在，因此無法進行監視。"/>
-			<FileTooBigToOpen title="文件太大" message="文件太大，無法使用 Notepad++ 開啟。"/>
+			<FileTooBigToOpen title="文件太大" message="文件太大，無法使用 Textrument 開啟。"/>
 			<CreateNewFileOrNot title="開新檔案" message="「$STR_REPLACE$」不存在。您要開新檔案嗎？"/>
 			<CreateNewFileError title="開新檔案" message="無法開新檔案「$STR_REPLACE$」。"/>
 			<OpenFileError title="錯誤" message="無法開啟「$STR_REPLACE$」"/>
@@ -1125,7 +1070,7 @@
 您必須從資料夾工作區中刪除該資料夾，才可添加「$STR_REPLACE$」。"/>
 
 			<ProjectPanelChanged title="$STR_REPLACE$" message="工作區已被修改。您要儲存它嗎？"/>
-			<ProjectPanelChangedSaveError title="$STR_REPLACE$" message="工作區儲存失敗。"/>
+			<ProjectPanelSaveError title="$STR_REPLACE$" message="寫入工作區文件時發生錯誤。工作區儲存失敗。"/>
 			<ProjectPanelOpenDoSaveDirtyWsOrNot title="開啟工作區" message="目前的工作區已被修改。您要儲存目前的專案嗎？"/>
 			<ProjectPanelNewDoSaveDirtyWsOrNot title="新工作區" message="目前的工作區已被修改。您要儲存目前的專案嗎？"/>
 			<ProjectPanelOpenFailed title="無法開啟工作區" message="工作區檔案無效或已被損毀。"/>
@@ -1137,10 +1082,10 @@
 			<UDLRemoveCurrentLang title="刪除語言" message="您確定要刪除目前的自訂程式語言嗎？"/>
 			<SCMapperDoDeleteOrNot title="刪除快捷鍵" message="您確定要刪除這個快捷鍵嗎？"/>
 			<FindCharRangeValueError title="輸入值範圍錯誤" message="您輸入的值應在 0 到 255 之間。如要搜尋字元編號大於 255 的字元，請在「尋找」對話方塊中使用「規則運算式」。"/>
-			<ExitToUpdatePlugins title="關閉 Notepad++" message="如果您的回答是肯定的，Notepad ++將自動關閉以進行後置安裝。
-所有的後置安裝終止後，Notepad ++將重新啟動。
+			<ExitToUpdatePlugins title="關閉 Textrument" message="Textrument 將自動關閉以進行後續作業。
+在所有後續作業完成後，Textrument 將重新啟動。
 繼續嗎？"/>
-			<NeedToRestartToLoadPlugins title="重新啟動 Notepad++" message="您必須重新啟動 Notepad++ 才能載入已安裝的外掛模組。"/>
+			<NeedToRestartToLoadPlugins title="重新啟動 Textrument" message="您必須重新啟動 Textrument 才能載入已安裝的外掛模組。"/>
 		</MessageBox>
 		<ClipboardHistory>
 			<PanelTitle name="剪貼簿記錄"/>
@@ -1167,12 +1112,15 @@
 		</DocumentMap>
 		<FunctionList>
 			<PanelTitle name="函式清單"/>
-			<SortTip name="排序" />
-			<ReloadTip name="重新載入" />
+			<SortTip name="排序"/>
+			<ReloadTip name="重新載入"/>
 		</FunctionList>
 		<FolderAsWorkspace>
 			<PanelTitle name="資料夾工作區"/>
 			<SelectFolderFromBrowserString name="選擇一個資料夾以加入資料夾工作區"/>
+			<ExpandAllFoldersTip name="展開所有文件夾"/>
+			<CollapseAllFoldersTip name="收折所有文件夾"/>
+			<LocateCurrentFileTip name="現行文件位置"/>
 			<Menus>
 				<Item id="3511" name="移除"/>
 				<Item id="3512" name="全部移除"/>
@@ -1201,6 +1149,7 @@
 					<Item id="3126" name="另存新檔..."/>
 					<Item id="3127" name="另存複本..."/>
 					<Item id="3121" name="新增專案"/>
+					<Item id="3128" name="在專案中多個檔案中尋找..."/>
 				</WorkspaceMenu>
 				<ProjectMenu>
 					<Item id="3111" name="重新命名"/>
@@ -1236,8 +1185,8 @@
 			<word-chars-list-tab-warning value="$INT_REPLACE$ 個 TAB"/>
 			<word-chars-list-warning-end value=" 在您的單字字元集中。"/>
 			<cloud-invalid-warning value="無效的路徑。"/>
-			<cloud-restart-warning value="請重新啟動 Notepad++ 以使變更生效。"/>
-			<cloud-select-folder value="選擇一個資料夾，以便 Notepad++ 從中讀取/寫入其設定。"/>
+			<cloud-restart-warning value="請重新啟動 Textrument 以使變更生效。"/>
+			<cloud-select-folder value="選擇一個資料夾，以便 Textrument 從中讀取/寫入其設定。"/>
 			<shift-change-direction-tip value="使用「Shift + Enter」以相反方向進行搜尋"/>
 			<two-find-buttons-tip value="顯示「找上一個」按鈕"/>
 			<find-in-files-filter-tip value="只在 cpp, cxx, h, hxx &amp;&amp; hpp 中找尋:
@@ -1278,7 +1227,9 @@
 			<finder-close-this value="關閉這個搜尋結果"/>
 			<finder-collapse-all value="層數全部收折"/>
 			<finder-uncollapse-all value="層數全部展開"/>
-			<finder-copy value="複製"/>
+			<finder-copy value="複製">
+				<Item value="複製"/>
+			</finder-copy>
 			<finder-select-all value="全部選取"/>
 			<finder-clear-all value="全部清除"/>
 			<finder-open-all value="全部開啟"/>
@@ -1288,6 +1239,8 @@
 			<common-name value="名稱："/>
 			<tabrename-title value="重新命名現有頁籤"/>
 			<tabrename-newname value="新的名稱："/>
+			<splitter-rotate-left value="向左旋轉"/>
+			<splitter-rotate-right value="向右旋轉"/>
 			<recent-file-history-maxfile value="最大數量："/>
 			<language-tabsize value="TAB 大小："/>
 			<userdefined-title-new value="開新語言"/>
@@ -1300,24 +1253,32 @@
 			<summary-filecreatetime value="建檔時間： "/>
 			<summary-filemodifytime value="修改時間： "/>
 			<summary-filelen value="文件長度（以位元為單位）： "/>
-			<summary-nbchar value="字元數（不含行結尾）： "/>
+			<summary-nbchar value="字元數（不含換行字元）： "/>
 			<summary-nbword value="字數： "/>
 			<summary-nbline value="行數： "/>
 			<summary-nbbyte value="文件長度： "/>
 			<summary-nbsel1 value=" 個選取字元（ "/>
 			<summary-nbsel2 value=" 位元）在 "/>
 			<summary-nbrange value=" 個選取範圍中"/>
+			<find-in-files-progress-title value="在檔案中尋找中..."/>
 			<replace-in-files-confirm-title value="確認"/>
 			<replace-in-files-confirm-directory value="是否要替換所有匹配項在此目錄中："/>
 			<replace-in-files-confirm-filetype value="向所有擁有下列副檔名的檔案："/>
+			<replace-in-files-progress-title value="在多個檔案中取代中..."/>
+			<replace-in-projects-confirm-title value="確認"/>
+			<replace-in-projects-confirm-message value="是否要替換所選專案項目中所有文檔中的所有匹配項？"/>
 			<replace-in-open-docs-confirm-title value="替換確認"/>
 			<replace-in-open-docs-confirm-message value="您確定要替換所有打開的文檔中的所有匹配項嗎？"/>
 			<find-result-caption value="搜尋結果"/>
 			<find-result-title value="搜尋"/>
+			<!-- Must not begin with space or tab character -->
 			<find-result-title-info value="（找到 $INT_REPLACE1$ 個結果在 $INT_REPLACE2$ 的文件中。搜尋文件量： $INT_REPLACE3$）"/>
 			<find-result-title-info-extra value=" - 僅在搜尋結果中尋找"/>
 			<find-result-hits value="（$INT_REPLACE$ 個結果）"/>
-			<find-regex-zero-length-match value="零長度的字元相符" />
+			<find-result-line-prefix value="行號"/>
+			<!-- Must not begin with space or tab character -->
+			<find-regex-zero-length-match value="零長度的字元相符"/>
+			<tab-untitled-string value="新文件 "/>
 		</MiscStrings>
 	</Native-Langue>
-</NotepadPlus>
+</Textrument>

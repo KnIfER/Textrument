@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
 Uzbek translation made by:
 Orzu Samarqandiy <orzu at sourceforge.net>
@@ -6,12 +6,12 @@ Abdurashid Muhitdinov <cool_zero at list.ru>
 Last update: 2009 July 07
 -->
 <!--
-Uzbek (Latin) translation for Notepad++
-Updated to v7.6.2:
+Uzbek (Latin) translation for Textrument
+Updated to v7.9:
 Updater: Shamsiddinov Zafar
 -->
-<NotepadPlus>
-	<Native-Langue name="O‘zbekcha" filename="uzbek.xml" version="7.6.2">
+<Textrument>
+	<Native-Langue name="O‘zbekcha" filename="uzbek.xml" version="v1.0.0">
 		<Menu>
 			<Main>
 
@@ -27,14 +27,14 @@ Updater: Shamsiddinov Zafar
 					<Item menuId="macro" name="&amp;Makroslar"/>
 					<Item menuId="run" name="&amp;Ishga tushirmoq"/>
 					<Item idName="Plugins" name="&amp;Ilovalar"/>
-					<Item idName="Window"  name="&amp;Xatcho‘plar"/>
+					<Item idName="Window" name="&amp;Xatcho‘plar"/>
 				</Entries>
 
 				<SubEntries>
 					<Item subMenuId="file-openFolder" name="&amp;Fayl jildini ochmoq"/>
 					<Item subMenuId="file-closeMore" name="Xatcho‘plar boshqaruvi..."/>
 					<Item subMenuId="file-recentFiles" name="So‘nggi fayllar"/>
-					<Item subMenuId="edit-copyToClipboard"  name="&amp;Buferga nusxalamoq..."/>
+					<Item subMenuId="edit-copyToClipboard" name="&amp;Buferga nusxalamoq..."/>
 					<Item subMenuId="edit-indent" name="Chekinishlar (Tab)"/>
 					<Item subMenuId="edit-convertCaseTo" name="Registrlarni almashtirmoq"/>
 					<Item subMenuId="edit-lineOperations" name="Satrlar bo‘yicha amallar"/>
@@ -49,37 +49,38 @@ Updater: Shamsiddinov Zafar
 					<Item subMenuId="search-jumpUp" name="Yuqoriga o‘tmoq"/>
 					<Item subMenuId="search-jumpDown" name="Pastga o‘tmoq"/>
 					<Item subMenuId="search-bookmark" name="&amp;Xatcho‘plar"/>
-					<Item subMenuId="view-showSymbol"  name="Belgilarni ko‘rsatmoq"/>
-					<Item subMenuId="view-zoom"  name="Matn miqyosi"/>
-					<Item subMenuId="view-moveCloneDocument"  name="Fayl darchasi"/>
-					<Item subMenuId="view-tab"  name="Xatcho‘plar tanlovi..."/>
+					<Item subMenuId="view-showSymbol" name="Belgilarni ko‘rsatmoq"/>
+					<Item subMenuId="view-zoom" name="Matn miqyosi"/>
+					<Item subMenuId="view-moveCloneDocument" name="Fayl darchasi"/>
+					<Item subMenuId="view-tab" name="Xatcho‘plar tanlovi..."/>
 					<Item subMenuId="view-collapseLevel" name="Darajani yoymoq"/>
 					<Item subMenuId="view-uncollapseLevel" name="Darajani yig‘moq"/>
-					<Item subMenuId="view-project" name="Loyiha (panel)"/>
-					<Item subMenuId="encoding-characterSets"  name="Kodlashlar"/>
-					<Item subMenuId="encoding-arabic"  name="Arabcha"/>
-					<Item subMenuId="encoding-baltic"  name="Boltiq bo‘yi tillarida"/>
-					<Item subMenuId="encoding-celtic"  name="Keltcha"/>
-					<Item subMenuId="encoding-cyrillic"  name="Kirillcha"/>
-					<Item subMenuId="encoding-centralEuropean"  name="Markaziy Yevropa tillarida"/>
-					<Item subMenuId="encoding-chinese"  name="Xitoycha"/>
-					<Item subMenuId="encoding-easternEuropean"  name="Sharqiy Yevropa tillarida"/>
-					<Item subMenuId="encoding-greek"  name="Grekcha"/>
-					<Item subMenuId="encoding-hebrew"  name="Ivritcha"/>
-					<Item subMenuId="encoding-japanese"  name="Yaponcha"/>
+					<Item subMenuId="view-project" name="Project taxtali"/>
+					<Item subMenuId="encoding-characterSets" name="Kodlashlar"/>
+					<Item subMenuId="encoding-arabic" name="Arabcha"/>
+					<Item subMenuId="encoding-baltic" name="Boltiq bo‘yi tillarida"/>
+					<Item subMenuId="encoding-celtic" name="Keltcha"/>
+					<Item subMenuId="encoding-cyrillic" name="Kirillcha"/>
+					<Item subMenuId="encoding-centralEuropean" name="Markaziy Yevropa tillarida"/>
+					<Item subMenuId="encoding-chinese" name="Xitoycha"/>
+					<Item subMenuId="encoding-easternEuropean" name="Sharqiy Yevropa tillarida"/>
+					<Item subMenuId="encoding-greek" name="Grekcha"/>
+					<Item subMenuId="encoding-hebrew" name="Ivritcha"/>
+					<Item subMenuId="encoding-japanese" name="Yaponcha"/>
 					<Item subMenuId="encoding-korean" name="Koreyscha"/>
 					<Item subMenuId="encoding-northEuropean" name="Shimoliy Yevropa tillarida"/>
 					<Item subMenuId="encoding-thai" name="Taylandcha"/>
 					<Item subMenuId="encoding-turkish" name="Turkcha"/>
 					<Item subMenuId="encoding-westernEuropean" name="G‘arbiy Yevropa tillarida"/>
 					<Item subMenuId="encoding-vietnamese" name="Vetnamcha"/>
-					<Item subMenuId="settings-import"  name="Import qilmoq"/>
-					<Item subMenuId="tools-md5"  name="MD5"/>
-					<Item subMenuId="tools-sha256"  name="SHA-256"/>
+					<Item subMenuId="language-userDefinedLanguage" name="Foydalanuvchi belgilagan til"/>
+					<Item subMenuId="settings-import" name="Import qilmoq"/>
+					<Item subMenuId="tools-md5" name="MD5"/>
+					<Item subMenuId="tools-sha256" name="SHA-256"/>
 				</SubEntries>
 
 				<Commands>
-					<Item id="1001"  name="&amp;Pdf shaklida saqlamoq!"/>
+					<Item id="1001" name="&amp;Pdf shaklida saqlamoq!"/>
 					<Item id="41001" name="Yangi fayl"/>
 					<Item id="41002" name="Ochmoq"/>
 					<Item id="41019" name="&amp;Fayl jildini ochmoq"/>
@@ -293,8 +294,8 @@ Updater: Shamsiddinov Zafar
 					<Item id="46180" name="O‘z tanlovlaringiz"/>
 					<Item id="46250" name="O‘z sintaksisingizni ko‘rsating..."/>
 					<Item id="47000" name="Dastur haqida..."/>
-					<Item id="47001" name="Notepad++ veb-sahifasi"/>
-					<Item id="47002" name="Notepad++ loyihasi sahifasi"/>
+					<Item id="47001" name="Textrument veb-sahifasi"/>
+					<Item id="47002" name="Textrument loyihasi sahifasi"/>
 					<Item id="47003" name="Internet hujjati"/>
 					<Item id="47004" name="Forum"/>
 					<Item id="47005" name="Ilovalar..."/>
@@ -326,40 +327,50 @@ Updater: Shamsiddinov Zafar
 					<Item id="10002" name="Boshqa Hududga nusxalamoq"/>
 					<Item id="10003" name="Yangi Namunada ko‘chirmoq"/>
 					<Item id="10004" name="Yangi Namunada ochmoq"/>
+					<Item id="44070" name="Tab ro&amp;#39;yxati"/>
+					<Item id="44105" name="panel faollashtirish, lekin u tahrir yo&amp;#39;q"/>
+					<Item id="48100" name="Кичик белгилар"/>
+					<Item id="48101" name="Йирик белгилар"/>
+					<Item id="48102" name="Стандарт кичик белгилар"/>
+					<Item id="45014" name="ikkilik uslubi"/>
+					<Item id="48105" name="Sozlash paneli"/>
+					<Item id="48106" name="Wrap paneli"/>
+					<Item id="48107" name="Multi-line tablar"/>
 				</Commands>
 			</Main>
 			<Splitter>
-			</Splitter>
+            </Splitter>
 			<TabBar>
-					<Item CMID="0"  name="Yopmoq"/>
-					<Item CMID="1"  name="Bundan boshqasini yopmoq"/>
-					<Item CMID="2"  name="Saqlamoq"/>
-					<Item CMID="3"  name="Quyidagidek saqlamoq..."/>
-					<Item CMID="4"  name="Chop etmoq"/>
-					<Item CMID="5"  name="Boshqa Hududga ko‘chirmoq"/>
-					<Item CMID="6"  name="Boshqa Hududga nusxalamoq"/>
-					<Item CMID="7"  name="Fayl to‘liq yo‘lagi (buferda)"/>
-					<Item CMID="8"  name="Fayl nomi (buferda)"/>
-					<Item CMID="9"  name="Fayl jildiga yo‘l (buferda)"/>
-					<Item CMID="10" name="Qayta nomlamoq"/>
-					<Item CMID="11" name="Faylni olib tashlamoq (Savatga)"/>
-					<Item CMID="12" name="&quot;Faqat o‘qish&quot; rejimi"/>
-					<Item CMID="13" name="&quot;Faqat o‘qish&quot; rejimini olib tashlamoq"/>
-					<Item CMID="14" name="Yangi Namunada ko‘chirmoq"/>
-					<Item CMID="15" name="Yangi Namunada ochmoq"/>
-					<Item CMID="16" name="Diskdan yangilamoq"/>
-					<Item CMID="17" name="Chapdagi barcha xatcho‘plarni yopmoq"/>
-					<Item CMID="18" name="O‘ngdagi barcha xatcho‘plarni yopmoq"/>
-					<Item CMID="19" name="Fayl jildini ochmoq"/>
-					<Item CMID="20" name="Jilddagi faylni cmd’da ochmoq"/>
-					<Item CMID="21" name="Standart ilovada ochmoq"/>
+				<Item CMID="0" name="Yopmoq"/>
+				<Item CMID="1" name="Bundan boshqasini yopmoq"/>
+				<Item CMID="2" name="Saqlamoq"/>
+				<Item CMID="3" name="Quyidagidek saqlamoq..."/>
+				<Item CMID="4" name="Chop etmoq"/>
+				<Item CMID="5" name="Boshqa Hududga ko‘chirmoq"/>
+				<Item CMID="6" name="Boshqa Hududga nusxalamoq"/>
+				<Item CMID="7" name="Fayl to‘liq yo‘lagi (buferda)"/>
+				<Item CMID="8" name="Fayl nomi (buferda)"/>
+				<Item CMID="9" name="Fayl jildiga yo‘l (buferda)"/>
+				<Item CMID="10" name="Qayta nomlamoq"/>
+				<Item CMID="11" name="Faylni olib tashlamoq (Savatga)"/>
+				<Item CMID="12" name="&quot;Faqat o‘qish&quot; rejimi"/>
+				<Item CMID="13" name="&quot;Faqat o‘qish&quot; rejimini olib tashlamoq"/>
+				<Item CMID="14" name="Yangi Namunada ko‘chirmoq"/>
+				<Item CMID="15" name="Yangi Namunada ochmoq"/>
+				<Item CMID="16" name="Diskdan yangilamoq"/>
+				<Item CMID="17" name="Chapdagi barcha xatcho‘plarni yopmoq"/>
+				<Item CMID="18" name="O‘ngdagi barcha xatcho‘plarni yopmoq"/>
+				<Item CMID="19" name="Fayl jildini ochmoq"/>
+				<Item CMID="20" name="Jilddagi faylni cmd’da ochmoq"/>
+				<Item CMID="21" name="Standart ilovada ochmoq"/>
+				<Item CMID="23" name="bog&amp;#39;liq faylni oching / Directory"/>
 			</TabBar>
 		</Menu>
 
 		<Dialog>
 			<Find title="" titleFind="Izlamoq" titleReplace="Almashtirmoq" titleFindInFiles="Faylda izlamoq" titleMark="Nishonchalar">
-				<Item id="1"    name="Davom etmoq"/>
-				<Item id="2"    name="Yopmoq"/>
+				<Item id="1" name="Davom etmoq"/>
+				<Item id="2" name="Yopmoq"/>
 				<Item id="1603" name="Faqat butun so‘zlarni"/>
 				<Item id="1604" name="&amp;Registr hisobini olmoq"/>
 				<Item id="1605" name="Doimiy ifoda"/>
@@ -394,9 +405,9 @@ Updater: Shamsiddinov Zafar
 				<Item id="1722" name="Qayta izlashda davom etmoq"/>
 			</Find>
 
-			<FindCharsInRange title = "Diapazonda belgilarni izlamoq....">
+			<FindCharsInRange title="Diapazonda belgilarni izlamoq....">
 				<Item id="2910" name="Izlamoq"/>
-				<Item id="2"      name="Yopmoq"/>
+				<Item id="2" name="Yopmoq"/>
 				<Item id="2901" name="ASCII belgilari emas (128-255)"/>
 				<Item id="2902" name="ASCII belgilari (0 - 127)"/>
 				<Item id="2903" name="O‘z diapazoningiz:"/>
@@ -406,60 +417,60 @@ Updater: Shamsiddinov Zafar
 				<Item id="2909" name="To‘xtovsiz izlamoq"/>
 			</FindCharsInRange>
 
-			<GoToLine title= "Satrga o‘tmoq...">
+			<GoToLine title="Satrga o‘tmoq...">
 				<Item id="2007" name="Satr"/>
 				<Item id="2008" name="Belgi"/>
-				<Item id="1"    name="O‘tmoq!"/>
-				<Item id="2"    name="Bekor qilmoq"/>
+				<Item id="1" name="O‘tmoq!"/>
+				<Item id="2" name="Bekor qilmoq"/>
 				<Item id="2004" name="Joriy satr raqami:"/>
 				<Item id="2005" name="O‘tish satrini kiriting:"/>
 				<Item id="2006" name="Jami satrlar soni:"/>
 			</GoToLine>
 
-			<Run title = "Ishga tushirmoq...">
+			<Run title="Ishga tushirmoq...">
 				<Item id="1903" name="Dasturga kirish parametrini kiriting"/>
-				<Item id="1"    name="Kirmoq"/>
-				<Item id="2"    name="Bekor qilmoq"/>
+				<Item id="1" name="Kirmoq"/>
+				<Item id="2" name="Bekor qilmoq"/>
 				<Item id="1904" name="Saqlamoq..."/>
 			</Run>
 
 			<MD5FromFilesDlg title="Fayldan MD5 tuzmoq">
 				<Item id="1922" name="MD5 tuzish uchun fayl tanlang..."/>
 				<Item id="1924" name="Buferdan nusxalamoq"/>
-				<Item id="2"    name="Yopmoq"/>
+				<Item id="2" name="Yopmoq"/>
 			</MD5FromFilesDlg>
 
 			<MD5FromTextDlg title="MD5 tuzmoq">
 				<Item id="1932" name="Har bir satrni alohida ko‘rib chiqmoq"/>
 				<Item id="1934" name="Buferga nusxalamoq"/>
-				<Item id="2"    name="Yopmoq"/>
+				<Item id="2" name="Yopmoq"/>
 			</MD5FromTextDlg>
 
 			<SHA256FromFilesDlg title="Fayldan SHA-256 tuzmoq">
 				<Item id="1922" name="SHA-256 tuzish uchun fayl tanlang..."/>
 				<Item id="1924" name="Buferga nusxalamoq"/>
-				<Item id="2"    name="Yopmoq"/>
+				<Item id="2" name="Yopmoq"/>
 			</SHA256FromFilesDlg>
 
 			<SHA256FromTextDlg title="SHA-256 tuzmoq">
 				<Item id="1932" name="Har bir satrni alohida ko‘rib chiqmoq"/>
 				<Item id="1934" name="Buferga nusxalamoq"/>
-				<Item id="2"    name="Yopmoq"/>
+				<Item id="2" name="Yopmoq"/>
 			</SHA256FromTextDlg>
 
-			<PluginsAdminDlg title="Ilovalar boshqaruvi" titleAvailable = "Mavjudlari" titleUpdates = "Yangilanganlari" titleInstalled = "O‘rnatilganlari">
-				<ColumnPlugin   name="Ilova nomi"/>
-				<ColumnVersion  name="Versiyasi"/>
+			<PluginsAdminDlg title="Ilovalar boshqaruvi" titleAvailable="Mavjudlari" titleUpdates="Yangilanganlari" titleInstalled="O‘rnatilganlari">
+				<ColumnPlugin name="Ilova nomi"/>
+				<ColumnVersion name="Versiyasi"/>
 				<Item id="5501" name="Izlash:"/>
 				<Item id="5503" name="O‘rnatmoq"/>
 				<Item id="5504" name="Yangilamoq"/>
 				<Item id="5505" name="Yo‘qotmoq"/>
 				<Item id="5508" name="Davom etmoq"/>
-				<Item id="2"    name="Yopmoq"/>
+				<Item id="2" name="Yopmoq"/>
 			</PluginsAdminDlg>
 
-			<StyleConfig    title="Uslubni aniqlamoq">
-				<Item id="2"    name="Bekor qilmoq"/>
+			<StyleConfig title="Uslubni aniqlamoq">
+				<Item id="2" name="Bekor qilmoq"/>
 				<Item id="2301" name="ОК"/>
 				<Item id="2303" name="Shaffoflik"/>
 				<Item id="2306" name="Uslubni tanlang:"/>
@@ -506,6 +517,9 @@ Updater: Shamsiddinov Zafar
 				<ScintillaCommandsTab name="Scintilla"/>
 				<ConflictInfoOk name="Ushbu elementda tugmalar qarama-qarshiligi kuzatilmadi."/>
 				<ConflictInfoEditing name="Qarama-qarshilik yo‘q . . ."/>
+				<MainCommandNames>
+					<Item id="2147483547" name="bo&amp;#39;sh"/>
+				</MainCommandNames>
 			</ShortcutMapper>
 			<ShortcutMapperSubDialg title="Tezkor Tugmalar">
 				<Item id="1" name="ОК"/>
@@ -693,9 +707,9 @@ Updater: Shamsiddinov Zafar
 					<Item id="24301" name="2-ajratkich"/>
 				</Operator>
 			</UserDefine>
-			<Preference title = "Tanlovlar">
+			<Preference title="Tanlovlar">
 				<Item id="6001" name="Yopmoq"/>
-				<Global title = "Asosiy">
+				<Global title="Asosiy">
 					<Item id="6101" name="Uskunalar paneli ko‘rinishi"/>
 					<Item id="6102" name="Panelni berkitmoq"/>
 					<Item id="6103" name="Kichik yorliqlarda"/>
@@ -717,9 +731,10 @@ Updater: Shamsiddinov Zafar
 					<Item id="6123" name="Dastur interfeysi tili"/>
 					<Item id="6125" name="Fayllar Ro‘yxati paneli"/>
 					<Item id="6126" name="Ko‘rsatmoq"/>
-					<Item id="6127" name="Kengaytirilgan ustunlarni berkitmoq"/>
+					<Item id="6127" name="kengaytirish ustunini yoqish"/>
+					<Item id="6128" name="katta matnni ko&amp;#39;rsatish"/>
 				</Global>
-				<Scintillas title = "Tahrirlash">
+				<Scintillas title="Tahrirlash">
 					<Item id="6201" name="Matn-bloki tuzilishi"/>
 					<Item id="6202" name="Odatiy"/>
 					<Item id="6203" name="Strelkali"/>
@@ -747,11 +762,14 @@ Updater: Shamsiddinov Zafar
 					<Item id="6229" name="Tekis"/>
 					<Item id="6230" name="Chekinishlar bilan"/>
 					<Item id="6231" name="Darcha  gardishi o‘lchami"/>
-					<Item id="6234" name="Yurg‘izish funksiyasini o‘chirib qo‘ymoq&#x0A; (agar tapchadda probel bo‘lsa)"/>
+					<Item id="6234" name="Yurg‘izish funksiyasini o‘chirib qo‘ymoq&#xA; (agar tapchadda probel bo‘lsa)"/>
 					<Item id="6235" name="Gardishsiz"/>
 					<Item id="6236" name="So‘nggi satrgacha yurg‘izmoq"/>
+					<Item id="6237" name="Oʻnlik sonda koʻrsatgan holda oʻz ustuningiz markerini qoʻshing.
+Siz bir necha marker ustunlarini probellar orqali belgilashingiz mumkin."/>
+					<Item id="6239" name="Sichqn. oʻng tugm. bosilmaganda ham belgilashni saqlamoq"/>
 				</Scintillas>
-				<NewDoc title = "Yangi fayl">
+				<NewDoc title="Yangi fayl">
 					<Item id="6401" name="Formati"/>
 					<Item id="6402" name="Windows"/>
 					<Item id="6403" name="Unix"/>
@@ -766,18 +784,22 @@ Updater: Shamsiddinov Zafar
 					<Item id="6419" name="Yangi fayl"/>
 					<Item id="6420" name="ANSI faylni ochishda qo‘llamoq"/>
 				</NewDoc>
-				<DefaultDir title="Standart yo‘lak">
+				<DefaultDir title="Directory">
 					<Item id="6413" name="Standart Yo‘lak (Ochish/Saqlash)"/>
 					<Item id="6414" name="Joriy faylga o‘tish"/>
 					<Item id="6415" name="So‘nggi jild yo‘lagini saqlab qolmoq"/>
-					<Item id="6430" name="Faylni saqlashning yangi darchasi (fayl kengaytmasi so‘rovisiz)"/>
 					<Item id="6431" name="Dasturga surib olib kelingan jilddagi barcha fayllarni ochmoq"/>
+					<Item id="6433" name="filtrlar"/>
+					<Item id="6432" name="Drag va Drop"/>
+					<Item id="6434" name="Yinelemeli"/>
+					<Item id="6430" name="Faylni saqlashning yangi darchasi"/>
 				</DefaultDir>
-				<FileAssoc title = "Fayllar birikuvi">
+				<FileAssoc title="Fayllar birikuvi">
+					<Item id="4008" name="Textrument dasturiga Maʼmur (Admin) nomi bilan kirsangiz ushbu funksiya faollashadi."/>
 					<Item id="4009" name="Qo‘llovchi formatlar:"/>
 					<Item id="4010" name="Qayd etilgan formatlar:"/>
 				</FileAssoc>
-				<Print title = "Chop etish">
+				<Print title="Chop etish">
 					<Item id="6601" name="Satrlar raqamini chop etmoq"/>
 					<Item id="6602" name="Rang tuzilmasi"/>
 					<Item id="6603" name="Qanday bo‘lsa"/>
@@ -806,6 +828,15 @@ Updater: Shamsiddinov Zafar
 					<Item id="6727" name="Qaysi qism..."/>
 					<Item id="6728" name="Kolontitullar"/>
 				</Print>
+				<Searching title="Izlash">
+					<Item id="6901" name="Tanlangan so&amp;#39;zni olib"/>
+					<Item id="6902" name="nomutanosib yozuv"/>
+					<Item id="6903" name="Izlash bajarilgandan soʻng ham Izlash darchasida qolmoq"/>
+					<Item id="6904" name="Almashtirish amalini barcha ochilgan oynalarda bajarmoq"/>
+					<Item id="6906" name="yaqin so&amp;#39;zlarni qiling"/>
+					<Item id="6905" name="Soni o&amp;#39;tish Shriftning o&amp;#39;lchami"/>
+					<Item id="6907" name="Qidiruv Field"/>
+				</Searching>
 				<RecentFilesHistory title="Ochish tarixi">
 					<Item id="6304" name="So‘nggi Yopilgan Fayllar Tarixi"/>
 					<Item id="6305" name="Kirganda tekshirmaslik"/>
@@ -839,7 +870,7 @@ Updater: Shamsiddinov Zafar
 					<Item id="6510" name="Odatiy qiymatdan foyd.."/>
 					<Item id="6335" name="Teskari tutuq belgisi (‘) SQL belgisi ko‘rinishidir"/>
 				</Language>
-				<MISC title = "Boshqalar">
+				<MISC title="Boshqalar">
 					<Item id="6307" name="Faollashtirmoq"/>
 					<Item id="6308" name="Treyga o‘tkazmoq"/>
 					<Item id="6312" name="Fayl o‘zgarishlarini kuzatmoq  (извне)"/>
@@ -859,15 +890,17 @@ Updater: Shamsiddinov Zafar
 					<Item id="6344" name="Faylni Ko‘rmoq"/>
 					<Item id="6345" name="Xatcho‘plar ostida miniatura"/>
 					<Item id="6346" name="Fayl xaritasida ko‘rsatmoq"/>
+					<Item id="6349" name="DirectWrite funksiyasidan foydalanmoq (Textrument dasturiga qayta kirish talab etiladi)"/>
+					<Item id="6350" name="Toʻldirish rejimini qoʻllamoq"/>
 				</MISC>
-				<MultiInstance title = "Kirish rejimi">
+				<MultiInstance title="Kirish rejimi">
 					<Item id="6151" name="Fayl ochish rejimi"/>
 					<Item id="6152" name="Sessiya faqat yangi darchada ochilganda"/>
 					<Item id="6153" name="Har bir faylni yangi darchada ochmoq"/>
 					<Item id="6154" name="Barcha fayllarni bir darchada ochmoq (odatiy)"/>
-					<Item id="6155" name="* O‘zgarishlar Notepad++ qayta yuklangach, ishga tushadi"/>
+					<Item id="6155" name="* O‘zgarishlar Textrument qayta yuklangach, ishga tushadi"/>
 				</MultiInstance>
-				<Delimiter title = "Ajratkich">
+				<Delimiter title="Ajratkich">
 					<Item id="6251" name="Ajratkich parametrlari (Ctrl + 2 Sichq.ni bosish)"/>
 					<Item id="6252" name="Ochilgan"/>
 					<Item id="6255" name="Yopilgan"/>
@@ -876,7 +909,7 @@ Updater: Shamsiddinov Zafar
 					<Item id="6258" name="falon falon falon falon falon falon"/>
 					<Item id="6161" name="Belgilar ro‘yxati"/>
 					<Item id="6162" name="Odatiy belgilardan foydalanmoq"/>
-					<Item id="6163" name="O‘z belgilaringizni so‘z bo‘lagi kabi qo‘shmoq&#x0A;(agar nima qilishni bilmasangiz, foydalanmang)"/>
+					<Item id="6163" name="O‘z belgilaringizni so‘z bo‘lagi kabi qo‘shmoq&#xA;(agar nima qilishni bilmasangiz, foydalanmang)"/>
 				</Delimiter>
 				<Cloud title="Saqlama">
 					<Item id="6262" name="Saqlama tanlovlari"/>
@@ -893,7 +926,7 @@ Updater: Shamsiddinov Zafar
 					<!-- Masalan’dan keyingi satr o‘zgartirilmaydi: -->
 					<Item id="6278" name="Masalan: https://www.google.com/search?q=$(CURRENT_WORD)"/>
 				</SearchEngine>
-				<Backup title = "Zaxira nusxasi">
+				<Backup title="Zaxira nusxasi">
 					<Item id="6801" name="Zaxira nusxasi (saqlash vaqtida)"/>
 					<Item id="6817" name="Sessiyalarni saqlab qo‘yish va davriy zaxira nusxasini yaratish"/>
 					<Item id="6309" name="Keyingi kirish uchun joriy sessiyani saqlab qo‘ymoq"/>
@@ -928,22 +961,22 @@ Updater: Shamsiddinov Zafar
 					<Item id="6866" name="3-buyurtma juft:"/>
 				</AutoCompletion>
 			</Preference>
-				<MultiMacro title = "Ko‘p marotaba kirish ...">
-				<Item id="1"    name="Kirish"/>
-				<Item id="2"    name="Bekor qilmoq"/>
+			<MultiMacro title="Ko‘p marotaba kirish ...">
+				<Item id="1" name="Kirish"/>
+				<Item id="2" name="Bekor qilmoq"/>
 				<Item id="8006" name="Makros:"/>
 				<Item id="8001" name="Bajarmoq"/>
 				<Item id="8005" name="marta"/>
 				<Item id="8002" name="Fayl oxirigacha bajarmoq"/>
 			</MultiMacro>
-				<Window title = "Fayllar xatcho‘pi">
-				<Item id="1"    name="Ochmoq"/>
-				<Item id="2"    name="ОК"/>
+			<Window title="Fayllar xatcho‘pi">
+				<Item id="1" name="Ochmoq"/>
+				<Item id="2" name="ОК"/>
 				<Item id="7002" name="Saqlamoq"/>
 				<Item id="7003" name="Darcha(lar)ni Yopmoq"/>
 				<Item id="7004" name="Tekislamoq"/>
 			</Window>
-				<ColumnEditor title = "Ustun tuzuvchi">
+			<ColumnEditor title="Ustun tuzuvchi">
 				<Item id="2023" name="Qo‘yish uchun matn"/>
 				<Item id="2033" name="Qo‘yish uchun sonlar"/>
 				<Item id="2030" name="Boshlang‘ich son:"/>
@@ -955,12 +988,12 @@ Updater: Shamsiddinov Zafar
 				<Item id="2025" name="Sakkizlik"/>
 				<Item id="2026" name="Oltilik"/>
 				<Item id="2027" name="Ikkilik"/>
-				<Item id="1"    name="ОК"/>
-				<Item id="2"    name="Bekor qilmoq"/>
+				<Item id="1" name="ОК"/>
+				<Item id="2" name="Bekor qilmoq"/>
 			</ColumnEditor>
 			<FindInFinder title="Topilganlarda izlash...">
-				<Item id="1"    name="Barini Izlamoq"/>
-				<Item id="2"    name="Yopmoq"/>
+				<Item id="1" name="Barini Izlamoq"/>
+				<Item id="2" name="Yopmoq"/>
 				<Item id="1711" name="Izlash :"/>
 				<Item id="1713" name="Faqat topilganlardan izlamoq"/>
 				<Item id="1714" name="Faqat butun so‘zlarni"/>
@@ -973,60 +1006,60 @@ Updater: Shamsiddinov Zafar
 			</FindInFinder>
 		</Dialog>
 		<MessageBox>
-			<ContextMenuXmlEditWarning title="contextMenu tahriri" message="contextMenu.xml faylini tahrirlash orqali o‘zingizning Notepad++ qalquvchi menyusini tahrirlash imkonini beradi.&#x0A;O‘zgarishlarni amalda qo‘llash uchun Notepad++ dasturini qayta ishga tushirasiz."/>
-			<NppHelpAbsentWarning title="Fayl mavjud emas" message="&#x0A;mavjud emas. Uni Notepad++ saytidan ko‘chirib oling."/>
-			<SaveCurrentModifWarning title="Joriy o‘zgarishni saqlash" message="Joriy o‘zgarish saqlanishi kerak.&#x0A;Barcha saqlangan o‘zgarishlarni bekor qilib bo‘lmaydi.&#x0A;&#x0A;Davom ettirilsinmi?"/>
-			<LoseUndoAbilityWarning title="Bekor qilish imkoniyati yo‘qotildi" message="Joriy o‘zgarish saqlanmog‘i lozim.&#x0A;Barcha saqlangan o‘zgarishlarni bekor qilib bo‘lmaydi.&#x0A;&#x0A;Davom ettirilsinmi?"/>
-			<CannotMoveDoc title="Notepad++ dasturining yangi namunasiga o‘tish" message="Faylda o‘zgarish mavjud. Uni saqlang va qayta urinib ko‘ring."/>
-			<DocReloadWarning title="Qayta yuklash" message="Barcha kiritilgan o‘zgarishlar yo‘qotiladi!&#x0A;Davom ettirilsinmi?"/>
+			<ContextMenuXmlEditWarning title="contextMenu tahriri" message="contextMenu.xml faylini tahrirlash orqali o‘zingizning Textrument qalquvchi menyusini tahrirlash imkonini beradi.&#xA;O‘zgarishlarni amalda qo‘llash uchun Textrument dasturini qayta ishga tushirasiz."/>
+			<NppHelpAbsentWarning title="Fayl mavjud emas" message="&#xA;mavjud emas. Uni Textrument saytidan ko‘chirib oling."/>
+			<SaveCurrentModifWarning title="Joriy o‘zgarishni saqlash" message="Joriy o‘zgarish saqlanishi kerak.&#xA;Barcha saqlangan o‘zgarishlarni bekor qilib bo‘lmaydi.&#xA;&#xA;Davom ettirilsinmi?"/>
+			<LoseUndoAbilityWarning title="Bekor qilish imkoniyati yo‘qotildi" message="Joriy o‘zgarish saqlanmog‘i lozim.&#xA;Barcha saqlangan o‘zgarishlarni bekor qilib bo‘lmaydi.&#xA;&#xA;Davom ettirilsinmi?"/>
+			<CannotMoveDoc title="Textrument dasturining yangi namunasiga o‘tish" message="Faylda o‘zgarish mavjud. Uni saqlang va qayta urinib ko‘ring."/>
+			<DocReloadWarning title="Qayta yuklash" message="Barcha kiritilgan o‘zgarishlar yo‘qotiladi!&#xA;Davom ettirilsinmi?"/>
 			<FileLockedWarning title="Saqlashning imkoni yo‘q" message="Fayl boshqa dasturda ochilganligini tekshirib ko‘ring."/>
-			<FileAlreadyOpenedInNpp title="" message="Fayl allaqachon Notepad++ dasturida ochilgan."/>
+			<FileAlreadyOpenedInNpp title="" message="Fayl allaqachon Textrument dasturida ochilgan."/>
 			<DeleteFileFailed title="Faylni olib tashlash" message="Faylni yo‘qotib bo‘lmadi."/>
 
-			<NbFileToOpenImportantWarning title="Fayllar soni juda ko‘p" message="$INT_REPLACE$ ta fayl ochiladi.&#x0A;Davom ettirilsinmi?"/>
-			<SettingsOnCloudError title="Saqlama Parametrlari" message="Saqlash uchun ko‘rsatilgan disk yoki jild faqat o‘qish uchun mo‘ljallanganga o‘xshaydi.&#x0A;Siz yozish uchun kirish ruxsatini olmog‘ingiz lozim.&#x0A;Saqlash parametri bekor qilinadi. Tanlovlar darchasidan o‘zgarishlarni bekor qiling..."/>
+			<NbFileToOpenImportantWarning title="Fayllar soni juda ko‘p" message="$INT_REPLACE$ ta fayl ochiladi.&#xA;Davom ettirilsinmi?"/>
+			<SettingsOnCloudError title="Saqlama Parametrlari" message="Saqlash uchun ko‘rsatilgan disk yoki jild faqat o‘qish uchun mo‘ljallanganga o‘xshaydi.&#xA;Siz yozish uchun kirish ruxsatini olmog‘ingiz lozim.&#xA;Saqlash parametri bekor qilinadi. Tanlovlar darchasidan o‘zgarishlarni bekor qiling..."/>
 			<FilePathNotFoundWarning title="Faylni ochish" message="Siz ochmoqchi bo‘lgan fayl mavjud emas."/>
 			<SessionFileInvalidError title="Sessiyani yuklab bo‘lmadi" message="Sessiya fayli mavjud emas yoki haqiqiy emas."/>
-			<DroppingFolderAsProjectModeWarning title="Yo‘naltiruvchi amal" message="Siz faqat fayl yoki jildni qo‘lla olasiz, ikkovini emas, chunki Loyiha tarzidagi Jild qilib o‘tkazmoqdasiz.&#x0A;вы должны включить &quot;Открыть все файлы папки при перетаскивании, вместо запуска Папка как Рабочая Область&quot; в &quot;Директорию По Умолчанию&quot;, чтобы эта операция работала зайдите в Настройки."/>
+			<DroppingFolderAsProjectModeWarning title="Yo‘naltiruvchi amal" message="Siz faqat fayl yoki jildni qo‘lla olasiz, ikkovini emas, chunki Loyiha tarzidagi Jild qilib o‘tkazmoqdasiz.&#xA;вы должны включить &quot;Открыть все файлы папки при перетаскивании, вместо запуска Папка как Рабочая Область&quot; в &quot;Директорию По Умолчанию&quot;, чтобы эта операция работала зайдите в Настройки."/>
 			<SortingError title="Saralash xatoligi" message="$INT_REPLACE$ satrlar tufayli saralab bo‘lmaydi."/>
 			<ColumnModeTip title="Режим Столбца" message="Пожалуйста, используйте &quot;ALT+Выделение Мышкой&quot; или &quot;Alt+Shift+Клавиши Стрелок&quot; для переключения в режим столбца."/>
 			<BufferInvalidWarning title="Saqlash xatoligi" message="Saqlab bo‘lmadi: Buferga ruxsat yo‘q."/>
 			<DoSaveOrNot title="Saqlash" message="&quot;$STR_REPLACE$&quot; fayli saqlansinmi?"/>
-			<DoCloseOrNot title="Удержание несуществующего файла" message="Файла &quot;$STR_REPLACE$&quot; больше не существует.&#x0A;Удержать этот файл в редакторе?"/>
-			<DoDeleteOrNot title="Faylni yo‘qotish" message="&quot;$STR_REPLACE$&quot;&#x0A; fayli yopiladi va Savatga jo‘natiladi.&#x0A;Davom ettirilsinmi?"/>
-			<NoBackupDoSaveFile title="Сохранение" message="Файл резервной копии не найден (удалён извне).&#x0A;Сохраните его, иначе ваши данные будут потеряны.&#x0A;Вы хотите сохранить файл &quot;$STR_REPLACE$&quot; ?"/>
-			<DoReloadOrNot title="Обновление файла" message="&quot;$STR_REPLACE$&quot;&#x0A;&#x0A;Этот файл был изменен другой программой.&#x0A;Вы хотите обновить его?"/>
-			<DoReloadOrNotAndLooseChange title="Обновление файла" message="&quot;$STR_REPLACE$&quot;&#x0A;&#x0A;Этот файл был изменен другой программой.&#x0A;Вы хотите обновить его?&#x0A;Но вы потеряете все внесенные изменения в Notepad++?"/>
+			<DoCloseOrNot title="Удержание несуществующего файла" message="Файла &quot;$STR_REPLACE$&quot; больше не существует.&#xA;Удержать этот файл в редакторе?"/>
+			<DoDeleteOrNot title="Faylni yo‘qotish" message="&quot;$STR_REPLACE$&quot;&#xA; fayli yopiladi va Savatga jo‘natiladi.&#xA;Davom ettirilsinmi?"/>
+			<NoBackupDoSaveFile title="Сохранение" message="Файл резервной копии не найден (удалён извне).&#xA;Сохраните его, иначе ваши данные будут потеряны.&#xA;Вы хотите сохранить файл &quot;$STR_REPLACE$&quot; ?"/>
+			<DoReloadOrNot title="Обновление файла" message="&quot;$STR_REPLACE$&quot;&#xA;&#xA;Этот файл был изменен другой программой.&#xA;Вы хотите обновить его?"/>
+			<DoReloadOrNotAndLooseChange title="Обновление файла" message="&quot;$STR_REPLACE$&quot;&#xA;&#xA;Этот файл был изменен другой программой.&#xA;Вы хотите обновить его?&#xA;Но вы потеряете все внесенные изменения в Textrument?"/>
 			<PrehistoricSystemDetected title="Обнаружена доисторическая система" message="Кажется, вы все еще используете доисторическую систему. Извините, но эта функция работает только на современных системах."/>
-			<XpUpdaterProblem title="Обновление Notepad++" message="Обновление Notepad++ не совместимо с XP из-за устаревшего уровня безопасности.&#x0A;Хотите перейти на страницу Notepad++, чтобы загрузить последнюю версию?"/>
+			<XpUpdaterProblem title="Обновление Textrument" message="Обновление Textrument не совместимо с XP из-за устаревшего уровня безопасности.&#xA;Хотите перейти на страницу Textrument, чтобы загрузить последнюю версию?"/>
 			<DocTooDirtyToMonitor title="Проблема Мониторинга" message="Документ в работе. Сохраните внесённые изменения перед его мониторингом."/>
 			<DocNoExistToMonitor title="Проблема Мониторинга" message="Для мониторинга файл должен существовать."/>
-			<FileTooBigToOpen title="Fayl hajmida muammo" message="Faylni Notepad++ dasturida ochish uchun judda kattalik qiladi"/>
+			<FileTooBigToOpen title="Fayl hajmida muammo" message="Faylni Textrument dasturida ochish uchun judda kattalik qiladi"/>
 			<CreateNewFileOrNot title="Yangi fayl yaratish" message="&quot;$STR_REPLACE$&quot; mavjud emas. Yaratilsinmi?"/>
 			<CreateNewFileError title="Yangi fayl yaratish" message="&quot;$STR_REPLACE$&quot; faylini yaratib bo‘lmadi."/>
 			<OpenFileError title="XATOLIK" message="&quot;$STR_REPLACE$&quot; nomli faylni ochib bo‘lmadi."/>
-			<FileBackupFailed title="Ошибка файла Резервного Копирования" message="Предыдущая версия файла не может быть сохранена в каталоге резервного копирования &quot;$STR_REPLACE$&quot;.&#x0A;&#x0A;Вы хотите сохранить текущий файл так или иначе?"/>
+			<FileBackupFailed title="Ошибка файла Резервного Копирования" message="Предыдущая версия файла не может быть сохранена в каталоге резервного копирования &quot;$STR_REPLACE$&quot;.&#xA;&#xA;Вы хотите сохранить текущий файл так или иначе?"/>
 			<LoadStylersFailed title="Ошибка загрузки stylers.xml" message="Ошибка загрузки &quot;$STR_REPLACE$&quot;!"/>
-			<LoadLangsFailed title="Конфигуратор" message="Ошибка загрузки langs.xml!&#x0A;Вы хотите восстановить свой langs.xml?"/>
+			<LoadLangsFailed title="Конфигуратор" message="Ошибка загрузки langs.xml!&#xA;Вы хотите восстановить свой langs.xml?"/>
 			<LoadLangsFailedFinal title="Конфигуратор" message="Ошибка загрузки langs.xml!"/>
-			<FolderAsWorspaceSubfolderExists title="Проблема при добавлении &quot;Папка как Рабочая Область&quot;" message="Подпапка папки, которую вы хотите добавить, уже существует.&#x0A;Пожалуйста, удалите её корень, прежде чем добавить папку &quot;$STR_REPLACE$&quot;."/>
+			<FolderAsWorspaceSubfolderExists title="Проблема при добавлении &quot;Папка как Рабочая Область&quot;" message="Подпапка папки, которую вы хотите добавить, уже существует.&#xA;Пожалуйста, удалите её корень, прежде чем добавить папку &quot;$STR_REPLACE$&quot;."/>
 
 			<ProjectPanelChanged title="$STR_REPLACE$" message="O‘zgarish mavjud. Saqlashni xohlaysizmi?"/>
 			<ProjectPanelChangedSaveError title="$STR_REPLACE$" message="Ishchi hududingiz saqlanmagan."/>
 			<ProjectPanelOpenDoSaveDirtyWsOrNot title="Открытие Рабочей Области" message="Текущая рабочая область была изменена. Вы хотите сохранить текущий проект?"/>
 			<ProjectPanelNewDoSaveDirtyWsOrNot title="Новая Рабочая Область" message="Текущая рабочая область была изменена. Вы хотите сохранить текущий проект?"/>
-			<ProjectPanelOpenFailed title="Открытие Рабочей Области" message="Не удалось открыть рабочую область.&#x0A;Похоже файл, который нужно открыть, является недопустимым файлом проекта."/>
-			<ProjectPanelRemoveFolderFromProject title="Удаление папки из проекта" message="Все подэлементы будут удалены.&#x0A;Вы действительно хотите удалить эту папку из проекта?"/>
+			<ProjectPanelOpenFailed title="Открытие Рабочей Области" message="Не удалось открыть рабочую область.&#xA;Похоже файл, который нужно открыть, является недопустимым файлом проекта."/>
+			<ProjectPanelRemoveFolderFromProject title="Удаление папки из проекта" message="Все подэлементы будут удалены.&#xA;Вы действительно хотите удалить эту папку из проекта?"/>
 			<ProjectPanelRemoveFileFromProject title="Удаление файла из проекта" message="Вы действительно хотите удалить этот файл из проекта?"/>
 			<ProjectPanelReloadError title="Перезагрузка Рабочей Области" message="Не удается найти файл для перезагрузки."/>
-			<ProjectPanelReloadDirty title="Перезагрузка Рабочей Области" message="Текущее рабочая область была изменена. Перезагрузка отменит все изменения.&#x0A;Вы хотите продолжить?"/>
-			<UDLNewNameError title="Ошибка Польз. Имени" message="Это имя используется другим языком.&#x0A;Пожалуйста, дайте ему другое имя."/>
+			<ProjectPanelReloadDirty title="Перезагрузка Рабочей Области" message="Текущее рабочая область была изменена. Перезагрузка отменит все изменения.&#xA;Вы хотите продолжить?"/>
+			<UDLNewNameError title="Ошибка Польз. Имени" message="Это имя используется другим языком.&#xA;Пожалуйста, дайте ему другое имя."/>
 			<UDLRemoveCurrentLang title="Удаление текущего языка" message="Вы уверены?"/>
 			<SCMapperDoDeleteOrNot title="Ishonchingiz komilmi?" message="Haqiqatan ham ushbu tezkor tugma olib tashlansinmi?"/>
 			<FindCharRangeValueError title="Проблема со значением диапазона" message="Вы должны ввести от 0 и до 255."/>
-			<OpenInAdminMode title="Saqlash xatoligi" message="Faylni saqlab bo‘lmaydi yoki himoyalangan.&#x0A;Notepad++ dasturiga administrator rejimida kirishni xohlaysizmi?"/>
-			<OpenInAdminModeWithoutCloseCurrent title="Saqlashda xatolik" message="Faylni saqlab bo‘lmaydi va himoyalangan bo‘lishi mumkin.&#x0A;Notepad++ dasturi Administrator rejimida ochishini xohlaysizmi?"/>
-			<OpenInAdminModeFailed title="Administrator rejimida ochishning imkoni yo‘q" message="Notepad++ Administrator rejimida ocha olmaydi."/>
+			<OpenInAdminMode title="Saqlash xatoligi" message="Faylni saqlab bo‘lmaydi yoki himoyalangan.&#xA;Textrument dasturiga administrator rejimida kirishni xohlaysizmi?"/>
+			<OpenInAdminModeWithoutCloseCurrent title="Saqlashda xatolik" message="Faylni saqlab bo‘lmaydi va himoyalangan bo‘lishi mumkin.&#xA;Textrument dasturi Administrator rejimida ochishini xohlaysizmi?"/>
+			<OpenInAdminModeFailed title="Administrator rejimida ochishning imkoni yo‘q" message="Textrument Administrator rejimida ocha olmaydi."/>
 		</MessageBox>
 		<ClipboardHistory>
 			<PanelTitle name="Bufer tarixi"/>
@@ -1052,8 +1085,8 @@ Updater: Shamsiddinov Zafar
 		</DocumentMap>
 		<FunctionList>
 			<PanelTitle name="Funksiyalar ro‘yxati"/>
-			<SortTip name="Tartiblamoq" />
-			<ReloadTip name="Yangilamoq" />
+			<SortTip name="Tartiblamoq"/>
+			<ReloadTip name="Yangilamoq"/>
 		</FunctionList>
 		<FolderAsWorkspace>
 			<PanelTitle name="Loyiha tarzidagi Jild"/>
@@ -1124,8 +1157,8 @@ Updater: Shamsiddinov Zafar
 			<word-chars-list-tab-warning value="$INT_REPLACE$ ta TAB"/>
 			<word-chars-list-warning-end value="  ro‘yxatingizdagi belgilar."/>
 			<cloud-invalid-warning value="Ruxsat etilmagan yo‘lak."/>
-			<cloud-restart-warning value="Faollashtirish uchun Notepad++ qayta yuklanishi lozim."/>
-			<cloud-select-folder value="Notepad++ o‘z tanlovlarini o‘qishi/yozishi uchun jild tanlang"/>
+			<cloud-restart-warning value="Faollashtirish uchun Textrument qayta yuklanishi lozim."/>
+			<cloud-select-folder value="Textrument o‘z tanlovlarini o‘qishi/yozishi uchun jild tanlang"/>
 			<shift-change-direction-tip value="Teskari tartibda izlash uchun Shift+Enter tugmalarini birdaniga bosing."/>
 			<two-find-buttons-tip value="2 tomonlama izlash"/>
 			<find-status-top-reached value="Izlash: Pastda bitta o‘xshashlik topildi. Fayl boshiga o‘tildi."/>
@@ -1157,10 +1190,12 @@ Updater: Shamsiddinov Zafar
 			<finder-close-this value="Ushbu qidiruvni yopmoq"/>
 			<finder-collapse-all value="Barini yig‘moq"/>
 			<finder-uncollapse-all value="Barini yoymoq"/>
-			<finder-copy value="Nusxalamoq"/>
+			<finder-copy value="Nusxalamoq">
+				<Item value="Nusxalamoq"/>
+			</finder-copy>
 			<finder-select-all value="Barini belgilamoq"/>
 			<finder-clear-all value="Barini tozalamoq"/>
 			<finder-open-all value="Barini ochmoq"/>
 		</MiscStrings>
 	</Native-Langue>
-</NotepadPlus>
+</Textrument>

@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 Aragonese localization
-for Notepad++ 6.4.5
+for Textrument 6.4.5
 Updated 28 Sept 2013
 By ChesÃƒÂºs D. Trigo [xuxinho7@gmail.com] & softaragones [softaragones@softaragones.org]
 -->
-<NotepadPlus>
-	<Native-Langue name="aragonese" filename="aragonese.xml">
+<Textrument>
+	<Native-Langue name="aragonese" filename="aragonese.xml" version="v1.0.0">
 		<Menu>
 			<Main>
 				<Entries>
@@ -240,12 +240,12 @@ By ChesÃƒÂºs D. Trigo [xuxinho7@gmail.com] & softaragones [softaragones@soft
 					<Item id="46250" name="Definir o luenguache..."/>
 					<Item id="46180" name="D&amp;efiniu por l'usuario"/>
 					<Item id="47000" name="&amp;Quanto a Textrument..."/>
-					<Item id="47001" name="Pachina web de &amp;Notepad++ "/>
-					<Item id="47002" name="Pachina d'o &amp;prochecto Notepad++ "/>
+					<Item id="47001" name="Pachina web de &amp;Textrument "/>
+					<Item id="47002" name="Pachina d'o &amp;prochecto Textrument "/>
 					<Item id="47003" name="Np&amp;Wiki++ (Aduya en linia)"/>
 					<Item id="47004" name="&amp;Foro"/>
 					<Item id="47005" name="Aconseguir mas &amp;complementos"/>
-					<Item id="47006" name="&amp;Esviellar Notepad++"/>
+					<Item id="47006" name="&amp;Esviellar Textrument"/>
 					<Item id="47008" name="&amp;Aduya..."/>
 					<Item id="47009" name="Confi&amp;gurar l'intermediario de l'actualizaciÃƒÂ³n"/>
 					<Item id="48005" name="Importar &amp;complementos..."/>
@@ -267,7 +267,7 @@ By ChesÃƒÂºs D. Trigo [xuxinho7@gmail.com] & softaragones [softaragones@soft
 				</Commands>
 			</Main>
 			<Splitter>
-			</Splitter>
+            </Splitter>
 			<TabBar>
 				<Item CMID="0" name="&amp;Zarrar"/>
 				<Item CMID="1" name="Zarrar-los &amp;totz fueras d'iste"/>
@@ -859,5 +859,5 @@ By ChesÃƒÂºs D. Trigo [xuxinho7@gmail.com] & softaragones [softaragones@soft
 			</Menus>
 		</ProjectManager>
 	</Native-Langue>
-</NotepadPlus>
+</Textrument>
 

@@ -1,12 +1,12 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
-	Serbian localization for Notepad++
+	Serbian localization for Textrument
 	Last modified Wednesday, Mart 11th 2010 18:06 GMT by Иван Старчевић.
 	Please e-mail errors, suggestions etc. to ivanstar61 at gmail.com.
 -->
 
-<NotepadPlus>
-	<Native-Langue name="Српски" filename="serbianCyrillic.xml" >
+<Textrument>
+	<Native-Langue name="Српски" filename="serbianCyrillic.xml" version="v1.0.0">
 		<Menu>
 			<Main>
 				<!-- Main Menu Entries -->
@@ -20,13 +20,13 @@
 					<Item menuId="settings" name="П&amp;оставке"/>
 					<Item menuId="macro" name="Макро"/>
 					<Item menuId="run" name="Покрени"/>
-					<Item idName ="Plugins" name="Додаци"/>
-					<Item idName ="Window" name="Прозор"/>
+					<Item idName="Plugins" name="Додаци"/>
+					<Item idName="Window" name="Прозор"/>
 				</Entries>
 
 				<!-- Sub Menu Entries -->
 				<SubEntries>
-					<Item subMenuId="edit-copyToClipboard"  name="Сачувај у остави"/>
+					<Item subMenuId="edit-copyToClipboard" name="Сачувај у остави"/>
 					<Item subMenuId="edit-indent" name="Увуци"/>
 					<Item subMenuId="edit-convertCaseTo" name="Обележи па пребаци у"/>
 					<Item subMenuId="edit-lineOperations" name="Линија извођења"/>
@@ -40,30 +40,30 @@
 					<Item subMenuId="search-jumpUp" name="Иди горе"/>
 					<Item subMenuId="search-jumpDown" name="Иди доле"/>
 					<Item subMenuId="search-bookmark" name="Забелешке"/>
-					<Item subMenuId="view-showSymbol"  name="Прикажи симбол"/>
-					<Item subMenuId="view-zoom"  name="Увећај"/>
-					<Item subMenuId="view-moveCloneDocument"  name="Помери тренутни документ"/>
+					<Item subMenuId="view-showSymbol" name="Прикажи симбол"/>
+					<Item subMenuId="view-zoom" name="Увећај"/>
+					<Item subMenuId="view-moveCloneDocument" name="Помери тренутни документ"/>
 					<Item subMenuId="view-collapseLevel" name="Пад нивоа"/>
 					<Item subMenuId="view-uncollapseLevel" name="Дизање нивоа"/>
 					<Item subMenuId="view-project" name="Пројекат"/>
-					<Item subMenuId="encoding-characterSets"  name="Скуп знакова"/>
-					<Item subMenuId="encoding-arabic"  name="арапски"/>
-					<Item subMenuId="encoding-baltic"  name="балтички"/>
-					<Item subMenuId="encoding-celtic"  name="келтски"/>
-					<Item subMenuId="encoding-cyrillic"  name="ћирилични"/>
-					<Item subMenuId="encoding-centralEuropean"  name="средњевропски"/>
-					<Item subMenuId="encoding-chinese"  name="кинески"/>
-					<Item subMenuId="encoding-easternEuropean"  name="источноевропски"/>
-					<Item subMenuId="encoding-greek"  name="грчки"/>
-					<Item subMenuId="encoding-hebrew"  name="хебрејски"/>
-					<Item subMenuId="encoding-japanese"  name="јапански"/>
+					<Item subMenuId="encoding-characterSets" name="Скуп знакова"/>
+					<Item subMenuId="encoding-arabic" name="арапски"/>
+					<Item subMenuId="encoding-baltic" name="балтички"/>
+					<Item subMenuId="encoding-celtic" name="келтски"/>
+					<Item subMenuId="encoding-cyrillic" name="ћирилични"/>
+					<Item subMenuId="encoding-centralEuropean" name="средњевропски"/>
+					<Item subMenuId="encoding-chinese" name="кинески"/>
+					<Item subMenuId="encoding-easternEuropean" name="источноевропски"/>
+					<Item subMenuId="encoding-greek" name="грчки"/>
+					<Item subMenuId="encoding-hebrew" name="хебрејски"/>
+					<Item subMenuId="encoding-japanese" name="јапански"/>
 					<Item subMenuId="encoding-korean" name="корејски"/>
 					<Item subMenuId="encoding-northEuropean" name="северноевропски"/>
 					<Item subMenuId="encoding-thai" name="тајландски"/>
 					<Item subMenuId="encoding-turkish" name="турски"/>
 					<Item subMenuId="encoding-westernEuropean" name="западноевропски"/>
 					<Item subMenuId="encoding-vietnamese" name="вијетнамски"/>
-					<Item subMenuId="settings-import"  name="Увези"/>
+					<Item subMenuId="settings-import" name="Увези"/>
 				</SubEntries>
 
 				<!-- all menu item -->
@@ -77,7 +77,7 @@
 					<Item id="41007" name="Сач&amp;увај све"/>
 					<Item id="41008" name="Сачувај &amp;као..."/>
 					<Item id="41010" name="Одштампај..."/>
-					<Item id="1001"  name="Одштампај одмах"/>
+					<Item id="1001" name="Одштампај одмах"/>
 					<Item id="41011" name="И&amp;злаз"/>
 					<Item id="41012" name="Учитај сесију..."/>
 					<Item id="41013" name="Сачувај сесију..."/>
@@ -181,8 +181,8 @@
 					<Item id="44019" name="Приказ свих знакова"/>
 					<Item id="44020" name="Постави упутство"/>
 					<Item id="44022" name="Прелом текста"/>
-					<Item id="44023" name="Уве&amp;ћај	Ctrl+точкић миша напред"/>
-					<Item id="44024" name="Ума&amp;њи	Ctrl+точкић миша назад"/>
+					<Item id="44023" name="Уве&amp;ћај Ctrl+точкић миша напред"/>
+					<Item id="44024" name="Ума&amp;њи Ctrl+точкић миша назад"/>
 					<Item id="44025" name="Прикажи знак за размак"/>
 					<Item id="44026" name="Прикажи знак за крај реда"/>
 					<Item id="44029" name="Одмотај све нивое"/>
@@ -220,13 +220,13 @@
 
 					<Item id="46001" name="Поставке стилова..."/>
 					<Item id="46180" name="Кориснички-одређен"/>
-					<Item id="47000" name="О Notepad++-у..."/>
-					<Item id="47001" name="Интернет страница Notepad++"/>
-					<Item id="47002" name="Страница пројекта Notepad++"/>
+					<Item id="47000" name="О Textrument-у..."/>
+					<Item id="47001" name="Интернет страница Textrument"/>
+					<Item id="47002" name="Страница пројекта Textrument"/>
 					<Item id="47003" name="Помоћ преко интернета"/>
 					<Item id="47004" name="Дискусиона група"/>
 					<Item id="47005" name="Преузми нове додатке"/>
-					<Item id="47006" name="Ажурирај Notepad++"/>
+					<Item id="47006" name="Ажурирај Textrument"/>
 					<Item id="47008" name="Садржај помоћи"/>
 					<Item id="48005" name="Увоз додатака ..."/>
 					<Item id="48006" name="Увоз тема ..."/>
@@ -247,32 +247,32 @@
 				</Commands>
 			</Main>
 			<Splitter>
-			</Splitter>
+            </Splitter>
 			<TabBar>
-					<Item CMID="0" name="Затвори"/>
-					<Item CMID="1" name="Затвори све остале"/>
-					<Item CMID="2" name="Сачувај"/>
-					<Item CMID="3" name="Сачувај као..."/>
-					<Item CMID="4" name="Штампач"/>
-					<Item CMID="5" name="Приказ у другом делу"/>
-					<Item CMID="6" name="Дуплирани приказ"/>
-					<Item CMID="7" name="Сачувај целу путању датотеке у остави"/>
-					<Item CMID="8" name="Сачувај име датотеке у остави"/>
-					<Item CMID="9" name="Сачувај путању тренутне фасцикле у остави"/>
-					<Item CMID="10" name="Преименуј"/>
-					<Item CMID="11" name="Избриши"/>
-					<Item CMID="12" name="Само за читање"/>
-					<Item CMID="13" name="Одстрани заштиту од писања"/>
-					<Item CMID="14" name="Пребаци другој надлежности"/>
-					<Item CMID="15" name="Отвори у новој надлежности"/>
-					<Item CMID="16" name="Поново учитај"/>
+				<Item CMID="0" name="Затвори"/>
+				<Item CMID="1" name="Затвори све остале"/>
+				<Item CMID="2" name="Сачувај"/>
+				<Item CMID="3" name="Сачувај као..."/>
+				<Item CMID="4" name="Штампач"/>
+				<Item CMID="5" name="Приказ у другом делу"/>
+				<Item CMID="6" name="Дуплирани приказ"/>
+				<Item CMID="7" name="Сачувај целу путању датотеке у остави"/>
+				<Item CMID="8" name="Сачувај име датотеке у остави"/>
+				<Item CMID="9" name="Сачувај путању тренутне фасцикле у остави"/>
+				<Item CMID="10" name="Преименуј"/>
+				<Item CMID="11" name="Избриши"/>
+				<Item CMID="12" name="Само за читање"/>
+				<Item CMID="13" name="Одстрани заштиту од писања"/>
+				<Item CMID="14" name="Пребаци другој надлежности"/>
+				<Item CMID="15" name="Отвори у новој надлежности"/>
+				<Item CMID="16" name="Поново учитај"/>
 			</TabBar>
 		</Menu>
 
 		<Dialog>
 			<Find title="" titleFind="Нађи" titleReplace="Замени" titleFindInFiles="Пронађи у датотекама">
-				<Item id="1"    name="Пронађи следеће"/>
-				<Item id="2"    name="Затвори"/>
+				<Item id="1" name="Пронађи следеће"/>
+				<Item id="2" name="Затвори"/>
 				<Item id="1620" name="Пронађи :"/>
 				<Item id="1603" name="Упореди само &amp;целе речи"/>
 				<Item id="1604" name="Упореди &amp;подударне"/>
@@ -289,32 +289,32 @@
 				<Item id="1611" name="Заме&amp;ни са:"/>
 				<Item id="1608" name="&amp;Замени"/>
 				<Item id="1609" name="Замени &amp;све"/>
-			 	<Item id="1623" name="Провидан"/>
-			 	<Item id="1687" name="Кад није у жижи"/>
-			 	<Item id="1688" name="Увек"/>
-			 	<Item id="1632" name="У избору"/>
-			 	<Item id="1633" name="Очисти"/>
-			 	<Item id="1635" name="Замени све у свим отвореним документима"/>
-			 	<Item id="1636" name="Пронађи све у свим отвореним документима"/>
-			 	<Item id="1637" name="Пронађи у датотекама"/>
-			 	<Item id="1654" name="Филтери:"/>
-			 	<Item id="1655" name="Фасцикла:"/>
-			 	<Item id="1656" name="Нађи све"/>
-			 	<Item id="1658" name="У свим подфасциклама"/>
-			 	<Item id="1659" name="У сакривеним фасц."/>
-			 	<Item id="1624" name="Начин претраге"/>
-			 	<Item id="1625" name="Уобичајен"/>
-			 	<Item id="1626" name="Проширен (\n, \r, \t, \0, \x...)"/>
-			 	<Item id="1660" name="Замени у датотеци"/>
+				<Item id="1623" name="Провидан"/>
+				<Item id="1687" name="Кад није у жижи"/>
+				<Item id="1688" name="Увек"/>
+				<Item id="1632" name="У избору"/>
+				<Item id="1633" name="Очисти"/>
+				<Item id="1635" name="Замени све у свим отвореним документима"/>
+				<Item id="1636" name="Пронађи све у свим отвореним документима"/>
+				<Item id="1637" name="Пронађи у датотекама"/>
+				<Item id="1654" name="Филтери:"/>
+				<Item id="1655" name="Фасцикла:"/>
+				<Item id="1656" name="Нађи све"/>
+				<Item id="1658" name="У свим подфасциклама"/>
+				<Item id="1659" name="У сакривеним фасц."/>
+				<Item id="1624" name="Начин претраге"/>
+				<Item id="1625" name="Уобичајен"/>
+				<Item id="1626" name="Проширен (\n, \r, \t, \0, \x...)"/>
+				<Item id="1660" name="Замени у датотеци"/>
 				<Item id="1661" name="Прати текући документ"/>
-			 	<Item id="1641" name="Пронађи све у текућем документу"/>
-			 	<Item id="1686" name="Провидан"/>
+				<Item id="1641" name="Пронађи све у текућем документу"/>
+				<Item id="1686" name="Провидан"/>
 			</Find>
 			<GoToLine title="Пређи у ...">
 				<Item id="2007" name="Ред"/>
 				<Item id="2008" name="Карактер"/>
-				<Item id="1"    name="&amp;Крени"/>
-				<Item id="2"    name="Одустани"/>
+				<Item id="1" name="&amp;Крени"/>
+				<Item id="2" name="Одустани"/>
 				<Item id="2004" name="Tренутни:"/>
 				<Item id="2005" name="Жељени:"/>
 				<Item id="2006" name="Не може даље од :"/>
@@ -322,13 +322,13 @@
 
 			<Run title="Покрени...">
 				<Item id="1903" name="Име програма који треба покренути"/>
-				<Item id="1"    name="Покрени"/>
-				<Item id="2"    name="Одустани"/>
+				<Item id="1" name="Покрени"/>
+				<Item id="2" name="Одустани"/>
 				<Item id="1904" name="Сачувај..."/>
 			</Run>
 
 			<StyleConfig title="Поставке стилова">
-				<Item id="2"    name="Одустани"/>
+				<Item id="2" name="Одустани"/>
 				<Item id="2301" name="Сачувај &amp;/Затвори"/>
 				<Item id="2303" name="Провидност"/>
 				<Item id="2306" name="Изабери тему: "/>
@@ -369,8 +369,8 @@
 				<Item id="20011" name="Провидност"/>
 				<Item id="20015" name="Извоз..."/>
 				<Item id="20016" name="Увоз..."/>
-			    <StylerDialog title="Стајлер - дијалог">
-			   <Item id="25030" name="Избор словоликова:"/>
+				<StylerDialog title="Стајлер - дијалог">
+					<Item id="25030" name="Избор словоликова:"/>
 					<Item id="25006" name="Боја предњег плана"/>
 					<Item id="25007" name="Боја позадине"/>
 					<Item id="25031" name="Назив:"/>
@@ -444,7 +444,7 @@
 					<Item id="6101" name="Трака алата"/>
 					<Item id="6102" name="Сакри"/>
 					<Item id="6103" name="Мале иконе"/>
-	                <Item id="6104" name="Велике иконе"/>
+					<Item id="6104" name="Велике иконе"/>
 					<Item id="6105" name="Стандардне иконе"/>
 
 					<Item id="6106" name="Трака језичака"/>
@@ -475,7 +475,7 @@
 					<Item id="6201" name="Изглед ивице датотеке"/>
 					<Item id="6202" name="Једноставно"/>
 					<Item id="6203" name="Стрелица"/>
-	                <Item id="6204" name="Круг-дрво"/>
+					<Item id="6204" name="Круг-дрво"/>
 					<Item id="6205" name="Квадрат-дрво"/>
 					<Item id="6226" name="Ниједан"/>
 
@@ -498,7 +498,7 @@
 					<Item id="6401" name="Формат"/>
 					<Item id="6402" name="Windows"/>
 					<Item id="6403" name="Unix"/>
-	                <Item id="6404" name="Mac"/>
+					<Item id="6404" name="Mac"/>
 					<Item id="6405" name="Кодирање"/>
 					<Item id="6406" name="ANSI"/>
 					<Item id="6407" name="UTF-8 без BOM"/>
@@ -531,7 +531,7 @@
 					<Item id="6602" name="Избор боја"/>
 					<Item id="6603" name="Добићете оно што видите"/>
 					<Item id="6604" name="Обрни боје"/>
-	                <Item id="6605" name="Црно на белом"/>
+					<Item id="6605" name="Црно на белом"/>
 					<Item id="6606" name="Без позадинске боје"/>
 					<Item id="6607" name="Подеси ивицу (мм)"/>
 					<Item id="6612" name="Лева"/>
@@ -542,21 +542,21 @@
 					<Item id="6707" name="Укошен"/>
 					<Item id="6708" name="Заглавље"/>
 					<Item id="6709" name="Леви део"/>
-	                <Item id="6710" name="Средњи део"/>
+					<Item id="6710" name="Средњи део"/>
 					<Item id="6711" name="Десни део"/>
 					<Item id="6717" name="Подебљан"/>
 					<Item id="6718" name="Укошен"/>
 					<Item id="6719" name="Подножје"/>
 					<Item id="6720" name="Леви део"/>
-	                <Item id="6721" name="Средњи део"/>
+					<Item id="6721" name="Средњи део"/>
 					<Item id="6722" name="Десни део"/>
-	                <Item id="6723" name="Додај"/>
+					<Item id="6723" name="Додај"/>
 					<Item id="6725" name="Променљива :"/>
 					<Item id="6728" name="Заглавље и подножје"/>
 				</Print>
 				<MISC title="Остало">
 					<Item id="6304" name="Поставке историје датотека"/>
-	                <Item id="6305" name="Не проверавај при покретању"/>
+					<Item id="6305" name="Не проверавај при покретању"/>
 					<Item id="6306" name="Највећи број у прошлости:"/>
 					<Item id="6307" name="Омогући"/>
 					<Item id="6308" name="Умањи у стартни плато"/>
@@ -568,7 +568,7 @@
 					<Item id="6319" name="Омогући"/>
 					<Item id="6320" name="Не подвлачи"/>
 					<Item id="6322" name="Наставак датотеке:"/>
-					<Item id="6323" name="Омогући самоажурирање Notepad++"/>
+					<Item id="6323" name="Омогући самоажурирање Textrument"/>
 					<Item id="6324" name="Бирање документа (Ctrl+TAB)"/>
 					<Item id="6326" name="Омогући паметно наглашавање"/>
 					<Item id="6329" name="Истакни подударне знакове"/>
@@ -590,7 +590,7 @@
 					<Item id="6804" name="Пронађи фасциклу за причувну"/>
 					<Item id="6803" name="Фасцикла:"/>
 					<Item id="6807" name="Самодопуњавање"/>
-	                <Item id="6808" name="Самодопуњавање при сваком уносу"/>
+					<Item id="6808" name="Самодопуњавање при сваком уносу"/>
 					<Item id="6809" name="Допуни функције"/>
 					<Item id="6810" name="Допуни речи"/>
 					<Item id="6811" name="Од"/>
@@ -629,15 +629,15 @@
 				<Item id="2" name="Откажи"/>
 			</ColumnEditor>
 		</Dialog>
-<MessageBox>
-			<ContextMenuXmlEditWarning title="Уређивање contextMenu" message="Уређивање contextMenu.xml вам омогућава да измените свој Notepad++ искачући додатни изборник.\rМорате препокренути ваш Notepad++ да би измене ступиле на снагу contextMenu.xml."/>
-			<NppHelpAbsentWarning title="Датотека не постоји" message="\rне постоји. Преузмите је са Notepad++ сајта."/>
+		<MessageBox>
+			<ContextMenuXmlEditWarning title="Уређивање contextMenu" message="Уређивање contextMenu.xml вам омогућава да измените свој Textrument искачући додатни изборник.\rМорате препокренути ваш Textrument да би измене ступиле на снагу contextMenu.xml."/>
+			<NppHelpAbsentWarning title="Датотека не постоји" message="\rне постоји. Преузмите је са Textrument сајта."/>
 			<SaveCurrentModifWarning title="Сачувај тренутну измену" message="Требало би да сачувате тренутну промену.\rСве сачуване измене се не могу опозвати.\r\rНастављате?"/>
 			<LoseUndoAbilityWarning title="Губи способност смањења опозива" message="Требало би да сачувате тренутну промену.\rСве сачуване измене се не могу опозвати.\r\rНастављате?"/>
-			<CannotMoveDoc title="Премести у нову Notepad++ инстанцу" message="Документ је измењен, сачувајте га а затим покушајте поново."/>
-			<DocReloadWarning title="Поново учитај" message="Желите да поново учутате тренутну датотеку и изгубите направљене промене у Notepad++?"/>
+			<CannotMoveDoc title="Премести у нову Textrument инстанцу" message="Документ је измењен, сачувајте га а затим покушајте поново."/>
+			<DocReloadWarning title="Поново учитај" message="Желите да поново учутате тренутну датотеку и изгубите направљене промене у Textrument?"/>
 			<FileLockedWarning title="Неуспешно чување" message="Проверите да ли је ова датотека отворена у другом програму"/>
-			<FileAlreadyOpenedInNpp title="" message="Датотека је већ отворена у Notepad++."/>
+			<FileAlreadyOpenedInNpp title="" message="Датотека је већ отворена у Textrument."/>
 			<DeleteFileFailed title="Избриши датотеку" message="Неуспешно брисање датотеке"/>
 
 			<!-- $INT_REPLACE$ is a place holder, don't translate it -->
@@ -690,4 +690,4 @@
 			</Menus>
 		</ProjectManager>
 	</Native-Langue>
-</NotepadPlus>
+</Textrument>

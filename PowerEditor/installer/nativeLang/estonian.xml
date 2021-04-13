@@ -3,8 +3,8 @@
 Estonian translation by Andres Traks
 https://github.com/AndresTraks/
 -->
-<NotepadPlus>
-	<Native-Langue name="Estonian" filename="estonian.xml" version="7.3.1">
+<Textrument>
+	<Native-Langue name="Estonian" filename="estonian.xml" version="v1.0.0">
 		<Menu>
 			<Main>
 				<!-- Main Menu Entries -->
@@ -293,7 +293,7 @@ https://github.com/AndresTraks/
 					<Item id="47011" name="Tugi"/>
 					<Item id="47012" name="Silumisinfo..."/>
 					<Item id="47005" name="Leia veel pluginaid"/>
-					<Item id="47006" name="Värskenda Notepad++-i"/>
+					<Item id="47006" name="Värskenda Textrument-i"/>
 					<Item id="47009" name="Seadista proksiserver värskendamiseks..."/>
 					<Item id="48005" name="Pluginate importimine..."/>
 					<Item id="48006" name="Kujunduste importimine..."/>
@@ -319,10 +319,14 @@ https://github.com/AndresTraks/
 					<Item id="48100" name="Väikesed ikoonid"/>
 					<Item id="48101" name="Suured ikoonid"/>
 					<Item id="48102" name="Tavasuuruses ikoonid"/>
+					<Item id="45014" name="binaarsed"/>
+					<Item id="48105" name="Kohanda tööriistariba"/>
+					<Item id="48106" name="wrap tööriistariba"/>
+					<Item id="48107" name="Mitmeliiniline lehtedest"/>
 				</Commands>
 			</Main>
 			<Splitter>
-			</Splitter>
+            </Splitter>
 			<TabBar>
 				<Item CMID="0" name="Sule"/>
 				<Item CMID="1" name="Sule kõik teised"/>
@@ -661,6 +665,7 @@ https://github.com/AndresTraks/
 					<Item id="6125" name="Dokumentide loendi paneel"/>
 					<Item id="6126" name="Näita"/>
 					<Item id="6127" name="Luba laienduse veerus"/>
+					<Item id="6128" name="Näita suuremat teksti"/>
 				</Global>
 				<Scintillas title="Redigeerimine">
 					<Item id="6216" name="Kursori sätted"/>
@@ -719,11 +724,11 @@ https://github.com/AndresTraks/
 					<Item id="6413" name="Vaikekaust (avamisel ja salvestamisel)"/>
 					<Item id="6414" name="Kasuta avatud dokumendi kausta"/>
 					<Item id="6415" name="Jäta meelde viimati kasutatud kaust"/>
-					<Item id="6430" name="Kasuta uues stiilis salvestamise dialoogi "/>
 					<Item id="6431" name="Kausta pukseerimisel ava kõik kaustas asuvad failid tööruumina avamise asemel"/>
 					<Item id="6433" name="filtrid"/>
 					<Item id="6432" name="Tõmba ja lase lahti"/>
 					<Item id="6434" name="rekursiivselt"/>
+					<Item id="6430" name="Kasuta uues stiilis salvestamise dialoogi "/>
 				</DefaultDir>
 
 				<FileAssoc title="Failiseosed">
@@ -917,6 +922,11 @@ https://github.com/AndresTraks/
 				<Item id="1" name="Olgu"/>
 				<Item id="2" name="Loobu"/>
 			</ColumnEditor>
+			<ShortcutMapper>
+				<MainCommandNames>
+					<Item id="2147483547" name="Tühi"/>
+				</MainCommandNames>
+			</ShortcutMapper>
 		</Dialog>
 		<MessageBox>
 			<ContextMenuXmlEditWarning title="Kontekstimenüü redigeerimine" message="Faili contextMenu.xml kaudu saab muuta Textrument-i kontekstimenüü kirjeid.
@@ -1012,7 +1022,7 @@ Pärast faili salvestamist tuleb muudatuste rakendamiseks Textrument uuesti käi
 			<word-chars-list-tab-warning value="$INT_REPLACE$ tabeldusmärk(i)"/>
 			<word-chars-list-warning-end value=" tähemärkide loendis."/>
 			<cloud-invalid-warning value="Vigane rada."/>
-			<cloud-restart-warning value="Palun taaskäivita muudatuste rakendamiseks Notepad++."/>
+			<cloud-restart-warning value="Palun taaskäivita muudatuste rakendamiseks Textrument."/>
 		</MiscStrings>
 	</Native-Langue>
-</NotepadPlus>
+</Textrument>

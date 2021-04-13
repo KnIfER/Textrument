@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<NotepadPlus>
-	<Native-Langue name="Indonesian" filename="indonesian.xml" version="7.5.5">
+<Textrument>
+	<Native-Langue name="Indonesian" filename="indonesian.xml" version="v1.0.0">
 		<Menu>
 			<Main>
 				<!-- Main Menu Entries -->
@@ -281,14 +281,14 @@
 					<Item id="46180" name="Definisi-Pengguna"/>
 					<Item id="47000" name="Ihwal Textrument..."/>
 					<Item id="47010" name="Argumen Baris Perintah..."/>
-					<Item id="47001" name="Beranda Notepad++"/>
-					<Item id="47002" name="Laman Proyek Notepad++"/>
+					<Item id="47001" name="Beranda Textrument"/>
+					<Item id="47002" name="Laman Proyek Textrument"/>
 					<Item id="47003" name="Dokumentasi Daring"/>
 					<Item id="47004" name="Forum"/>
 					<Item id="47011" name="Dukungan Langsung"/>
 					<Item id="47012" name="Info Debug..."/>
 					<Item id="47005" name="Dapatkan Plugin Lain"/>
-					<Item id="47006" name="Perbarui Notepad++"/>
+					<Item id="47006" name="Perbarui Textrument"/>
 					<Item id="47009" name="Atur Proksi..."/>
 					<Item id="48005" name="Impor Plugin ..."/>
 					<Item id="48006" name="Impor Tema ..."/>
@@ -314,10 +314,14 @@
 					<Item id="48100" name="Ikon kecil"/>
 					<Item id="48101" name="Ikon besar"/>
 					<Item id="48102" name="Ikon standar"/>
+					<Item id="45014" name="biner Modus"/>
+					<Item id="48105" name="Customize Toolbar"/>
+					<Item id="48106" name="wrap Toolbar"/>
+					<Item id="48107" name="Tab Multi-baris"/>
 				</Commands>
 			</Main>
 			<Splitter>
-			</Splitter>
+            </Splitter>
 			<TabBar>
 				<Item CMID="0" name="Tutup"/>
 				<Item CMID="1" name="Tutup Semua Kecuali Ini"/>
@@ -473,6 +477,9 @@
 				<ScintillaCommandsTab name="Perintah lainnya"/>
 				<ConflictInfoOk name="Tidak ada pintasan yang konflik untuk butir ini."/>
 				<ConflictInfoEditing name="Tidak ada konflik ..."/>
+				<MainCommandNames>
+					<Item id="2147483547" name="Kosong"/>
+				</MainCommandNames>
 			</ShortcutMapper>
 			<ShortcutMapperSubDialg title="Pintasan">
 				<Item id="1" name="Oke"/>
@@ -682,6 +689,7 @@
 					<Item id="6125" name="Panel Daftar Dokumen"/>
 					<Item id="6126" name="Tampilkan"/>
 					<Item id="6127" name="Aktifkan kolom ekstensi"/>
+					<Item id="6128" name="Menampilkan teks lebih besar"/>
 				</Global>
 				<Scintillas title="Pengeditan">
 					<Item id="6216" name="Pengaturan Caret"/>
@@ -737,11 +745,11 @@
 					<Item id="6413" name="Direktori Baku (Buka/Simpan)"/>
 					<Item id="6414" name="Ikuti dokumen aktif"/>
 					<Item id="6415" name="Ingat direktori terakhir"/>
-					<Item id="6430" name="Gunakan dialog gaya baru "/>
 					<Item id="6431" name="Buka semua file dari folder bukan meluncurkan folder sebagai Ruang kerja saat menjatuhkan folder"/>
 					<Item id="6433" name="filter"/>
 					<Item id="6432" name="Drag dan Drop"/>
 					<Item id="6434" name="rekursif"/>
+					<Item id="6430" name="Gunakan dialog gaya baru "/>
 				</DefaultDir>
 
 				<FileAssoc title="Asosiasi Berkas">
@@ -1052,8 +1060,8 @@
 			<word-chars-list-tab-warning value="$INT_REPLACE$ TAB"/>
 			<word-chars-list-warning-end value="  dalam daftar karakter anda."/>
 			<cloud-invalid-warning value="Jalur tidak valid."/>
-			<cloud-restart-warning value="Silakan mulai ulang Notepad++ agar diterapkan."/>
-			<cloud-select-folder value="Pilih folder dari/ke tempat Notepad++ membaca/menulis pengaturannya"/>
+			<cloud-restart-warning value="Silakan mulai ulang Textrument agar diterapkan."/>
+			<cloud-select-folder value="Pilih folder dari/ke tempat Textrument membaca/menulis pengaturannya"/>
 			<shift-change-direction-tip value="Gunakan Shift+Enter untuk mencari dalam arah berlawanan"/>
 			<two-find-buttons-tip value="mode 2 tombol cari"/>
 			<find-status-top-reached value="Cari: Menemukan kejadian pertama dari bawah. Awal dokumen telah tercapai."/>
@@ -1085,10 +1093,12 @@
 			<finder-close-this value="Tutup pencari ini"/>
 			<finder-collapse-all value="Bentangkan semua"/>
 			<finder-uncollapse-all value="Ciutkan semua"/>
-			<finder-copy value="Salin"/>
+			<finder-copy value="Salin">
+				<Item value="Salin"/>
+			</finder-copy>
 			<finder-select-all value="Pilih semua"/>
 			<finder-clear-all value="Bersihkan semua"/>
 			<finder-open-all value="Buka semua"/>
 		</MiscStrings>
 	</Native-Langue>
-</NotepadPlus>
+</Textrument>

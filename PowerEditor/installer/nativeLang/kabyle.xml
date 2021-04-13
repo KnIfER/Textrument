@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<NotepadPlus>
-	<Native-Langue name="Taqbaylit" filename="kabyle.xml">
+<Textrument>
+	<Native-Langue name="Taqbaylit" filename="kabyle.xml" version="v1.0.0">
 		<Menu>
 			<Main>
 				<!-- Main Menu Entries -->
@@ -256,12 +256,12 @@
 					<Item id="46001" name="Swel aɣanib..."/>
 					<Item id="46180" name="User-Defined"/>
 					<Item id="47000" name="About Textrument..."/>
-					<Item id="47001" name="Notepad++ Home"/>
-					<Item id="47002" name="Asebter n usenfaṛ Notepad++"/>
+					<Item id="47001" name="Textrument Home"/>
+					<Item id="47002" name="Asebter n usenfaṛ Textrument"/>
 					<Item id="47003" name="Online Documentation"/>
 					<Item id="47004" name="Forum"/>
 					<Item id="47005" name="Get More Plugins"/>
-					<Item id="47006" name="Lqem Notepad++"/>
+					<Item id="47006" name="Lqem Textrument"/>
 					<Item id="47008" name="Tallalt"/>
 					<Item id="47009" name="Set Updater Proxy..."/>
 					<Item id="48005" name="Import Plugin(s) ..."/>
@@ -279,7 +279,7 @@
 				</Commands>
 			</Main>
 			<Splitter>
-			</Splitter>
+            </Splitter>
 			<TabBar>
 				<Item CMID="0" name="Mdel"/>
 				<Item CMID="1" name="Mdel kulec ala wagi"/>
@@ -901,4 +901,4 @@
 			</Menus>
 		</ProjectManager>
 	</Native-Langue>
-</NotepadPlus>
+</Textrument>

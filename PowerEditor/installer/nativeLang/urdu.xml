@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<NotepadPlus>
-	<Native-Langue name="Urdu" RTL="yes" filename="urdu.xml">
+<Textrument>
+	<Native-Langue name="Urdu" RTL="yes" filename="urdu.xml" version="v1.0.0">
 		<Menu>
 			<Main>
 				<!-- Main Menu Entries -->
@@ -18,7 +18,7 @@
 
 				<!-- Sub Menu Entries -->
 				<SubEntries>
-				</SubEntries>
+                </SubEntries>
 
 				<!-- all menu item -->
 				<Commands>
@@ -126,10 +126,14 @@
 					<Item id="49000" name="&amp;رن..."/>
 					<Item id="44070" name="ٹیب کی فہرست"/>
 					<Item id="44105" name="پینل چالو کریں لیکن یہ ٹوگل ایسا نہیں کرتے"/>
+					<Item id="45014" name="ثنائی موڈ"/>
+					<Item id="48105" name="مرضی کے مطابق بنائیں ٹول بار"/>
+					<Item id="48106" name="ملفوف ٹول بار"/>
+					<Item id="48107" name="کثیر لائن ٹیبز"/>
 				</Commands>
 			</Main>
 			<Splitter>
-			</Splitter>
+            </Splitter>
 			<TabBar>
 				<Item CMID="0" name="اغلقني"/>
 				<Item CMID="1" name="اغلقهم كلهم ماعداي"/>
@@ -265,6 +269,11 @@
 					<Item id="24314" name="الحد مغلق:"/>
 				</Operator>
 			</UserDefine>
+			<ShortcutMapper>
+				<MainCommandNames>
+					<Item id="2147483547" name="خالی"/>
+				</MainCommandNames>
+			</ShortcutMapper>
 		</Dialog>
 	</Native-Langue>
-</NotepadPlus>
+</Textrument>

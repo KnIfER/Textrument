@@ -1,14 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <!--
-
-	Slovak localization for Notepad++
-	last modified: 8. 9. 2020 by kubalav
-	
+	Slovak localization for Textrument
 -->
-
-<NotepadPlus>
-	<Native-Langue name="Slovenčina" filename="slovak.xml" version="7.8.9">
+<Textrument>
+	<Native-Langue name="Slovenčina" filename="slovak.xml" version="v1.0.0">
 		<Menu>
 			<Main>
 				<!-- Main Menu Entries -->
@@ -45,6 +40,7 @@
 					<Item subMenuId="search-unmarkAll" name="Odznačiť všetko"/>
 					<Item subMenuId="search-jumpUp" name="Skok nahor"/>
 					<Item subMenuId="search-jumpDown" name="Skok nadol"/>
+					<Item subMenuId="search-copyStyledText" name="Kopírovať štylizovaný text"/>
 					<Item subMenuId="search-bookmark" name="Záložka"/>
 					<Item subMenuId="view-currentFileIn" name="Zobraziť aktuálny súbor v"/>
 					<Item subMenuId="view-showSymbol" name="Zobraziť znak"/>
@@ -76,13 +72,13 @@
 					<Item subMenuId="tools-md5" name="MD5"/>
 					<Item subMenuId="tools-sha256" name="SHA-256"/>
 				</SubEntries>
-
 				<!-- all menu item -->
 				<Commands>
 					<Item id="41001" name="&amp;Nový"/>
-					<Item id="41002" name="&amp;Otvoriť"/>
+					<Item id="41002" name="&amp;Otvoriť…"/>
 					<Item id="41019" name="v Prieskumníkovi"/>
 					<Item id="41020" name="v Príkazovom riadku"/>
+					<Item id="41025" name="Priečinok ako pracovný priestor"/>
 					<Item id="41003" name="Zatvoriť"/>
 					<Item id="41004" name="Z&amp;atvoriť všetko"/>
 					<Item id="41005" name="Zatvoriť všetky okrem aktuálneho"/>
@@ -99,7 +95,7 @@
 					<Item id="41013" name="Uložiť reláciu..."/>
 					<Item id="41014" name="Obnoviť z disku"/>
 					<Item id="41015" name="Uložiť kópiu ako..."/>
-					<Item id="41016" name="Presunúť do Koša"/>
+					<Item id="41016" name="Presunúť do koša…"/>
 					<Item id="41017" name="Premenovať..."/>
 					<Item id="41021" name="Obnoviť naposledy zatvorený súbor"/>
 					<Item id="41022" name="Otvoriť priečinok ako pracovný priestor..."/>
@@ -115,13 +111,16 @@
 					<Item id="42008" name="Zväčšiť odsadenie riadka"/>
 					<Item id="42009" name="Zmenšiť odsadenie riadka"/>
 					<Item id="42010" name="Duplikovať aktuálny riadok"/>
-					<Item id="42077" name="Odstrániť posebe idúce duplicitné riadky"/>
+					<Item id="42079" name="Odstrániť duplicitné riadky"/>
+					<Item id="42077" name="Odstrániť po sebe idúce duplicitné riadky"/>
 					<Item id="42012" name="Rozdeliť riadky"/>
 					<Item id="42013" name="Spojiť riadky"/>
 					<Item id="42014" name="Posunúť aktuálny riadok nahor"/>
 					<Item id="42015" name="Posunúť aktuálny riadok nadol"/>
 					<Item id="42059" name="Usporiadať riadky vzostupne"/>
 					<Item id="42060" name="Usporiadať riadky zostupne"/>
+					<Item id="42080" name="Usporiadať riadky vzostupne (nerozlišovať veľkosť písma)"/>
+					<Item id="42081" name="Usporiadať riadky zostupne (nerozlišovať veľkosť písma)"/>
 					<Item id="42061" name="Usporiadať riadky ako celé čísla vzostupne"/>
 					<Item id="42062" name="Usporiadať riadky ako celé čísla zostupne"/>
 					<Item id="42063" name="Usporiadať riadky ako desatinné čísla (s čiarkou) vzostupne"/>
@@ -161,6 +160,7 @@
 					<Item id="42048" name="Kopírovať Binárny obsah"/>
 					<Item id="42049" name="Vystrihnúť Binárny obsah"/>
 					<Item id="42050" name="Prilepiť Binárny obsah"/>
+					<Item id="42082" name="Kopírovať odkaz"/>
 					<Item id="42037" name="Stĺpcový režim..."/>
 					<Item id="42034" name="Stĺpcový editor..."/>
 					<Item id="42051" name="Panel ASCII znakov"/>
@@ -199,7 +199,7 @@
 					<Item id="43009" name="Prejsť na párovú zátvorku"/>
 					<Item id="43010" name="Hľadať predchádzajúci"/>
 					<Item id="43011" name="&amp;Postupné vyhľadávanie"/>
-					<Item id="43013" name="Hľadať v súboroch"/>
+					<Item id="43013" name="Hľadať v súboroch…"/>
 					<Item id="43014" name="Hľadať ďalší (Volatilne)"/>
 					<Item id="43015" name="Hľadať predchádzajúci (Volatilne)"/>
 					<Item id="43022" name="Použiť 1. štýl"/>
@@ -225,6 +225,13 @@
 					<Item id="43042" name="4. štýl"/>
 					<Item id="43043" name="5. štýl"/>
 					<Item id="43044" name="Hľadať štýl"/>
+					<Item id="43055" name="1. štýl"/>
+					<Item id="43056" name="2. štýl"/>
+					<Item id="43057" name="3. štýl"/>
+					<Item id="43058" name="4. štýl"/>
+					<Item id="43059" name="5. štýl"/>
+					<Item id="43060" name="Všetky štýly"/>
+					<Item id="43061" name="Nájsť štýl (Označené)"/>
 					<Item id="43045" name="Okno s výsledkami hľadania"/>
 					<Item id="43046" name="Ďalší výsledok hľadania"/>
 					<Item id="43047" name="Predchádzajúci výsledok hľadania"/>
@@ -290,30 +297,28 @@
 					<Item id="45057" name="OEM 865: Škandinávske"/>
 					<Item id="45053" name="OEM 860: Portugalčina"/>
 					<Item id="45056" name="OEM 863: Francúzština"/>
-
 					<Item id="10001" name="Presunúť do druhého náhľadu"/>
 					<Item id="10002" name="Klonovať do druhého náhľadu"/>
 					<Item id="10003" name="Presunúť do novej inštancie"/>
 					<Item id="10004" name="Otvoriť v novej inštancii"/>
-
 					<Item id="46001" name="Nastavenie štýlov..."/>
 					<Item id="46250" name="Definovať vlastný jazyk..."/>
 					<Item id="46300" name="Otvoriť priečinok Užívateľom definovaný jazyk..."/>
 					<Item id="46180" name="Definovaný používateľom"/>
-					<Item id="47000" name="O Notepade++"/>
+					<Item id="47000" name="O Notepade++…"/>
 					<Item id="47010" name="Parametre príkazového riadka..."/>
-					<Item id="47001" name="Domovská stránka Notepad++"/>
-					<Item id="47002" name="Stránka projektu Notepad++"/>
+					<Item id="47001" name="Domovská stránka Textrument"/>
+					<Item id="47002" name="Stránka projektu Textrument"/>
 					<Item id="47003" name="Online dokumentácia"/>
-					<Item id="47004" name="Notepad++ komunita (Fórum)"/>
+					<Item id="47004" name="Textrument komunita (Fórum)"/>
 					<Item id="47011" name="Online podpora"/>
 					<Item id="47012" name="Informácie pre ladenie..."/>
 					<Item id="47005" name="Získať viac doplnkov"/>
-					<Item id="47006" name="Aktualizovať Notepad++"/>
+					<Item id="47006" name="Aktualizovať Textrument"/>
 					<Item id="47009" name="Nastaviť proxy server pre aktualizáciu..."/>
 					<Item id="48005" name="Importovať doplnky..."/>
 					<Item id="48006" name="Importovať témy..."/>
-					<Item id="48018" name="Úprava kontextového menu"/>
+					<Item id="48018" name="Úprava kontextového menu…"/>
 					<Item id="48009" name="Nastavenie klávesových skratiek..."/>
 					<Item id="48011" name="Preferencie..."/>
 					<Item id="48014" name="Otvoriť priečinok pluginov..."/>
@@ -325,7 +330,6 @@
 					<Item id="48505" name="Vytvoriť zo súborov..."/>
 					<Item id="48506" name="Vytvoriť z výberu do schránky"/>
 					<Item id="49000" name="&amp;Spustiť..."/>
-
 					<Item id="50000" name="Dokončovanie funkcií"/>
 					<Item id="50001" name="Dokončovanie slov"/>
 					<Item id="50002" name="Pomôcka k parametrom funkcie"/>
@@ -343,23 +347,27 @@
 					<Item id="48100" name="Malé ikony"/>
 					<Item id="48101" name="Veľké ikony"/>
 					<Item id="48102" name="Štandardné ikony"/>
+					<Item id="45014" name="režim binárne"/>
+					<Item id="48105" name="Prispôsob"/>
+					<Item id="48106" name="Wrap Toolbar"/>
+					<Item id="48107" name="Multi-linka Tabs"/>
 				</Commands>
 			</Main>
 			<Splitter>
-			</Splitter>
+            </Splitter>
 			<TabBar>
 				<Item CMID="0" name="Zatvoriť"/>
 				<Item CMID="1" name="Zatvoriť všetko OKREM tohto"/>
 				<Item CMID="2" name="Uložiť"/>
 				<Item CMID="3" name="Uložiť ako..."/>
-				<Item CMID="4" name="Tlačiť"/>
+				<Item CMID="4" name="Tlačiť…"/>
 				<Item CMID="5" name="Presunúť do druhého náhľadu"/>
 				<Item CMID="6" name="Klonovať do druhého náhľadu"/>
 				<Item CMID="7" name="Celá cesta k súboru do schránky"/>
 				<Item CMID="8" name="Názov súboru do schránky"/>
 				<Item CMID="9" name="Cesta k aktuálnemu priečinku do schránky"/>
-				<Item CMID="10" name="Premenovať"/>
-				<Item CMID="11" name="Presunúť do Koša"/>
+				<Item CMID="10" name="Premenovať…"/>
+				<Item CMID="11" name="Presunúť do koša…"/>
 				<Item CMID="12" name="Iba na čítanie"/>
 				<Item CMID="13" name="Odstrániť označenie 'Iba na čítanie'"/>
 				<Item CMID="14" name="Presunúť do novej inštancie"/>
@@ -372,9 +380,9 @@
 				<Item CMID="21" name="Otvoriť v predvolenom prehliadači"/>
 				<Item CMID="22" name="Zatvoriť všetky nezmenené"/>
 				<Item CMID="23" name="Otvorte prepojený súbor / adresár"/>
+				<Item CMID="24" name="Otvoriť priečinok súboru ako pracovný priestor"/>
 			</TabBar>
 		</Menu>
-
 		<Dialog>
 			<Find title="" titleFind="Hľadať" titleReplace="Nahradiť" titleFindInFiles="Hľadať v súboroch" titleMark="Označiť">
 				<Item id="1" name="Hľadať ďalší"/>
@@ -388,11 +396,11 @@
 				<Item id="1614" name="Spočítať"/>
 				<Item id="1615" name="Označiť všetko"/>
 				<Item id="1616" name="Označiť riadok"/>
-				<Item id="1618" name="Odstrániť označenie pred každým vyhľadávaním"/>
+				<Item id="1618" name="Odstrániť pred každým vyhľadávaním"/>
 				<Item id="1611" name="Na&amp;hradiť čím:"/>
 				<Item id="1608" name="&amp;Nahradiť"/>
 				<Item id="1609" name="Nahradiť &amp;všetko"/>
-				<Item id="1687" name="Pri strate focusu"/>
+				<Item id="1687" name="Pri strate fokusu"/>
 				<Item id="1688" name="Vždy"/>
 				<Item id="1632" name="Vo výbere"/>
 				<Item id="1633" name="Odstrániť označenie"/>
@@ -401,7 +409,7 @@
 				<Item id="1654" name="Filtre:"/>
 				<Item id="1655" name="Priečinok:"/>
 				<Item id="1656" name="Hľadať všetko"/>
-				<Item id="1658" name="Vo všetkých podpriečinkoch"/>
+				<Item id="1658" name="Vo všet. podpriečinkoch"/>
 				<Item id="1659" name="V skrytých priečinkoch"/>
 				<Item id="1624" name="Režim vyhľadávania"/>
 				<Item id="1625" name="Normálny"/>
@@ -412,10 +420,10 @@
 				<Item id="1686" name="Priehľadnosť"/>
 				<Item id="1703" name=". -&gt; nový riadok"/>
 				<Item id="1721" name="▲"/>
-				<Item id="1723" name="▼ Find Next"/>
+				<Item id="1723" name="▼ Next"/>
+				<Item id="1725" name="Kopírovať označený text"/>
 			</Find>
-
-			<FindCharsInRange title="Hľadať znaky v rozsahu...">
+			<FindCharsInRange title="Hľadať znaky v rozsahu">
 				<Item id="2" name="Zatvoriť"/>
 				<Item id="2901" name="Non-ASCII znaky (128-255)"/>
 				<Item id="2902" name="ASCII znaky (0 - 127)"/>
@@ -426,7 +434,6 @@
 				<Item id="2909" name="Cyklicky"/>
 				<Item id="2910" name="Hľadať"/>
 			</FindCharsInRange>
-
 			<GoToLine title="Ísť na">
 				<Item id="2007" name="Riadok"/>
 				<Item id="2008" name="Pozícia"/>
@@ -436,38 +443,32 @@
 				<Item id="2005" name="Prejsť na riadok/pozíciu:"/>
 				<Item id="2006" name="Posledný riadok/pozícia:"/>
 			</GoToLine>
-
-			<Run title="Spustiť...">
+			<Run title="Spustiť">
 				<Item id="1903" name="Program na spustenie"/>
 				<Item id="1" name="Spustiť"/>
 				<Item id="2" name="Zrušiť"/>
-				<Item id="1904" name="Uložiť..."/>
+				<Item id="1904" name="Uložiť"/>
 			</Run>
-
 			<MD5FromFilesDlg title="Vytvoriť MD5 kontrolný súčet zo súborov">
 				<Item id="1922" name="Vybrať súbory pre generovanie MD5..."/>
 				<Item id="1924" name="Skopírovať do schránky"/>
 				<Item id="2" name="Zatvoriť"/>
 			</MD5FromFilesDlg>
-
 			<MD5FromTextDlg title="Vytvoriť MD5 kontrolný súčet">
 				<Item id="1932" name="Každý riadok ako samostatný textový reťazec"/>
 				<Item id="1934" name="Skopírovať do schránky"/>
 				<Item id="2" name="Zatvoriť"/>
 			</MD5FromTextDlg>
-
 			<SHA256FromFilesDlg title="Vytvoriť SHA-256 kontrolný súčet zo súborov">
 				<Item id="1922" name="Vybrať súbory pre generovanie SHA-256..."/>
 				<Item id="1924" name="Skopírovať do schránky"/>
 				<Item id="2" name="Zatvoriť"/>
 			</SHA256FromFilesDlg>
-
 			<SHA256FromTextDlg title="Vytvoriť SHA-256 kontrolný súčet">
 				<Item id="1932" name="Každý riadok ako samostatný textový reťazec"/>
 				<Item id="1934" name="Skopírovať do schránky"/>
 				<Item id="2" name="Zatvoriť"/>
 			</SHA256FromTextDlg>
-
 			<PluginsAdminDlg title="Správa doplnkov" titleAvailable="Dostupné" titleUpdates="Aktualizácie" titleInstalled="Nainštalované">
 				<ColumnPlugin name="Doplnok"/>
 				<ColumnVersion name="Verzia"/>
@@ -478,7 +479,6 @@
 				<Item id="5508" name="Ďalší"/>
 				<Item id="2" name="Zatvoriť"/>
 			</PluginsAdminDlg>
-
 			<StyleConfig title="Nastavenie štýlov">
 				<Item id="2" name="Zrušiť"/>
 				<Item id="2301" name="Uložiť a zatvoriť"/>
@@ -509,7 +509,6 @@
 					<Item id="2232" name="Povoliť glob. štýl pre podčiarknuté písmo"/>
 				</SubDialog>
 			</StyleConfig>
-
 			<ShortcutMapper title="Nastavenie klávesových skratiek">
 				<Item id="2602" name="Upraviť"/>
 				<Item id="2603" name="Odstrániť"/>
@@ -526,7 +525,10 @@
 				<PluginCommandsTab name="Príkazy doplnkov"/>
 				<ScintillaCommandsTab name="Príkazy editora Scintilla"/>
 				<ConflictInfoOk name="Žiadne konflikty pre túto položku."/>
-				<ConflictInfoEditing name="Žiadne konflikty . . ."/>
+				<ConflictInfoEditing name="Žiadne konflikty…"/>
+				<MainCommandNames>
+					<Item id="2147483547" name="prázdny"/>
+				</MainCommandNames>
 			</ShortcutMapper>
 			<ShortcutMapperSubDialg title="Skratka">
 				<Item id="1" name="OK"/>
@@ -540,9 +542,9 @@
 			</ShortcutMapperSubDialg>
 			<UserDefine title="Definovať vlastný jazyk">
 				<Item id="20001" name="Pripnúť"/>
-				<Item id="20002" name="Premenovať"/>
+				<Item id="20002" name="Premenovať…"/>
 				<Item id="20003" name="Vytvoriť nový..."/>
-				<Item id="20004" name="Odstrániť"/>
+				<Item id="20004" name="Odstrániť…"/>
 				<Item id="20005" name="Uložiť ako..."/>
 				<Item id="20007" name="Jazyk používateľa:"/>
 				<Item id="20009" name="Prípona:"/>
@@ -586,7 +588,7 @@
 				</StylerDialog>
 				<Folder title="Balenie a predvoľby">
 					<Item id="21101" name="Predvolený štýl"/>
-					<Item id="21102" name="Nastaviť štýl"/>
+					<Item id="21102" name="Nastaviť štýl…"/>
 					<Item id="21105" name="Dokumentácia:"/>
 					<Item id="21104" name="Dočasná stránka s dokumentáciou:"/>
 					<Item id="21106" name="Zbaliť kompaktne (zbaliť aj prázdne riadky)"/>
@@ -594,17 +596,17 @@
 					<Item id="21224" name="Začiatok:"/>
 					<Item id="21225" name="Stred:"/>
 					<Item id="21226" name="Koniec:"/>
-					<Item id="21227" name="Nastaviť štýl"/>
+					<Item id="21227" name="Nastaviť štýl…"/>
 					<Item id="21320" name="Zbalenie v štýle kódu 2 (vyžaduje oddeľovače):"/>
 					<Item id="21324" name="Začiatok:"/>
 					<Item id="21325" name="Stred:"/>
 					<Item id="21326" name="Koniec:"/>
-					<Item id="21327" name="Nastaviť štýl"/>
+					<Item id="21327" name="Nastaviť štýl…"/>
 					<Item id="21420" name="Zbalenie v štýle komentáru:"/>
 					<Item id="21424" name="Začiatok:"/>
 					<Item id="21425" name="Stred:"/>
 					<Item id="21426" name="Koniec:"/>
-					<Item id="21427" name="Nastaviť štýl"/>
+					<Item id="21427" name="Nastaviť štýl…"/>
 				</Folder>
 				<Keywords title="Zoznamy kľúčových slov">
 					<Item id="22101" name="1. Skupina"/>
@@ -623,14 +625,14 @@
 					<Item id="22521" name="Režim prefixu"/>
 					<Item id="22571" name="Režim prefixu"/>
 					<Item id="22621" name="Režim prefixu"/>
-					<Item id="22122" name="Nastaviť štýl"/>
-					<Item id="22222" name="Nastaviť štýl"/>
-					<Item id="22322" name="Nastaviť štýl"/>
-					<Item id="22422" name="Nastaviť štýl"/>
-					<Item id="22472" name="Nastaviť štýl"/>
-					<Item id="22522" name="Nastaviť štýl"/>
-					<Item id="22572" name="Nastaviť štýl"/>
-					<Item id="22622" name="Nastaviť štýl"/>
+					<Item id="22122" name="Nastaviť štýl…"/>
+					<Item id="22222" name="Nastaviť štýl…"/>
+					<Item id="22322" name="Nastaviť štýl…"/>
+					<Item id="22422" name="Nastaviť štýl…"/>
+					<Item id="22472" name="Nastaviť štýl…"/>
+					<Item id="22522" name="Nastaviť štýl…"/>
+					<Item id="22572" name="Nastaviť štýl…"/>
+					<Item id="22622" name="Nastaviť štýl…"/>
 				</Keywords>
 				<Comment title="Komentár a číslo">
 					<Item id="23003" name="Pozícia riadkového komentáru"/>
@@ -638,17 +640,17 @@
 					<Item id="23005" name="Vynútiť na začiatku riadka"/>
 					<Item id="23006" name="Povoliť úvodné medzery"/>
 					<Item id="23001" name="Povoliť zbaliť komentáre"/>
-					<Item id="23326" name="Nastaviť štýl"/>
+					<Item id="23326" name="Nastaviť štýl…"/>
 					<Item id="23323" name="Začiatok"/>
 					<Item id="23324" name="Pokračovací znak"/>
 					<Item id="23325" name="Koniec"/>
 					<Item id="23301" name="Štýl riadkového komentáru"/>
-					<Item id="23124" name="Nastaviť štýl"/>
+					<Item id="23124" name="Nastaviť štýl…"/>
 					<Item id="23122" name="Začiatok"/>
 					<Item id="23123" name="Koniec"/>
 					<Item id="23101" name="Štýl komentáru"/>
 					<Item id="23201" name="Číselný štýl"/>
-					<Item id="23220" name="Nastaviť štýl"/>
+					<Item id="23220" name="Nastaviť štýl…"/>
 					<Item id="23230" name="Prefix 1"/>
 					<Item id="23232" name="Prefix 2"/>
 					<Item id="23234" name="Extra 1"/>
@@ -663,49 +665,49 @@
 				</Comment>
 				<Operator title="Operátory a oddeľovače">
 					<Item id="24101" name="Štýly operátorov"/>
-					<Item id="24113" name="Nastaviť štýl"/>
+					<Item id="24113" name="Nastaviť štýl…"/>
 					<Item id="24116" name="Operátory 1"/>
 					<Item id="24117" name="Operátory 2 (vyžaduje oddeľovače)"/>
 					<Item id="24201" name="Štýl oddeľovača 1"/>
 					<Item id="24220" name="Začiatok:"/>
 					<Item id="24221" name="Escape:"/>
 					<Item id="24222" name="Koniec:"/>
-					<Item id="24223" name="Nastaviť štýl"/>
+					<Item id="24223" name="Nastaviť štýl…"/>
 					<Item id="24301" name="Štýl oddeľovača 2"/>
 					<Item id="24320" name="Začiatok:"/>
 					<Item id="24321" name="Escape:"/>
 					<Item id="24322" name="Koniec:"/>
-					<Item id="24323" name="Nastaviť štýl"/>
+					<Item id="24323" name="Nastaviť štýl…"/>
 					<Item id="24401" name="Štýl oddeľovača 3"/>
 					<Item id="24420" name="Začiatok:"/>
 					<Item id="24421" name="Escape:"/>
 					<Item id="24422" name="Koniec:"/>
-					<Item id="24423" name="Nastaviť štýl"/>
+					<Item id="24423" name="Nastaviť štýl…"/>
 					<Item id="24451" name="Štýl oddeľovača 4"/>
 					<Item id="24470" name="Začiatok:"/>
 					<Item id="24471" name="Escape:"/>
 					<Item id="24472" name="Koniec:"/>
-					<Item id="24473" name="Nastaviť štýl"/>
+					<Item id="24473" name="Nastaviť štýl…"/>
 					<Item id="24501" name="Štýl oddeľovača 5"/>
 					<Item id="24520" name="Začiatok:"/>
 					<Item id="24521" name="Escape:"/>
 					<Item id="24522" name="Koniec:"/>
-					<Item id="24523" name="Nastaviť štýl"/>
+					<Item id="24523" name="Nastaviť štýl…"/>
 					<Item id="24551" name="Štýl oddeľovača 6"/>
 					<Item id="24570" name="Začiatok:"/>
 					<Item id="24571" name="Escape:"/>
 					<Item id="24572" name="Koniec:"/>
-					<Item id="24573" name="Nastaviť štýl"/>
+					<Item id="24573" name="Nastaviť štýl…"/>
 					<Item id="24601" name="Štýl oddeľovača 7"/>
 					<Item id="24620" name="Začiatok:"/>
 					<Item id="24621" name="Escape:"/>
 					<Item id="24622" name="Koniec:"/>
-					<Item id="24623" name="Nastaviť štýl"/>
+					<Item id="24623" name="Nastaviť štýl…"/>
 					<Item id="24651" name="Štýl oddeľovača 8"/>
 					<Item id="24670" name="Začiatok:"/>
 					<Item id="24671" name="Escape:"/>
 					<Item id="24672" name="Koniec:"/>
-					<Item id="24673" name="Nastaviť štýl"/>
+					<Item id="24673" name="Nastaviť štýl…"/>
 				</Operator>
 			</UserDefine>
 			<Preference title="Preferencie">
@@ -716,13 +718,11 @@
 					<Item id="6103" name="Malé ikony"/>
 					<Item id="6104" name="Veľké ikony"/>
 					<Item id="6105" name="Štandardné ikony"/>
-
 					<Item id="6106" name="Panel kariet"/>
 					<Item id="6107" name="Zmenšiť"/>
 					<Item id="6108" name="Zamknúť (Vypne Drag 'N' Drop)"/>
 					<Item id="6109" name="Stmaviť neaktívne karty"/>
 					<Item id="6110" name="Farebne zvýrazniť aktívnu kartu"/>
-
 					<Item id="6111" name="Zobraziť stavový riadok"/>
 					<Item id="6112" name="Zobraziť tlačidlo zatvorenia na karte"/>
 					<Item id="6113" name="Dvojklikom zatvoriť dokument"/>
@@ -730,13 +730,12 @@
 					<Item id="6119" name="Viacriadkový"/>
 					<Item id="6120" name="Vertikálny"/>
 					<Item id="6121" name="Ukončiť pri zatvorení poslednej karty"/>
-
 					<Item id="6122" name="Skryť panel menu (Na prepínanie použite klávesu Alt alebo F10)"/>
 					<Item id="6123" name="Lokalizácia"/>
-
 					<Item id="6125" name="Panel prepínača dokumentov"/>
 					<Item id="6126" name="Zobraziť"/>
 					<Item id="6127" name="Aktivácia rozšírenie stĺpec"/>
+					<Item id="6128" name="Alternatívne ikony"/>
 				</Global>
 				<Scintillas title="Editor">
 					<Item id="6216" name="Nastavenie kurzora"/>
@@ -744,38 +743,31 @@
 					<Item id="6219" name="Rýchlosť blikania:"/>
 					<Item id="6221" name="R"/>
 					<Item id="6222" name="P"/>
-					<Item id="6224" name="Nastavenie viacnásobnej editácie"/>
 					<Item id="6225" name="Povoliť Ctrl+klik pre výber"/>
+					<Item id="6227" name="Zalomenie riadku"/>
+					<Item id="6228" name="Predvolené"/>
+					<Item id="6229" name="Zarovnané"/>
+					<Item id="6230" name="Odsadené"/>
+					<Item id="6234" name="Zakázať funkciu vylepšeného posunu (pri problémoch s touchpadom)"/>
+					<Item id="6214" name="Zvýrazniť aktuálny riadok"/>
+					<Item id="6215" name="Povoliť vyhladzovanie písma"/>
+					<Item id="6236" name="Povoliť posun za posledným riadkom"/>
+					<Item id="6239" name="Ponechať označenie pri kliknutí pravým tlačidlom mimo označenia"/>
 					<Item id="6201" name="Štýl stromu"/>
 					<Item id="6202" name="Jednoduchý"/>
 					<Item id="6203" name="Šípky"/>
 					<Item id="6204" name="Kruhy"/>
 					<Item id="6205" name="Štvorce"/>
 					<Item id="6226" name="Žiadny"/>
-
-					<Item id="6227" name="Zalamovanie riadka"/>
-					<Item id="6228" name="Predvolené"/>
-					<Item id="6229" name="Zarovnané"/>
-					<Item id="6230" name="Odsadené"/>
-
 					<Item id="6206" name="Zobraziť čísla riadkov"/>
 					<Item id="6207" name="Zobraziť záložky"/>
-					<Item id="6208" name="Zobraziť vertikálny okraj"/>
-					<Item id="6234" name="Zakázať funkciu vylepšeného posunu
-(pri problémoch s touchpadom)"/>
-
 					<Item id="6211" name="Nastavenie vertikálneho okraja"/>
 					<Item id="6213" name="Režim pozadia"/>
-					<Item id="6237" name="Pridajte značku stĺpca tak, že označíte jej pozíciu s desatinným číslom.
-Zadať môžete viacero značiek pomocou medzery na oddelenie rôznych čísel."/>
-					<Item id="6214" name="Zvýrazňovať aktuálny riadok"/>
-					<Item id="6215" name="Povoliť vyhladzovanie písma"/>
+					<Item id="6237" name="Pridajte značku stĺpca tak, že označíte jej pozíciu s desatinným číslom. Zadať môžete viacero značiek pomocou medzery na oddelenie rôznych čísel."/>
 					<Item id="6231" name="Šírka okraja"/>
 					<Item id="6235" name="Bez okraja"/>
-					<Item id="6236" name="Povoliť posun za posledným riadkom"/>
-					<Item id="6239" name="Ponechať označenie pri kliknutí pravým tlačidlom mimo označenia"/>
+					<Item id="6224" name="Nastavenie viacnásobnej editácie"/>
 				</Scintillas>
-
 				<NewDoc title="Nový dokument">
 					<Item id="6401" name="Formát (Koniec riadka)"/>
 					<Item id="6402" name="Windows (CR LF)"/>
@@ -791,18 +783,16 @@ Zadať môžete viacero značiek pomocou medzery na oddelenie rôznych čísel."
 					<Item id="6419" name="Nový dokument"/>
 					<Item id="6420" name="Použiť pri otváraní ANSI súborov"/>
 				</NewDoc>
-
 				<DefaultDir title="adresár">
 					<Item id="6413" name="Predvolený priečinok pre otvorenie a uloženie súborov"/>
 					<Item id="6414" name="Riadiť sa aktuálnym dokumentom"/>
 					<Item id="6415" name="Pamätať si posledný použitý priečinok"/>
-					<Item id="6430" name="Použiť nový štýl dialógového okna "/>
 					<Item id="6431" name="Pri pretiahnutí priečinka myšou otvoriť súbory v priečinku, nie panel prac. priestoru"/>
 					<Item id="6433" name="filtre"/>
 					<Item id="6432" name="Drag and Drop"/>
 					<Item id="6434" name="rekurzívne"/>
+					<Item id="6430" name="Použiť nový štýl dialógového okna "/>
 				</DefaultDir>
-
 				<FileAssoc title="Asociácia súborov">
 					<Item id="4008" name="Ak chcete použiť túto funkciu , ukončite, prosím, Textrument a znova ho spustite v režime správcu."/>
 					<Item id="4009" name="Podporované prípony:"/>
@@ -819,7 +809,6 @@ Zadať môžete viacero značiek pomocou medzery na oddelenie rôznych čísel."
 					<Item id="6510" name="Použiť predvolenú hodnotu"/>
 					<Item id="6335" name="V SQL považovať spätnú lomku za znak ukončenia"/>
 				</Language>
-
 				<Highlighting title="Zvýrazňovanie">
 					<Item id="6333" name="Inteligentné zvýrazňovanie"/>
 					<Item id="6326" name="Povoliť"/>
@@ -832,7 +821,6 @@ Zadať môžete viacero značiek pomocou medzery na oddelenie rôznych čísel."
 					<Item id="6328" name="Zvýrazňovať atribúty značiek"/>
 					<Item id="6330" name="Zvýrazňovať oblasť komentáru/php/asp"/>
 				</Highlighting>
-
 				<Print title="Tlač">
 					<Item id="6601" name="Tlačiť čísla riadkov"/>
 					<Item id="6602" name="Možnosti farieb"/>
@@ -862,7 +850,6 @@ Zadať môžete viacero značiek pomocou medzery na oddelenie rôznych čísel."
 					<Item id="6727" name="Tu sa zobrazia nastav. premenných"/>
 					<Item id="6728" name="Hlavička a päta"/>
 				</Print>
-
 				<Searching title="Vyhľadávanie">
 					<Item id="6901" name="Vybrať označené slovo"/>
 					<Item id="6902" name="neproporcionálne písmo"/>
@@ -872,7 +859,6 @@ Zadať môžete viacero značiek pomocou medzery na oddelenie rôznych čísel."
 					<Item id="6905" name="Zväčšiť veľkosť písma"/>
 					<Item id="6907" name="vyhľadávacie pole"/>
 				</Searching>
-
 				<RecentFilesHistory title="História súborov">
 					<Item id="6304" name="História posledných súborov"/>
 					<Item id="6306" name="Max. počet položiek:"/>
@@ -883,7 +869,6 @@ Zadať môžete viacero značiek pomocou medzery na oddelenie rôznych čísel."
 					<Item id="6426" name="Celá cesta k súboru"/>
 					<Item id="6427" name="Prispôsobiť maximálnu dĺžku:"/>
 				</RecentFilesHistory>
-
 				<Backup title="Zálohovanie">
 					<Item id="6817" name="Bod obnovenia a periodické zálohovanie"/>
 					<Item id="6818" name="Povoliť bod obnovenia a periodické zálohovanie"/>
@@ -898,7 +883,6 @@ Zadať môžete viacero značiek pomocou medzery na oddelenie rôznych čísel."
 					<Item id="6804" name="Voliteľný priečinok pre zálohy"/>
 					<Item id="6803" name="Priečinok:"/>
 				</Backup>
-
 				<AutoCompletion title="Automat. dokončovanie">
 					<Item id="6115" name="Automatické odsadzovanie"/>
 					<Item id="6807" name="Automatické dokončovanie"/>
@@ -919,7 +903,6 @@ Zadať môžete viacero značiek pomocou medzery na oddelenie rôznych čísel."
 					<Item id="6863" name="Párové znaky 2:"/>
 					<Item id="6866" name="Párové znaky 3:"/>
 				</AutoCompletion>
-
 				<MultiInstance title="Viacnásobné spustenie">
 					<Item id="6151" name="Nastavenie viacnásobného spustenia"/>
 					<Item id="6152" name="Otvárať reláciu v novej inštancii programu Textrument"/>
@@ -927,7 +910,6 @@ Zadať môžete viacero značiek pomocou medzery na oddelenie rôznych čísel."
 					<Item id="6154" name="Len jedna inštancia programu (Predvolené)"/>
 					<Item id="6155" name="* Zmena nastavení vyžaduje reštart programu"/>
 				</MultiInstance>
-
 				<Delimiter title="Oddeľovací znak">
 					<Item id="6251" name="Nastavenie výberu ohraničeného oddeľovacími znakmi (Ctrl+dvojklik myšou)"/>
 					<Item id="6252" name="Začiatok"/>
@@ -935,16 +917,13 @@ Zadať môžete viacero značiek pomocou medzery na oddelenie rôznych čísel."
 					<Item id="6256" name="Povoliť výber cez viacero riadkov"/>
 					<Item id="6161" name="Zoznam znakov výrazu"/>
 					<Item id="6162" name="Použiť predvolený zoznam znakov výrazu, tak ako je"/>
-					<Item id="6163" name="Pridať vlastný znak ako časť výrazu
-(zvoľte, iba ak viete, čo robíte)"/>
+					<Item id="6163" name="Pridať vlastný znak ako časť výrazu (zvoľte, iba ak viete, čo robíte)"/>
 				</Delimiter>
-
 				<Cloud title="Úložisko">
-					<Item id="6262" name="Úložisko s nastaveniami programu"/>
-					<Item id="6263" name="Bez úložiska"/>
-					<Item id="6267" name="Cesta k úložisku:"/>
+					<Item id="6262" name="Nastavenia programu v cloude"/>
+					<Item id="6263" name="Bez cloudu"/>
+					<Item id="6267" name="Nastaviť umiestnenie v cloude:"/>
 				</Cloud>
-
 				<SearchEngine title="Vyhľadávač">
 					<Item id="6271" name="Vyhľadávač (pre príkaz &quot;Hľadať na Internete&quot;)"/>
 					<Item id="6272" name="DuckDuckGo"/>
@@ -955,7 +934,6 @@ Zadať môžete viacero značiek pomocou medzery na oddelenie rôznych čísel."
 					<!-- Don't change anything after Example: -->
 					<Item id="6278" name="Príklad: https://www.google.com/search?q=$(CURRENT_WORD)"/>
 				</SearchEngine>
-
 				<MISC title="Rôzne">
 					<ComboBox id="6347">
 						<Element name="Povoliť"/>
@@ -965,23 +943,24 @@ Zadať môžete viacero značiek pomocou medzery na oddelenie rôznych čísel."
 					<Item id="6308" name="Minimalizovať do oblasti oznámení"/>
 					<Item id="6312" name="Automatické zisťovanie stavu súboru"/>
 					<Item id="6313" name="Tichá aktualizácia"/>
-					<Item id="6318" name="Nastavenie hypertextového odkazu"/>
 					<Item id="6325" name="Skočiť po aktualizácii na posledný riadok"/>
-					<Item id="6319" name="Povoliť"/>
-					<Item id="6320" name="Nepodčiarkovať"/>
 					<Item id="6322" name="Prípona súboru relácie:"/>
 					<Item id="6323" name="Povoliť automatické aktualizácie programu Textrument"/>
+					<Item id="6351" name="V dialógovom okne Uložiť nastaviť filter prípony na *.*"/>
 					<Item id="6324" name="Prepínanie dokumentov (Ctrl+Tab)"/>
 					<Item id="6331" name="Zobrazovať v záhlaví okna iba názov súboru"/>
 					<Item id="6334" name="Automatické zisťovanie kódovania znakov"/>
 					<Item id="6349" name="Použiť DirectWrite (Môže ovplyvniť renderovanie špeciálnych znakov, vyžaduje sa reštart Textrument)"/>
-					<Item id="6350" name="Povoliť režim orámovania"/>
 					<Item id="6337" name="Prípona súboru prac. priestoru:"/>
 					<Item id="6114" name="Povoliť"/>
 					<Item id="6117" name="Povoliť MRU správanie"/>
 					<Item id="6344" name="Náhľad neaktívnych dokumentov"/>
 					<Item id="6345" name="Náhľad na karte dokumentu"/>
 					<Item id="6346" name="Náhľad na mape dokumentu"/>
+					<Item id="6318" name="Klikateľný odkaz na nastavenia"/>
+					<Item id="6319" name="Povoliť"/>
+					<Item id="6320" name="Bez podčiarknutia"/>
+					<Item id="6350" name="Povoliť režim fullbox"/>
 				</MISC>
 			</Preference>
 			<MultiMacro title="Spustiť makro viacnásobne">
@@ -1014,7 +993,7 @@ Zadať môžete viacero značiek pomocou medzery na oddelenie rôznych čísel."
 				<Item id="1" name="OK"/>
 				<Item id="2" name="Zrušiť"/>
 			</ColumnEditor>
-			<FindInFinder title="Hľadať vo vyhľadávači">
+			<FindInFinder title="Hľadať vo výsledkoch vyhľadávania">
 				<Item id="1" name="Hľadať všetko"/>
 				<Item id="2" name="Zatvoriť"/>
 				<Item id="1711" name="Hľadať:"/>
@@ -1038,55 +1017,30 @@ Zadať môžete viacero značiek pomocou medzery na oddelenie rôznych čísel."
 		</Dialog>
 		<MessageBox>
 			<!-- $INT_REPLACE$ is a place holder, don't translate it -->
-			<ContextMenuXmlEditWarning title="Úprava kontextového menu" message="Úpravou súboru contextMenu.xml zmeníte vyskakovacie kontextové menu programu.
-Bude potrebné reštartovať Textrument, aby sa zmeny v súbore  prejavili."/>
-			<NppHelpAbsentWarning title="Súbor neexistuje" message="
-neexistuje. Stiahnite si ho, prosím, z domovskej stránky programu Textrument."/>
-			<SaveCurrentModifWarning title="Uložiť zmeny" message="Mali by ste uložiť aktuálne zmeny.
-Uložené zmeny nie je možné vrátiť.
-
-Pokračovať?"/>
-			<LoseUndoAbilityWarning title="Varovanie pred stratou možnosti vrátiť zmeny" message="Mali by ste uložiť aktuálne zmeny.
-Uložené zmeny nie je možné vrátiť.
-
-Pokračovať?"/>
+			<ContextMenuXmlEditWarning title="Úprava kontextového menu" message="Úpravou súboru contextMenu.xml zmeníte vyskakovacie kontextové menu programu. Bude potrebné reštartovať Textrument, aby sa zmeny v súbore  prejavili."/>
+			<SaveCurrentModifWarning title="Uložiť zmeny" message="Mali by ste uložiť aktuálne zmeny. Uložené zmeny nie je možné vrátiť.  Pokračovať?"/>
+			<LoseUndoAbilityWarning title="Varovanie pred stratou možnosti vrátiť zmeny" message="Mali by ste uložiť aktuálne zmeny. Uložené zmeny nie je možné vrátiť.  Pokračovať?"/>
 			<CannotMoveDoc title="Presunúť do novej inštancie programu Textrument" message="Dokument bol zmenený. Uložte zmeny a skúste to znova."/>
 			<DocReloadWarning title="Obnoviť" message="Ste si istý, že chcete obnoviť aktuálny súbor a stratiť tak zmeny vykonané v programe Textrument?"/>
 			<FileLockedWarning title="Uloženie zlyhalo" message="Skontrolujte, prosím, či súbor nie je otvorený v inom programe."/>
 			<FileAlreadyOpenedInNpp title="" message="Súbor je už otvorený v programe Textrument."/>
+			<RenameTabTemporaryNameAlreadyInUse title="Premenovanie zlyhalo" message="Tento názov je už použitý pre inú kartu."/>
 			<DeleteFileFailed title="Odstrániť súbor" message="Odstránenie súboru zlyhalo."/>
-
-			<NbFileToOpenImportantWarning title="Príliš veľa súborov k otvoreniu" message="Chystáte sa otvoriť $INT_REPLACE$ súborov.
-Naozaj ich chcete otvoriť?"/>
-			<SettingsOnCloudError title="Úložisko s nastaveniami programu" message="Zdá sa, že cesta k úložisku s nastaveniami je nastavená na jednotku určenú len na čítanie
-alebo na priečinok bez oprávnenia na zápis.
-Uloženie vašich nastavení bude zrušené. Znovu, prosím, nastavte zodpovedajúcu hodnotu v ponuke &quot;Nastavenia -&gt; Preferencie... -&gt; Úložisko&quot;."/>
+			<NbFileToOpenImportantWarning title="Príliš veľa súborov k otvoreniu" message="Chystáte sa otvoriť $INT_REPLACE$ súborov. Naozaj ich chcete otvoriť?"/>
+			<SettingsOnCloudError title="Úložisko s nastaveniami programu" message="Zdá sa, že cesta k úložisku s nastaveniami je nastavená na jednotku určenú len na čítanie alebo na priečinok bez oprávnenia na zápis. Uloženie vašich nastavení bude zrušené. Znovu, prosím, nastavte zodpovedajúcu hodnotu v ponuke &quot;Nastavenia -&gt; Preferencie... -&gt; Úložisko&quot;."/>
 			<FilePathNotFoundWarning title="Otvoriť súbor" message="Súbor, ktorý sa pokúšate otvoriť, neexistuje."/>
 			<SessionFileInvalidError title="Reláciu nie je možné načítať" message="Súbor relácie je poškodený alebo neplatný."/>
-			<DroppingFolderAsProjectModeWarning title="Neplatná operácia" message="Preťahovať môžete buď len súbory, alebo len adresáre. Nie oboje súčasne, pretože máte aktivovaný režim otvárania priečinka ako pracovného priestoru.
-Aby táto operácia fungovala, musíte povoliť položku &quot;Pri pretiahnutí priečinka myšou otvoriť súbory v priečinku, nie panel prac. priestoru&quot; v ponuke &quot;Nastavenia -&gt; Preferencie... -&gt; Predvolený priečinok&quot;."/>
+			<DroppingFolderAsProjectModeWarning title="Neplatná operácia" message="Preťahovať môžete buď len súbory, alebo len adresáre. Nie oboje súčasne, pretože máte aktivovaný režim otvárania priečinka ako pracovného priestoru. Aby táto operácia fungovala, musíte povoliť položku &quot;Pri pretiahnutí priečinka myšou otvoriť súbory v priečinku, nie panel prac. priestoru&quot; v ponuke &quot;Nastavenia -&gt; Preferencie... -&gt; Predvolený priečinok&quot;."/>
 			<SortingError title="Chyba usporiadania" message="Nie je možné vykonať číselné usporiadanie kvôli riadku $INT_REPLACE$."/>
 			<ColumnModeTip title="Tip k stĺpcovému režimu" message="Na prepnutie do stĺpcového režimu použite, prosím, &quot;ALT + Výber myšou&quot; alebo &quot;Alt + Shift + Šípka&quot;."/>
 			<BufferInvalidWarning title="Uloženie zlyhalo" message="Uloženie zlyhalo: Neplatná vyrovnávacia pamäť."/>
-			<DoCloseOrNot title="Ponechať neexistujúci súbor" message="Súbor &quot;$STR_REPLACE$&quot; už neexistuje.
-Ponechať tento súbor v editore?"/>
-			<DoDeleteOrNot title="Odstrániť súbor" message="Súbor &quot;$STR_REPLACE$&quot;
-bude presunutý do Koša a tento dokument bude zatvorený.
-Pokračovať?"/>
-			<NoBackupDoSaveFile title="Uložiť" message="Záložný súbor sa nenašiel.
-Uložte ho, ináč budú vaše dáta stratené.
-Chcete uložiť súbor &quot;$STR_REPLACE$&quot;?"/>
-			<DoReloadOrNot title="Obnoviť" message="Súbor &quot;$STR_REPLACE$&quot;
-
-bol zmenený inou aplikáciou.
-Chcete ho obnoviť?"/>
-			<DoReloadOrNotAndLooseChange title="Obnoviť" message="Súbor &quot;$STR_REPLACE$&quot;
-
-bol zmenený inou aplikáciou.
-Chcete ho obnoviť a prísť tak o zmeny vykonané v programe Textrument?"/>
+			<DoCloseOrNot title="Ponechať neexistujúci súbor" message="Súbor &quot;$STR_REPLACE$&quot; už neexistuje. Ponechať tento súbor v editore?"/>
+			<DoDeleteOrNot title="Odstrániť súbor" message="Súbor &quot;$STR_REPLACE$&quot; bude presunutý do Koša a tento dokument bude zatvorený. Pokračovať?"/>
+			<NoBackupDoSaveFile title="Uložiť" message="Záložný súbor sa nenašiel. Uložte ho, ináč budú vaše dáta stratené. Chcete uložiť súbor &quot;$STR_REPLACE$&quot;?"/>
+			<DoReloadOrNot title="Obnoviť" message="Súbor &quot;$STR_REPLACE$&quot;  bol zmenený inou aplikáciou. Chcete ho obnoviť?"/>
+			<DoReloadOrNotAndLooseChange title="Obnoviť" message="Súbor &quot;$STR_REPLACE$&quot;  bol zmenený inou aplikáciou. Chcete ho obnoviť a prísť tak o zmeny vykonané v programe Textrument?"/>
 			<PrehistoricSystemDetected title="Zistený príliš starý systém" message="Zdá sa, že používate príliš starý systém. Ospravedlňujeme sa, ale táto funkcia je podporovaná len na novších systémoch."/>
-			<XpUpdaterProblem title="Aktualizácia programu Textrument" message="Aktualizácia programu Textrument nie je kompatibilná s Windows XP z dôvodu zastaralej bezpečnostnej vrstvy tohto systému.
-Prejsť na domovskú stránku programu Textrument, odkiaľ si môžete stiahnuť najnovšiu verziu?"/>
+			<XpUpdaterProblem title="Aktualizácia programu Textrument" message="Aktualizácia programu Textrument nie je kompatibilná s Windows XP z dôvodu zastaralej bezpečnostnej vrstvy tohto systému. Prejsť na domovskú stránku programu Textrument, odkiaľ si môžete stiahnuť najnovšiu verziu?"/>
 			<GUpProxyConfNeedAdminMode title="Nastavenia proxy" message="Pre nastavenie proxy, spustite, prosím, Textrument v režime správcu."/>
 			<DocTooDirtyToMonitor title="Problém so sledovaním zmien" message="Dokument bol pozmenený. Pred sledovaním zmien, uložte všetky zmeny v dokumente."/>
 			<DocNoExistToMonitor title="Problém so sledovaním zmien" message="Súbor musí najprv existovať, aby v ňom bolo možné sledovať zmeny."/>
@@ -1094,43 +1048,30 @@ Prejsť na domovskú stránku programu Textrument, odkiaľ si môžete stiahnuť
 			<CreateNewFileOrNot title="Vytvoriť nový súbor" message="Súbor &quot;$STR_REPLACE$&quot; neexistuje. Chcete ho vytvoriť?"/>
 			<CreateNewFileError title="Vytvoriť nový súbor" message="Súbor &quot;$STR_REPLACE$&quot; nie je možné vytvoriť."/>
 			<OpenFileError title="CHYBA" message="Súbor &quot;$STR_REPLACE$&quot; nie je možné otvoriť."/>
-			<FileBackupFailed title="Zálohovanie súboru zlyhalo" message="Predchádzajúcu verziu súboru sa nepodarilo uložiť do priečinka záloh &quot;$STR_REPLACE$&quot;.
-
-Chcete aj napriek tomu uložiť aktuálny súbor?"/>
+			<FileBackupFailed title="Zálohovanie súboru zlyhalo" message="Predchádzajúcu verziu súboru sa nepodarilo uložiť do priečinka záloh &quot;$STR_REPLACE$&quot;.  Chcete aj napriek tomu uložiť aktuálny súbor?"/>
 			<LoadStylersFailed title="Načítanie súboru stylers.xml zlyhalo" message="Súbor &quot;$STR_REPLACE$&quot; sa nepodarilo načítať!"/>
-			<LoadLangsFailed title="Konfigurátor" message="Súbor langs.xml sa nepodarilo načítať!
-Chcete váš súbor langs.xml obnoviť?"/>
+			<LoadLangsFailed title="Konfigurátor" message="Súbor langs.xml sa nepodarilo načítať! Chcete váš súbor langs.xml obnoviť?"/>
 			<LoadLangsFailedFinal title="Konfigurátor" message="Načítanie súboru langs.xml zlyhalo!"/>
-			<FolderAsWorspaceSubfolderExists title="Problém s pridaním priečinka do pracovného priestoru" message="Podpriečinok priečinka, ktorý chcete pridať už existuje.
-Predtým ako pridáte na panel priečinok &quot;$STR_REPLACE$&quot; odstráňte, prosím, jeho koreňový priečinok."/>
-
+			<FolderAsWorspaceSubfolderExists title="Problém s pridaním priečinka do pracovného priestoru" message="Podpriečinok priečinka, ktorý chcete pridať už existuje. Predtým ako pridáte na panel priečinok &quot;$STR_REPLACE$&quot; odstráňte, prosím, jeho koreňový priečinok."/>
 			<ProjectPanelChanged title="$STR_REPLACE$" message="Pracovný priestor bol zmenený. Chcete ho uložiť?"/>
 			<ProjectPanelChangedSaveError title="$STR_REPLACE$" message="Váš pracovný priestor nebol uložený."/>
 			<ProjectPanelOpenDoSaveDirtyWsOrNot title="Otvoriť pracovný priestor" message="Aktuálny pracovný priestor bol zmenený. Chcete uložiť aktuálny projekt?"/>
 			<ProjectPanelNewDoSaveDirtyWsOrNot title="Nový pracovný priestor" message="Aktuálny pracovný priestor bol zmenený. Chcete uložiť aktuálny projekt?"/>
-			<ProjectPanelOpenFailed title="Otvoriť pracovný priestor" message="Pracovný priestor sa nepodarilo otvoriť.
-Zdá sa, že súbor, ktorý sa pokúšate otvoriť, nie je platným súborom projektu."/>
-			<ProjectPanelRemoveFolderFromProject title="Odstrániť priečinok z projektu" message="Odstránením priečinka odstránite aj všetky jeho položky.
-Naozaj chcete odstrániť tento priečinok z projektu?"/>
+			<ProjectPanelOpenFailed title="Otvoriť pracovný priestor" message="Pracovný priestor sa nepodarilo otvoriť. Zdá sa, že súbor, ktorý sa pokúšate otvoriť, nie je platným súborom projektu."/>
+			<ProjectPanelRemoveFolderFromProject title="Odstrániť priečinok z projektu" message="Odstránením priečinka odstránite aj všetky jeho položky. Naozaj chcete odstrániť tento priečinok z projektu?"/>
 			<ProjectPanelRemoveFileFromProject title="Odstrániť súbor z projektu" message="Naozaj chcete odstrániť tento súbor z projektu?"/>
 			<ProjectPanelReloadError title="Obnoviť pracovný priestor" message="Súbor pre obnovenie sa nenašiel."/>
-			<ProjectPanelReloadDirty title="Obnoviť pracovný priestor" message="Aktuálny pracovný priestor bol zmenený. Obnovením prídete o všetky zmeny.
-Chcete pokračovať?"/>
-			<UDLNewNameError title="Chyba UDL" message="Tento názov už používa iný jazyk.
-Zvoľte, prosím, iný."/>
+			<ProjectPanelReloadDirty title="Obnoviť pracovný priestor" message="Aktuálny pracovný priestor bol zmenený. Obnovením prídete o všetky zmeny. Chcete pokračovať?"/>
+			<UDLNewNameError title="Chyba UDL" message="Tento názov už používa iný jazyk. Zvoľte, prosím, iný."/>
 			<UDLRemoveCurrentLang title="Odstrániť aktuálny jazyk" message="Ste si istý?"/>
 			<SCMapperDoDeleteOrNot title="Ste si istý?" message="Naozaj chcete odstrániť túto klávesovú skratku?"/>
 			<FindCharRangeValueError title="Problém s rozsahom hodnoty" message="Zadajte hodnotu v rozsahu 0 až 255."/>
-			<OpenInAdminMode title="Uloženie zlyhalo" message="Súbor nie je možné uložiť, môže byť chránený.
-Chcete spustiť Notepad++ v režime správcu?"/>
-			<OpenInAdminModeWithoutCloseCurrent title="Uloženie zlyhalo" message="Súbor nie je možné uložiť, môže byť chránený.
-Chcete spustiť Notepad++ v režime správcu?"/>
-			<OpenInAdminModeFailed title="Otvorenie v režime správcu zlyhalo" message="Notepad++ nie je možné spustiť v režime správcu."/>
+			<OpenInAdminMode title="Uloženie zlyhalo" message="Súbor nie je možné uložiť, môže byť chránený. Chcete spustiť Textrument v režime správcu?"/>
+			<OpenInAdminModeWithoutCloseCurrent title="Uloženie zlyhalo" message="Súbor nie je možné uložiť, môže byť chránený. Chcete spustiť Textrument v režime správcu?"/>
+			<OpenInAdminModeFailed title="Otvorenie v režime správcu zlyhalo" message="Textrument nie je možné spustiť v režime správcu."/>
 			<ViewInBrowser title="Zobrazenie aktuálneho súboru v prehliadači" message="Aplikácia sa v systéme nenašla."/>
-			<ExitToUpdatePlugins title="Notepad++ is about to exit" message="If you click YES, you will quit Notepad++ to continue the operations.
-Notepad++ will be restarted after all the operations are terminated.
-Continue?"/>
-			<NeedToRestartToLoadPlugins title="Notepad++ need to be relaunched" message="You have to restart Notepad++ to load plugins you installed."/>
+			<ExitToUpdatePlugins title="Textrument is about to exit" message="If you click YES, you will quit Textrument to continue the operations. Textrument will be restarted after all the operations are terminated. Continue?"/>
+			<NeedToRestartToLoadPlugins title="Textrument need to be relaunched" message="You have to restart Textrument to load plugins you installed."/>
 		</MessageBox>
 		<ClipboardHistory>
 			<PanelTitle name="História schránky"/>
@@ -1163,12 +1104,15 @@ Continue?"/>
 			<ReloadTip name="Obnoviť"/>
 		</FunctionList>
 		<FolderAsWorkspace>
-			<PanelTitle name="Pracovný priestor"/>
+			<PanelTitle name="Priečinok ako pracovný priestor"/>
 			<SelectFolderFromBrowserString name="Vyberte priečinok, ktorý chcete pridať na panel pracovného priestoru"/>
+			<ExpandAllFoldersTip name="Rozbaliť všetky priečinky"/>
+			<CollapseAllFoldersTip name="Zbaliť všetky priečinky"/>
+			<LocateCurrentFileTip name="Zobraziť umiestnenie aktuálneho súboru"/>
 			<Menus>
 				<Item id="3511" name="Odstrániť"/>
 				<Item id="3512" name="Odstrániť všetko"/>
-				<Item id="3513" name="Pridať"/>
+				<Item id="3513" name="Pridať…"/>
 				<Item id="3514" name="Otvoriť predvolenou aplikáciou"/>
 				<Item id="3515" name="Otvoriť"/>
 				<Item id="3516" name="Skopírovať cestu"/>
@@ -1232,15 +1176,11 @@ Continue?"/>
 			<word-chars-list-tab-warning value="$INT_REPLACE$ tabulátor(-y)"/>
 			<word-chars-list-warning-end value="."/>
 			<cloud-invalid-warning value="Neplatná cesta"/>
-			<cloud-restart-warning value="Aby sa zmeny prejavili, reštartujte, prosím, Notepad++."/>
-			<cloud-select-folder value="Vyberte priečinok pre načítanie/uloženie nastavení programu Notepad++"/>
+			<cloud-restart-warning value="Aby sa zmeny prejavili, reštartujte, prosím, Textrument."/>
+			<cloud-select-folder value="Vyberte priečinok pre načítanie/uloženie nastavení programu Textrument"/>
 			<shift-change-direction-tip value="Pre vyhľadávanie v opačnom smere použite Shift+Enter"/>
 			<two-find-buttons-tip value="Režim dvoch tlačidiel"/>
-			<find-in-files-filter-tip value="Hľadať v cpp, cxx, h, hxx &amp;&amp; hpp:
-*.cpp *.cxx *.h *.hxx *.hpp
-
-Hľadať vo všetkých súboroch okrem exe, obj &amp;&amp; log:
-*.* !*.exe !*.obj !*.log"/>
+			<find-in-files-filter-tip value="Hľadať v cpp, cxx, h, hxx &amp;&amp; hpp: *.cpp *.cxx *.h *.hxx *.hpp  Hľadať vo všetkých súboroch okrem exe, obj &amp;&amp; log: *.* !*.exe !*.obj !*.log"/>
 			<find-status-top-reached value="Hľadať: Našiel sa posledný výskyt hľadaného výrazu. Bol dosiahnutý začiatok dokumentu."/>
 			<find-status-end-reached value="Hľadať: Našiel sa prvý výskyt hľadaného výrazu. Bol dosiahnutý koniec dokumentu."/>
 			<find-status-replaceinfiles-1-replaced value="Nahradiť v súboroch: Bol nahradený 1 výskyt hľadaného výrazu."/>
@@ -1271,10 +1211,12 @@ Hľadať vo všetkých súboroch okrem exe, obj &amp;&amp; log:
 			<find-status-scope-backward value="od začiatku súboru po kurzor"/>
 			<find-status-scope-forward value="od kurzoru po koniec súboru"/>
 			<finder-find-in-finder value="Vyhľadať v týchto výsledkoch hľadania..."/>
-			<finder-close-this value="Zatvoriť tento vyhľadávač"/>
+			<finder-close-this value="Zatvoriť tieto výsledy vyhľadávania"/>
 			<finder-collapse-all value="Zbaliť všetko"/>
 			<finder-uncollapse-all value="Rozbaliť všetko"/>
-			<finder-copy value="Kopírovať"/>
+			<finder-copy value="Kopírovať">
+				<Item value="Kopírovať"/>
+			</finder-copy>
 			<finder-select-all value="Vybrať všetko"/>
 			<finder-clear-all value="Vymazať všetko"/>
 			<finder-open-all value="Otvoriť všetko"/>
@@ -1286,8 +1228,8 @@ Hľadať vo všetkých súboroch okrem exe, obj &amp;&amp; log:
 			<tabrename-newname value="Nový názov: "/>
 			<recent-file-history-maxfile value="Max. súbor: "/>
 			<language-tabsize value="Veľkosť karty: "/>
-			<userdefined-title-new value="Vytvoriť nový jazyk..."/>
-			<userdefined-title-save value="Uložiť aktuálny názov jazyka..."/>
+			<userdefined-title-new value="Vytvoriť nový jazyk"/>
+			<userdefined-title-save value="Uložiť aktuálny názov jazyka"/>
 			<userdefined-title-rename value="Premenovať aktuálny názov jazyka"/>
 			<autocomplete-nb-char value="č. znaku: "/>
 			<edit-verticaledge-nb-col value="č. stĺpca:"/>
@@ -1302,18 +1244,21 @@ Hľadať vo všetkých súboroch okrem exe, obj &amp;&amp; log:
 			<summary-nbsel1 value=" označených znakov ("/>
 			<summary-nbsel2 value=" bajtov) v "/>
 			<summary-nbrange value=" oblastiach"/>
+			<find-in-files-progress-title value="Prebieha hľadanie v súboroch…"/>
 			<replace-in-files-confirm-title value="Naozaj?"/>
-			<replace-in-files-confirm-directory value="Naozaj chcete nahradiť všetky výskyty v :"/>
-			<replace-in-files-confirm-filetype value="Pre typ súboru :"/>
+			<replace-in-files-confirm-directory value="Naozaj chcete nahradiť všetky výskyty v:"/>
+			<replace-in-files-confirm-filetype value="Pre typ súboru:"/>
+			<replace-in-files-progress-title value="Prebieha nahradzovanie v súboroch…"/>
 			<replace-in-open-docs-confirm-title value="Naozaj?"/>
 			<replace-in-open-docs-confirm-message value="Naozaj chcete nahradiť všetky výskyty vo všetkých otvorených dokumentoch"/>
-			<find-result-caption value="Výsledok hľadania"/>
+			<find-result-caption value="Výsledky vyhľadávania"/>
 			<find-result-title value="Hľadať"/>
 			<find-result-title-info value="($INT_REPLACE1$ výskytov v $INT_REPLACE2$ súboroch z $INT_REPLACE3$ prehľadávaných)"/>
 			<find-result-title-info-selections value="($INT_REPLACE1$ výskytov v $INT_REPLACE2$ výberoch z $INT_REPLACE3$ nájdených)"/>
 			<find-result-title-info-extra value=" - Režim filtrovania riadka: zobraziť iba filtrované výsledky"/>
 			<find-result-hits value="($INT_REPLACE$ výskytov)"/>
+			<find-result-line-prefix value="Riadok"/>
 			<find-regex-zero-length-match value="výskyt nulovej dĺžky"/>
 		</MiscStrings>
 	</Native-Langue>
-</NotepadPlus>
+</Textrument>

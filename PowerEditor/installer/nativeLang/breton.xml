@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<NotepadPlus>
-	<Native-Langue name="Brezhoneg" filename="breton.xml" version="7.8.3">
+<Textrument>
+	<Native-Langue name="Brezhoneg" filename="breton.xml" version="v1.0.0">
 		<Menu>
 			<Main>
 				<!-- Main Menu Entries -->
@@ -286,14 +286,14 @@
 					<Item id="46180" name="Termenet gant an implijader"/>
 					<Item id="47000" name="Diwar-benn Textrument"/>
 					<Item id="47010" name="Arguzennoù al linenn-urzhiad..."/>
-					<Item id="47001" name="Lec'hienn ofisiel Notepad++"/>
-					<Item id="47002" name="Pajenn diorren Notepad++"/>
+					<Item id="47001" name="Lec'hienn ofisiel Textrument"/>
+					<Item id="47002" name="Pajenn diorren Textrument"/>
 					<Item id="47003" name="Titouradur enlinenn"/>
-					<Item id="47004" name="Kumuniezh Notepad++ (forom)"/>
+					<Item id="47004" name="Kumuniezh Textrument (forom)"/>
 					<Item id="47011" name="Skoazell enlinenn"/>
 					<Item id="47012" name="Titouroù diveugiñ..."/>
 					<Item id="47005" name="Kaout muioc'h a lugantoù"/>
-					<Item id="47006" name="Hizivaat Notepad++"/>
+					<Item id="47006" name="Hizivaat Textrument"/>
 					<Item id="47009" name="Termeniñ ar proksi hizivaer..."/>
 					<Item id="48005" name="Emporzhiañ al lugant(où)..."/>
 					<Item id="48006" name="Emporzhiañ un tem(où)..."/>
@@ -325,7 +325,7 @@
 				</Commands>
 			</Main>
 			<Splitter>
-			</Splitter>
+            </Splitter>
 			<TabBar>
 				<Item CMID="0" name="Serriñ"/>
 				<Item CMID="1" name="Serriñ pep-tra NEMET an dra-se"/>
@@ -773,8 +773,8 @@
 					<Item id="6413" name="Kavlec'h dre ziouer (digeriñ/enrollañ)"/>
 					<Item id="6414" name="Heuliañ an teuliad-red"/>
 					<Item id="6415" name="Derc'hel soñj eus ar c'havlec'h implijet da ziwezhañ"/>
-					<Item id="6430" name="Implijout ar stil divizoù nevez "/>
 					<Item id="6431" name="Digeriñ holl restroù an doser e-plas loc'hañ an Doser evel spas-labour pa vez rinklet an doser"/>
+					<Item id="6430" name="Implijout ar stil divizoù nevez "/>
 				</DefaultDir>
 
 				<FileAssoc title="Astennoù restroù">
@@ -938,7 +938,7 @@
 					<Item id="6324" name="Gwinter teuliad (Ktrl+taolennata)"/>
 					<Item id="6331" name="Diskouez an anv-restr hepken e barrenn an titloù"/>
 					<Item id="6334" name="Em-diguzhañ an enkodañ arouezioù"/>
-					<Item id="6314" name="Implijout skriturioù mono-spaset en divizoù Klask (adloc'hañ Notepad++ ret)"/>
+					<Item id="6314" name="Implijout skriturioù mono-spaset en divizoù Klask (adloc'hañ Textrument ret)"/>
 					<Item id="6337" name="Astenn restr spas-labour:"/>
 					<Item id="6114" name="Enaouiñ"/>
 					<Item id="6117" name="Enaouiñ ar perc'henner MRU"/>
@@ -1086,15 +1086,15 @@ roit un an anv all mar plij."/>
 			<SCMapperDoDeleteOrNot title="Ha sur oc'h?" message="Ha sur oc'h da gaout c'hoant da zilemel ar verradenn-mañ?"/>
 			<FindCharRangeValueError title="Talvoudegezh pladigenn gudennek" message="Bez ho peus da skrivañ etre 0 ha 255."/>
 			<OpenInAdminMode title="Argerzh enrollañ c'hwitet" message="N'hall ket bezañ enrollet ar restr dre ma tlefe bezañ gwarezet.
-Ha c'hoant ho peus da loc'hañ Notepad++ e mod Merour?"/>
+Ha c'hoant ho peus da loc'hañ Textrument e mod Merour?"/>
 			<OpenInAdminModeWithoutCloseCurrent title="Argerzh enrollañ c'hwitet" message="N'hall ket bezañ enrollet ar restr dre ma tlefe bezañ gwarezet.
-Ha c'hoant ho peus da loc'hañ Notepad++ e mod Merour?"/>
-			<OpenInAdminModeFailed title="Argerzh digeriñ e mod Merour c'hwitet" message="N'heller ket digeriñ Notepad++ e mod Merour."/>
+Ha c'hoant ho peus da loc'hañ Textrument e mod Merour?"/>
+			<OpenInAdminModeFailed title="Argerzh digeriñ e mod Merour c'hwitet" message="N'heller ket digeriñ Textrument e mod Merour."/>
 			<ViewInBrowser title="Gwelet ar restr-red er Merdeer" message="N'heller ket kavout an arload en ho sistem."/>
-			<ExitToUpdatePlugins title="Notepad++ a zo war-nes serriñ" message="Ma klikit war Ya, kuitaet e vo ganeoc'h Notepad++ evit kenderc'hel gant an operiadurioù.
-Adloc'het e vo Notepad++ ur wech echu an holl operiadurioù.
+			<ExitToUpdatePlugins title="Textrument a zo war-nes serriñ" message="Ma klikit war Ya, kuitaet e vo ganeoc'h Textrument evit kenderc'hel gant an operiadurioù.
+Adloc'het e vo Textrument ur wech echu an holl operiadurioù.
 Kenderc'hel ganti?"/>
-			<NeedToRestartToLoadPlugins title="Notepad++ en deus ezhomm da vezañ adloc'het" message="Bez ho peus da adloc'hañ Notepad++ evit kargañ al lugantoù a zo bet staliet ganeoc'h."/>
+			<NeedToRestartToLoadPlugins title="Textrument en deus ezhomm da vezañ adloc'het" message="Bez ho peus da adloc'hañ Textrument evit kargañ al lugantoù a zo bet staliet ganeoc'h."/>
 		</MessageBox>
 		<ClipboardHistory>
 			<PanelTitle name="Roll-istor ar golver"/>
@@ -1195,8 +1195,8 @@ Kenderc'hel ganti?"/>
 			<word-chars-list-tab-warning value="$INT_REPLACE$ TAB(s)"/>
 			<word-chars-list-warning-end value=" e-barzh ho listennad arouezioù."/>
 			<cloud-invalid-warning value="Hent direizh."/>
-			<cloud-restart-warning value="Adloc'hit Notepad++, mar plij, evit ma vefe kemeret e kont ar c'hemmoù."/>
-			<cloud-select-folder value="Diuzit un doser adalek/da belec'h Notepad++ e lennfe/skrivfe ec'h arventennoù"/>
+			<cloud-restart-warning value="Adloc'hit Textrument, mar plij, evit ma vefe kemeret e kont ar c'hemmoù."/>
+			<cloud-select-folder value="Diuzit un doser adalek/da belec'h Textrument e lennfe/skrivfe ec'h arventennoù"/>
 			<shift-change-direction-tip value="Implijit LKD+Kas evit klask en tu kontrol"/>
 			<two-find-buttons-tip value="Mod klask 2 vouton"/>
 			<find-in-files-filter-tip value="Klask e cpp, cxx, h, hxx &amp;&amp; hpp:
@@ -1233,7 +1233,9 @@ Klask en holl restroù paneve exe, obj &amp;&amp; log:
 			<finder-close-this value="Serriñ ar c'haver-mañ"/>
 			<finder-collapse-all value="Bihanaat pep-tra"/>
 			<finder-uncollapse-all value="Brasaat pep-tra"/>
-			<finder-copy value="Eilañ"/>
+			<finder-copy value="Eilañ">
+				<Item value="Eilañ"/>
+			</finder-copy>
 			<finder-select-all value="Diuzañ pep-tra"/>
 			<finder-clear-all value="Diverkañ pep-tra"/>
 			<finder-open-all value="Digeriñ pep-tra"/>
@@ -1262,4 +1264,4 @@ Klask en holl restroù paneve exe, obj &amp;&amp; log:
 			<summary-nbrange value=" pladigennoù"/>
 		</MiscStrings>
 	</Native-Langue>
-</NotepadPlus>
+</Textrument>

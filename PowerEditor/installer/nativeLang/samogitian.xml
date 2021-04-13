@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<NotepadPlus>
-	<Native-Langue name="Samogitian" filename="samogitian.xml">
+<Textrument>
+	<Native-Langue name="Samogitian" filename="samogitian.xml" version="v1.0.0">
 		<!-- Mindaugas Machernis veertea.  -->
 		<Menu>
 			<Main>
@@ -93,6 +93,10 @@
 					<Item id="49000" name="&amp;Veakdiitea..."/>
 					<Item id="44070" name="Tab Lisi"/>
 					<Item id="44105" name="Faatoaaga le laulau ae faia le toggle ai"/>
+					<Item id="45014" name="Faiga Binary"/>
+					<Item id="48105" name="Customize Toolbar"/>
+					<Item id="48106" name="afifi Toolbar"/>
+					<Item id="48107" name="Tabs eseese laina"/>
 				</Commands>
 			</Main>
 			<Splitter>
@@ -212,6 +216,11 @@
 					<Item id="24101" name="Operatoree aktiivoujamea"/>
 				</Operator>
 			</UserDefine>
+			<ShortcutMapper>
+				<MainCommandNames>
+					<Item id="2147483547" name="gaogao"/>
+				</MainCommandNames>
+			</ShortcutMapper>
 		</Dialog>
 	</Native-Langue>
-</NotepadPlus>
+</Textrument>

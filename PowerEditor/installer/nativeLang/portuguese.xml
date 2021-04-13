@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<NotepadPlus>
-	<Native-Langue name="Portuguese Portugal" filename="portuguese.xml" version="6.6.9">
+<Textrument>
+	<Native-Langue name="Portuguese Portugal" filename="portuguese.xml" version="v1.0.0">
 		<Menu>
 			<Main>
 				<!-- Main Menu Entries -->
@@ -256,12 +256,12 @@
 					<Item id="46180" name="Definida pelo Utilizador"/>
 					<Item id="47000" name="Sobre o Textrument..."/>
 					<Item id="47010" name="Argumentos da Linha de Comando..."/>
-					<Item id="47001" name="Página da Notepad++"/>
-					<Item id="47002" name="Página do Projeto Notepad++"/>
+					<Item id="47001" name="Página da Textrument"/>
+					<Item id="47002" name="Página do Projeto Textrument"/>
 					<Item id="47003" name="Documentação na Internet"/>
 					<Item id="47004" name="Fórum"/>
 					<Item id="47005" name="Obter Mais Plugins"/>
-					<Item id="47006" name="Atualizar o Notepad++"/>
+					<Item id="47006" name="Atualizar o Textrument"/>
 					<Item id="47008" name="Conteúdos da Ajuda"/>
 					<Item id="47009" name="Definir Proxy Atualizador..."/>
 					<Item id="48005" name="Importar Plugin(s)..."/>
@@ -288,10 +288,14 @@
 					<Item id="48100" name="Ícones Pequenos"/>
 					<Item id="48101" name="Ícones Grandes"/>
 					<Item id="48102" name="Ícones Normais"/>
+					<Item id="45014" name="Modo binário"/>
+					<Item id="48105" name="Personalizar Barra de Ferramentas"/>
+					<Item id="48106" name="envoltório Toolbar"/>
+					<Item id="48107" name="Tabs Multi-line"/>
 				</Commands>
 			</Main>
 			<Splitter>
-			</Splitter>
+            </Splitter>
 			<TabBar>
 				<Item CMID="0" name="Fechar"/>
 				<Item CMID="1" name="Fechar tudo EXCETO Este"/>
@@ -607,6 +611,7 @@
 					<Item id="6125" name="Painel Lista Documento"/>
 					<Item id="6126" name="Mostrar"/>
 					<Item id="6127" name="Ativar coluna extensão"/>
+					<Item id="6128" name="Mostrar texto maior"/>
 				</Global>
 				<Scintillas title="Edição">
 					<Item id="6216" name=" Definições do Cursor "/>
@@ -782,12 +787,11 @@
 				<Cloud title="Cloud">
 					<Item id="6262" name="Definições na nuvem"/>
 					<Item id="6263" name="Sem Nuvem"/>
-					<Item id="6264" name="Dropbox"/>
 					<Item id="6265" name="OneDrive"/>
 					<Item id="6266" name="Google Drive"/>
 					<!--
-					  Item id="6261" name="Por favor reinicie o Notepad++ para aplicar."/
-					-->
+                      Item id="6261" name="Por favor reinicie o Textrument para aplicar."/
+                    -->
 				</Cloud>
 
 				<MISC title="Diversos">
@@ -845,6 +849,11 @@
 				<Item id="1" name="CONFIRMAR"/>
 				<Item id="2" name="Cancelar"/>
 			</ColumnEditor>
+			<ShortcutMapper>
+				<MainCommandNames>
+					<Item id="2147483547" name="Vazio"/>
+				</MainCommandNames>
+			</ShortcutMapper>
 		</Dialog>
 		<MessageBox>
 			<ContextMenuXmlEditWarning title="Editar contextMenu" message="Editar o contextMenu.xml permite-lhe modificar o menu de contexto do seu Textrument.\r Tem de reiniciar o seu Textrument para que as alterações do contextMenu.xml tenham efeito."/>
@@ -929,7 +938,7 @@
 			</Menus>
 		</ProjectManager>
 	</Native-Langue>
-</NotepadPlus>
+</Textrument>
 
 <!--
 Updated by:

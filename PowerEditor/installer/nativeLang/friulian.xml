@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<NotepadPlus>
-	<Native-Langue name="Furlan" filename="friulian.xml">
+<Textrument>
+	<Native-Langue name="Furlan" filename="friulian.xml" version="v1.0.0">
 		<Menu>
 			<Main>
 				<!-- Main Menu Entries -->
@@ -211,12 +211,12 @@
 					<Item id="46001" name="Configurazion dai stîi..."/>
 					<Item id="46180" name="Definît dal utent"/>
 					<Item id="47000" name="Informazions su..."/>
-					<Item id="47001" name="Sît di Notepad++"/>
-					<Item id="47002" name="Pagjine dal progjet di Notepad++"/>
+					<Item id="47001" name="Sît di Textrument"/>
+					<Item id="47002" name="Pagjine dal progjet di Textrument"/>
 					<Item id="47003" name="Jutori in linee"/>
 					<Item id="47004" name="Forum"/>
 					<Item id="47005" name="Cjate altris plugins"/>
-					<Item id="47006" name="Inzorne Notepad++"/>
+					<Item id="47006" name="Inzorne Textrument"/>
 					<Item id="47008" name="Contignûts dal jutori"/>
 					<Item id="48005" name="Impuarte plugins..."/>
 					<Item id="48006" name="Impuarte temis..."/>
@@ -237,7 +237,7 @@
 				</Commands>
 			</Main>
 			<Splitter>
-			</Splitter>
+            </Splitter>
 			<TabBar>
 				<Item CMID="0" name="Siere"/>
 				<Item CMID="1" name="Siere dut fûr che chest"/>
@@ -596,4 +596,4 @@
 			</ColumnEditor>
 		</Dialog>
 	</Native-Langue>
-</NotepadPlus>
+</Textrument>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<NotepadPlus>
-	<Native-Langue name="বাঙালি" filename="bengali.xml">
+<Textrument>
+	<Native-Langue name="বাঙালি" filename="bengali.xml" version="v1.0.0">
 		<Menu>
 			<Main>
 				<!-- Main Menu Entries -->
@@ -257,12 +257,12 @@
 					<Item id="46250" name="আপনার ভাষা নির্ধারণ করুন ..."/>
 					<Item id="46180" name="ব্যবহারকারী সংজ্ঞায়িত(User Defined)"/>
 					<Item id="47000" name="Textrument আমার ..."/>
-					<Item id="47001" name="Notepad++ বাড়ি"/>
-					<Item id="47002" name="Notepad++ প্রকল্প পাতা"/>
+					<Item id="47001" name="Textrument বাড়ি"/>
+					<Item id="47002" name="Textrument প্রকল্প পাতা"/>
 					<Item id="47003" name="অনলাইন ডকুমেন্টেশন"/>
 					<Item id="47004" name="ফোরাম"/>
 					<Item id="47005" name="আরো প্লাগইন যোগ করুন"/>
-					<Item id="47006" name="আপডেট করা হয়েছে Notepad++"/>
+					<Item id="47006" name="আপডেট করা হয়েছে Textrument"/>
 					<Item id="47008" name="সাহায্যের জন্য বিবরণ "/>
 					<Item id="47009" name="সেট আপডেট প্রক্সি"/>
 					<Item id="48005" name="আমদানি (আমদানি) প্লাগ"/>
@@ -286,10 +286,14 @@
 					<Item id="48100" name="ছোট আইকন"/>
 					<Item id="48101" name="বড় আইকন"/>
 					<Item id="48102" name="মান আইকন"/>
+					<Item id="45014" name="বাইনারি মোড"/>
+					<Item id="48105" name="কাস্টমাইজ টুলবার"/>
+					<Item id="48106" name="মোড়ানো টুলবার"/>
+					<Item id="48107" name="মাল্টি লাইন ট্যাব"/>
 				</Commands>
 			</Main>
 			<Splitter>
-			</Splitter>
+            </Splitter>
 			<TabBar>
 				<Item CMID="0" name="নিকট"/>
 				<Item CMID="1" name="তাছাড়া, সব বন্ধ "/>
@@ -604,6 +608,7 @@
 
 					<Item id="6125" name="ডকুমেন্ট তালিকা প্যানেল"/>
 					<Item id="6126" name="প্রদর্শন"/>
+					<Item id="6128" name="বৃহত্তর টেক্সট প্রদর্শন"/>
 				</Global>
 				<Scintillas title="Editing">
 					<Item id="6216" name="ক্যারেট সেটিংস"/>
@@ -824,6 +829,11 @@
 				<Item id="1" name="ঠিক আছে"/>
 				<Item id="2" name="বাতিল"/>
 			</ColumnEditor>
+			<ShortcutMapper>
+				<MainCommandNames>
+					<Item id="2147483547" name="খালি"/>
+				</MainCommandNames>
+			</ShortcutMapper>
 		</Dialog>
 		<MessageBox>
 			<ContextMenuXmlEditWarning title="Editing contextMenu" message="Editing contextMenu.xml allows you to modify your Textrument popup context menu.\rYou have to restart your Textrument to take effect after modifying contextMenu.xml."/>
@@ -908,4 +918,4 @@
 			</Menus>
 		</ProjectManager>
 	</Native-Langue>
-</NotepadPlus>
+</Textrument>

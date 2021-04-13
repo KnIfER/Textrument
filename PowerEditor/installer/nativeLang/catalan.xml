@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-Catalan translation for Notepad++
+Catalan translation for Textrument
 Updated 10.06.2020, v7.8.7
 By Hiro5 <groccat at gmail>
 -->
-<NotepadPlus>
-	<Native-Langue name="Català" filename="catalan.xml" version="7.8.7">
+<Textrument>
+	<Native-Langue name="Català" filename="catalan.xml" version="v1.0.0">
 		<Menu>
 			<Main>
 				<Entries>
@@ -327,13 +327,13 @@ By Hiro5 <groccat at gmail>
 					<Item id="48017" name="&amp;Modifica tecla de drecera/Esborra ordre..."/>
 					<Item id="48015" name="Administració de complements..."/>
 					<Item id="47010" name="Ús en &amp;línia d'ordres..."/>
-					<Item id="47001" name="Web de &amp;Notepad++"/>
-					<Item id="47002" name="Pàgina del &amp;projecte Notepad++"/>
+					<Item id="47001" name="Web de &amp;Textrument"/>
+					<Item id="47002" name="Pàgina del &amp;projecte Textrument"/>
 					<Item id="47003" name="Documentació en línia"/>
-					<Item id="47004" name="&amp;Fòrum de Notepad++"/>
+					<Item id="47004" name="&amp;Fòrum de Textrument"/>
 					<Item id="47011" name="&amp;Suport en línia"/>
 					<Item id="47005" name="Aconsegueix més &amp;complements"/>
-					<Item id="47006" name="Ac&amp;tualitza Notepad++"/>
+					<Item id="47006" name="Ac&amp;tualitza Textrument"/>
 					<Item id="47009" name="Confi&amp;gura l'intermediari d'actualització"/>
 					<Item id="47012" name="Informació de depuració..."/>
 					<Item id="47000" name="&amp;Quant a Textrument"/>
@@ -342,6 +342,10 @@ By Hiro5 <groccat at gmail>
 					<Item id="48100" name="Icones petites"/>
 					<Item id="48101" name="Icones grans"/>
 					<Item id="48102" name="Icones estàndard"/>
+					<Item id="45014" name="Mode binari"/>
+					<Item id="48105" name="Personalitzar barra d&amp;#39;eines"/>
+					<Item id="48106" name="Barra d&amp;#39;eines d&amp;#39;embolcall"/>
+					<Item id="48107" name="aquí multilínia"/>
 				</Commands>
 			</Main>
 			<Splitter>
@@ -413,7 +417,7 @@ By Hiro5 <groccat at gmail>
 				<Item id="1687" name="En perdre el focus"/>
 				<Item id="1688" name="Sempre"/>
 				<Item id="1721" name="▲"/>
-				<Item id="1723" name="▼ Cerca següent"/>
+				<Item id="1723" name="▼ Següent"/>
 			</Find>
 			<FindCharsInRange title="Cerca interval de caràcters...">
 				<Item id="2910" name="Cerca"/>
@@ -518,6 +522,9 @@ By Hiro5 <groccat at gmail>
 				<ScintillaCommandsTab name="Ordres Scintilla"/>
 				<ConflictInfoOk name="No hi ha cap conflicte de drecera amb aquest element."/>
 				<ConflictInfoEditing name="Sense conflictes . . ."/>
+				<MainCommandNames>
+					<Item id="2147483547" name="Buit"/>
+				</MainCommandNames>
 			</ShortcutMapper>
 			<ShortcutMapperSubDialg title="Drecera de teclat">
 				<Item id="1" name="D'acord"/>
@@ -725,6 +732,7 @@ By Hiro5 <groccat at gmail>
 					<Item id="6113" name="Doble clic per tancar el document"/>
 					<Item id="6121" name="Surt en tancar l'última pestanya"/>
 					<Item id="6122" name="Amaga la barra de menú (prem Alt o F10 per accedir)"/>
+					<Item id="6128" name="Veure el text més gran"/>
 				</Global>
 				<Scintillas title="Opcions visuals">
 					<Item id="6216" name="Configuració del cursor"/>
@@ -776,11 +784,11 @@ By Hiro5 <groccat at gmail>
 					<Item id="6413" name="Directori d'obertura/emmagatzematge"/>
 					<Item id="6414" name="Segons el document actual"/>
 					<Item id="6415" name="Segons l'últim directori emprat"/>
-					<Item id="6430" name="Diàleg de desament sense capacitat de camí d'estil Unix"/>
 					<Item id="6431" name="Obre els fitxers d'una carpeta arrossegada en comptes d'obrir a Carpetes de treball"/>
 					<Item id="6433" name="filtres"/>
 					<Item id="6432" name="Arrossegar i deixar anar"/>
 					<Item id="6434" name="de forma recursiva"/>
+					<Item id="6430" name="Diàleg de desament sense capacitat de camí d'estil Unix"/>
 				</DefaultDir>
 				<RecentFilesHistory title="Historial de fitxers recents">
 					<Item id="6304" name="Historial de fitxers recents"/>
@@ -917,7 +925,7 @@ By Hiro5 <groccat at gmail>
 					<Item id="6345" name="Previsualitza en la pestanya"/>
 					<Item id="6346" name="Previsualitza en el mapa del document"/>
 					<Item id="6334" name="Autodetecta codificació de caràcters"/>
-					<Item id="6314" name="Empra lletra monoespai al diàleg de cerca (demana reiniciar Notepad++)"/>
+					<Item id="6314" name="Empra lletra monoespai al diàleg de cerca (demana reiniciar Textrument)"/>
 					<Item id="6308" name="Minimitza a la safata del sistema"/>
 					<Item id="6331" name="Mostra només el nom de fitxer a la barra de títol"/>
 					<Item id="6323" name="Actualitza Textrument automàticament"/>
@@ -1044,12 +1052,12 @@ By Hiro5 <groccat at gmail>
 			<UDLRemoveCurrentLang title="Esborra el llenguatge actual" message="Esteu segur?"/>
 			<SCMapperDoDeleteOrNot title="Supressió de drecera" message="Segur que voleu suprimir aquesta drecera?"/>
 			<FindCharRangeValueError title="Valor fora de rang" message="Hauríeu d'escriure un valor de 0 a 255."/>
-			<OpenInAdminMode title="Error en desar" message="El fitxer no es pot desar i pot estar protegit.&#xD;Voleu iniciar Notepad++ en mode d'administrador?"/>
-			<OpenInAdminModeWithoutCloseCurrent title="Error en desar" message="El fitxer no es pot desar i pot estar protegit.&#xD;Voleu iniciar Notepad++ en mode d'administrador?"/>
-			<OpenInAdminModeFailed title="Error en obrir en mode d'administrador" message="No es pot obrir Notepad++ en mode d'administrador."/>
+			<OpenInAdminMode title="Error en desar" message="El fitxer no es pot desar i pot estar protegit.&#xD;Voleu iniciar Textrument en mode d'administrador?"/>
+			<OpenInAdminModeWithoutCloseCurrent title="Error en desar" message="El fitxer no es pot desar i pot estar protegit.&#xD;Voleu iniciar Textrument en mode d'administrador?"/>
+			<OpenInAdminModeFailed title="Error en obrir en mode d'administrador" message="No es pot obrir Textrument en mode d'administrador."/>
 			<ViewInBrowser title="Mostra el fitxer actual al navegador" message="No s'ha trobat l'aplicació al vostre sistema."/>
-			<ExitToUpdatePlugins title="Notepad++ està a punt de tancar" message="Si feu clic a SÍ, sortiràs de Notepad++ per continuar les operacions.&#xD;Notepad++ es reiniciarà un cop hagin finalitzat totes les operacions.&#xD;Voleu continuar?"/>
-			<NeedToRestartToLoadPlugins title="Notepad++ demana reiniciar-se" message="S'ha de reiniciar Notepad++ per carregar els complements que heu instal·lat."/>
+			<ExitToUpdatePlugins title="Textrument està a punt de tancar" message="Si feu clic a SÍ, sortiràs de Textrument per continuar les operacions.&#xD;Textrument es reiniciarà un cop hagin finalitzat totes les operacions.&#xD;Voleu continuar?"/>
+			<NeedToRestartToLoadPlugins title="Textrument demana reiniciar-se" message="S'ha de reiniciar Textrument per carregar els complements que heu instal·lat."/>
 		</MessageBox>
 		<ClipboardHistory>
 			<PanelTitle name="Historial del porta-retalls"/>
@@ -1153,8 +1161,8 @@ By Hiro5 <groccat at gmail>
 			<word-chars-list-tab-warning value="$INT_REPLACE$ tabulacions"/>
 			<word-chars-list-warning-end value=" en la llista de caràcters."/>
 			<cloud-invalid-warning value="El camí no és vàlid."/>
-			<cloud-restart-warning value="Reinicieu Notepad++ perquè faci efecte."/>
-			<cloud-select-folder value="Seleccioneu una carpeta des d'on Notepad++ llegirà/escriurà la seva configuració"/>
+			<cloud-restart-warning value="Reinicieu Textrument perquè faci efecte."/>
+			<cloud-select-folder value="Seleccioneu una carpeta des d'on Textrument llegirà/escriurà la seva configuració"/>
 			<shift-change-direction-tip value="Utilitza Maj.+Retorn per cercar en direcció contrària"/>
 			<two-find-buttons-tip value="Mode de cerca amb 2 botons"/>
 			<find-in-files-filter-tip value="Cerca als cpp, cxx, h, hxx &amp;&amp; hpp:&#xD;*.cpp *.cxx *.h *.hxx *.hpp&#xD;&#xD;Cerca a tots els fitxer excepte exe, obj &amp;&amp; log:&#xD;*.* !*.exe !*.obj !*.log"/>
@@ -1187,7 +1195,9 @@ By Hiro5 <groccat at gmail>
 			<finder-close-this value="Tanca aquest cercador"/>
 			<finder-collapse-all value="Plega-ho tot"/>
 			<finder-uncollapse-all value="Desplega-ho tot"/>
-			<finder-copy value="Copia"/>
+			<finder-copy value="Copia">
+				<Item value="Copia"/>
+			</finder-copy>
 			<finder-select-all value="Selecciona-ho tot"/>
 			<finder-clear-all value="Neteja-ho tot"/>
 			<finder-open-all value="Obre-ho tot"/>
@@ -1224,4 +1234,4 @@ By Hiro5 <groccat at gmail>
 			<find-result-hits value="($INT_REPLACE$ trobats)"/>
 		</MiscStrings>
 	</Native-Langue>
-</NotepadPlus>
+</Textrument>

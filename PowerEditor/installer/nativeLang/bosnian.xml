@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<NotepadPlus>
-	<Native-Langue name="Bosanski" filename="bosnian.xml">
+<Textrument>
+	<Native-Langue name="Bosanski" filename="bosnian.xml" version="v1.0.0">
 		<Menu>
 			<Main>
 				<!-- Main Menu Entries -->
@@ -224,8 +224,8 @@
 
 					<Item id="46001" name="Postavke stilova..."/>
 					<Item id="47000" name="O programu... F1"/>
-					<Item id="47001" name="Internet stranica Notepad++"/>
-					<Item id="47002" name="Stranica projekta Notepad++"/>
+					<Item id="47001" name="Internet stranica Textrument"/>
+					<Item id="47002" name="Stranica projekta Textrument"/>
 					<Item id="47003" name="Pomoć na Internetu"/>
 					<Item id="47004" name="Forum"/>
 					<Item id="47005" name="Dodaj nove priključke"/>
@@ -248,10 +248,14 @@
 					<Item id="48100" name="Male ikone"/>
 					<Item id="48101" name="Velike ikone"/>
 					<Item id="48102" name="Male standardne ikone"/>
+					<Item id="45014" name="Binary Mode"/>
+					<Item id="48105" name="Prilagodi Toolbar"/>
+					<Item id="48106" name="wrap Toolbar"/>
+					<Item id="48107" name="Multi-line Kartice"/>
 				</Commands>
 			</Main>
 			<Splitter>
-			</Splitter>
+            </Splitter>
 			<TabBar>
 				<Item CMID="0" name="Zatvori"/>
 				<Item CMID="1" name="Zatvori sve ostale"/>
@@ -441,6 +445,7 @@
 					<Item id="6121" name="Izborna traka"/>
 					<Item id="6122" name="Sakrij (za promjenu koristite tipke Alt ili F10)"/>
 					<Item id="6123" name="Jezik"/>
+					<Item id="6128" name="Prikaz veće tekst"/>
 				</Global>
 				<Scintillas title="Uređivanje komponenti">
 					<Item id="6216" name="Postavke pokazivača"/>
@@ -595,6 +600,11 @@
 				<Item id="1" name="U redu"/>
 				<Item id="2" name="Poništi"/>
 			</ColumnEditor>
+			<ShortcutMapper>
+				<MainCommandNames>
+					<Item id="2147483547" name="prazan"/>
+				</MainCommandNames>
+			</ShortcutMapper>
 		</Dialog>
 	</Native-Langue>
-</NotepadPlus>
+</Textrument>

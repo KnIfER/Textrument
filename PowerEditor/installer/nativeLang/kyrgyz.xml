@@ -2,8 +2,8 @@
 <!-- Kyrgyz translation made by: -->
 <!-- Murat Jumashev <murat@crm.kg> -->
 <!-- Last update (5.6.8): 23:58 22.03.2010 -->
-<NotepadPlus>
-	<Native-Langue name="Кыргызча" filename="kyrgyz.xml">
+<Textrument>
+	<Native-Langue name="Кыргызча" filename="kyrgyz.xml" version="v1.0.0">
 		<Menu>
 			<Main>
 				<!-- Main Menu Entries -->
@@ -201,8 +201,8 @@
 					<Item id="10004" name="Жаңы терезеге көчүр"/>
 					<Item id="46001" name="&amp;Стиль аныктооч..."/>
 					<Item id="47000" name="&amp;Программа жөнүндө..."/>
-					<Item id="47001" name="Notepad++ үй &amp;барагы"/>
-					<Item id="47002" name="Notepad++ &amp;проектисинин барагы"/>
+					<Item id="47001" name="Textrument үй &amp;барагы"/>
+					<Item id="47002" name="Textrument &amp;проектисинин барагы"/>
 					<Item id="47003" name="&amp;Интернеттен жардам"/>
 					<Item id="47004" name="&amp;Форум"/>
 					<Item id="47005" name="&amp;Көбүрөөк кошумчаларды тап"/>
@@ -230,10 +230,14 @@
 					<Item id="48100" name="Майда белгичелер"/>
 					<Item id="48101" name="Чоң белгичелер"/>
 					<Item id="48102" name="Демейки белгичелер"/>
+					<Item id="45014" name="Экилик режим"/>
+					<Item id="48105" name="Өзгөчөлөштүрүү алуу куралдар панели"/>
+					<Item id="48106" name="жыйынтыктар алуу куралдар панели"/>
+					<Item id="48107" name="Көп-сап Аккорды"/>
 				</Commands>
 			</Main>
 			<Splitter>
-			</Splitter>
+            </Splitter>
 			<TabBar>
 				<Item CMID="0" name="Мени жап"/>
 				<Item CMID="1" name="Менден башкасынын бардыгын жап"/>
@@ -426,6 +430,7 @@
 					<Item id="6121" name="Меню сабы"/>
 					<Item id="6122" name="Жашыр (ачуу: Alt же F10 менен)"/>
 					<Item id="6123" name="Интерфейс тили"/>
+					<Item id="6128" name="көп текстти көрсөтүү"/>
 				</Global>
 				<Scintillas title="Оңдоо">
 					<Item id="6201" name="Блоктор чегинин келбети"/>
@@ -584,6 +589,11 @@
 				<Item id="1" name="OK"/>
 				<Item id="2" name="Кайтар"/>
 			</ColumnEditor>
+			<ShortcutMapper>
+				<MainCommandNames>
+					<Item id="2147483547" name="бош"/>
+				</MainCommandNames>
+			</ShortcutMapper>
 		</Dialog>
 	</Native-Langue>
-</NotepadPlus>
+</Textrument>

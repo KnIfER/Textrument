@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<NotepadPlus>
-	<Native-Langue name="Greek" filename="greek.xml">
+<Textrument>
+	<Native-Langue name="Greek" filename="greek.xml" version="v1.0.0">
 		<Menu>
 			<Main>
 				<!-- Main Menu Entries -->
@@ -210,12 +210,12 @@
 					<Item id="46001" name="Διαμορφωτής Στυλ..."/>
 					<Item id="46180" name="Ορισμός από το χρήστη"/>
 					<Item id="47000" name="Σχετικά..."/>
-					<Item id="47001" name="Notepad++ Αρχική"/>
-					<Item id="47002" name="Notepad++ Σελίδα Σχεδίου"/>
+					<Item id="47001" name="Textrument Αρχική"/>
+					<Item id="47002" name="Textrument Σελίδα Σχεδίου"/>
 					<Item id="47003" name="Βοήθεια με σύνδεση"/>
 					<Item id="47004" name="Φόρουμ"/>
 					<Item id="47005" name="Λήψη περισσότερων πρόσθετων"/>
-					<Item id="47006" name="Ενημέρωση Notepad++"/>
+					<Item id="47006" name="Ενημέρωση Textrument"/>
 					<Item id="47008" name="Περιεχόμενα βοήθειας"/>
 					<Item id="48005" name="Εισαγωγή Plugin(s) ..."/>
 					<Item id="48006" name="Εισαγωγή Θεμάτων ..."/>
@@ -238,10 +238,14 @@
 					<Item id="48100" name="Μικρά εικονίδια"/>
 					<Item id="48101" name="Μεγάλα εικονίδια"/>
 					<Item id="48102" name="Μικρά πρότυπα εικονίδια"/>
+					<Item id="45014" name="Δυαδική Λειτουργία"/>
+					<Item id="48105" name="Προσαρμογή γραμμής εργαλείων"/>
+					<Item id="48106" name="Τυλίξτε Toolbar"/>
+					<Item id="48107" name="Καρτέλες πολλαπλών γραμμών"/>
 				</Commands>
 			</Main>
 			<Splitter>
-			</Splitter>
+            </Splitter>
 			<TabBar>
 				<Item CMID="0" name="Κλείσιμο"/>
 				<Item CMID="1" name="Κλείσιμο όλων εκτός του παρόντος"/>
@@ -430,6 +434,7 @@
 					<Item id="6121" name="Γραμμή μενού"/>
 					<Item id="6122" name="Απόκρυψη (Εναλλαγή με Alt ή F10)"/>
 					<Item id="6123" name="Γλώσσα"/>
+					<Item id="6128" name="Προβολή μεγαλύτερου κειμένου"/>
 				</Global>
 				<Scintillas title="Επεξεργασία Τμημάτων">
 					<Item id="6216" name="Ρυθμίσεις Αγκύλης"/>
@@ -593,6 +598,11 @@
 				<Item id="1" name="OK"/>
 				<Item id="2" name="Ακύρωση"/>
 			</ColumnEditor>
+			<ShortcutMapper>
+				<MainCommandNames>
+					<Item id="2147483547" name="Αδειάζω"/>
+				</MainCommandNames>
+			</ShortcutMapper>
 		</Dialog>
 	</Native-Langue>
-</NotepadPlus>
+</Textrument>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<NotepadPlus>
-	<Native-Langue name="Mongolian" filename="mongolian.xml" version="6.6.8">
+<Textrument>
+	<Native-Langue name="Mongolian" filename="mongolian.xml" version="v1.0.0">
 		<Menu>
 			<Main>
 				<!-- Main Menu Entries -->
@@ -256,12 +256,12 @@
 					<Item id="46180" name="Хэрэглэгчийн тохируулснаар"/>
 					<Item id="47000" name="Textrument -н тухай..."/>
 					<Item id="47010" name="Тушаалын мөрний өгөгдлүүд..."/>
-					<Item id="47001" name="Notepad++ -н веб хуудас"/>
-					<Item id="47002" name="Notepad++ Төслийн хуудас"/>
+					<Item id="47001" name="Textrument -н веб хуудас"/>
+					<Item id="47002" name="Textrument Төслийн хуудас"/>
 					<Item id="47003" name="Онлайн материалууд"/>
 					<Item id="47004" name="Хэлэлцүүлэг"/>
 					<Item id="47005" name="Нэмэлтүүд авах"/>
-					<Item id="47006" name="Notepad++ -г шинэчлэх"/>
+					<Item id="47006" name="Textrument -г шинэчлэх"/>
 					<Item id="47008" name="Тусламжын контентууд"/>
 					<Item id="47009" name="Шинэчлэгчийн проксийг тохируулах..."/>
 					<Item id="48005" name="Нэмэлт(үүд) импортлох..."/>
@@ -285,10 +285,14 @@
 					<Item id="48100" name="Жижиг дүрс"/>
 					<Item id="48101" name="Том дүрс"/>
 					<Item id="48102" name="Жишиг дүрс"/>
+					<Item id="45014" name="Хоёрт хэлбэрийн файлыг нь горим"/>
+					<Item id="48105" name="Customize Toolbar"/>
+					<Item id="48106" name="Боодолтой Toolbar"/>
+					<Item id="48107" name="Олон шугам Цонхнууд нь"/>
 				</Commands>
 			</Main>
 			<Splitter>
-			</Splitter>
+            </Splitter>
 			<TabBar>
 				<Item CMID="0" name="Хаах"/>
 				<Item CMID="1" name="Үүнээс бусдыг хаах"/>
@@ -604,6 +608,7 @@
 					<Item id="6125" name="Бичиг баримтын мөрний самбар"/>
 					<Item id="6126" name="Харуулах"/>
 					<Item id="6127" name="өргөтгөл багана идэвхжүүлэх"/>
+					<Item id="6128" name="их текстийг харуулах"/>
 				</Global>
 				<Scintillas title="Засах">
 					<Item id="6216" name="Caret тохиргоо"/>
@@ -777,10 +782,9 @@
 				<Cloud title="Үүл">
 					<Item id="6262" name="Тохиргоог үүлрүү хадгалах"/>
 					<Item id="6263" name="Үүл ашиглахгүй"/>
-					<Item id="6264" name="Dropbox"/>
 					<Item id="6265" name="OneDrive"/>
 					<Item id="6266" name="Google Drive"/>
-					<!--Item id="6261" name="Please restart Notepad++ to take effect."/-->
+					<!--Item id="6261" name="Please restart Textrument to take effect."/-->
 				</Cloud>
 
 				<MISC title="Бусад">
@@ -838,6 +842,11 @@
 				<Item id="1" name="ЗА"/>
 				<Item id="2" name="Цуцлах"/>
 			</ColumnEditor>
+			<ShortcutMapper>
+				<MainCommandNames>
+					<Item id="2147483547" name="хоосон"/>
+				</MainCommandNames>
+			</ShortcutMapper>
 		</Dialog>
 		<MessageBox>
 			<ContextMenuXmlEditWarning title="Хулганы баруун товч дараад гарч ирэх цэсийг тохируулах" message="contextMenu.xml-г засах нь Хулганы баруун товч дараад гарч ирэх цэсийг тохируулах боломжыг олгоно.\rҮүнийг өөрчилснийхөө дараа Textrument -г хаагаад дахин нээх шаардлагатай"/>
@@ -922,4 +931,4 @@
 			</Menus>
 		</ProjectManager>
 	</Native-Langue>
-</NotepadPlus>
+</Textrument>

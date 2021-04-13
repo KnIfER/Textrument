@@ -1,6 +1,6 @@
-<?xml version="1.0" encoding="utf-8" ?>
-<NotepadPlus>
-	<Native-Langue name="Castellano - Español" filename="spanish_ar.xml" >
+<?xml version="1.0" encoding="UTF-8"?>
+<Textrument>
+	<Native-Langue name="Castellano - Español" filename="spanish_ar.xml" version="v1.0.0">
 		<Menu>
 			<Main>
 				<!-- Main Menu Entries -->
@@ -21,7 +21,7 @@
 				<SubEntries>
 					<Item subMenuId="file-closeMore" name="Cerrar más"/>
 					<Item subMenuId="file-recentFiles" name="Archivos recientes"/>
-					<Item subMenuId="edit-copyToClipboard"  name="Copiar al portapapeles"/>
+					<Item subMenuId="edit-copyToClipboard" name="Copiar al portapapeles"/>
 					<Item subMenuId="edit-indent" name="Tabulación"/>
 					<Item subMenuId="edit-convertCaseTo" name="MAYÚSCULAS/minúsculas"/>
 					<Item subMenuId="edit-lineOperations" name="Operaciones con líneas"/>
@@ -35,31 +35,31 @@
 					<Item subMenuId="search-jumpUp" name="Arriba"/>
 					<Item subMenuId="search-jumpDown" name="Abajo"/>
 					<Item subMenuId="search-bookmark" name="Marcador"/>
-					<Item subMenuId="view-showSymbol"  name="Mostrar símbolo"/>
-					<Item subMenuId="view-zoom"  name="Zoom"/>
-					<Item subMenuId="view-moveCloneDocument"  name="Mover/Clonar el documento actual"/>
-					<Item subMenuId="view-tab"  name="Pestaña"/>
+					<Item subMenuId="view-showSymbol" name="Mostrar símbolo"/>
+					<Item subMenuId="view-zoom" name="Zoom"/>
+					<Item subMenuId="view-moveCloneDocument" name="Mover/Clonar el documento actual"/>
+					<Item subMenuId="view-tab" name="Pestaña"/>
 					<Item subMenuId="view-collapseLevel" name="Contraer nivel"/>
 					<Item subMenuId="view-uncollapseLevel" name="Expandir nivel"/>
 					<Item subMenuId="view-project" name="Proyecto"/>
-					<Item subMenuId="encoding-characterSets"  name="Páginas de código"/>
-					<Item subMenuId="encoding-arabic"  name="Árabe"/>
-					<Item subMenuId="encoding-baltic"  name="Báltico"/>
-					<Item subMenuId="encoding-celtic"  name="Céltico"/>
-					<Item subMenuId="encoding-cyrillic"  name="Cirílico"/>
-					<Item subMenuId="encoding-centralEuropean"  name="Europa Central"/>
-					<Item subMenuId="encoding-chinese"  name="Chino"/>
-					<Item subMenuId="encoding-easternEuropean"  name="Europa Oriental"/>
-					<Item subMenuId="encoding-greek"  name="Griego"/>
-					<Item subMenuId="encoding-hebrew"  name="Hebreo"/>
-					<Item subMenuId="encoding-japanese"  name="Japonés"/>
+					<Item subMenuId="encoding-characterSets" name="Páginas de código"/>
+					<Item subMenuId="encoding-arabic" name="Árabe"/>
+					<Item subMenuId="encoding-baltic" name="Báltico"/>
+					<Item subMenuId="encoding-celtic" name="Céltico"/>
+					<Item subMenuId="encoding-cyrillic" name="Cirílico"/>
+					<Item subMenuId="encoding-centralEuropean" name="Europa Central"/>
+					<Item subMenuId="encoding-chinese" name="Chino"/>
+					<Item subMenuId="encoding-easternEuropean" name="Europa Oriental"/>
+					<Item subMenuId="encoding-greek" name="Griego"/>
+					<Item subMenuId="encoding-hebrew" name="Hebreo"/>
+					<Item subMenuId="encoding-japanese" name="Japonés"/>
 					<Item subMenuId="encoding-korean" name="Coreano"/>
 					<Item subMenuId="encoding-northEuropean" name="Europa del Norte"/>
 					<Item subMenuId="encoding-thai" name="Tailandés"/>
 					<Item subMenuId="encoding-turkish" name="Turco"/>
 					<Item subMenuId="encoding-westernEuropean" name="Europa Occidental"/>
 					<Item subMenuId="encoding-vietnamese" name="Vietnamita"/>
-					<Item subMenuId="settings-import"  name="Importar"/>
+					<Item subMenuId="settings-import" name="Importar"/>
 				</SubEntries>
 
 				<!-- all menu item -->
@@ -75,7 +75,7 @@
 					<Item id="41007" name="Guardar t&amp;odo"/>
 					<Item id="41008" name="Guardar &amp;como..."/>
 					<Item id="41010" name="Imprimir..."/>
-					<Item id="1001"  name="¡Imprimir ahora!"/>
+					<Item id="1001" name="¡Imprimir ahora!"/>
 					<Item id="41011" name="S&amp;alir"/>
 					<Item id="41012" name="Cargar sesión..."/>
 					<Item id="41013" name="Guardar sesión..."/>
@@ -125,8 +125,8 @@
 					<Item id="42051" name="Panel de caracteres"/>
 					<Item id="42052" name="Historial del portapapeles"/>
 					<Item id="42025" name="Guardar macro grabada"/>
-					<Item id="42026" name="Dirección del texto Der-->Izq"/>
-					<Item id="42027" name="Dirección del texto Izq-->Der"/>
+					<Item id="42026" name="Dirección del texto Der--&gt;Izq"/>
+					<Item id="42027" name="Dirección del texto Izq--&gt;Der"/>
 					<Item id="42028" name="Solo lectura"/>
 					<Item id="42029" name="Copiar ruta del archivo"/>
 					<Item id="42030" name="Copiar nombre del archivo"/>
@@ -249,13 +249,13 @@
 					<Item id="46001" name="Configurador de estilo..."/>
 					<Item id="46250" name="Lenguaje definido por el usuario..."/>
 					<Item id="46180" name="Definido por el usuario"/>
-					<Item id="47000" name="Acerca de Notepad++..."/>
-					<Item id="47001" name="Web de Notepad++"/>
-					<Item id="47002" name="Proyecto Notepad++ en Sourceforge"/>
+					<Item id="47000" name="Acerca de Textrument..."/>
+					<Item id="47001" name="Web de Textrument"/>
+					<Item id="47002" name="Proyecto Textrument en Sourceforge"/>
 					<Item id="47003" name="NpWiki++ (Ayuda en línea)"/>
 					<Item id="47004" name="Foro"/>
 					<Item id="47005" name="Descargar más complementos"/>
-					<Item id="47006" name="Actualizar Notepad++"/>
+					<Item id="47006" name="Actualizar Textrument"/>
 					<Item id="47008" name="Ayuda..."/>
 					<Item id="47009" name="Configurar el Proxy para actualizar..."/>
 					<Item id="48005" name="Importar complementos ..."/>
@@ -303,8 +303,8 @@
 
 		<Dialog>
 			<Find title="" titleFind="Buscar" titleReplace="Reemplazar" titleFindInFiles="Buscar en archivos" titleMark="Marcar">
-				<Item id="1" 	name="Buscar siguiente"/>
-				<Item id="2" 	name="Cerrar"/>
+				<Item id="1" name="Buscar siguiente"/>
+				<Item id="2" name="Cerrar"/>
 				<Item id="1620" name="Buscar:"/>
 				<Item id="1603" name="Solo &amp;palabras completas"/>
 				<Item id="1604" name="Coincidir &amp;MAYÚSCULAS/minúsculas"/>
@@ -339,15 +339,15 @@
 				<Item id="1626" name="Extendido (\n, \r, \t, \0, \x...)"/>
 				<Item id="1660" name="Reemplazar en archivos"/>
 				<Item id="1661" name="Seguir en doc. actual"/>
-			 	<Item id="1641" name="Buscar todo en el documento actual"/>
-			 	<Item id="1686" name="Transparencia"/>
+				<Item id="1641" name="Buscar todo en el documento actual"/>
+				<Item id="1686" name="Transparencia"/>
 				<Item id="1703" name="&amp;. en nueva línea"/>
 			</Find>
 			<GoToLine title="Ir a línea...">
 				<Item id="2007" name="Línea"/>
 				<Item id="2008" name="Desplazamiento"/>
-				<Item id="1" 	name="&amp;Ir"/>
-				<Item id="2" 	name="Cancelar"/>
+				<Item id="1" name="&amp;Ir"/>
+				<Item id="2" name="Cancelar"/>
 				<Item id="2004" name="Se encuentra aquí:"/>
 				<Item id="2005" name="Quiere ir a:"/>
 				<Item id="2006" name="No puede ir más allá de:"/>
@@ -355,13 +355,13 @@
 
 			<Run title="Ejecutar...">
 				<Item id="1903" name="Escriba la ruta o programa a ejecutar"/>
-				<Item id="1" 	name="Ejecutar"/>
-				<Item id="2" 	name="Cancelar"/>
+				<Item id="1" name="Ejecutar"/>
+				<Item id="2" name="Cancelar"/>
 				<Item id="1904" name="Guardar..."/>
 			</Run>
 
 			<StyleConfig title="Configurador de estilo">
-				<Item id="2"    name="Cancelar"/>
+				<Item id="2" name="Cancelar"/>
 				<Item id="2301" name="Guardar &amp;&amp; Cerrar"/>
 				<Item id="2303" name="Transparencia"/>
 				<Item id="2306" name="Selecciona tema: "/>
@@ -392,7 +392,8 @@
 
 			</StyleConfig>
 
-			<UserDefine title="Lenguajes definidos por el usuario"><!--"View"->"user-defined" dialog-->
+			<UserDefine title="Lenguajes definidos por el usuario">
+				<!--"View"->"user-defined" dialog-->
 				<Item id="20001" name="Acoplar"/>
 				<Item id="20002" name="Renombrar"/>
 				<Item id="20003" name="Crear nuevo..."/>
@@ -734,10 +735,10 @@
 
 				<MultiInstance title="Ventanas múltiples">
 					<Item id="6151" name="Configuración de ventanas múltiples"/>
-					<Item id="6152" name="Abrir sesión en una nueva ventana de Notepad++"/>
+					<Item id="6152" name="Abrir sesión en una nueva ventana de Textrument"/>
 					<Item id="6153" name="Siempre en modo ventanas múltiples"/>
 					<Item id="6154" name="Predeterminado (ventana única)"/>
-					<Item id="6155" name="* Luego de modificar esta configuración es necesario reiniciar Notepad++"/>
+					<Item id="6155" name="* Luego de modificar esta configuración es necesario reiniciar Textrument"/>
 				</MultiInstance>
 
 				<Delimiter title="Delimitador">
@@ -804,14 +805,14 @@
 			</ColumnEditor>
 		</Dialog>
 		<MessageBox>
-			<ContextMenuXmlEditWarning title="Editar contextMenu" message="Editar contextMenu.xml le permite modificar el menú contextual emergente de Notepad++.\rTiene que reiniciar Notepad++ para que los cambios se apliquen después de modificar contextMenu.xml."/>
-			<NppHelpAbsentWarning title="El archivo no existe" message="\rno existe. Por favor, descarguelo en el sitio de Notepad++."/>
+			<ContextMenuXmlEditWarning title="Editar contextMenu" message="Editar contextMenu.xml le permite modificar el menú contextual emergente de Textrument.\rTiene que reiniciar Textrument para que los cambios se apliquen después de modificar contextMenu.xml."/>
+			<NppHelpAbsentWarning title="El archivo no existe" message="\rno existe. Por favor, descarguelo en el sitio de Textrument."/>
 			<SaveCurrentModifWarning title="Guardar las Modificaciones Actuales" message="Debe guardar las modificaciones actuales.\rTodas las modificaciones guardadas no se pueden deshacer.\r\r¿Continuar?"/>
 			<LoseUndoAbilityWarning title="Desactivar la opción de deshacer cambios" message="Desea guardar las modificaciones actuales.\rTodas las modificaciones no podrán deshacerse.\r\r¿Continuar?"/>
-			<CannotMoveDoc title="Mover a una ventana nueva de Notepad++" message="El documento se a modificado, guárdelo e inténtelo nuevamente."/>
-			<DocReloadWarning title="Releer" message="¿Está seguro de querer releer el archivo actual y perder los cambios hechos en Notepad++?"/>
+			<CannotMoveDoc title="Mover a una ventana nueva de Textrument" message="El documento se a modificado, guárdelo e inténtelo nuevamente."/>
+			<DocReloadWarning title="Releer" message="¿Está seguro de querer releer el archivo actual y perder los cambios hechos en Textrument?"/>
 			<FileLockedWarning title="Guardado fallido" message="Por favor compruebe que éste archivo no esté abierto con otro programa"/>
-			<FileAlreadyOpenedInNpp title="" message="El archivo ya está abierto en Notepad++."/>
+			<FileAlreadyOpenedInNpp title="" message="El archivo ya está abierto en Textrument."/>
 			<DeleteFileFailed title="Eliminar archivo" message="Eliminación de archivo fallida"/>
 
 			<!-- $INT_REPLACE$ is a place holder, don't translate it -->
@@ -837,8 +838,8 @@
 		</DocumentMap>
 		<FunctionList>
 			<PanelTitle name="Lista de función"/>
-			<SortTip name="Ordenar" />
-			<ReloadTip name="Releer" />
+			<SortTip name="Ordenar"/>
+			<ReloadTip name="Releer"/>
 		</FunctionList>
 		<ProjectManager>
 			<PanelTitle name="Proyecto"/>
@@ -887,4 +888,4 @@
 			</Menus>
 		</ProjectManager>
 	</Native-Langue>
-</NotepadPlus>
+</Textrument>

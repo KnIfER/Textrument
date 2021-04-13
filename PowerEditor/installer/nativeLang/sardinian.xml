@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-	Sardininian translation for Notepad++ 5.9.6.1
+	Sardininian translation for Textrument 5.9.6.1
 	Last modified Sat, December 24th, 2011 01:10 GMT by Marco Solinas.
 	Please e-mail errors, suggestions etc. to solinas.marco(at)libero.it.
 	For updates, see https://sourceforge.net/projects/notepad-plus/forums/forum/558104/topic/1853765
@@ -23,8 +23,8 @@
 	Gràtzias de coru!
 	Marco
 -->
-<NotepadPlus>
-	<Native-Langue name="Sardu" filename="sardinian.xml">
+<Textrument>
+	<Native-Langue name="Sardu" filename="sardinian.xml" version="v1.0.0">
 		<Menu>
 			<Main>
 				<!-- Main Menu Entries -->
@@ -252,12 +252,12 @@
 					<Item id="46019" name="File MS INI"/>
 					<Item id="46180" name="Definidu dae s'impitadore"/>
 					<Item id="47000" name="Informatziones a pitzu de..."/>
-					<Item id="47001" name="Pàgina printzipale Notepad++"/>
-					<Item id="47002" name="Pàgina progetu Notepad++"/>
+					<Item id="47001" name="Pàgina printzipale Textrument"/>
+					<Item id="47002" name="Pàgina progetu Textrument"/>
 					<Item id="47003" name="Agitòriu in lìnia"/>
 					<Item id="47004" name="Forum"/>
 					<Item id="47005" name="Otenni àteros plugin"/>
-					<Item id="47006" name="Annoa Notepad++"/>
+					<Item id="47006" name="Annoa Textrument"/>
 					<Item id="47008" name="Ghia..."/>
 					<Item id="48005" name="Importa Plugin..."/>
 					<Item id="48006" name="Importa Tema(s) ..."/>
@@ -695,4 +695,4 @@
 			</Menus>
 		</ProjectManager>
 	</Native-Langue>
-</NotepadPlus>
+</Textrument>

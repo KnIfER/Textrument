@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<NotepadPlus>
-	<Native-Langue name="Basque" filename="basque.xml" version="7.5">
+<Textrument>
+	<Native-Langue name="Basque" filename="basque.xml" version="v1.0.0">
 		<Menu>
 			<Main>
 				<!-- Main Menu Entries -->
@@ -283,13 +283,13 @@
 					<Item id="46180" name="Erabiltzaileak Zehaztuta"/>
 					<Item id="46250" name="Zehaztu zure hizkuntza..."/>
 					<Item id="47000" name="Textrument &amp;Buruz..."/>
-					<Item id="47001" name="Notepad++ Etxea"/>
-					<Item id="47002" name="Notepad++ Egitasmoaren &amp;Webgunea"/>
+					<Item id="47001" name="Textrument Etxea"/>
+					<Item id="47002" name="Textrument Egitasmoaren &amp;Webgunea"/>
 					<Item id="47003" name="Online Laguntza"/>
 					<Item id="47004" name="Eztabaidagunea"/>
 					<Item id="47011" name="Zuzeneko Sostengua"/>
 					<Item id="47005" name="Lortu &amp;Plugin Gehiago"/>
-					<Item id="47006" name="Eg&amp;uneratu Notepad++"/>
+					<Item id="47006" name="Eg&amp;uneratu Textrument"/>
 					<Item id="47008" name="Laguntza Edukiak"/>
 					<Item id="47009" name="Ezarri Eguneratzaile Proxya..."/>
 					<Item id="47010" name="Komando Lerro Argumentuak..."/>
@@ -315,10 +315,14 @@
 					<Item id="48100" name="Ikur txikiak"/>
 					<Item id="48101" name="Ikur handiak"/>
 					<Item id="48102" name="Ikur estandarrak"/>
+					<Item id="45014" name="Binary Mode"/>
+					<Item id="48105" name="Pertsonalizatu Toolbar"/>
+					<Item id="48106" name="Wrap Toolbar"/>
+					<Item id="48107" name="Lerro anitzeko Tabs"/>
 				</Commands>
 			</Main>
 			<Splitter>
-			</Splitter>
+            </Splitter>
 			<TabBar>
 				<Item CMID="0" name="Itxi "/>
 				<Item CMID="1" name="Itxi Denak HAU EZIK"/>
@@ -675,6 +679,7 @@
 					<Item id="6125" name="Agiri Aldatzailea"/>
 					<Item id="6126" name="Erakutsi"/>
 					<Item id="6127" name="Gaitu luzapena zutabea"/>
+					<Item id="6128" name="Erakutsi testu handiago"/>
 				</Global>
 				<Scintillas title="Editatu">
 					<Item id="6201" name="Agiritegi Bazter Estiloa"/>
@@ -735,12 +740,11 @@
 					<Item id="6413" name="Berezko Zuzenbidea (Ireki/Gorde)"/>
 					<Item id="6414" name="Jarraitu uneko agiria"/>
 					<Item id="6415" name="Gogoratu erabilitako azken zuzenbidea"/>
-					<Item id="6430" name="Erabili estilo berriko gordetze elkarrizketa "/>
-					a
 					<Item id="6431" name="Ireki agiritegiko agiri guztiak agiritegi erortzean Agiritegia Laninguru bezala abiarazi ordez"/>
 					<Item id="6433" name="iragazkiak"/>
 					<Item id="6432" name="Eta Eraman"/>
 					<Item id="6434" name="errekurtsiboki"/>
+					<Item id="6430" name="Erabili estilo berriko gordetze elkarrizketa "/>
 				</DefaultDir>
 				<FileAssoc title="Agiri Elkarketa">
 					<Item id="4009" name="Onartutako Luzapenak:"/>
@@ -946,6 +950,11 @@
 				<Item id="1" name="Ongi"/>
 				<Item id="2" name="Ezeztatu"/>
 			</ColumnEditor>
+			<ShortcutMapper>
+				<MainCommandNames>
+					<Item id="2147483547" name="Empty"/>
+				</MainCommandNames>
+			</ShortcutMapper>
 		</Dialog>
 		<MessageBox>
 			<ContextMenuXmlEditWarning title="Hitzinguru Menua Editatzea" message="Hitzinguru Menua Editatzen.xml-ek Textrument oharleiho hitzinguru menua aldatzea ahalbidetzen dizu.    Textrument berrabiarazi behar duzu eragina izateko hitzinguru Menua.xml aldatu ondoren."/>
@@ -1046,8 +1055,8 @@ Zure ezarpenak hodeian ezeztatu egingo da. Mesedez berrezarri balio zuzen bat Ho
 			<word-chars-list-tab-warning value="$INT_REPLACE$ TAB(s)"/>
 			<word-chars-list-warning-end value="  zure hizki zerrendan."/>
 			<cloud-invalid-warning value="Helburu baliogabea."/>
-			<cloud-restart-warning value="Mesedez berrabiarazi Notepad++ eragina izateko."/>
+			<cloud-restart-warning value="Mesedez berrabiarazi Textrument eragina izateko."/>
 			<shift-change-direction-tip value="Erabili Aldatu + Sartu alderantzizko norabidean bilatzeko"/>
 		</MiscStrings>
 	</Native-Langue>
-</NotepadPlus>
+</Textrument>

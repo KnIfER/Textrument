@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 ***********************************************************************************
-	zulu language binary translations file for Notepad++ ::
+	zulu language binary translations file for Textrument ::
 	Created By:- Roshan K. Rathod
 	Email id- rathodroshan0137@gmail.com,rkinfoteh28@gmail.com
 ************************************************************************************
 	
 -->
-<NotepadPlus>
-	<Native-Langue name="zulu" filename="zulu.xml" version="7.6.2">
+<Textrument>
+	<Native-Langue name="zulu" filename="zulu.xml" version="v1.0.0">
 		<Menu>
 			<Main>
 				<!-- Main Menu Entries -->
@@ -327,10 +327,14 @@
 					<Item id="48100" name="Izithonjana ezincane"/>
 					<Item id="48101" name="Izithombe ezinkulu"/>
 					<Item id="48102" name="Izithonjana ezijwayelekile"/>
+					<Item id="45014" name="Binary Mode"/>
+					<Item id="48105" name="Yenza ibha yamathuluzi e"/>
+					<Item id="48106" name="Goqa ibha yamathuluzi e"/>
+					<Item id="48107" name="Imigqa eminingi Amathebhu"/>
 				</Commands>
 			</Main>
 			<Splitter>
-			</Splitter>
+            </Splitter>
 			<TabBar>
 				<Item CMID="0" name="Vala"/>
 				<Item CMID="1" name="Vala konke KULO"/>
@@ -496,6 +500,9 @@
 				<ScintillaCommandsTab name="Sscintilla imiyalo"/>
 				<ConflictInfoOk name="Azikho izingxabano zokunqamulela zento."/>
 				<ConflictInfoEditing name="Awekho izingxabano . . ."/>
+				<MainCommandNames>
+					<Item id="2147483547" name="engenalutho"/>
+				</MainCommandNames>
 			</ShortcutMapper>
 			<ShortcutMapperSubDialg title="Isinqamuleli">
 				<Item id="1" name="KULUNGILE"/>
@@ -706,6 +713,7 @@
 					<Item id="6125" name="Iphaneli Yohlu Lomqulu"/>
 					<Item id="6126" name="Bonisa"/>
 					<Item id="6127" name="Nika amandla isandiso ikholomu"/>
+					<Item id="6128" name="Bonisa umbhalo emikhulu"/>
 				</Global>
 				<Scintillas title="Ukuhlela">
 					<Item id="6216" name="Izilungiselelo ze-Caret"/>
@@ -764,11 +772,11 @@
 					<Item id="6413" name="I-Directory yangaphandle (Vula / Gcina)"/>
 					<Item id="6414" name="Landela idokhumenti yamanje"/>
 					<Item id="6415" name="Khumbula isiqondisi sokugcina esasetshenziswa"/>
-					<Item id="6430" name="Sebenzisaingxoxoyesitayelaesisha"/>
 					<Item id="6431" name="Vula wonke amafolda wefolda esikhundleni sokuqala ifolda njengendawo yokusebenzela kwifolda yehla"/>
 					<Item id="6433" name="Izihlungi"/>
 					<Item id="6432" name="Hudula bese udedele"/>
 					<Item id="6434" name="Recursively"/>
+					<Item id="6430" name="Sebenzisaingxoxoyesitayelaesisha"/>
 				</DefaultDir>
 
 				<FileAssoc title="Ifayela leFayili">
@@ -1187,11 +1195,13 @@ Ingabe ufuna ukuqala i-Notepad ++ kwimodi ye-Administrator?"/>
 			<finder-close-this value="Vala lo mtholi"/>
 			<finder-collapse-all value="Yehla konke"/>
 			<finder-uncollapse-all value="Ungabuyi konke"/>
-			<finder-copy value="Kopisha"/>
+			<finder-copy value="Kopisha">
+				<Item value="Kopisha"/>
+			</finder-copy>
 			<finder-select-all value="Khetha konke"/>
 			<finder-clear-all value="Sula konke"/>
 			<finder-open-all value="Vula konke"/>
 		</MiscStrings>
 
 	</Native-Langue>
-</NotepadPlus>
+</Textrument>

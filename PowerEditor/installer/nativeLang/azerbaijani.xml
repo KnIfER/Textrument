@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<NotepadPlus>
-	<Native-Langue name="Azərbaycan" filename="azerbaijan.xml">
+<Textrument>
+	<Native-Langue name="Azərbaycan" filename="azerbaijan.xml" version="v1.0.0">
 		<Menu>
 			<Main>
 				<!-- Main Menu Entries -->
@@ -207,8 +207,8 @@
 					<Item id="46001" name="Stilin konfiqurasiyası..."/>
 					<Item id="46180" name="İstifadəçinin nizamları"/>
 					<Item id="47000" name="Textrument haqqında"/>
-					<Item id="47001" name="Notepad++ vebsaytı"/>
-					<Item id="47002" name="Notepad++ layihə-səhifəsi"/>
+					<Item id="47001" name="Textrument vebsaytı"/>
+					<Item id="47002" name="Textrument layihə-səhifəsi"/>
 					<Item id="47003" name="Onlayn kömək"/>
 					<Item id="47004" name="Forum"/>
 					<Item id="47005" name="Plaginləri yüklə"/>
@@ -234,11 +234,15 @@
 					<Item id="48100" name="Balaca ikonlar"/>
 					<Item id="48101" name="Böyük ikonlar"/>
 					<Item id="48102" name="Standart ikonlar"/>
+					<Item id="45014" name="Binary Mode"/>
+					<Item id="48105" name="Customize Toolbar"/>
+					<Item id="48106" name="Wrap Toolbar"/>
+					<Item id="48107" name="Multi-line Tabs"/>
 				</Commands>
 
 			</Main>
 			<Splitter>
-			</Splitter>
+            </Splitter>
 
 			<TabBar>
 				<Item CMID="0" name="Bağla"/>
@@ -440,6 +444,7 @@
 					<Item id="6121" name="Menyu paneli"/>
 					<Item id="6122" name="Gizlət (Seçim üçün &quot;Alt&quot; və ya &quot;F1&quot; düyməsini basın)"/>
 					<Item id="6123" name="İnterfeys dili"/>
+					<Item id="6128" name="böyük mətn göstər"/>
 				</Global>
 
 				<Scintillas title="Redaktə etmək">
@@ -617,6 +622,11 @@
 				<Item id="2" name="İmtina"/>
 			</ColumnEditor>
 
+			<ShortcutMapper>
+				<MainCommandNames>
+					<Item id="2147483547" name="boş"/>
+				</MainCommandNames>
+			</ShortcutMapper>
 		</Dialog>
 	</Native-Langue>
-</NotepadPlus>
+</Textrument>

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-	Georgian localization for Notepad++ 6.2.3
+	Georgian localization for Textrument 6.2.3
 	Translated By UGLT.
 	Contact Us: info@uglt.org
 -->
-<NotepadPlus>
-	<Native-Langue name="ქართული" filename="georgian.xml">
+<Textrument>
+	<Native-Langue name="ქართული" filename="georgian.xml" version="v1.0.0">
 		<Menu>
 			<Main>
 				<!-- Main Menu Entries -->
@@ -220,12 +220,12 @@
 					<Item id="46001" name="სტილის კონფიგურაცია..."/>
 					<Item id="46180" name="მომხმარებლის მიერ განსაზღვრული"/>
 					<Item id="47000" name="Textrument-ის შესახებ..."/>
-					<Item id="47001" name="Notepad++-ის ვებ-გვერდი"/>
-					<Item id="47002" name="Notepad++-ის პროექტის გვერდი"/>
+					<Item id="47001" name="Textrument-ის ვებ-გვერდი"/>
+					<Item id="47002" name="Textrument-ის პროექტის გვერდი"/>
 					<Item id="47003" name="ინტერნეტ-დოკუმენტაცია"/>
 					<Item id="47004" name="ფორუმი"/>
 					<Item id="47005" name="სხვა დანამატების გადმოწერა"/>
-					<Item id="47006" name="Notepad++-ის განახლება"/>
+					<Item id="47006" name="Textrument-ის განახლება"/>
 					<Item id="47008" name="დახმარება"/>
 					<Item id="48005" name="დანამატის იმპორტი..."/>
 					<Item id="48006" name="გაფორმების იმპორტი..."/>
@@ -248,10 +248,14 @@
 					<Item id="48100" name="პატარა ხატულები"/>
 					<Item id="48101" name="დიდი ხატულები"/>
 					<Item id="48102" name="სტანდარტული ხატულები"/>
+					<Item id="45014" name="ორობითი რეჟიმი"/>
+					<Item id="48105" name="Customize Toolbar"/>
+					<Item id="48106" name="Wrap Toolbar"/>
+					<Item id="48107" name="Multi-line Tabs"/>
 				</Commands>
 			</Main>
 			<Splitter>
-			</Splitter>
+            </Splitter>
 			<TabBar>
 				<Item CMID="0" name="დახურვა"/>
 				<Item CMID="1" name="ამის გარდა ყველას დახურვა"/>
@@ -468,6 +472,7 @@
 					<Item id="6121" name="მენიუს პანელი"/>
 					<Item id="6122" name="დამალვა (გამოსაჩენად გამოიყენეთ ღილაკი Alt ან F10)"/>
 					<Item id="6123" name="ენა"/>
+					<Item id="6128" name="ჩვენების უფრო დიდი ტექსტი"/>
 				</Global>
 				<Scintillas title="რედაქტირება">
 					<Item id="6216" name="კურსორის პარამეტრები"/>
@@ -633,6 +638,11 @@
 				<Item id="1" name="კარგი"/>
 				<Item id="2" name="გაუქმება"/>
 			</ColumnEditor>
+			<ShortcutMapper>
+				<MainCommandNames>
+					<Item id="2147483547" name="Empty"/>
+				</MainCommandNames>
+			</ShortcutMapper>
 		</Dialog>
 		<MessageBox>
 			<ContextMenuXmlEditWarning title="კონტექსტური მენიუს შეცვლა" message="ფაილის contextMenu.xml შეცვლა საშუალებას მოგცემთ შეცვალოთ Textrument-ის კონტექსტური მენიუს პუნქტები.\rcontextMenu.xml-ის შეცვლის შემდეგ გადატვირთეთ Textrument."/>
@@ -695,4 +705,4 @@
 			</Menus>
 		</ProjectManager>
 	</Native-Langue>
-</NotepadPlus>
+</Textrument>

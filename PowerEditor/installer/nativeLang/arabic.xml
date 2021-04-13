@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-	URL: https://www.w3schools.com/xml/xml_syntax.asp
-	- &#xD;  is (\r) new line 
-	- &gt;   is (>) and &lt; is (<)
-	- &amp;  is (&)
-	- &apos; is (')
-	- &quot; is (")
-	-->
-<NotepadPlus>
-	<Native-Langue name="Arabic" filename="arabic.xml" RTL="yes" version="7.7.2">
+    URL: https://www.w3schools.com/xml/xml_syntax.asp
+    - &#xD;  is (\r) new line 
+    - &gt;   is (>) and &lt; is (<)
+    - &amp;  is (&)
+    - &apos; is (')
+    - &quot; is (")
+    -->
+<Textrument>
+	<Native-Langue name="Arabic" filename="arabic.xml" RTL="yes" version="v1.0.0">
 		<Menu>
 			<Main>
 				<!-- Main Menu Entries -->
@@ -292,14 +292,14 @@
 					<Item id="46180" name="معرف من قبل المستخدم"/>
 					<Item id="47000" name="عن Textrument"/>
 					<Item id="47010" name="متغيرات سطر الأوامر..."/>
-					<Item id="47001" name="الصفحة الرئيسية Notepad++"/>
-					<Item id="47002" name="صفحة المشروع Notepad++"/>
+					<Item id="47001" name="الصفحة الرئيسية Textrument"/>
+					<Item id="47002" name="صفحة المشروع Textrument"/>
 					<Item id="47003" name="المستندات على الإنترنت"/>
-					<Item id="47004" name="مجتمع Notepad++ (المنتدى)"/>
+					<Item id="47004" name="مجتمع Textrument (المنتدى)"/>
 					<Item id="47011" name="الدعم المباشر"/>
 					<Item id="47012" name="معلومات تصحيح الأخطاء..."/>
 					<Item id="47005" name="الحصول على المزيد من الإضافات"/>
-					<Item id="47006" name="تحديث Notepad++"/>
+					<Item id="47006" name="تحديث Textrument"/>
 					<Item id="47009" name="تعيين Proxy للتحديث..."/>
 					<Item id="48005" name="استيراد الإضافات..."/>
 					<Item id="48006" name="استيراد نمط الموضوعات..."/>
@@ -330,10 +330,14 @@
 					<Item id="48100" name="أيقونات صغيرة"/>
 					<Item id="48101" name="أيقونات كبيرة"/>
 					<Item id="48102" name="أيقونات قياسية"/>
+					<Item id="45014" name="الوضع الثنائي"/>
+					<Item id="48105" name="تخصيص شريط الأدوات"/>
+					<Item id="48106" name="شريط أدوات التفاف"/>
+					<Item id="48107" name="علامات متعددة خط"/>
 				</Commands>
 			</Main>
 			<Splitter>
-			</Splitter>
+            </Splitter>
 			<TabBar>
 				<Item CMID="0" name="إغلاق"/>
 				<Item CMID="1" name="إغلاق الكل باستثناء هذا"/>
@@ -399,7 +403,7 @@
 				<Item id="1686" name="الشفاف&amp;ية"/>
 				<Item id="1703" name="&amp;. تطابق سطر جديد"/>
 				<Item id="1721" name="▲"/>
-				<Item id="1723" name="▼ بحث عن التالي"/>
+				<Item id="1723" name="▼ التالي"/>
 			</Find>
 
 			<FindCharsInRange title="بحث عن أحرف في النطاق...">
@@ -512,6 +516,9 @@
 				<ScintillaCommandsTab name="أوامر Scintilla"/>
 				<ConflictInfoOk name="لا يوجد تعارض في الاختصار لهذا العنصر."/>
 				<ConflictInfoEditing name="لا يوجد تعارض. . ."/>
+				<MainCommandNames>
+					<Item id="2147483547" name="فارغة"/>
+				</MainCommandNames>
 			</ShortcutMapper>
 			<ShortcutMapperSubDialg title="الاختصار">
 				<Item id="1" name="موافق"/>
@@ -722,6 +729,7 @@
 					<Item id="6125" name="لوحة قائمة المستند"/>
 					<Item id="6126" name="إظهار"/>
 					<Item id="6127" name="تمكين العمود التمديد"/>
+					<Item id="6128" name="عرض النص أكبر"/>
 				</Global>
 				<Scintillas title="تحرير">
 					<Item id="6216" name="إعدادات مؤشر الكتابة"/>
@@ -779,11 +787,11 @@
 					<Item id="6413" name="الدليل الافتراضي (فتح / حفظ)"/>
 					<Item id="6414" name="اتبع المستند الحالي"/>
 					<Item id="6415" name="تذكر آخر دليل تم استخدامه"/>
-					<Item id="6430" name="استخدام مربع حوار بالنمط الجديد "/>
 					<Item id="6431" name="فتح جميع الملفات في المجلد بدلاً من فتح المجلد كمساحدة عمل عند إفلات المجلد"/>
 					<Item id="6433" name="مرشحات"/>
 					<Item id="6432" name="السحب والإسقاط"/>
 					<Item id="6434" name="متكرر"/>
+					<Item id="6430" name="استخدام مربع حوار بالنمط الجديد "/>
 				</DefaultDir>
 
 				<FileAssoc title="امتداد الملف">
@@ -1057,12 +1065,12 @@
 			<UDLRemoveCurrentLang title="إزالة اللغة الحالية" message="هل أنت متأكد؟"/>
 			<SCMapperDoDeleteOrNot title="هل أنت متأكد؟" message="هل بالتأكيد تريد حذف هذا الاختصار؟"/>
 			<FindCharRangeValueError title="مشكلة في قيمة النطاق" message="يجب أن تكتب بين 0 و 255."/>
-			<OpenInAdminMode title="فشل الحفظ" message="لا يمكن حفظ الملف وقد يكون محمياً.&#xA;هل تريد تشغيل Notepad++ في وضع المسؤول؟"/>
-			<OpenInAdminModeWithoutCloseCurrent title="فشل الحفظ" message="لا يمكن حفظ الملف وقد يكون محمياً.&#xA;هل تريد تشغيل Notepad++ في وضع المسؤول؟"/>
-			<OpenInAdminModeFailed title="فشل الفتح في وضع المسؤول." message="لا يمكن فتح Notepad++ في وضع المسؤول."/>
+			<OpenInAdminMode title="فشل الحفظ" message="لا يمكن حفظ الملف وقد يكون محمياً.&#xA;هل تريد تشغيل Textrument في وضع المسؤول؟"/>
+			<OpenInAdminModeWithoutCloseCurrent title="فشل الحفظ" message="لا يمكن حفظ الملف وقد يكون محمياً.&#xA;هل تريد تشغيل Textrument في وضع المسؤول؟"/>
+			<OpenInAdminModeFailed title="فشل الفتح في وضع المسؤول." message="لا يمكن فتح Textrument في وضع المسؤول."/>
 			<ViewInBrowser title="عرض الملف الحالي في المتصفح" message="لا يمكن العثور على التطبيق في نظامك."/>
-			<ExitToUpdatePlugins title="Notepad++ على وشك الخروج" message="إذا قمت بالضغط على نعم، ستقوم بمغادرة Notepad ++ لمتابعة العمليات.&#xA;سيتم إعادة تشغيل Notepad ++ بعد إنهاء جميع العمليات.&#xA;متابعة؟"/>
-			<NeedToRestartToLoadPlugins title="Notepad++ يحتاج لإعادة تشغيل" message="يجب عليك إعادة تشغيل Notepad++ لتحميل الإضافات التي قمت بتثبيتها."/>
+			<ExitToUpdatePlugins title="Textrument على وشك الخروج" message="إذا قمت بالضغط على نعم، ستقوم بمغادرة Notepad ++ لمتابعة العمليات.&#xA;سيتم إعادة تشغيل Notepad ++ بعد إنهاء جميع العمليات.&#xA;متابعة؟"/>
+			<NeedToRestartToLoadPlugins title="Textrument يحتاج لإعادة تشغيل" message="يجب عليك إعادة تشغيل Textrument لتحميل الإضافات التي قمت بتثبيتها."/>
 		</MessageBox>
 		<ClipboardHistory>
 			<PanelTitle name="سجل الذاكرة"/>
@@ -1163,8 +1171,8 @@
 			<word-chars-list-tab-warning value="$INT_REPLACE$ TAB(s)"/>
 			<word-chars-list-warning-end value="  في قائمة الأحرف الخاصة بك."/>
 			<cloud-invalid-warning value="مسار غير صالح."/>
-			<cloud-restart-warning value="الرجاء إعادة تشغيل Notepad++ لتطبيق التغييرات."/>
-			<cloud-select-folder value="حدد المجلد من/إلى حيث Notepad++ يقرأ/يكتب إعداداته"/>
+			<cloud-restart-warning value="الرجاء إعادة تشغيل Textrument لتطبيق التغييرات."/>
+			<cloud-select-folder value="حدد المجلد من/إلى حيث Textrument يقرأ/يكتب إعداداته"/>
 			<shift-change-direction-tip value="استخدم Shift + Enter للبحث في الاتجاه المعاكس."/>
 			<two-find-buttons-tip value="وضع 2 أزرار بحث"/>
 			<find-status-top-reached value="البحث: تم العثور على أول تكرار من أسفل. تم الوصل إلى بداية المستند."/>
@@ -1196,7 +1204,9 @@
 			<finder-close-this value="إغلاق هذا الباحث"/>
 			<finder-collapse-all value="طي الكل"/>
 			<finder-uncollapse-all value="إلغاء طي الكل"/>
-			<finder-copy value="نسخ"/>
+			<finder-copy value="نسخ">
+				<Item value="نسخ"/>
+			</finder-copy>
 			<finder-select-all value="تحديد الكل"/>
 			<finder-clear-all value="مسح الكل"/>
 			<finder-open-all value="فتح الكل"/>
@@ -1225,4 +1235,4 @@
 			<summary-nbrange value=" النطاقات"/>
 		</MiscStrings>
 	</Native-Langue>
-</NotepadPlus>
+</Textrument>

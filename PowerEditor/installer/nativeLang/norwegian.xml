@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<NotepadPlus>
-	<Native-Langue name="Norsk" filename="norwegian.xml">
+<Textrument>
+	<Native-Langue name="Norsk" filename="norwegian.xml" version="v1.0.0">
 		<!-- Endret av Tor Ole Grønvoll 2015-08
-		 torole@gmail.com -->
+         torole@gmail.com -->
 		<Menu>
 			<Main>
 				<!--  Main Menu Entries -->
@@ -165,8 +165,8 @@
 
 					<Item id="46001" name="Stiler ..."/>
 					<Item id="47000" name="Om ... F1"/>
-					<Item id="47001" name="Notepad++ hjemmeside"/>
-					<Item id="47002" name="Notepad++ prosjektside"/>
+					<Item id="47001" name="Textrument hjemmeside"/>
+					<Item id="47002" name="Textrument prosjektside"/>
 					<Item id="47003" name="Hjelp på internett"/>
 					<Item id="47004" name="Forum"/>
 					<Item id="47005" name="Hent flere tilleggsmoduler"/>
@@ -188,6 +188,10 @@
 					<Item id="48100" name="Små ikoner"/>
 					<Item id="48101" name="Store ikoner"/>
 					<Item id="48102" name="Små standard-ikoner"/>
+					<Item id="45014" name="Binary Mode"/>
+					<Item id="48105" name="Tilpass verktøylinje"/>
+					<Item id="48106" name="wrap verktøylinjen"/>
+					<Item id="48107" name="Multi-line Tabs"/>
 				</Commands>
 			</Main>
 			<Splitter>
@@ -388,6 +392,7 @@
 					<Item id="6121" name="Meny verktøylinje"/>
 					<Item id="6122" name="Skjul (bruk Alt eller F10 for å bytte)"/>
 					<Item id="6123" name="Lokaltilpassing"/>
+					<Item id="6128" name="Vise større tekst"/>
 				</Global>
 				<Scintillas title="Layout">
 					<Item id="6216" name="Skrivemerke"/>
@@ -542,6 +547,11 @@
 				<Item id="1" name="OK"/>
 				<Item id="2" name="Avbryt"/>
 			</ColumnEditor>
+			<ShortcutMapper>
+				<MainCommandNames>
+					<Item id="2147483547" name="Tømme"/>
+				</MainCommandNames>
+			</ShortcutMapper>
 		</Dialog>
 	</Native-Langue>
-</NotepadPlus>
+</Textrument>

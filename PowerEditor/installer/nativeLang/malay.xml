@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<NotepadPlus>
+<Textrument>
 	<!--
 Author: Andi Rady Kurniawan
 Date: 12 October 2008
-Desc: Malay translation for Notepad++
+Desc: Malay translation for Textrument
 -->
-	<Native-Langue name="Bahasa Melayu" filename="malay.xml">
+	<Native-Langue name="Bahasa Melayu" filename="malay.xml" version="v1.0.0">
 
 		<Menu>
 
@@ -141,8 +141,8 @@ Desc: Malay translation for Notepad++
 					<Item id="10002" name="Klonkan ke Pandangan seterusnya"/>
 					<Item id="46001" name="Penatarajah Penggaya..."/>
 					<Item id="47000" name="Tentang..."/>
-					<Item id="47001" name="Halaman Notepad++"/>
-					<Item id="47002" name="Laman Projek Notepad++"/>
+					<Item id="47001" name="Halaman Textrument"/>
+					<Item id="47002" name="Laman Projek Textrument"/>
 					<Item id="47003" name="Bantuan atas talian"/>
 					<Item id="47004" name="Forum"/>
 					<Item id="47005" name="Dapatkan lebih plugin"/>
@@ -160,10 +160,14 @@ Desc: Malay translation for Notepad++
 					<Item id="48100" name="Arca kecil"/>
 					<Item id="48101" name="Arca besar"/>
 					<Item id="48102" name="Arca kecil piawai"/>
+					<Item id="45014" name="Mod binari"/>
+					<Item id="48105" name="Customize Toolbar"/>
+					<Item id="48106" name="balut Toolbar"/>
+					<Item id="48107" name="Tabs berbilang talian"/>
 				</Commands>
 			</Main>
 			<Splitter>
-			</Splitter>
+            </Splitter>
 
 			<TabBar>
 				<Item CMID="0" name="Tutup saya"/>
@@ -250,7 +254,7 @@ Desc: Malay translation for Notepad++
 
 					<!--
 
-					<Item id = "2210" name = "Attention : The definition of this style will be the default definition for all non defined styles"/>\
+                    <Item id = "2210" name = "Attention : The definition of this style will be the default definition for all non defined styles"/>\
 
 -->
 					<Item id="2211" name="Perihal Gaya :"/>
@@ -353,6 +357,7 @@ Desc: Malay translation for Notepad++
 					<Item id="6120" name="Menegak"/>
 					<Item id="6121" name="Palang menu"/>
 					<Item id="6122" name="Sorok (Guna kekunci Alt atau F10 untuk menogolkannya)"/>
+					<Item id="6128" name="Paparkan teks yang lebih besar"/>
 				</Global>
 
 				<Scintillas title="Komponen sunting">
@@ -501,6 +506,11 @@ Desc: Malay translation for Notepad++
 				<Item id="1" name="Baik"/>
 				<Item id="2" name="Batal"/>
 			</ColumnEditor>
+			<ShortcutMapper>
+				<MainCommandNames>
+					<Item id="2147483547" name="kosong"/>
+				</MainCommandNames>
+			</ShortcutMapper>
 		</Dialog>
 	</Native-Langue>
-</NotepadPlus>
+</Textrument>

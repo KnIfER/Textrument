@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<NotepadPlus>
-	<Native-Langue name="Shqip" filename="albanian.xml" version="6.7.9">
+<Textrument>
+	<Native-Langue name="Shqip" filename="albanian.xml" version="v1.0.0">
 		<Menu>
 			<Main>
 				<!-- Main Menu Entries -->
@@ -272,12 +272,12 @@
 					<Item id="46180" name="Përcaktuar-përdoruesi"/>
 					<Item id="47000" name="Rreth Textrument..."/>
 					<Item id="47010" name="Argumentet e linjës së komandës..."/>
-					<Item id="47001" name="Notepad++ Hyrje"/>
-					<Item id="47002" name="Notepad++ Faqja e projektit"/>
+					<Item id="47001" name="Textrument Hyrje"/>
+					<Item id="47002" name="Textrument Faqja e projektit"/>
 					<Item id="47003" name="Dokumentacioni nëlinjë"/>
 					<Item id="47004" name="Forumi"/>
 					<Item id="47005" name="Merr më shumë shtojca"/>
-					<Item id="47006" name="Aktualizo Notepad++"/>
+					<Item id="47006" name="Aktualizo Textrument"/>
 					<Item id="47008" name="Ndihma e përmbajtjes"/>
 					<Item id="47009" name="Vendos proksi të aktualizuesit..."/>
 					<Item id="48005" name="Importo shtoja(t) ..."/>
@@ -301,10 +301,14 @@
 					<Item id="48100" name="Ikona të vogla"/>
 					<Item id="48101" name="Ikona të mëdha"/>
 					<Item id="48102" name="Ikona standarde"/>
+					<Item id="45014" name="Mode Binary"/>
+					<Item id="48105" name="Customize Toolbar"/>
+					<Item id="48106" name="Wrap Toolbar"/>
+					<Item id="48107" name="Tabs Multi-line"/>
 				</Commands>
 			</Main>
 			<Splitter>
-			</Splitter>
+            </Splitter>
 			<TabBar>
 				<Item CMID="0" name="Mbyll"/>
 				<Item CMID="1" name="Mbyll të gjitha VEÇ kësaj"/>
@@ -621,6 +625,7 @@
 					<Item id="6125" name="Paneli i listës së documentave"/>
 					<Item id="6126" name="Shfaq"/>
 					<Item id="6127" name="Aktivizo kolonën extension"/>
+					<Item id="6128" name="Të shfaqur tekstin më të madhe"/>
 				</Global>
 				<Scintillas title="Korrigjimi">
 					<Item id="6216" name="Rregullimet Caret"/>
@@ -791,10 +796,9 @@
 				<Cloud title="Cloud">
 					<Item id="6262" name="Rregullimet në cloud"/>
 					<Item id="6263" name="Jo re"/>
-					<Item id="6264" name="Dropbox"/>
 					<Item id="6265" name="OneDrive"/>
 					<Item id="6266" name="Google Drive"/>
-					<!--Item id="6261" name="Please restart Notepad++ to take effect."/-->
+					<!--Item id="6261" name="Please restart Textrument to take effect."/-->
 				</Cloud>
 
 				<MISC title="MISC.">
@@ -852,6 +856,11 @@
 				<Item id="1" name="OK"/>
 				<Item id="2" name="Anulo"/>
 			</ColumnEditor>
+			<ShortcutMapper>
+				<MainCommandNames>
+					<Item id="2147483547" name="bosh"/>
+				</MainCommandNames>
+			</ShortcutMapper>
 		</Dialog>
 		<MessageBox>
 			<ContextMenuXmlEditWarning title="Korrigjimi i menysë së përmbajtjes" message="Korrigjimi i contextMenu.xml ju lejon të modifikoni menytë taf-paf (popup) të përmbajtjes së Textrument.\rDuhet të rifilloni Textrument, që të hyjë në efekt pas modifikimit të contextMenu.xml."/>
@@ -935,4 +944,4 @@
 			</Menus>
 		</ProjectManager>
 	</Native-Langue>
-</NotepadPlus>
+</Textrument>

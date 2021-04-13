@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<NotepadPlus>
-	<Native-Langue name="Japanese" filename="japanese.xml" version="7.8.9">
+<Textrument>
+	<Native-Langue name="Japanese" filename="japanese.xml" version="v1.0.0">
 		<Menu>
 			<Main>
 				<!-- Main Menu Entries -->
@@ -20,7 +20,7 @@
 				</Entries>
 				<!-- Sub Menu Entries -->
 				<SubEntries>
-					<Item subMenuId="file-openFolder" name="このファイルのあるフォルダを開く"/>
+					<Item subMenuId="file-openFolder" name="このファイルのあるフォルダーを開く"/>
 					<Item subMenuId="file-closeMore" name="他のファイルを閉じる"/>
 					<Item subMenuId="file-recentFiles" name="最近使用したファイル(&amp;R)"/>
 					<Item subMenuId="edit-copyToClipboard" name="クリップボードにコピー"/>
@@ -37,6 +37,7 @@
 					<Item subMenuId="search-unmarkAll" name="マークをすべて解除"/>
 					<Item subMenuId="search-jumpUp" name="前のマークに移動"/>
 					<Item subMenuId="search-jumpDown" name="次のマークに移動"/>
+					<Item subMenuId="search-copyStyledText" name="スタイル付きの文字列をコピー"/>
 					<Item subMenuId="search-bookmark" name="ブックマーク"/>
 					<Item subMenuId="view-currentFileIn" name="ブラウザーで開く"/>
 					<Item subMenuId="view-showSymbol" name="制御文字の表示"/>
@@ -72,9 +73,10 @@
 				<!-- all menu item -->
 				<Commands>
 					<Item id="41001" name="新規作成(&amp;N)"/>
-					<Item id="41002" name="開く(&amp;O)"/>
+					<Item id="41002" name="開く(&amp;O)..."/>
 					<Item id="41019" name="エクスプローラー"/>
 					<Item id="41020" name="コマンドプロンプト"/>
+					<Item id="41025" name="フォルダーをワークスペースとして開く"/>
 					<Item id="41003" name="閉じる(&amp;C)"/>
 					<Item id="41004" name="すべて閉じる(&amp;E)"/>
 					<Item id="41005" name="現在の文書以外を閉じる"/>
@@ -107,6 +109,7 @@
 					<Item id="42008" name="インデントを増やす"/>
 					<Item id="42009" name="インデントを減らす"/>
 					<Item id="42010" name="カーソル行を複製"/>
+					<Item id="42079" name="重複行を削除"/>
 					<Item id="42077" name="連続する重複行を削除"/>
 					<Item id="42012" name="折り返し位置で分割"/>
 					<Item id="42013" name="選択行を連結"/>
@@ -114,6 +117,8 @@
 					<Item id="42015" name="下の行と入れ替え"/>
 					<Item id="42059" name="選択行を　辞書順で昇順ソート"/>
 					<Item id="42060" name="選択行を　辞書順で降順ソート"/>
+					<Item id="42080" name="選択行を　辞書順で昇順ソート(大文字小文字を無視)"/>
+					<Item id="42081" name="選択行を　辞書順で降順ソート(大文字小文字を無視)"/>
 					<Item id="42061" name="選択行を　整数として昇順ソート"/>
 					<Item id="42062" name="選択行を　整数として降順ソート"/>
 					<Item id="42063" name="選択行を　実数(コンマが小数点)として昇順ソート"/>
@@ -152,6 +157,7 @@
 					<Item id="42048" name="バイナリコンテンツをコピー"/>
 					<Item id="42049" name="バイナリコンテンツを切り取り"/>
 					<Item id="42050" name="バイナリコンテンツを貼り付け"/>
+					<Item id="42082" name="リンクをコピー"/>
 					<Item id="42037" name="矩形モード..."/>
 					<Item id="42034" name="矩形編集..."/>
 					<Item id="42051" name="文字コード表"/>
@@ -216,6 +222,13 @@
 					<Item id="43042" name="スタイル4"/>
 					<Item id="43043" name="スタイル5"/>
 					<Item id="43044" name="マーク画面で作成されたマーク"/>
+					<Item id="43055" name="スタイル1"/>
+					<Item id="43056" name="スタイル2"/>
+					<Item id="43057" name="スタイル3"/>
+					<Item id="43058" name="スタイル4"/>
+					<Item id="43059" name="スタイル5"/>
+					<Item id="43060" name="すべてのスタイル"/>
+					<Item id="43061" name="マーク画面で作成されたマーク"/>
 					<Item id="43045" name="検索結果ウィンドウ"/>
 					<Item id="43046" name="次の検索結果"/>
 					<Item id="43047" name="前の検索結果"/>
@@ -299,14 +312,14 @@
 					<Item id="46180" name="ユーザー定義"/>
 					<Item id="47000" name="Textrumentについて"/>
 					<Item id="47010" name="コマンドライン引数..."/>
-					<Item id="47001" name="Notepad++のサイト"/>
-					<Item id="47002" name="Notepad++のプロジェクトページ"/>
+					<Item id="47001" name="Textrumentのサイト"/>
+					<Item id="47002" name="Textrumentのプロジェクトページ"/>
 					<Item id="47003" name="オンラインドキュメント"/>
-					<Item id="47004" name="Notepad++のコミュニティ(フォーラム)"/>
+					<Item id="47004" name="Textrumentのコミュニティ(フォーラム)"/>
 					<Item id="47011" name="ライブサポート"/>
 					<Item id="47012" name="デバッグ情報..."/>
 					<Item id="47005" name="プラグインを探す"/>
-					<Item id="47006" name="Notepad++をアップデート"/>
+					<Item id="47006" name="Textrumentをアップデート"/>
 					<Item id="47009" name="アップデーターのプロキシを設定..."/>
 					<Item id="48005" name="プラグインをインポート..."/>
 					<Item id="48006" name="テーマをインポート..."/>
@@ -326,8 +339,6 @@
 					<Item id="50000" name="関数名補完"/>
 					<Item id="50001" name="単語補完"/>
 					<Item id="50002" name="関数パラメータのヒント"/>
-					<Item id="50003" name="前の文書へ切り替え"/>
-					<Item id="50004" name="次の文書へ切り替え"/>
 					<Item id="50005" name="マクロの記録を開始・停止"/>
 					<Item id="50006" name="パス補完"/>
 					<Item id="44042" name="行を隠す"/>
@@ -340,22 +351,26 @@
 					<Item id="48100" name="小さなアイコン"/>
 					<Item id="48101" name="大きなアイコン"/>
 					<Item id="48102" name="標準アイコン"/>
+					<Item id="45014" name="バイナリモード"/>
+					<Item id="48105" name="ツールバーのカスタマイズ"/>
+					<Item id="48106" name="ラップツールバー"/>
+					<Item id="48107" name="マルチラインタブ"/>
 				</Commands>
 			</Main>
 			<Splitter>
-			</Splitter>
+            </Splitter>
 			<TabBar>
 				<Item CMID="0" name="閉じる"/>
 				<Item CMID="1" name="他のタブをすべて閉じる"/>
 				<Item CMID="2" name="上書き保存"/>
 				<Item CMID="3" name="名前を付けて保存..."/>
-				<Item CMID="4" name="印刷"/>
+				<Item CMID="4" name="印刷..."/>
 				<Item CMID="5" name="別のビューへ移動"/>
 				<Item CMID="6" name="別のビューへ複製"/>
 				<Item CMID="7" name="フルパスをコピー"/>
 				<Item CMID="8" name="ファイル名をコピー"/>
 				<Item CMID="9" name="ディレクトリをコピー"/>
-				<Item CMID="10" name="名前の変更"/>
+				<Item CMID="10" name="名前の変更..."/>
 				<Item CMID="11" name="ごみ箱に移動"/>
 				<Item CMID="12" name="読み取り専用モード"/>
 				<Item CMID="13" name="ファイルの読み取り専用を解除"/>
@@ -369,11 +384,12 @@
 				<Item CMID="21" name="既定のアプリで開く"/>
 				<Item CMID="22" name="未変更をすべて閉じる"/>
 				<Item CMID="23" name="リンクされたファイル/ディレクトリを開きます。"/>
+				<Item CMID="24" name="ファイルを含むフォルダーをワークスペースとして開く"/>
 			</TabBar>
 		</Menu>
 
 		<Dialog>
-			<Find title="" titleFind="検索" titleReplace="置換" titleFindInFiles="ファイル内検索" titleMark="マーク">
+			<Find title="" titleFind="検索" titleReplace="置換" titleFindInFiles="ファイル内検索" titleFindInProjects="プロジェクト内検索" titleMark="マーク">
 				<Item id="1" name="次を検索"/>
 				<Item id="1722" name="逆方向に検索する"/>
 				<Item id="2" name="閉じる"/>
@@ -398,18 +414,23 @@
 				<Item id="1654" name="フィルタ(&amp;S):"/>
 				<Item id="1655" name="ﾃﾞｨﾚｸﾄﾘ(&amp;E):"/>
 				<Item id="1656" name="すべて検索"/>
-				<Item id="1658" name="サブフォルダも検索(&amp;B)"/>
-				<Item id="1659" name="隠しフォルダも検索(&amp;H)"/>
+				<Item id="1658" name="サブフォルダーも検索(&amp;B)"/>
+				<Item id="1659" name="隠しフォルダーも検索(&amp;H)"/>
 				<Item id="1624" name="検索モード"/>
 				<Item id="1625" name="標準(&amp;N)"/>
 				<Item id="1626" name="拡張(\n, \r, \t, \0, \x...) (&amp;X)"/>
 				<Item id="1660" name="ファイル内置換"/>
-				<Item id="1661" name="現在のフォルダ"/>
+				<Item id="1665" name="プロジェクト内置換"/>
+				<Item id="1661" name="現在のフォルダー"/>
+				<Item id="1662" name="プロジェクトパネル 1"/>
+				<Item id="1663" name="プロジェクトパネル 2"/>
+				<Item id="1664" name="プロジェクトパネル 3"/>
 				<Item id="1641" name="現在の文書内で検索"/>
 				<Item id="1686" name="透明化(&amp;Y)"/>
 				<Item id="1703" name="&amp;.は改行と一致"/>
 				<Item id="1721" name="▲"/>
 				<Item id="1723" name="▼ 次を検索"/>
+				<Item id="1725" name="マークした文字列をコピー"/>
 			</Find>
 
 			<FindCharsInRange title="文字範囲を指定して検索...">
@@ -524,6 +545,9 @@
 				<ScintillaCommandsTab name="エディター"/>
 				<ConflictInfoOk name="この項目と競合するショートカットはありません。"/>
 				<ConflictInfoEditing name="競合しません..."/>
+				<MainCommandNames>
+					<Item id="2147483547" name="空の"/>
+				</MainCommandNames>
 			</ShortcutMapper>
 			<ShortcutMapperSubDialg title="ショートカット">
 				<Item id="1" name="OK"/>
@@ -734,6 +758,7 @@
 					<Item id="6125" name="文書一覧"/>
 					<Item id="6126" name="表示"/>
 					<Item id="6127" name="拡張列を有効に"/>
+					<Item id="6128" name="別デザインのアイコンを使用する"/>
 				</Global>
 				<Scintillas title="編集画面">
 					<Item id="6216" name="カーソル設定"/>
@@ -741,37 +766,33 @@
 					<Item id="6219" name="点滅速度:"/>
 					<Item id="6221" name="速く"/>
 					<Item id="6222" name="遅く"/>
-					<Item id="6224" name="一括編集"/>
 					<Item id="6225" name="有効(Ctrl+クリック/選択)"/>
+					<Item id="6227" name="行折り返し"/>
+					<Item id="6228" name="デフォルト"/>
+					<Item id="6229" name="端揃え"/>
+					<Item id="6230" name="インデント"/>
+					<Item id="6234" name="スクロールの拡張機能を無効にする(タッチパッドで問題になる場合)"/>
+					<Item id="6214" name="現在行を強調表示する"/>
+					<Item id="6215" name="フォントスムージングを有効にする"/>
+					<Item id="6236" name="最終行を画面上端までスクロールできる"/>
+					<Item id="6239" name="選択範囲外を右クリックしたときに選択を解除しない"/>
 					<Item id="6201" name="折り畳み表示スタイル"/>
 					<Item id="6202" name="シンプル"/>
 					<Item id="6203" name="矢印"/>
 					<Item id="6204" name="丸とツリー"/>
 					<Item id="6205" name="四角とツリー"/>
 					<Item id="6226" name="なし"/>
-
-					<Item id="6227" name="行折り返し"/>
-					<Item id="6228" name="デフォルト"/>
-					<Item id="6229" name="端揃え"/>
-					<Item id="6230" name="インデント"/>
-
 					<Item id="6206" name="行番号を表示"/>
 					<Item id="6207" name="ブックマークを表示"/>
-					<Item id="6208" name="指定桁で垂直線を表示"/>
-					<Item id="6234" name="スクロールの拡張機能を無効にする
-(タッチパッドに問題がある場合)"/>
-
 					<Item id="6211" name="ガイド線の表示設定"/>
 					<Item id="6213" name="背景色で表示"/>
 					<Item id="6237" name="線を表示したい桁位置を指定してください。
 複数の値を半角スペースで区切って記入することで、複数の線を表示できます。"/>
-					<Item id="6214" name="現在行を強調表示する"/>
-					<Item id="6215" name="フォントスムージングを有効にする"/>
 					<Item id="6231" name="枠線幅"/>
 					<Item id="6235" name="枠を非表示"/>
-					<Item id="6236" name="最終行を1行目までスクロールできる"/>
-					<Item id="6239" name="選択範囲外を右クリックしたときに選択を解除しない"/>
+					<Item id="6224" name="一括編集"/>
 				</Scintillas>
+
 
 				<NewDoc title="新規文書">
 					<Item id="6401" name="フォーマット(改行コード)"/>
@@ -790,14 +811,14 @@
 				</NewDoc>
 
 				<DefaultDir title="ディレクトリ">
-					<Item id="6413" name="既定ディレクトリ(開く/保存)"/>
+					<Item id="6413" name="開く/保存する時の既定のディレクトリ"/>
 					<Item id="6414" name="現在の文書に従う"/>
 					<Item id="6415" name="最後に使ったディレクトリ"/>
-					<Item id="6430" name="新しいファイルダイアログ"/>
 					<Item id="6431" name="フォルダーをドロップした時、ワークスペースとせずに すべてのファイルを開く"/>
 					<Item id="6433" name="フィルタ"/>
 					<Item id="6432" name="ドラッグアンドドロップ"/>
 					<Item id="6434" name="再帰的に"/>
+					<Item id="6430" name="新しいファイルダイアログ"/>
 				</DefaultDir>
 
 				<FileAssoc title="ファイルの関連付け">
@@ -961,23 +982,25 @@
 					<Item id="6308" name="タスクトレイに格納"/>
 					<Item id="6312" name="ファイルの状態監視"/>
 					<Item id="6313" name="自動で最新状態に更新"/>
-					<Item id="6318" name="URLのハイパーリンク化"/>
 					<Item id="6325" name="更新後最後の行にスクロール"/>
-					<Item id="6319" name="有効"/>
-					<Item id="6320" name="下線を引かない"/>
 					<Item id="6322" name="セッションファイルの拡張子:"/>
 					<Item id="6323" name="Textrumentの自動アップデートを有効にする"/>
+					<Item id="6351" name="保存ダイアログの「ファイルの種類」を *.* にする"/>
 					<Item id="6324" name="ビューの切り替え(Ctrl+Tab)"/>
 					<Item id="6331" name="タイトルバーにファイル名のみ表示"/>
 					<Item id="6334" name="文字コードを自動判別"/>
 					<Item id="6349" name="DirectWriteを使用する（特殊な文字の描画が改善されます。Textrument の再起動が必要）"/>
-					<Item id="6350" name="注目時に背景色を変える"/>
 					<Item id="6337" name="ワークスペースファイルの拡張子:"/>
 					<Item id="6114" name="有効"/>
 					<Item id="6117" name="最近使用した順で切り替える"/>
 					<Item id="6344" name="タブのプレビュー"/>
 					<Item id="6345" name="タブの近くに表示する"/>
 					<Item id="6346" name="文書マップに表示する"/>
+					<Item id="6360" name="音を鳴らさないようにする"/>
+					<Item id="6318" name="URIのハイパーリンク化"/>
+					<Item id="6319" name="有効"/>
+					<Item id="6320" name="下線を引かない"/>
+					<Item id="6350" name="注目時に背景色を変える"/>
 				</MISC>
 			</Preference>
 			<MultiMacro title="指定マクロを複数回実行">
@@ -1036,8 +1059,6 @@
 			<!-- $INT_REPLACE$ is a place holder, don't translate it -->
 			<ContextMenuXmlEditWarning title="コンテキストメニューの編集" message="これから開く contextMenu.xml を編集することで、Textrumentのポップアップメニューを変更できます。
 変更を適用するには、保存後、Textrumentを再起動して下さい。"/>
-			<NppHelpAbsentWarning title="警告: ファイルが存在しません" message="
-が存在しません。Textrumentのサイトからダウンロードしてください。"/>
 			<SaveCurrentModifWarning title="警告: 現在の変更を保存" message="現在の変更を保存する必要があります。
 保存したすべての変更は取り消すことはできません。
 
@@ -1050,11 +1071,13 @@
 			<DocReloadWarning title="再読み込み" message="変更が失われますが、このドキュメントを本当に開き直しますか?"/>
 			<FileLockedWarning title="警告: 保存失敗" message="このファイルを別のプログラムで開いていないか確認してください。"/>
 			<FileAlreadyOpenedInNpp title="" message="そのファイルは既にTextrumentで開かれています。"/>
+			<RenameTabTemporaryNameAlreadyInUse title="名前の変更に失敗" message="指定された名前は、ほかのタブで使用されています。"/>
+			<!-- HowToReproduce: Rename the tab of an untitled document and provide a name that is the same as an already-existing tab of an untitled document. -->
 			<DeleteFileFailed title="削除失敗" message="ファイルの削除に失敗しました。"/>
 
 			<NbFileToOpenImportantWarning title="大量のファイルを開こうとしています" message="$INT_REPLACE$ 個のファイルを開こうとしています。
 本当に開きますか?"/>
-			<SettingsOnCloudError title="警告: クラウド設定" message="クラウドのパスが、読み込み専用ドライブか、書き込み権限が必要なフォルダに設定されています。
+			<SettingsOnCloudError title="警告: クラウド設定" message="クラウドのパスが、読み込み専用ドライブか、書き込み権限が必要なフォルダーに設定されています。
 クラウドの設定はキャンセルされます。環境設定画面で正しい場所を指定し直して下さい。"/>
 
 			<FilePathNotFoundWarning title="警告: ファイルを開く" message="指定されたファイルは存在しません。"/>
@@ -1101,7 +1124,8 @@ langs.xml を復元しますか？"/>
 該当フォルダーのルートをパネルから取り除いてから、フォルダー &quot;$STR_REPLACE$&quot; を追加して下さい。"/>
 
 			<ProjectPanelChanged title="$STR_REPLACE$" message="ワークスペースは変更されています。保存しますか？"/>
-			<ProjectPanelChangedSaveError title="$STR_REPLACE$" message="ワークスペースは保存されませんでした。"/>
+			<ProjectPanelSaveError title="$STR_REPLACE$" message="ワークスペースファイルを保存中にエラーが発生しました。
+ワークスペースは保存されませんでした。"/>
 			<ProjectPanelOpenDoSaveDirtyWsOrNot title="ワークスペースを開く" message="現在のワークスペースは変更されています。現在のプロジェクトを保存しますか？"/>
 			<ProjectPanelNewDoSaveDirtyWsOrNot title="新規ワークスペース" message="現在のワークスペースは変更されています。現在のプロジェクトを保存しますか？"/>
 			<ProjectPanelOpenFailed title="ワークスペースを開く" message="ワークスペースを開くことができませんでした。
@@ -1118,15 +1142,15 @@ langs.xml を復元しますか？"/>
 			<SCMapperDoDeleteOrNot title="よろしいですか？" message="このショートカットを削除してよろしいですか？"/>
 			<FindCharRangeValueError title="数値範囲" message="0 から 255 の値を入力して下さい。"/>
 			<OpenInAdminMode title="保存に失敗" message="ファイルを保存できませんでした。保護されたファイルのようです。
-Notepad++ を管理者権限で立ち上げますか？"/>
+Textrument を管理者権限で立ち上げますか？"/>
 			<OpenInAdminModeWithoutCloseCurrent title="保存に失敗" message="ファイルを保存できませんでした。保護されたファイルのようです。
-Notepad++ を管理者権限で立ち上げますか？"/>
-			<OpenInAdminModeFailed title="管理者権限で立ち上げることに失敗" message="Notepad++ を管理者権限で立ち上げられませんでした。"/>
+Textrument を管理者権限で立ち上げますか？"/>
+			<OpenInAdminModeFailed title="管理者権限で立ち上げることに失敗" message="Textrument を管理者権限で立ち上げられませんでした。"/>
 			<ViewInBrowser title="ブラウザーで開く" message="アプリケーションが見つかりませんでした。"/>
-			<ExitToUpdatePlugins title="Notepad++ を終了しようとしています" message="「はい」を選択すると、Notepad++ を終了して更新作業を行います。
-すべての作業が完了すると Notepad++ は再起動します。
+			<ExitToUpdatePlugins title="Textrument を終了しようとしています" message="「はい」を選択すると、Textrument を終了して更新作業を行います。
+すべての作業が完了すると Textrument は再起動します。
 処理を続けますか？"/>
-			<NeedToRestartToLoadPlugins title="Notepad++ を再起動してください" message="インストールしたプラグインを読み込むには、Notepad++ を再起動してください。"/>
+			<NeedToRestartToLoadPlugins title="Textrument を再起動してください" message="インストールしたプラグインを読み込むには、Textrument を再起動してください。"/>
 		</MessageBox>
 		<ClipboardHistory>
 			<PanelTitle name="クリップボード履歴"/>
@@ -1161,6 +1185,9 @@ Notepad++ を管理者権限で立ち上げますか？"/>
 		<FolderAsWorkspace>
 			<PanelTitle name="ワークスペース フォルダー"/>
 			<SelectFolderFromBrowserString name="ワークスペース フォルダーに追加するフォルダーを選択"/>
+			<ExpandAllFoldersTip name="すべてのフォルダーを展開する"/>
+			<CollapseAllFoldersTip name="すべてのフォルダーを畳む"/>
+			<LocateCurrentFileTip name="現在のファイルを見つける"/>
 			<Menus>
 				<Item id="3511" name="取り除く"/>
 				<Item id="3512" name="すべて取り除く"/>
@@ -1178,7 +1205,7 @@ Notepad++ を管理者権限で立ち上げますか？"/>
 			<PanelTitle name="プロジェクト"/>
 			<WorkspaceRootName name="ワークスペース"/>
 			<NewProjectName name="プロジェクト名"/>
-			<NewFolderName name="フォルダ名"/>
+			<NewFolderName name="フォルダー名"/>
 			<Menus>
 				<Entries>
 					<Item id="0" name="ワークスペース"/>
@@ -1192,10 +1219,11 @@ Notepad++ を管理者権限で立ち上げますか？"/>
 					<Item id="3126" name="名前を付けて保存..."/>
 					<Item id="3127" name="複製を別名で保存..."/>
 					<Item id="3121" name="新規プロジェクトを追加"/>
+					<Item id="3128" name="プロジェクト内を検索..."/>
 				</WorkspaceMenu>
 				<ProjectMenu>
 					<Item id="3111" name="名前の変更"/>
-					<Item id="3112" name="フォルダを追加"/>
+					<Item id="3112" name="フォルダーを追加"/>
 					<Item id="3113" name="ファイルを追加..."/>
 					<Item id="3117" name="ディレクトリからファイルを追加..."/>
 					<Item id="3114" name="取り除く"/>
@@ -1204,7 +1232,7 @@ Notepad++ を管理者権限で立ち上げますか？"/>
 				</ProjectMenu>
 				<FolderMenu>
 					<Item id="3111" name="名前の変更"/>
-					<Item id="3112" name="フォルダを追加"/>
+					<Item id="3112" name="フォルダーを追加"/>
 					<Item id="3113" name="ファイルを追加..."/>
 					<Item id="3117" name="ディレクトリからファイルを追加..."/>
 					<Item id="3114" name="取り除く"/>
@@ -1229,7 +1257,7 @@ Notepad++ を管理者権限で立ち上げますか？"/>
 			<word-chars-list-warning-end value=" が含まれています。"/>
 			<cloud-invalid-warning value="無効なパスです。"/>
 			<cloud-restart-warning value="変更を有効にするには再起動が必要です。"/>
-			<cloud-select-folder value="Notepad++ が設定を読み書きするフォルダーを選択してください。"/>
+			<cloud-select-folder value="Textrument が設定を読み書きするフォルダーを選択してください。"/>
 			<shift-change-direction-tip value="Shift+Enter で逆方向に検索します"/>
 			<two-find-buttons-tip value="検索ボタンを2個に分ける"/>
 			<find-in-files-filter-tip value="例）cpp, cxx, h, hxx, hpp のファイルで検索する場合：
@@ -1270,7 +1298,9 @@ Notepad++ を管理者権限で立ち上げますか？"/>
 			<finder-close-this value="この検索結果を閉じる"/>
 			<finder-collapse-all value="すべて折りたたむ"/>
 			<finder-uncollapse-all value="すべて展開する"/>
-			<finder-copy value="コピー"/>
+			<finder-copy value="コピー">
+				<Item value="コピー"/>
+			</finder-copy>
 			<finder-select-all value="すべて選択"/>
 			<finder-clear-all value="すべてクリア"/>
 			<finder-open-all value="すべて開く"/>
@@ -1280,6 +1310,8 @@ Notepad++ を管理者権限で立ち上げますか？"/>
 			<common-name value="名前: "/>
 			<tabrename-title value="現ﾀﾌﾞのﾌｧｲﾙ名を変更"/>
 			<tabrename-newname value="新ﾌｧｲﾙ名: "/>
+			<splitter-rotate-left value="左回りに回す"/>
+			<splitter-rotate-right value="右回りに回す"/>
 			<recent-file-history-maxfile value="最大数: "/>
 			<language-tabsize value="タブ幅: "/>
 			<userdefined-title-new value="新しい言語定義を作成..."/>
@@ -1298,9 +1330,13 @@ Notepad++ を管理者権限で立ち上げますか？"/>
 			<summary-nbsel1 value=" 文字を選択（"/>
 			<summary-nbsel2 value=" バイト）/ "/>
 			<summary-nbrange value=" 個の選択範囲"/>
+			<find-in-files-progress-title value="複数ファイル内を検索中..."/>
 			<replace-in-files-confirm-title value="本当によろしいですか？"/>
 			<replace-in-files-confirm-directory value="下記ディレクトリ内の該当箇所をすべて置換しようとしています。よろしいですか？"/>
 			<replace-in-files-confirm-filetype value="ファイルの種類："/>
+			<replace-in-files-progress-title value="複数ファイル内で置換中..."/>
+			<replace-in-projects-confirm-title value="本当によろしいですか？"/>
+			<replace-in-projects-confirm-message value="選択したプロジェクトパネル内のすべての文書にて、すべての該当箇所を置換しようとしています。よろしいですか？"/>
 			<replace-in-open-docs-confirm-title value="本当によろしいですか？"/>
 			<replace-in-open-docs-confirm-message value="開いているすべての文書にて、すべての該当箇所を置換しようとしています。よろしいですか？"/>
 			<find-result-caption value="検索結果"/>
@@ -1309,7 +1345,9 @@ Notepad++ を管理者権限で立ち上げますか？"/>
 			<find-result-title-info-selections value="($INT_REPLACE1$ 件が $INT_REPLACE2$ 個の選択範囲内で一致しました。検索した選択範囲は $INT_REPLACE3$ 個)"/>
 			<find-result-title-info-extra value=" - 絞り込まれた検索結果のみを表示しています"/>
 			<find-result-hits value="($INT_REPLACE$ 件の一致)"/>
+			<find-result-line-prefix value="行番号"/>
+			<!-- Must not begin with space or tab character -->
 			<find-regex-zero-length-match value="長さ0で一致しました"/>
 		</MiscStrings>
 	</Native-Langue>
-</NotepadPlus>
+</Textrument>

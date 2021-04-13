@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<NotepadPlus>
-	<Native-Langue name="كوردی" RTL="yes" filename="kurdish.xml" version="7.5">
+<Textrument>
+	<Native-Langue name="كوردی" RTL="yes" filename="kurdish.xml" version="v1.0.0">
 		<Menu>
 			<Main>
 				<!-- Main Menu Entries -->
@@ -280,14 +280,14 @@
 					<Item id="46180" name="User-Defined"/>
 					<Item id="47000" name="دەربارەی Textrument..."/>
 					<Item id="47010" name="Command Line Arguments..."/>
-					<Item id="47001" name="Notepad++ Home"/>
-					<Item id="47002" name="Notepad++ Project Page"/>
+					<Item id="47001" name="Textrument Home"/>
+					<Item id="47002" name="Textrument Project Page"/>
 					<Item id="47003" name="Online Documentation"/>
-					<Item id="47004" name="Notepad++ Community (Forum)"/>
+					<Item id="47004" name="Textrument Community (Forum)"/>
 					<Item id="47011" name="پشتگیری ڕاستەوخۆ"/>
 					<Item id="47012" name="Debug Info..."/>
 					<Item id="47005" name="پێوەكراوی زیاتر"/>
-					<Item id="47006" name="نوێكردنەوەی Notepad++"/>
+					<Item id="47006" name="نوێكردنەوەی Textrument"/>
 					<Item id="47009" name="Set Updater Proxy..."/>
 					<Item id="48005" name="بەرزكردنەوەی پێوەكراوەكان(s) ..."/>
 					<Item id="48006" name="هاوردەكردنی قالبەكان(s) ..."/>
@@ -313,10 +313,14 @@
 					<Item id="48100" name="ئایكۆنی بچووك"/>
 					<Item id="48101" name="ئایكۆنی گەورە"/>
 					<Item id="48102" name="ئایكۆنی ستاندارد"/>
+					<Item id="45014" name="Mode binary"/>
+					<Item id="48105" name="Customize Toolbar"/>
+					<Item id="48106" name="wrap Amûran"/>
+					<Item id="48107" name="Tabs Multi-line"/>
 				</Commands>
 			</Main>
 			<Splitter>
-			</Splitter>
+            </Splitter>
 			<TabBar>
 				<Item CMID="0" name="داخستن"/>
 				<Item CMID="1" name="Close All BUT This"/>
@@ -654,6 +658,7 @@
 					<Item id="6125" name="Document List Panel"/>
 					<Item id="6126" name="Show"/>
 					<Item id="6127" name="Çalak column dirêjkirinê"/>
+					<Item id="6128" name="Display text mezintir"/>
 				</Global>
 				<Scintillas title="دەستكاریەكان">
 					<Item id="6216" name="Caret Settings"/>
@@ -712,11 +717,11 @@
 					<Item id="6413" name="Default Directory (Open/Save)"/>
 					<Item id="6414" name="Follow current document"/>
 					<Item id="6415" name="Remember last used directory"/>
-					<Item id="6430" name="Use new style save dialog "/>
 					<Item id="6431" name="Open all files of folder instead of launching Folder as Workspace on folder dropping"/>
 					<Item id="6433" name="Parzûn"/>
 					<Item id="6432" name="Drag û Drop"/>
 					<Item id="6434" name="Recursively"/>
+					<Item id="6430" name="Use new style save dialog "/>
 				</DefaultDir>
 
 				<FileAssoc title="كۆمەڵە پەڕگەكان">
@@ -912,6 +917,11 @@
 				<Item id="1" name="باشە"/>
 				<Item id="2" name="هەڵوەشاندنەوە"/>
 			</ColumnEditor>
+			<ShortcutMapper>
+				<MainCommandNames>
+					<Item id="2147483547" name="Vala"/>
+				</MainCommandNames>
+			</ShortcutMapper>
 		</Dialog>
 		<MessageBox>
 			<ContextMenuXmlEditWarning title="Editing contextMenu" message="Editing contextMenu.xml allows you to modify your Textrument popup context menu.
@@ -1018,8 +1028,8 @@ Your settings on cloud will be canceled. Please reset a coherent value via Prefe
 			<word-chars-list-tab-warning value="$INT_REPLACE$ TAB(s)"/>
 			<word-chars-list-warning-end value="  in your character list."/>
 			<cloud-invalid-warning value="Invalid path."/>
-			<cloud-restart-warning value="Please restart Notepad++ to take effect."/>
+			<cloud-restart-warning value="Please restart Textrument to take effect."/>
 			<shift-change-direction-tip value="Use Shift + Enter to search in the opposite direction"/>
 		</MiscStrings>
 	</Native-Langue>
-</NotepadPlus>
+</Textrument>

@@ -3,8 +3,8 @@
 <!-- Orzu Samarqandiy <orzu at sourceforge.net> -->
 <!-- Abdurashid Muhitdinov <cool_zero at list.ru> -->
 <!-- Last update: 2009 July 07 -->
-<NotepadPlus>
-	<Native-Langue name="Ўзбекча" filename="uzbekCyrillic.xml">
+<Textrument>
+	<Native-Langue name="Ўзбекча" filename="uzbekCyrillic.xml" version="v1.0.0">
 		<Menu>
 			<Main>
 				<!-- Main Menu Entries -->
@@ -168,8 +168,8 @@
 
 					<Item id="46001" name="Услубларни белгилаш..."/>
 					<Item id="47000" name="Дастур ҳақида..."/>
-					<Item id="47001" name="Notepad++ дастури сайти"/>
-					<Item id="47002" name="Notepad++ лойиҳаси сайти"/>
+					<Item id="47001" name="Textrument дастури сайти"/>
+					<Item id="47002" name="Textrument лойиҳаси сайти"/>
 					<Item id="47003" name="Интернетда ёрдам"/>
 					<Item id="47004" name="Форум"/>
 					<Item id="47005" name="Кўпроқ қўшимчалар"/>
@@ -191,18 +191,13 @@
 					<Item id="46016" name="Оддий матн"/>
 					<Item id="46017" name="RC Resource файли"/>
 					<Item id="46180" name="Шахсий танловлар"/>
-					<Item id="47006" name="Notepad++ дастурини янгилаш"/>
+					<Item id="47006" name="Textrument дастурини янгилаш"/>
 					<Item id="47007" name="Вики ТТС"/>
 
-					<Item id="44070" name="Tab ro&amp;#39;yxati"/>
-					<Item id="44105" name="panel faollashtirish, lekin u tahrir yo&amp;#39;q"/>
-					<Item id="48100" name="Кичик белгилар"/>
-					<Item id="48101" name="Йирик белгилар"/>
-					<Item id="48102" name="Стандарт кичик белгилар"/>
 				</Commands>
 			</Main>
 			<Splitter>
-			</Splitter>
+            </Splitter>
 			<TabBar>
 				<Item CMID="0" name="Шу файлни ёпиш"/>
 				<Item CMID="1" name="Шундан бошқа барча файлларни ёпиш"/>
@@ -220,7 +215,6 @@
 				<Item CMID="13" name="&quot;Фақат ўқиш&quot; белгисини олиб ташлаш"/>
 				<Item CMID="14" name="Янги нусхага ўтиш"/>
 				<Item CMID="15" name="Янги нусхада олиш"/>
-				<Item CMID="23" name="bog&amp;#39;liq faylni oching / Directory"/>
 			</TabBar>
 		</Menu>
 
@@ -547,4 +541,4 @@
 			</ColumnEditor>
 		</Dialog>
 	</Native-Langue>
-</NotepadPlus>
+</Textrument>

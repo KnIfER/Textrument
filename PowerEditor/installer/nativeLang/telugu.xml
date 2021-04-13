@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-	This is Telugu language file for Notepad++.
+	This is Telugu language file for Textrument.
 	I am Inspired by the Tamil and Hindi languages work done by Arivarasu B. and Rathin A. Dholakia.
 	Author: Sreedhar Reddy V
 	Email: srib4ufrnd@gmail.com
 	Note: In case of any suggestions and improvements please contact me. Help Indian Languages To Grow. Thank you.
 -->
-<NotepadPlus>
-	<Native-Langue name="తెలుగు" filename="telugu.xml">
+<Textrument>
+	<Native-Langue name="తెలుగు" filename="telugu.xml" version="v1.0.0">
 		<Menu>
 			<Main>
 				<!-- Main Menu Entries -->
@@ -238,10 +238,14 @@
 					<Item id="48100" name="స్మాల్ ఐకాన్స్"/>
 					<Item id="48101" name="బిగ్ ఐకాన్స్"/>
 					<Item id="48102" name="స్టాండర్డ్ ఐకాన్స్"/>
+					<Item id="45014" name="బైనరీ మోడ్"/>
+					<Item id="48105" name="అనుకూలపరచండి ఉపకరణపట్టీ"/>
+					<Item id="48106" name="సర్దుబాటు ఉపకరణపట్టీ"/>
+					<Item id="48107" name="బహుళ లైన్ టాబ్లు"/>
 				</Commands>
 			</Main>
 			<Splitter>
-				</Splitter>
+                </Splitter>
 			<TabBar>
 				<Item CMID="0" name="క్లోస్"/>
 				<Item CMID="1" name="క్లోస్ ఆల్ బట్ దిస్"/>
@@ -426,6 +430,7 @@
 					<Item id="6121" name="మేను బార్"/>
 					<Item id="6122" name="హైడ్ (యూజ్ అల్ట్ ఆర్ ఎఫ్10 కీ టు టాగల్)"/>
 					<Item id="6123" name="లోకలైసేషన్"/>
+					<Item id="6128" name="పెద్ద టెక్స్ట్ ప్రదర్శించు"/>
 				</Global>
 				<Scintillas title="ఎడిటింగ్">
 					<Item id="6216" name="కారెట్ సెట్టింగ్స్"/>
@@ -586,6 +591,11 @@
 				<Item id="1" name="ఓకే"/>
 				<Item id="2" name="క్యాన్సల్"/>
 			</ColumnEditor>
+			<ShortcutMapper>
+				<MainCommandNames>
+					<Item id="2147483547" name="ఖాళీ"/>
+				</MainCommandNames>
+			</ShortcutMapper>
 		</Dialog>
 	</Native-Langue>
-</NotepadPlus>
+</Textrument>

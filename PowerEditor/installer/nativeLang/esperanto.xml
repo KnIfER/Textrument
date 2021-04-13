@@ -7,8 +7,8 @@
 	Pli da informoj ĉe la fino de la dokumento
 	*********** BONAN LABORADON KUN NP++! :) ***********
 -->
-<NotepadPlus>
-	<Native-Langue name="Esperanto" filename="esperanto.xml">
+<Textrument>
+	<Native-Langue name="Esperanto" filename="esperanto.xml" version="v1.0.0">
 		<Menu>
 			<Main>
 				<!-- Ĉefaj menuoj -->
@@ -267,20 +267,20 @@
 
 					<Item id="10001" name="Deloku al alia vido"/>
 					<Item id="10002" name="Montru ankaŭ en alia vido"/>
-					<Item id="10003" name="Deloku al nova ekzemplo de Notepad++"/>
-					<Item id="10004" name="Montru ankaŭ en nova ekzemplo de Notepad++"/>
+					<Item id="10003" name="Deloku al nova ekzemplo de Textrument"/>
+					<Item id="10004" name="Montru ankaŭ en nova ekzemplo de Textrument"/>
 
 					<Item id="46001" name="Stilakordilo..."/>
 					<Item id="46250" name="Difinu vian lingvaĵon..."/>
 					<!--estis: 44011-->
 					<Item id="46180" name="Propre difinita lingvaĵo"/>
 					<Item id="47000" name="Pri Textrument..."/>
-					<Item id="47001" name="Hejmpaĝo de Notepad++"/>
-					<Item id="47002" name="Projektpaĝo de Notepad++"/>
+					<Item id="47001" name="Hejmpaĝo de Textrument"/>
+					<Item id="47002" name="Projektpaĝo de Textrument"/>
 					<Item id="47003" name="NpVikio++ (enreta helpo)"/>
 					<Item id="47004" name="Forumo"/>
 					<Item id="47005" name="Akiru pli da kromaĵoj"/>
-					<Item id="47006" name="Ĝisdatigo de Notepad++"/>
+					<Item id="47006" name="Ĝisdatigo de Textrument"/>
 					<Item id="47008" name="Loka helpo"/>
 					<Item id="47009" name="Agordu ĝisdatiga prokurilo..."/>
 					<Item id="47010" name="Argumentoj de komandlinio"/>
@@ -313,6 +313,10 @@
 					<Item id="48100" name="Malgrandaj bildsimboloj"/>
 					<Item id="48101" name="Grandaj bildsimboloj"/>
 					<Item id="48102" name="Klasikaj bildsimboloj"/>
+					<Item id="45014" name="duumaj Mode"/>
+					<Item id="48105" name="Agordu Ilobreto"/>
+					<Item id="48106" name="wrap Ilobreto"/>
+					<Item id="48107" name="Plurliniaj Langetoj"/>
 				</Commands>
 			</Main>
 			<Splitter>
@@ -332,8 +336,8 @@
 				<Item CMID="11" name="Forigu"/>
 				<Item CMID="12" name="Nurlegigu"/>
 				<Item CMID="13" name="Purigu la indikilon de nurlego"/>
-				<Item CMID="14" name="Deloku al nova ekzemplo de Notepad++"/>
-				<Item CMID="15" name="Montru ankaŭ en nova ekzemplo de Notepad++"/>
+				<Item CMID="14" name="Deloku al nova ekzemplo de Textrument"/>
+				<Item CMID="15" name="Montru ankaŭ en nova ekzemplo de Textrument"/>
 				<Item CMID="16" name="Reŝargu"/>
 				<Item CMID="17" name="Fermu ĉiujn maldekstre"/>
 				<Item CMID="18" name="Fermu ĉiujn dekstre"/>
@@ -647,6 +651,7 @@
 					<Item id="6125" name="Panelo de malfermitaj dosieroj"/>
 					<Item id="6126" name="Montru"/>
 					<Item id="6127" name="Ebligi etendo kolumno"/>
+					<Item id="6128" name="Montri pli granda teksto"/>
 				</Global>
 				<Scintillas title="Redaktado">
 					<Item id="6216" name="Agordoj pri tajpmontrilo"/>
@@ -879,6 +884,11 @@
 				<Item id="1" name="Akceptu"/>
 				<Item id="2" name="Rezignu"/>
 			</ColumnEditor>
+			<ShortcutMapper>
+				<MainCommandNames>
+					<Item id="2147483547" name="malplena"/>
+				</MainCommandNames>
+			</ShortcutMapper>
 		</Dialog>
 		<MessageBox>
 			<ContextMenuXmlEditWarning title="Redaktu kuntekstan menuon" message="Modifo de contextMenu.xml ebligas modifon de kunteksta menuo de Textrument.&#xA;Necesas restarti Textrument -n por ke modifoj faritaj en contextMenu.xml efikos."/>
@@ -941,7 +951,7 @@
 			</Menus>
 		</ProjectManager>
 	</Native-Langue>
-</NotepadPlus>
+</Textrument>
 <!--
 ne plu uzataj (?)
 

@@ -3,8 +3,8 @@
 <!-- Contributors: Supun Viraj, Gihan Timantha, Lasith Tarindu -->
 <!-- University of Colombo School of Computing, Sri Lanka, 2013 -->
 
-<NotepadPlus>
-	<Native-Langue name="Sinhala" filename="sinhala.xml">
+<Textrument>
+	<Native-Langue name="Sinhala" filename="sinhala.xml" version="v1.0.0">
 		<Menu>
 			<Main>
 
@@ -224,12 +224,12 @@
 					<Item id="46001" name="විලාස වින්‍යාසකය..."/>
 					<Item id="46180" name="පරිශීලක-අර්ථ දැක්වූ"/>
 					<Item id="47000" name="Textrument ගැන"/>
-					<Item id="47001" name="Notepad++ නිවස"/>
-					<Item id="47002" name="Notepad++ ව්‍යාපෘති පිටුව"/>
+					<Item id="47001" name="Textrument නිවස"/>
+					<Item id="47002" name="Textrument ව්‍යාපෘති පිටුව"/>
 					<Item id="47003" name="සබැඳි ප්‍රලේඛනය"/>
 					<Item id="47004" name="සංසදය"/>
 					<Item id="47005" name="තවත් පේනු මෘදුකාංග ලබා ගන්න"/>
-					<Item id="47006" name="Notepad++ යාවත්කාලීන කරන්න"/>
+					<Item id="47006" name="Textrument යාවත්කාලීන කරන්න"/>
 					<Item id="47008" name="අන්තර්ගත උදව්"/>
 					<Item id="48005" name="පේනු මෘදුකාංග ආයාතකරන්න..."/>
 					<Item id="48006" name="තේමා ආයාත කරන්න ..."/>
@@ -252,6 +252,10 @@
 					<Item id="48100" name="කුඩා නිරූපක "/>
 					<Item id="48101" name="විශාල නිරූපක"/>
 					<Item id="48102" name="සම්මත නිරූපක"/>
+					<Item id="45014" name="ද්විමය ප්රකාරය"/>
+					<Item id="48105" name="සකසුරුවම් මෙවලම් තීරුව"/>
+					<Item id="48106" name="එතුම මෙවලම් තීරුව"/>
+					<Item id="48107" name="බහු-රේඛාව ටැබ්"/>
 				</Commands>
 
 			</Main>
@@ -509,6 +513,7 @@
 					<Item id="6122" name="සගවන්න (use Alt or F10 key to toggle)"/>
 					<Item id="6123" name="ස්ථානගත කිරීම"/>
 
+					<Item id="6128" name="විශාල පෙළ ප්රදර්ශනය"/>
 				</Global>
 
 				<Scintillas title="Editing">
@@ -692,6 +697,11 @@
 				<Item id="1" name="හරි"/>
 				<Item id="2" name="අවලංගුකරන්න"/>
 			</ColumnEditor>
+			<ShortcutMapper>
+				<MainCommandNames>
+					<Item id="2147483547" name="හිස්"/>
+				</MainCommandNames>
+			</ShortcutMapper>
 		</Dialog>
 
 		<MessageBox>
@@ -763,4 +773,4 @@
 			</Menus>
 		</ProjectManager>
 	</Native-Langue>
-</NotepadPlus>
+</Textrument>

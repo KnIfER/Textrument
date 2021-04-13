@@ -4,9 +4,9 @@
 <!-- Webpage: http://w3.hdsnet.hu/batagy/ -->
 <!-- Forum topic: https://notepad-plus-plus.org/community/topic/80/hungarian-translation-->
 <!-- Prohardver topic: https://prohardver.hu/tema/re_notepad/friss.html -->
-<!-- For Notepad++ Version 7.8.4, modified on 2020.01.31 -->
-<NotepadPlus>
-	<Native-Langue name="Magyar" filename="hungarian.xml" version="7.8.4">
+<!-- For Textrument Version 7.8.4, modified on 2020.01.31 -->
+<Textrument>
+	<Native-Langue name="Magyar" filename="hungarian.xml" version="v1.0.0">
 		<Menu>
 			<Main>
 				<!-- Main Menu Entries -->
@@ -301,14 +301,14 @@
 					<Item id="46180" name="Egyéni nyelv"/>
 					<Item id="47000" name="Névjegy..."/>
 					<Item id="47010" name="Parancssori kapcsolók..."/>
-					<Item id="47001" name="Notepad++ honlapja"/>
-					<Item id="47002" name="Notepad++ projekt oldal"/>
+					<Item id="47001" name="Textrument honlapja"/>
+					<Item id="47002" name="Textrument projekt oldal"/>
 					<Item id="47003" name="Online Súgó"/>
-					<Item id="47004" name="Notepad++ Fórum"/>
+					<Item id="47004" name="Textrument Fórum"/>
 					<Item id="47011" name="Élő üzenőfal támogatás"/>
 					<Item id="47012" name="Debug adatok..."/>
 					<Item id="47005" name="További bővítmények"/>
-					<Item id="47006" name="Notepad++ frissítése"/>
+					<Item id="47006" name="Textrument frissítése"/>
 					<Item id="47009" name="Proxy beállítások..."/>
 					<Item id="48005" name="Bővítmények importálása..."/>
 					<Item id="48006" name="Stílus témák importálása..."/>
@@ -342,10 +342,14 @@
 					<Item id="48100" name="Kis ikonok"/>
 					<Item id="48101" name="Nagy ikonok"/>
 					<Item id="48102" name="Szokásos ikonok"/>
+					<Item id="45014" name="bináris módban"/>
+					<Item id="48105" name="Eszköztár testreszabása"/>
+					<Item id="48106" name="Wrap eszköztár"/>
+					<Item id="48107" name="Multi-line lapok"/>
 				</Commands>
 			</Main>
 			<Splitter>
-		  </Splitter>
+          </Splitter>
 			<TabBar>
 				<Item CMID="0" name="Bezárás"/>
 				<Item CMID="1" name="Többi fül bezárása"/>
@@ -526,6 +530,9 @@
 				<ScintillaCommandsTab name="Scintilla parancsok"/>
 				<ConflictInfoOk name="Nincs ütközés ennél az elemnél."/>
 				<ConflictInfoEditing name="Nincs ütközés . . ."/>
+				<MainCommandNames>
+					<Item id="2147483547" name="Üres"/>
+				</MainCommandNames>
 			</ShortcutMapper>
 			<ShortcutMapperSubDialg title="Billentyűparancs">
 				<Item id="1" name="OK"/>
@@ -735,6 +742,7 @@
 					<Item id="6125" name="Dokumentum listázó panel"/>
 					<Item id="6126" name="Engedélyezés"/>
 					<Item id="6127" name="Engedélyezze kiterjesztése oszlop"/>
+					<Item id="6128" name="A kijelző nagyobb szöveg"/>
 				</Global>
 				<Scintillas title="Megjelenítés">
 					<Item id="6216" name="Kurzor beállításai"/>
@@ -794,11 +802,11 @@
 					<Item id="6413" name="Alapértelmezett mappa (megnyitáskor és mentéskor)"/>
 					<Item id="6414" name="Ugyanott, mint a jelenlegi dokumentum"/>
 					<Item id="6415" name="Utoljára használt mappa megjegyzése"/>
-					<Item id="6430" name="Újabb típusú dialógus használata "/>
 					<Item id="6431" name="Mappa behúzásakor minden ottlévő fájl megnyitása, a Mappa mint Munkaterület helyett"/>
 					<Item id="6433" name="Szűrők"/>
 					<Item id="6432" name="Fogd és vidd"/>
 					<Item id="6434" name="rekurzívan"/>
+					<Item id="6430" name="Újabb típusú dialógus használata "/>
 				</DefaultDir>
 
 				<FileAssoc title="Fájl társítások">
@@ -965,7 +973,7 @@
 					<Item id="6324" name="Dokumentum váltó (Ctrl+TAB)"/>
 					<Item id="6331" name="Csak a fájlnév megjelenítése a fejlécben"/>
 					<Item id="6334" name="Karakterkódolás automatikus felismerése"/>
-					<Item id="6314" name="Azonos szélességű betűtípus a keresendő előzményekhez (Notepad++ újraindítás szükséges)"/>
+					<Item id="6314" name="Azonos szélességű betűtípus a keresendő előzményekhez (Textrument újraindítás szükséges)"/>
 					<Item id="6337" name="Munkaterület fájl kiterjesztés:"/>
 					<Item id="6114" name="Engedélyezés"/>
 					<Item id="6117" name="Lista sorrendje a használattól függ"/>
@@ -1114,15 +1122,15 @@ kérem, adjon másik nevet."/>
 			<SCMapperDoDeleteOrNot title="Billentyűparancs" message="Biztosan el akarja távolítani ezt a billentyűparancsot?"/>
 			<FindCharRangeValueError title="Értéktartomány probléma" message="0 és 255 közötti értéket kell használnia."/>
 			<OpenInAdminMode title="Sikertelen mentés" message="A fájl mentése nem sikerült, lehet, hogy védett.
-Elindítja a Notepad++-t rendszergazdaként?"/>
+Elindítja a Textrument-t rendszergazdaként?"/>
 			<OpenInAdminModeWithoutCloseCurrent title="Sikertelen mentés" message="A fájl mentése nem sikerült, lehet, hogy védett.
-Elindítja a Notepad++-t rendszergazdaként?"/>
-			<OpenInAdminModeFailed title="Sikertelen futtatás rendszergazdaként" message="A Notepad++ nem futtatható rendszergazdaként."/>
+Elindítja a Textrument-t rendszergazdaként?"/>
+			<OpenInAdminModeFailed title="Sikertelen futtatás rendszergazdaként" message="A Textrument nem futtatható rendszergazdaként."/>
 			<ViewInBrowser title="Jelenlegi fájl megnyitása böngészőben" message="Az alkalmazás nem található a rendszeren."/>
-			<ExitToUpdatePlugins title="A Notepad++ ki fog lépni" message="Ha IGEN-t kattint, a műveletek folytatásához a Notepad++ ki fog lépni.
+			<ExitToUpdatePlugins title="A Textrument ki fog lépni" message="Ha IGEN-t kattint, a műveletek folytatásához a Textrument ki fog lépni.
 A műveletek elvégzése után a program újra fog indulni.
 Folytatja?"/>
-			<NeedToRestartToLoadPlugins title="A Notepad++ újraindítása szükséges" message="A telepített bővítmények betöltéséhez indítsa újra a Notepad++-t."/>
+			<NeedToRestartToLoadPlugins title="A Textrument újraindítása szükséges" message="A telepített bővítmények betöltéséhez indítsa újra a Textrument-t."/>
 		</MessageBox>
 		<ClipboardHistory>
 			<PanelTitle name="Vágólap előzmények"/>
@@ -1223,8 +1231,8 @@ Folytatja?"/>
 			<word-chars-list-tab-warning value="$INT_REPLACE$ tabulátort"/>
 			<word-chars-list-warning-end value=" tartalmaz a karakter lista."/>
 			<cloud-invalid-warning value="Érvénytelen út."/>
-			<cloud-restart-warning value="Ehhez Notepad++ újraindítás szükséges."/>
-			<cloud-select-folder value="Adjon meg egy mappát, ahol a Notepad++ a beállításait tárolja"/>
+			<cloud-restart-warning value="Ehhez Textrument újraindítás szükséges."/>
+			<cloud-select-folder value="Adjon meg egy mappát, ahol a Textrument a beállításait tárolja"/>
 			<shift-change-direction-tip value="Shift + Enter használható az ellenkező irányú kereséshez"/>
 			<two-find-buttons-tip value="2 gombos kereső mód"/>
 			<find-in-files-filter-tip value="Keresés ezekben: cpp, cxx, h, hxx  hpp:
@@ -1261,7 +1269,9 @@ Kereés minden fájlban, kivéve exe, obj  log:
 			<finder-close-this value="Keresés bezárása"/>
 			<finder-collapse-all value="Mind összecsukása"/>
 			<finder-uncollapse-all value="Mind kibontása"/>
-			<finder-copy value="Másolás"/>
+			<finder-copy value="Másolás">
+				<Item value="Másolás"/>
+			</finder-copy>
 			<finder-select-all value="Mind kijelölése"/>
 			<finder-clear-all value="Mind eltávolítása"/>
 			<finder-open-all value="Mind megnyitása"/>
@@ -1290,4 +1300,4 @@ Kereés minden fájlban, kivéve exe, obj  log:
 			<summary-nbrange value=" szakaszban"/>
 		</MiscStrings>
 	</Native-Langue>
-</NotepadPlus>
+</Textrument>

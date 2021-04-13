@@ -4,8 +4,8 @@ Cyfieithiad | Translation
 19.12.2014
 gan/by Aled Powell
 -->
-<NotepadPlus>
-	<Native-Langue name="Cymraeg" filename="welsh.xml" version="6.6.8">
+<Textrument>
+	<Native-Langue name="Cymraeg" filename="welsh.xml" version="v1.0.0">
 		<Menu>
 			<Main>
 				<!-- Main Menu Entries -->
@@ -262,12 +262,12 @@ gan/by Aled Powell
 					<Item id="46180" name="Diffiniwyd gan y Defnyddiwr"/>
 					<Item id="47000" name="Ynghylch Textrument..."/>
 					<Item id="47010" name="Argiau Llinell Gorchymyn..."/>
-					<Item id="47001" name="Hafan Notepad++"/>
-					<Item id="47002" name="Tudalen Prosiect Notepad++"/>
+					<Item id="47001" name="Hafan Textrument"/>
+					<Item id="47002" name="Tudalen Prosiect Textrument"/>
 					<Item id="47003" name="Dogfennau Arlein"/>
 					<Item id="47004" name="Fforwm"/>
 					<Item id="47005" name="Cael Mwy o Ategolion"/>
-					<Item id="47006" name="Diweddaru Notepad++"/>
+					<Item id="47006" name="Diweddaru Textrument"/>
 					<Item id="47008" name="Cynnwys Cymorth"/>
 					<Item id="47009" name="Gosod Diweddarwr Procsi..."/>
 					<Item id="48005" name="Mewnforio Ategolun(-ion) ..."/>
@@ -291,10 +291,14 @@ gan/by Aled Powell
 					<Item id="48100" name="Eiconau bach"/>
 					<Item id="48101" name="Eiconau mawr"/>
 					<Item id="48102" name="Eiconau safonol"/>
+					<Item id="45014" name="Binary Modd"/>
+					<Item id="48105" name="Customize Toolbar"/>
+					<Item id="48106" name="wrap Bar Offer"/>
+					<Item id="48107" name="Tabs Aml-lein"/>
 				</Commands>
 			</Main>
 			<Splitter>
-			</Splitter>
+            </Splitter>
 			<TabBar>
 				<Item CMID="0" name="Cau"/>
 				<Item CMID="1" name="Cau'r CWBL OND Hwn"/>
@@ -606,6 +610,7 @@ gan/by Aled Powell
 					<Item id="6125" name="Panel Rhestr Dogfennau"/>
 					<Item id="6126" name="Dangos"/>
 					<Item id="6127" name="Galluogi colofn estyniad"/>
+					<Item id="6128" name="Arddangos testun yn fwy"/>
 				</Global>
 
 				<Scintillas title="Golygu">
@@ -776,10 +781,9 @@ gan/by Aled Powell
 				<Cloud title="Cwmwl">
 					<Item id="6262" name="Gosodiadau Cwmwl"/>
 					<Item id="6263" name="Dim Cwmwl"/>
-					<Item id="6264" name="Dropbox"/>
 					<Item id="6265" name="OneDrive"/>
 					<Item id="6266" name="Google Drive"/>
-					<!--Item id="6261" name="Cofiwch ail-ddechrau Notepad++ i roi newidiadau ar waith."/-->
+					<!--Item id="6261" name="Cofiwch ail-ddechrau Textrument i roi newidiadau ar waith."/-->
 				</Cloud>
 
 				<MISC title="Eraill">
@@ -837,6 +841,11 @@ gan/by Aled Powell
 				<Item id="1" name="Iawn"/>
 				<Item id="2" name="Diddymu"/>
 			</ColumnEditor>
+			<ShortcutMapper>
+				<MainCommandNames>
+					<Item id="2147483547" name="Gwag"/>
+				</MainCommandNames>
+			</ShortcutMapper>
 		</Dialog>
 		<MessageBox>
 			<ContextMenuXmlEditWarning title="Golygu contextMenu" message="Mae golygu contextMenu.xml yn eich gallugoi i addasu eich naidlen cyd-destun Textrument.\rRhaid ail-ddechrau Textrument i newidiadau i contextMenu.xml ddod ar waith."/>
@@ -921,4 +930,4 @@ gan/by Aled Powell
 			</Menus>
 		</ProjectManager>
 	</Native-Langue>
-</NotepadPlus>
+</Textrument>

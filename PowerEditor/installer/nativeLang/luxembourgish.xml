@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-	Luxembourgish translation for Notepad++ 5.1.
+	Luxembourgish translation for Textrument 5.1.
 	Last modified 02 December 2008 by Steve Gengler.
 -->
-<NotepadPlus>
-	<Native-Langue name="Lëtzebuergesch" filename="luxembourgish.xml">
+<Textrument>
+	<Native-Langue name="Lëtzebuergesch" filename="luxembourgish.xml" version="v1.0.0">
 		<Menu>
 			<Main>
 				<!-- Main Menu Titles -->
@@ -142,8 +142,8 @@
 					<Item id="46001" name="&amp;Stile ..."/>
 					<Item id="46180" name="Benotzerdefinéiert"/>
 					<Item id="47000" name="&amp;Info ..."/>
-					<Item id="47001" name="Notepad++ am &amp;Web"/>
-					<Item id="47002" name="Notepad++ bei &amp;Sourceforge"/>
+					<Item id="47001" name="Textrument am &amp;Web"/>
+					<Item id="47002" name="Textrument bei &amp;Sourceforge"/>
 					<Item id="47003" name="Online-&amp;Hëllef"/>
 					<Item id="47004" name="&amp;Forum"/>
 					<Item id="47005" name="&amp;Erweiderungen"/>
@@ -157,6 +157,10 @@
 					<Item id="48100" name="Kleng Icons"/>
 					<Item id="48101" name="Grouss Icons"/>
 					<Item id="48102" name="Kleng Standard-Icons"/>
+					<Item id="45014" name="Duebelstäresystem Régime"/>
+					<Item id="48105" name="asëtzen Toolbar"/>
+					<Item id="48106" name="geschenkt Toolbar"/>
+					<Item id="48107" name="Multi-Linn Tabs"/>
 				</Commands>
 			</Main>
 			<Splitter/>
@@ -339,6 +343,7 @@
 					<Item id="6120" name="Vertikal"/>
 					<Item id="6121" name="Menüleescht"/>
 					<Item id="6122" name="Ausblenden (Wiesselen: Alt oder F10)"/>
+					<Item id="6128" name="Haaptsäit grouss Text"/>
 				</Global>
 				<Scintillas title="Usiicht">
 					<Item id="6216" name="Cursor"/>
@@ -488,6 +493,11 @@
 				<Item id="1" name="Ausféie&amp;ren"/>
 				<Item id="2" name="Of&amp;briechen"/>
 			</ColumnEditor>
+			<ShortcutMapper>
+				<MainCommandNames>
+					<Item id="2147483547" name="eidel"/>
+				</MainCommandNames>
+			</ShortcutMapper>
 		</Dialog>
 	</Native-Langue>
-</NotepadPlus>
+</Textrument>

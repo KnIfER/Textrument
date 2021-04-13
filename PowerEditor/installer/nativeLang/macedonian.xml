@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-	Macedonian localization for Notepad++
+	Macedonian localization for Textrument
 	Last modified Wednesday, November 11th 2009 18:06 GMT by Kiril Sardjoski.
 	Please e-mail errors, suggestions etc. to kiril.sardjoski(at)gmail(dot)com.
 -->
-<NotepadPlus>
-	<Native-Langue name="Macedonian" filename="macedonian.xml">
+<Textrument>
+	<Native-Langue name="Macedonian" filename="macedonian.xml" version="v1.0.0">
 		<Menu>
 			<Main>
 				<!-- Main Menu Entries -->
@@ -168,8 +168,8 @@
 
 					<Item id="46001" name="Прилагодување на стилови..."/>
 					<Item id="47000" name="Околу Textrument..."/>
-					<Item id="47001" name="Notepad++ Дома"/>
-					<Item id="47002" name="Страна на Notepad++ Проектот"/>
+					<Item id="47001" name="Textrument Дома"/>
+					<Item id="47002" name="Страна на Textrument Проектот"/>
 					<Item id="47003" name="NpWiki++ (Помош преку Интернет)"/>
 					<Item id="47004" name="Форум"/>
 					<Item id="47005" name="Набави повеќе Plugin-ови"/>
@@ -191,10 +191,14 @@
 					<Item id="48100" name="Мали икони"/>
 					<Item id="48101" name="Големи икони"/>
 					<Item id="48102" name="Стандардни икони"/>
+					<Item id="45014" name="бинарен режим"/>
+					<Item id="48105" name="прилагодите лентата со алатки"/>
+					<Item id="48106" name="заврши Toolbar-от"/>
+					<Item id="48107" name="Мулти-линија Батерии"/>
 				</Commands>
 			</Main>
 			<Splitter>
-			</Splitter>
+            </Splitter>
 			<TabBar>
 				<Item CMID="0" name="Затвори"/>
 				<Item CMID="1" name="Затвори ги сите освен Ова"/>
@@ -384,6 +388,7 @@
 					<Item id="6121" name="Мени"/>
 					<Item id="6122" name="Скриј (користи Alt или F10 за поместување)"/>
 					<Item id="6123" name="Локализација"/>
+					<Item id="6128" name="Прикаже поголем текст"/>
 				</Global>
 				<Scintillas title="Едитирање">
 					<Item id="6216" name="Подесувања на покажувачот"/>
@@ -538,6 +543,11 @@
 				<Item id="1" name="Во Ред"/>
 				<Item id="2" name="Откажи"/>
 			</ColumnEditor>
+			<ShortcutMapper>
+				<MainCommandNames>
+					<Item id="2147483547" name="Испразни"/>
+				</MainCommandNames>
+			</ShortcutMapper>
 		</Dialog>
 	</Native-Langue>
-</NotepadPlus>
+</Textrument>

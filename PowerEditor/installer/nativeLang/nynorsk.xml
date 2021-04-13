@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<NotepadPlus>
-	<Native-Langue name="Norsk-nynorsk" filename="nynorsk.xml">
+<Textrument>
+	<Native-Langue name="Norsk-nynorsk" filename="nynorsk.xml" version="v1.0.0">
 
 		<!-- Omsett av Thomas Bernes 2008-12
-		 thomas.bernes@gmail.com         -->
+         thomas.bernes@gmail.com         -->
 
 		<Menu>
 			<Main>
@@ -230,12 +230,12 @@
 					<Item id="46001" name="Stilar..."/>
 					<Item id="46180" name="Brukardefinert"/>
 					<Item id="47000" name="Om Textrument..."/>
-					<Item id="47001" name="Notepad++ heimeside"/>
-					<Item id="47002" name="Notepad++ prosjektheimeside"/>
+					<Item id="47001" name="Textrument heimeside"/>
+					<Item id="47002" name="Textrument prosjektheimeside"/>
 					<Item id="47003" name="Hjelp på Internett"/>
 					<Item id="47004" name="Forum"/>
 					<Item id="47005" name="Finn fleire programtillegg"/>
-					<Item id="47006" name="Oppdater Notepad++"/>
+					<Item id="47006" name="Oppdater Textrument"/>
 					<Item id="47008" name="Innhald i hjelp"/>
 					<Item id="48005" name="Last inn programtillegg ..."/>
 					<Item id="48006" name="Last inn tema ..."/>
@@ -256,7 +256,7 @@
 				</Commands>
 			</Main>
 			<Splitter>
-			</Splitter>
+            </Splitter>
 			<TabBar>
 				<Item CMID="0" name="Lukk"/>
 				<Item CMID="1" name="Lukk alle utanom det aktive dokumentet"/>
@@ -706,4 +706,4 @@
 			</Menus>
 		</ProjectManager>
 	</Native-Langue>
-</NotepadPlus>
+</Textrument>
