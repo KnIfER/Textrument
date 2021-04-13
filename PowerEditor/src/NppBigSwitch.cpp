@@ -617,7 +617,8 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 			int statusBarHeight = _statusBar.getHeight();
 			::MoveWindow(_rebarBottom.getHSelf(), 0, rc.bottom - rebarBottomHeight - statusBarHeight, rc.right, rebarBottomHeight, TRUE);
 
-			if(_toolBar.wrap) {
+			if(_toolBar.wrap && _rebarTop.getIDVisible(REBAR_BAR_TOOLBAR)) 
+			{
 				_toolBar.syncToolbarRows();
 			}
 
@@ -2526,7 +2527,13 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 			bool show = (lParam != TRUE);
 			bool currentStatus = _rebarTop.getIDVisible(REBAR_BAR_TOOLBAR);
 			if (show != currentStatus)
+			{
 				_rebarTop.setIDVisible(REBAR_BAR_TOOLBAR, show);
+				if (_toolBar.wrap)
+				{
+					::SendMessage(hwnd, WM_SIZE, 0, 0);
+				}
+			}
 			return currentStatus;
 		}
 
