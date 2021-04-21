@@ -1,50 +1,111 @@
-// This file is part of Notepad++ project
-// Copyright (C)2020 Don HO <don.h@free.fr>
+// Microsoft Visual C++ generated resource script.
 //
-// This program is free software; you can redistribute it and/or
-// modify it under the terms of the GNU General Public License
-// as published by the Free Software Foundation; either
-// version 2 of the License, or (at your option) any later version.
-//
-// Note that the GPL places important restrictions on "derived works", yet
-// it does not provide a detailed definition of that term.  To avoid      
-// misunderstandings, we consider an application to constitute a          
-// "derivative work" for the purpose of this license if it does any of the
-// following:                                                             
-// 1. Integrates source code from Notepad++.
-// 2. Integrates/includes/aggregates Notepad++ into a proprietary executable
-//    installer, such as those produced by InstallShield.
-// 3. Links to a library or executes a program that does any of the above.
-//
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-//
-// You should have received a copy of the GNU General Public License
-// along with this program; if not, write to the Free Software
-// Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-
-// created by Daniel Volk mordorpost@volkarts.com
-
-#pragma once
-
 #include <windows.h>
 #include "RunMacroDlg_rc.h"
+/////////////////////////////////////////////////////////////////////////////
+// Neutral (Default) (unknown sub-lang: 0x3) resources
 
-IDD_RUN_MACRO_DLG DIALOGEX 0, 0, 168, 110
-STYLE DS_SETFONT | DS_3DLOOK | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | 
-    WS_SYSMENU
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ZZZ)
+LANGUAGE LANG_NEUTRAL, 0x3
+#pragma code_page(936)
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_RUN_MACRO_DLG DIALOGEX 0, 0, 170, 119
+STYLE DS_SETFONT | DS_3DLOOK | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
 EXSTYLE WS_EX_TOOLWINDOW
 CAPTION "Run a Macro Multiple Times"
-FONT 8, TEXT("MS Shell Dlg"), 400, 0, 0x1
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
 BEGIN
-    DEFPUSHBUTTON   "&Run",IDOK,27,82,50,14
-    PUSHBUTTON      "&Cancel",IDCANCEL,91,82,50,14
+    DEFPUSHBUTTON   "&Run",IDOK,27,95,50,14
+    PUSHBUTTON      "&Cancel",IDCANCEL,91,95,50,14
     CONTROL         "Run",IDC_M_RUN_MULTI,"Button",BS_AUTORADIOBUTTON,18,38,47,10
-    CONTROL         "Run until the &end of file", IDC_M_RUN_EOF,"Button", BS_AUTORADIOBUTTON,18,56,140,10
-    EDITTEXT        IDC_M_RUN_TIMES,67,35,25,14,ES_AUTOHSCROLL | ES_NUMBER | WS_EX_DLGMODALFRAME
+    CONTROL         "Run until the &end of file",IDC_M_RUN_EOF,"Button",BS_AUTORADIOBUTTON,18,56,140,10
+    EDITTEXT        IDC_M_RUN_TIMES,67,35,25,14,ES_CENTER | ES_AUTOHSCROLL | ES_NUMBER
     COMBOBOX        IDC_MACRO_COMBO,67,10,96,30,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
     RTEXT           "Macro to run :",IDC_MACRO2RUN_STATIC,5,12,59,8
     LTEXT           "times",IDC_TIMES_STATIC,97,38,65,8
+    CONTROL         "Run on each file",IDC_CHECK_RUN_PERFILE,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,19,73,141,15
 END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO
+BEGIN
+    IDD_RUN_MACRO_DLG, DIALOG
+    BEGIN
+        RIGHTMARGIN, 168
+        BOTTOMMARGIN, 110
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// AFX_DIALOG_LAYOUT
+//
+
+IDD_RUN_MACRO_DLG AFX_DIALOG_LAYOUT
+BEGIN
+    0
+END
+
+#endif    // Neutral (Default) (unknown sub-lang: 0x3) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////////////////
+// English (United States) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+#endif    // English (United States) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

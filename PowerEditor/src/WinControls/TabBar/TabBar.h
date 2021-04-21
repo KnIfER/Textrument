@@ -221,7 +221,7 @@ public :
 
 	static void setColour(COLORREF colour2Set, tabColourIndex i);
 
-protected:
+//protected:
     // it's the boss to decide if we do the drag N drop
     static bool _doDragNDrop;
 	// drag N drop members
@@ -243,6 +243,9 @@ protected:
 	int _whichCloseClickDown = -1;
 	bool _lmbdHit = false; // Left Mouse Button Down Hit
 	HWND _tooltips = nullptr;
+
+	static int _imgWidth;
+	static int _imgCloseWidth;
 
 	LRESULT runProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam);
 

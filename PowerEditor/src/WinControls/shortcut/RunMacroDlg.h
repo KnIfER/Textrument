@@ -32,10 +32,6 @@
 #include "RunMacroDlg_rc.h"
 #include "StaticDialog.h"
 
-#define RM_CANCEL -1
-#define RM_RUN_MULTI 1
-#define RM_RUN_EOF 2
-
 class RunMacroDlg : public StaticDialog
 {
 public :
@@ -60,15 +56,12 @@ public :
 
 	void initMacroList();
 
-	int getMode() const {return _mode;};
-	int getTimes() const {return _times;};
-	int getMacro2Exec() const;
+	void setMacro2Exec(int index);
 
 private :
 	virtual INT_PTR CALLBACK run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam);
 	void check(int);
 
-	int _mode = RM_RUN_MULTI;
-	int _times = 1;
-	int _macroIndex = 0;
+	int getMacro2Exec() const;
+	int _macroIndex = -1;
 };

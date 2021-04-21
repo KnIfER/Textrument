@@ -179,10 +179,10 @@ TCHAR* NativeLangSpeaker::getSpecialMenuEntryName(const char *entryName) const
 	return 0;
 }
 
-TCHAR* NativeLangSpeaker::getNativeLangMenuString(int itemID) const
+const TCHAR* NativeLangSpeaker::getNativeLangMenuString(int itemID, const TCHAR* defaultString) const
 {
 	if (!_nativeLangA)
-		return 0;
+		return defaultString;
 
 	//if (itemID>=43062&&itemID<=43066)
 	//{
@@ -190,13 +190,13 @@ TCHAR* NativeLangSpeaker::getNativeLangMenuString(int itemID) const
 	//}
 
 	TiXmlNodeA *node = _nativeLangA->FirstChild("Menu");
-	if (!node) return 0;
+	if (!node) return defaultString;
 
 	node = node->FirstChild("Main");
-	if (!node) return 0;
+	if (!node) return defaultString;
 
 	node = node->FirstChild("Commands");
-	if (!node) return 0;
+	if (!node) return defaultString;
 
 	WcharMbcsConvertor& wmc = WcharMbcsConvertor::getInstance();
 
@@ -215,7 +215,7 @@ TCHAR* NativeLangSpeaker::getNativeLangMenuString(int itemID) const
 			}
 		}
 	}
-	if (!node) return 0;
+	if (!node) return defaultString;
 }
 
 TCHAR* NativeLangSpeaker::getShortcutNameString(int itemID) const

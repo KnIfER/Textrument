@@ -42,6 +42,8 @@
 #include "wutils.h"
 #include "Shlobj.h"
 
+#include <set>
+
 using namespace std;
 
 #define WM_DPICHANGED 0x02E0
@@ -55,6 +57,8 @@ extern int isWindowMessaging;
 extern NppParameters* nppParms;
 
 extern NppGUI* nppUIParms;
+
+extern HMENU trackingToolbarMenu;
 
 bool Terminating;
 
@@ -602,8 +606,15 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 			return TRUE;
 		}
 
+		case WM_EXITSIZEMOVE:
+		{
+			return TRUE;
+		}
+
 		case WM_SIZE:
 		{
+			static int cc=0;
+			LogIs("WM_EXITSIZEMOVE %d ", cc++);
 			RECT rc;
 			_pPublicInterface->getClientRect(rc);
 			if (lParam == 0)
@@ -717,13 +728,62 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 			return TRUE;
 		}
 
-		case WM_MENURBUTTONUP:
+		case WM_MENUGETOBJECT :
 		{
+			LogIs("WM_UNINITMENUPOPUP %ld %ld", wParam, lParam);
+			break;
+		}
+
+		case WM_MENURBUTTONUP: // use right click on the menus
+		{
+			if(!bAllMenuRightClickable && trackingToolbarMenu) {
+				MENUITEMINFO info{sizeof(MENUITEMINFO), MIIM_STATE|MIIM_ID};
+				GetMenuItemInfo((HMENU)lParam, wParam, true, &info);
+				if (!(info.fState & (MF_GRAYED | MF_DISABLED)))
+				{
+					//auto id = GetMenuItemID((HMENU)lParam, wParam);
+					auto id = info.wID;
+
+					isWindowMessaging = 0;
+					command(id);
+					SendMessage(hwnd, WM_CANCELMODE, 0, 0);
+
+					//INPUT ip;
+					//// send ENTER
+					//// Set up a generic keyboard event.
+					//ip.type = INPUT_KEYBOARD;
+					//ip.ki.wScan = 0; // hardware scan code for key
+					//ip.ki.time = 0;
+					//ip.ki.dwExtraInfo = 0;
+					//// Press the key
+					//ip.ki.wVk = VK_RETURN;
+					//ip.ki.dwFlags = 0; // 0 for key press
+					//SendInput(1, &ip, sizeof(INPUT));
+				}
+				break;
+			}
 			if((HMENU)lParam==_tabPopupMenu.getMenuHandle()) {
 				auto id = GetMenuItemID((HMENU)lParam, wParam);
 				if(id==IDM_FILE_OPEN_DEFAULT_VIEWER) {
 					invokeCurrentFile(1);
 					SendMessage(hwnd, WM_CANCELMODE, 0, 0);
+				}
+			}
+			if((HMENU)lParam==::GetSubMenu(_mainMenuHandle, MENUINDEX_MACRO)) {
+				auto id = GetMenuItemID((HMENU)lParam, wParam);
+				auto ml = nppParam.getMacroList();
+				if (id>=ID_MACRO&&id<ID_MACRO+ml.size())
+				{
+					// fast replay macros
+					LogIs("GetSubMenu");
+
+					command(IDM_MACRO_RUNMULTIMACRODLG);
+					SendMessage(hwnd, WM_CANCELMODE, 0, 0);
+
+					if (_runMacroDlg.isVisible() && !_recordingMacro)
+					{
+						_runMacroDlg.setMacro2Exec(id-ID_MACRO);
+					}
 				}
 			}
 		}
@@ -1366,18 +1426,11 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 		{
 			if (!_recordingMacro) // if we're not currently recording, then playback the recorded keystrokes
 			{
-				int times = 1;
-				if (_runMacroDlg.getMode() == RM_RUN_MULTI)
-					times = _runMacroDlg.getTimes();
-				else if (_runMacroDlg.getMode() == RM_RUN_EOF)
-					times = -1;
-				else
-					break;
+				int times = nppParms->_RunMacro_modeEof?-1:nppParms->_RunMacro_times;
 
-				int counter = 0;
 				int lastLine = static_cast<int32_t>(_pEditView->execute(SCI_GETLINECOUNT)) - 1;
 				int currLine = static_cast<int32_t>(_pEditView->getCurrentLineNumber());
-				int indexMacro = _runMacroDlg.getMacro2Exec();
+				int indexMacro = nppParms->_RunMacro_index;
 				int deltaLastLine = 0;
 				int deltaCurrLine = 0;
 
@@ -1390,41 +1443,62 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 				}
 
 				_pEditView->execute(SCI_BEGINUNDOACTION);
-				for (;;)
+				bool perFile = nppParms->_RunMacro_perFile;
+				std::set<BufferID> runMap;
+				do
 				{
-					macroPlayback(m);
-					++counter;
-					if ( times >= 0 )
+					if (perFile)
 					{
-						if ( counter >= times )
-							break;
-					}
-					else // run until eof
-					{
-						bool cursorMovedUp = deltaCurrLine < 0;
-						deltaLastLine = static_cast<int32_t>(_pEditView->execute(SCI_GETLINECOUNT)) - 1 - lastLine;
-						deltaCurrLine = static_cast<int32_t>(_pEditView->getCurrentLineNumber()) - currLine;
-
-						if (( deltaCurrLine == 0 )	// line no. not changed?
-							&& (deltaLastLine >= 0))  // and no lines removed?
-							break; // exit
-
-						// Update the line count, but only if the number of lines remaining is shrinking.
-						// Otherwise, the macro playback may never end.
-						if (deltaLastLine < deltaCurrLine)
-							lastLine += deltaLastLine;
-
-						// save current line
-						currLine += deltaCurrLine;
-
-						// eof?
-						if ((currLine >= lastLine) || (currLine < 0)
-							|| ((deltaCurrLine == 0) && (currLine == 0) && ((deltaLastLine >= 0) || cursorMovedUp)))
+						BufferID currentBid = _pEditView->getCurrentBufferID();
+						if (runMap.find(currentBid)!=runMap.end())
 						{
 							break;
 						}
+						runMap.insert(currentBid);
 					}
-				}
+					int counter = 0;
+					for (;;)
+					{
+						macroPlayback(m);
+						++counter;
+						if ( times >= 0 )
+						{
+							if ( counter >= times )
+								break;
+						}
+						else // run until eof
+						{
+							bool cursorMovedUp = deltaCurrLine < 0;
+							deltaLastLine = static_cast<int32_t>(_pEditView->execute(SCI_GETLINECOUNT)) - 1 - lastLine;
+							deltaCurrLine = static_cast<int32_t>(_pEditView->getCurrentLineNumber()) - currLine;
+
+							if (( deltaCurrLine == 0 )	// line no. not changed?
+								&& (deltaLastLine >= 0))  // and no lines removed?
+								break; // exit
+
+									   // Update the line count, but only if the number of lines remaining is shrinking.
+									   // Otherwise, the macro playback may never end.
+							if (deltaLastLine < deltaCurrLine)
+								lastLine += deltaLastLine;
+
+							// save current line
+							currLine += deltaCurrLine;
+
+							// eof?
+							if ((currLine >= lastLine) || (currLine < 0)
+								|| ((deltaCurrLine == 0) && (currLine == 0) && ((deltaLastLine >= 0) || cursorMovedUp)))
+							{
+								break;
+							}
+						}
+					}
+					if (perFile)
+					{
+						// 切换到下一个文件
+						command(IDM_VIEW_TAB_NEXT);
+						//command(IDC_NEXT_DOC);
+					}
+				} while (perFile);
 				_pEditView->execute(SCI_ENDUNDOACTION);
 			}
 			break;
@@ -1689,6 +1763,7 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 
 		case WM_CONTEXTMENU:
 		{
+			//LogIs("WM_CONTEXTMENU!!!");
 			if (nppParam._isTaskListRBUTTONUP_Active)
 			{
 				nppParam._isTaskListRBUTTONUP_Active = false;

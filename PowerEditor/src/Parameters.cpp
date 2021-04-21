@@ -1754,6 +1754,9 @@ bool NppParameters::getUserParametersFromXmlTree()
 	//Get File browser parameters
 	feedFileBrowserParameters(root);
 
+	//Get Run Macro Dialog parameters
+	feedRunMacroParameters(root);
+
 	return true;
 }
 
@@ -2350,6 +2353,31 @@ void NppParameters::feedProjectPanelsParameters(TiXmlNode *node)
 				_workSpaceFilePathes[index] = filePath;
 			}
 		}
+	}
+}
+
+void watchBooleanField(TiXmlElement* element, const TCHAR* Name, bool & val) 
+{
+	const TCHAR* filedFound = element->Attribute(Name);
+	if (filedFound)
+		val = (lstrcmp(filedFound, TEXT("yes")) == 0);
+}
+
+void NppParameters::feedRunMacroParameters(TiXmlNode *node)
+{
+	TiXmlElement *runMacroRoot = node->FirstChildElement(TEXT("RunMacro"));
+	if (!runMacroRoot) return;
+	runMacroRoot->Attribute(TEXT("Idx"), &_RunMacro_index);
+	runMacroRoot->Attribute(TEXT("Time"), &_RunMacro_times);
+	watchBooleanField(runMacroRoot, TEXT("Mode"), _RunMacro_modeEof);
+	watchBooleanField(runMacroRoot, TEXT("Each"), _RunMacro_perFile);
+	if (_RunMacro_index<0)
+	{
+		_RunMacro_index=0;
+	}
+	if (_RunMacro_times<1)
+	{
+		_RunMacro_times=1;
 	}
 }
 
@@ -3832,6 +3860,29 @@ bool NppParameters::writeProjectPanelsSettings() const
 	return true;
 }
 
+bool NppParameters::writeRunMacroParameters() 
+{
+	if (!_pXmlUserDoc) return false;
+
+	TiXmlNode *nppRoot = _pXmlUserDoc->FirstChild(TEXT("NotepadPlus"));
+	if (not nppRoot)
+	{
+		nppRoot = _pXmlUserDoc->InsertEndChild(TiXmlElement(TEXT("NotepadPlus")));
+	}
+
+	TiXmlElement *macroNode = nppRoot->FirstChildElement(TEXT("RunMacro"));
+	if (!macroNode)
+	{
+		macroNode = nppRoot->InsertEndChild(TiXmlElement(TEXT("RunMacro")))->ToElement();
+	}
+	macroNode->SetAttribute(TEXT("Idx"), _RunMacro_index);
+	macroNode->SetAttribute(TEXT("Time"), _RunMacro_times);
+	macroNode->SetAttribute(TEXT("Mode"), _RunMacro_modeEof?_T("yes"):_T("no"));
+	macroNode->SetAttribute(TEXT("Each"), _RunMacro_perFile?_T("yes"):_T("no"));
+
+	return true;
+}
+
 bool NppParameters::writeFileBrowserSettings(const vector<generic_string> & rootPaths, const generic_string & latestSelectedItemPath, TiXmlNode* nppRoot) const
 {
 	if (!_pXmlUserDoc) return false;
@@ -4177,14 +4228,6 @@ void NppParameters::feedKeyWordsParameters(TiXmlNode *node)
 
 extern "C" {
 typedef DWORD (WINAPI * EESFUNC) (LPCTSTR, LPTSTR, DWORD);
-}
-
-
-void watchBooleanField(TiXmlElement* element, const TCHAR* Name, bool & val) 
-{
-	const TCHAR* filedFound = element->Attribute(Name);
-	if (filedFound)
-		val = (lstrcmp(filedFound, TEXT("yes")) == 0);
 }
 
 void NppParameters::feedGUIParameters(TiXmlNode *node)
@@ -5716,13 +5759,14 @@ void NppParameters::createXmlTreeFromGUIParams()
 	{
 		nppRoot = _pXmlUserDoc->InsertEndChild(TiXmlElement(TEXT("NotepadPlus")));
 	}
-
 	TiXmlNode *oldGUIRoot = nppRoot->FirstChildElement(TEXT("GUIConfigs"));
 	// Remove the old root nod if it exist
 	if (oldGUIRoot)
 	{
 		nppRoot->RemoveChild(oldGUIRoot);
 	}
+
+	writeRunMacroParameters();
 
 	TiXmlNode *newGUIRoot = nppRoot->InsertEndChild(TiXmlElement(TEXT("GUIConfigs")));
 

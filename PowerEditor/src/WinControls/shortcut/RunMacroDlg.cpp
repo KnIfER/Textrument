@@ -58,19 +58,15 @@ INT_PTR CALLBACK RunMacroDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM)
 		case WM_INITDIALOG :
 		{
 			initMacroList();
-			::SetDlgItemInt(_hSelf, IDC_M_RUN_TIMES, _times, FALSE);
-			switch (_mode)
+			::SetDlgItemInt(_hSelf, IDC_M_RUN_TIMES, nppParms->_RunMacro_times, FALSE);
+			check(nppParms->_RunMacro_modeEof?IDC_M_RUN_EOF:IDC_M_RUN_MULTI);
+			if (nppParms->_RunMacro_perFile)
 			{
-				case RM_RUN_MULTI:
-					check(IDC_M_RUN_MULTI);
-					break;
-				case RM_RUN_EOF:
-					check(IDC_M_RUN_EOF);
-					break;
+				::SendDlgItemMessage(_hSelf, IDC_CHECK_RUN_PERFILE, BM_SETCHECK, BST_CHECKED, 0);
 			}
 			::SendDlgItemMessage(_hSelf, IDC_M_RUN_TIMES, EM_LIMITTEXT, 4, 0);
 			goToCenter();
-
+			setMacro2Exec(nppParms->_RunMacro_index);
 			return TRUE;
 		}
 		
@@ -96,16 +92,11 @@ INT_PTR CALLBACK RunMacroDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM)
 					return TRUE;
 
 				case IDOK :
-					if ( isCheckedOrNot(IDC_M_RUN_MULTI) )
-					{
-						_mode = RM_RUN_MULTI;
-						_times = ::GetDlgItemInt(_hSelf, IDC_M_RUN_TIMES, NULL, FALSE);
-					}
-					else if ( isCheckedOrNot(IDC_M_RUN_EOF) )
-					{
-						_mode = RM_RUN_EOF;
-					}
-
+					nppParms->_RunMacro_index = getMacro2Exec();
+					nppParms->_RunMacro_times = ::GetDlgItemInt(_hSelf, IDC_M_RUN_TIMES, NULL, FALSE);
+					nppParms->_RunMacro_modeEof = isCheckedOrNot(IDC_M_RUN_EOF);
+					nppParms->_RunMacro_perFile = isCheckedOrNot(IDC_CHECK_RUN_PERFILE);
+					
 					if (::SendDlgItemMessage(_hSelf, IDC_MACRO_COMBO, CB_GETCOUNT, 0, 0))
 						::SendMessage(_hParent, WM_MACRODLGRUNMACRO, 0, 0);
 
@@ -125,17 +116,8 @@ INT_PTR CALLBACK RunMacroDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM)
 
 void RunMacroDlg::check(int id)
 {
-	// IDC_M_RUN_MULTI
-	if ( id == IDC_M_RUN_MULTI )
-		::SendDlgItemMessage(_hSelf, IDC_M_RUN_MULTI, BM_SETCHECK, BST_CHECKED, 0);
-	else
-		::SendDlgItemMessage(_hSelf, IDC_M_RUN_MULTI, BM_SETCHECK, BST_UNCHECKED, 0);
-
-	// IDC_M_RUN_EOF
-	if ( id == IDC_M_RUN_EOF )
-		::SendDlgItemMessage(_hSelf, IDC_M_RUN_EOF, BM_SETCHECK, BST_CHECKED, 0);
-	else
-		::SendDlgItemMessage(_hSelf, IDC_M_RUN_EOF, BM_SETCHECK, BST_UNCHECKED, 0);
+	::SendDlgItemMessage(_hSelf, IDC_M_RUN_MULTI, BM_SETCHECK, id == IDC_M_RUN_MULTI?BST_CHECKED:BST_UNCHECKED, 0);
+	::SendDlgItemMessage(_hSelf, IDC_M_RUN_EOF, BM_SETCHECK, id == IDC_M_RUN_EOF?BST_CHECKED:BST_UNCHECKED, 0);
 }
 
 int RunMacroDlg::getMacro2Exec() const 
@@ -144,3 +126,14 @@ int RunMacroDlg::getMacro2Exec() const
 	return isCurMacroPresent?(_macroIndex - 1):_macroIndex;
 }
 
+
+void RunMacroDlg::setMacro2Exec(int index)
+{
+	bool isCurMacroPresent = ::SendMessage(_hParent, WM_GETCURRENTMACROSTATUS, 0, 0) == MACRO_RECORDING_HAS_STOPPED;
+	if (isCurMacroPresent)
+	{
+		index++;
+	}
+	static_cast<int32_t>(::SendDlgItemMessage(_hSelf, IDC_MACRO_COMBO, CB_SETCURSEL, index, 0));
+	_macroIndex = index;
+}

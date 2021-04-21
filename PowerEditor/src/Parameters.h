@@ -40,6 +40,8 @@
 #include <assert.h>
 #include <tchar.h>
 
+#include "InsituDebug.h"
+
 #define MAX_FILE_PATH MAX_PATH
 
 class NativeLangSpeaker;
@@ -1436,6 +1438,7 @@ public:
 	bool writeHistory(const TCHAR *fullpath);
 
 	bool writeProjectPanelsSettings() const;
+	bool writeRunMacroParameters() ;
 	bool writeFileBrowserSettings(const std::vector<generic_string> & rootPath, const generic_string & latestSelectedItemPath, TiXmlNode* nppRoot=NULL) const;
 
 	TiXmlNode* getChildElementByAttribut(TiXmlNode *pere, const TCHAR *childName, const TCHAR *attributName, const TCHAR *attributVal) const;
@@ -1803,6 +1806,10 @@ public:
 
 	generic_string _titleBarAdditional;
 
+	bool _RunMacro_perFile = false;
+	bool _RunMacro_modeEof = false;
+	int  _RunMacro_index = 0;
+	int  _RunMacro_times = 1;
 public:
 	void setShortcutDirty() { _isAnyShortcutModified = true; };
 	void setAdminMode(bool isAdmin) { _isAdminMode = isAdmin; }
@@ -1904,6 +1911,7 @@ private:
 	void feedDockingManager(TiXmlNode *node, DockingManagerData & dockingData);
 	void feedFindHistoryParameters(TiXmlNode *node);
 	void feedProjectPanelsParameters(TiXmlNode *node);
+	void feedRunMacroParameters(TiXmlNode *node);
 	void feedFileBrowserParameters(TiXmlNode *node);
 	bool feedStylerArray(TiXmlNode *node);
 	std::pair<unsigned char, unsigned char> feedUserLang(TiXmlNode *node);
