@@ -973,6 +973,13 @@ int Notepad_plus::getButtonCommand(POINT &pointer) {
 			pointer.x = rect.left;
 			pointer.y = rect.bottom;
 			ClientToScreen(_toolBar.getHSelf(), &pointer);
+			ActiveBtnRect = {
+				pointer.x
+				, pointer.y-(rect.bottom-rect.top)
+				, pointer.x+(rect.right-rect.left)
+				, pointer.y
+			};
+
 			::SendMessage(_toolBar.getHSelf(), TB_GETBUTTON, i, reinterpret_cast<LPARAM>(&tempBtn));
 			return tempBtn.idCommand;
 		}

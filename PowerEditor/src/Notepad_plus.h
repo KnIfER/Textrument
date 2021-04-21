@@ -657,6 +657,10 @@ public:
 
 	void monitoringStartOrStopAndUpdateUI(Buffer* pBuf, bool isStarting);
 
+	RECT ActiveBtnRect;
+
+	bool bAllMenuRightClickable = false;
+
 	HINSTANCE getHinst();
 
 	TCHAR* getModuleFileName() const;
