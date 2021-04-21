@@ -31,6 +31,8 @@
 #include "ScintillaEditView.h"
 #include "Notepad_plus.h"
 
+#include "WindowsEx/comctl32.h"
+
 #ifndef _WIN32_IE
 #define _WIN32_IE	0x0600
 #endif //_WIN32_IE
@@ -239,13 +241,10 @@ void DocTabView::reSizeTo(RECT & rc)
 	else
 	{
 		TabBar::reSizeTo(rc);
+		//LogIs("reSizeTo:: %d %d %d %d", rc.left, rc.top, rc.right, rc.bottom);
 		rc.left	 += borderWidth;
 		rc.right -= borderWidth * 2;
 		if(borderXComp) {
-			if(rowCount>1) {
-				rc.top	 -= borderXComp;
-				rc.bottom += borderXComp * 2;
-			}
 			rc.left	 -= borderXComp;
 			rc.right += borderXComp * 2;
 			auto vInf = nppApp->_dockingManager.getContainerInfo();
@@ -256,6 +255,10 @@ void DocTabView::reSizeTo(RECT & rc)
 			if(vInf[1]->isVisible()|| nppApp->_subSplitter.isVisible()&&this==&nppApp->_mainDocTab) {
 				rc.right	 -= borderXComp;
 			}
+		}
+		if (_isVertical)
+		{
+			rc.right -= TabCtrl_GetVerticalModeWidth(_hSelf);
 		}
 		rc.top   += borderWidth;
 		rc.bottom -= (borderWidth * 2);

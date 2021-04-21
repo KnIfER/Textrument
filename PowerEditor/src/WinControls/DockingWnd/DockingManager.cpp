@@ -394,8 +394,9 @@ LRESULT DockingManager::runProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM l
 		}
 		case DMM_CLOSE:
 		{
-			tTbData	TbData	= *(reinterpret_cast<DockingCont*>(lParam))->getDataOfActiveTb();
-			LRESULT res = SendNotify(TbData.hClient, DMN_CLOSE);	// Be sure the active item is OK with closing
+			tTbData*	TbData	= (reinterpret_cast<DockingCont*>(lParam))->getDataOfActiveTb();
+			LRESULT res = TbData?SendNotify(TbData->hClient, DMN_CLOSE)
+				:1;	// Be sure the active item is OK with closing
 			return res;
 		}
 		case DMM_FLOATALL:

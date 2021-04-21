@@ -53,6 +53,7 @@ void tweakTabBarCMShowOpenLnk(ContextMenu& tabPopupMenu, NativeLangSpeaker& nati
 // Only for 2 main Scintilla editors
 BOOL Notepad_plus::notify(SCNotification *notification)
 {
+	//LogIs(3, "notification %0xd", notification->nmhdr.code);
 	//Important, keep track of which element generated the message
 	bool isFromPrimary = (_mainEditView.getHSelf() == notification->nmhdr.hwndFrom || _mainDocTab.getHSelf() == notification->nmhdr.hwndFrom);
 	bool isFromSecondary = !isFromPrimary && (_subEditView.getHSelf() == notification->nmhdr.hwndFrom || _subDocTab.getHSelf() == notification->nmhdr.hwndFrom);
@@ -473,8 +474,11 @@ BOOL Notepad_plus::notify(SCNotification *notification)
 			break;
 		}
 
+		//case NM_RDOWN: { LogIs("NM_RDOWN"); break; }
+
 		case NM_RCLICK :
 		{
+			//LogIs("NM_RCLICK");
 			POINT p;
 			::GetCursorPos(&p);
 
@@ -526,8 +530,10 @@ BOOL Notepad_plus::notify(SCNotification *notification)
 					return TRUE;
 				}
 			}
-			else // From tool bar
+			else {				
+				// LogIs("From tool bar");
 				return TRUE;
+			}
 			//break;
 
 			if (!_tabPopupMenu.isCreated())
@@ -926,6 +932,7 @@ BOOL Notepad_plus::notify(SCNotification *notification)
 
 		case TTN_GETDISPINFO:
 		{
+			//LogIs("TTN_GETDISPINFO!!!");
 			try
 			{
 				LPTOOLTIPTEXT lpttt = (LPTOOLTIPTEXT)notification;
@@ -955,8 +962,10 @@ BOOL Notepad_plus::notify(SCNotification *notification)
 				}
 				else if (hWin == _mainDocTab.getHSelf())
 				{
+					id = _mainDocTab._currentHoverTabItem;
 					BufferID idd = _mainDocTab.getBufferByIndex(id);
 					Buffer * buf = MainFileManager.getBufferByID(idd);
+					//LogIs(L"yess!!! %d", id);
 					tipTmp = buf->getFullPathName();
 
 					if (tipTmp.length() >= tipMaxLen)
@@ -967,6 +976,7 @@ BOOL Notepad_plus::notify(SCNotification *notification)
 				}
 				else if (hWin == _subDocTab.getHSelf())
 				{
+					id = _subDocTab._currentHoverTabItem;
 					BufferID idd = _subDocTab.getBufferByIndex(id);
 					Buffer * buf = MainFileManager.getBufferByID(idd);
 					tipTmp = buf->getFullPathName();
