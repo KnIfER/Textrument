@@ -238,6 +238,11 @@ LRESULT TaskList::runProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
 
 			if ( msg != NULL)
 			{
+				if (wParam == VK_ESCAPE)
+				{
+					::EndDialog(_hParent, -1);
+					return TRUE;
+				}
 				if ((msg->message == WM_KEYDOWN) && (0x80 & GetKeyState(VK_CONTROL)))
 				{
 					// Shift+Tab is cool but I think VK_UP and VK_LEFT are also cool :-)
