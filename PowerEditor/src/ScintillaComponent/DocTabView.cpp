@@ -240,6 +240,7 @@ void DocTabView::reSizeTo(RECT & rc)
 	}
 	else
 	{
+		int thisTop = rc.top;
 		TabBar::reSizeTo(rc);
 		//LogIs("reSizeTo:: %d %d %d %d", rc.left, rc.top, rc.right, rc.bottom);
 		rc.left	 += borderWidth;
@@ -261,7 +262,14 @@ void DocTabView::reSizeTo(RECT & rc)
 			rc.right -= TabCtrl_GetVerticalModeWidth(_hSelf);
 		}
 		rc.top   += borderWidth;
-		rc.bottom -= (borderWidth * 2);
+		if (_isVertical||rowCount>1)
+		{
+			rc.bottom -= (rc.top-thisTop-borderWidth*3);
+		} 
+		else
+		{
+			rc.bottom -= (borderWidth * 2);
+		}
 		_pView->reSizeTo(rc);
 	}
 	SendMessage(_hParent, NPPM_INTERNAL_UPDATECLICKABLELINKS, reinterpret_cast<WPARAM>(_pView), 0);

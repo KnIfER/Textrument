@@ -613,8 +613,7 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 
 		case WM_SIZE:
 		{
-			static int cc=0;
-			LogIs("WM_EXITSIZEMOVE %d ", cc++);
+			//static int cc=0; LogIs("WM_EXITSIZEMOVE %d ", cc++);
 			RECT rc;
 			_pPublicInterface->getClientRect(rc);
 			if (lParam == 0)

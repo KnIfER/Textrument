@@ -139,6 +139,7 @@ typedef struct
 	HDPA       items;           /* dynamic array of TAB_ITEM* pointers */
 
 	INT        tabMaxRows;
+	INT        tabMaxRowSet;
 	BOOL multilineScrolling;
 	INT        topmostVisible; /* Used for scrolling, this member contains  the index of the first visible row */
 	INT        maxRange; /* Used for scrolling */
@@ -986,6 +987,11 @@ static inline LRESULT _SetVerticalModeWidth (TAB_INFO *infoPtr, UINT val)
 	return 0;
 }
 
+static inline LRESULT _GetTopMostRow (TAB_INFO *infoPtr)
+{
+	return infoPtr->topmostVisible;
+}
+
 static LRESULT _MouseMove (TAB_INFO *infoPtr, WPARAM wParam, LPARAM lParam)
 {
 	int redrawLeave;
@@ -1132,7 +1138,8 @@ static LRESULT _OnVScroll(TAB_INFO *infoPtr, int nScrollCode, int nPos)
 	//nPos = infoPtr->maxRange-nPos;
 
 	if(nScrollCode == SB_THUMBPOSITION 
-		&& nPos != infoPtr->topmostVisible && (infoPtr->dwStyle&TCS_MULTILINE))
+		&& nPos != infoPtr->topmostVisible 
+		&& infoPtr->multilineScrolling)
 	{
 
 		if(nPos < infoPtr->topmostVisible)
@@ -1151,6 +1158,7 @@ static LRESULT _OnVScroll(TAB_INFO *infoPtr, int nScrollCode, int nPos)
 
 		TAB_RecalcHotTrack(infoPtr, NULL, NULL, NULL);
 		TAB_InvalidateTabArea(infoPtr);
+		_DismissToolTips(infoPtr);
 		SendMessageW(infoPtr->hwndUpDown, UDM_SETPOS, 0, MAKELONG(infoPtr->topmostVisible, 0));
 	}
 
@@ -1204,7 +1212,7 @@ static void TAB_SetupScrolling(TAB_INFO*   infoPtr, const RECT* clientRect)
 		* If we have one, we want to make sure it's positioned properly.
 		*/
 		if (infoPtr->hwndUpDown 
-			&& (GetWindowLongPtr(infoPtr->hwndUpDown, GWL_STYLE)&UDS_HORZ) ^ infoPtr->multilineScrolling)
+			&& (GetWindowLongPtr(infoPtr->hwndUpDown, GWL_STYLE)&UDS_HORZ) ^ !infoPtr->multilineScrolling)
 		{
 			DestroyWindow(infoPtr->hwndUpDown);
 			infoPtr->hwndUpDown = 0;
@@ -1508,9 +1516,7 @@ static void TAB_SetItemBounds (TAB_INFO *infoPtr)
 	}
 	else
 	{
-		/*
-		* No scrolling in Multiline or Vertical styles.
-		*/
+		infoPtr->tabMaxRows = infoPtr->tabMaxRowSet;
 		infoPtr->needsScrolling = FALSE;
 		infoPtr->leftmostVisible = 0;
 	}
@@ -2489,7 +2495,6 @@ static inline LRESULT _SetRedraw (TAB_INFO *infoPtr, BOOL doRedraw)
 static void TAB_EnsureSelectionVisible(TAB_INFO* infoPtr)
 {
 	INT iSelected = infoPtr->iSelected;
-	INT iOrigLeftmostVisible = infoPtr->leftmostVisible;
 
 	if (iSelected < 0)
 		return;
@@ -2532,52 +2537,90 @@ static void TAB_EnsureSelectionVisible(TAB_INFO* infoPtr)
 	/*
 	* Do the trivial cases first.
 	*/
-	if ( (!infoPtr->needsScrolling) ||
-		(infoPtr->hwndUpDown==0) || (infoPtr->dwStyle & TCS_VERTICAL))
+	if ( !infoPtr->needsScrolling && !infoPtr->multilineScrolling || infoPtr->hwndUpDown==0)
 		return;
 
-	if (infoPtr->leftmostVisible >= iSelected)
+	INT * acroVisible;
+
+	bool b1 = infoPtr->dwStyle&TCS_VERTICAL||infoPtr->dwStyle&TCS_MULTILINE;
+
+	if (b1)
 	{
-		infoPtr->leftmostVisible = iSelected;
+		acroVisible = &infoPtr->topmostVisible;
+	}
+	else
+	{
+		acroVisible = &infoPtr->leftmostVisible;
+	}
+
+	INT iOrigAcroVisible = *acroVisible;
+
+	if (iOrigAcroVisible >= iSelected
+		&&(infoPtr->dwStyle&TCS_VERTICAL||!b1))
+	{
+		*acroVisible = iSelected;
 	}
 	else
 	{
 		TAB_ITEM *selected = TAB_GetItem(infoPtr, iSelected);
 		RECT r;
-		INT width;
 		UINT i;
-
 		/* Calculate the part of the client area that is visible */
 		GetClientRect(infoPtr->hwnd, &r);
-		width = r.right;
-
-		GetClientRect(infoPtr->hwndUpDown, &r);
-		width -= r.right;
-
-		if ((selected->rect.right -
-			selected->rect.left) >= width )
+		INT widthHeight = r.right;
+		if (!widthHeight) return;
+		if (b1 && (infoPtr->dwStyle&TCS_VERTICAL)==0
+			&&iOrigAcroVisible >= (iSelected=selected->rect.top))
 		{
-			/* Special case: width of selected item is greater than visible
-			* part of control.
-			*/
-			infoPtr->leftmostVisible = iSelected;
+			*acroVisible = r.top;
+		}
+		else if (b1)
+		{
+			widthHeight = r.bottom;
+			//GetClientRect(infoPtr->hwndUpDown, &r);
+			//widthHeight -= r.right;
+			INT minRowTop = iSelected - infoPtr->tabMaxRows + 1;
+			if (minRowTop<0)
+			{
+				minRowTop = 0;
+			}
+			if (*acroVisible<minRowTop)
+			{
+				*acroVisible = minRowTop;
+			}
+			//LogIs(3, "TAB_EnsureSelectionVisible cap=%d sel=%d minRowTop=%d acro=%d orig=%d"
+			//	, widthHeight/infoPtr->tabHeight, iSelected, minRowTop, *acroVisible, iOrigAcroVisible);
 		}
 		else
 		{
-			for (i = infoPtr->leftmostVisible; i < infoPtr->uNumItem; i++)
+			GetClientRect(infoPtr->hwndUpDown, &r);
+			widthHeight -= r.right;
+
+			if (selected->rect.right - selected->rect.left >= widthHeight )
 			{
-				if ((selected->rect.right - TAB_GetItem(infoPtr, i)->rect.left) < width)
-					break;
+				/* Special case: height of selected item is greater than visible
+				* part of control.
+				*/
+				*acroVisible = iSelected;
 			}
-			infoPtr->leftmostVisible = i;
+			else
+			{
+				for (i = *acroVisible; i < infoPtr->uNumItem; i++)
+				{
+					if ((selected->rect.right - TAB_GetItem(infoPtr, i)->rect.left) < widthHeight)
+						break;
+				}
+				*acroVisible = i;
+			}
 		}
 	}
 
-	if (infoPtr->leftmostVisible != iOrigLeftmostVisible)
+	if (*acroVisible != iOrigAcroVisible)
 		TAB_RecalcHotTrack(infoPtr, NULL, NULL, NULL);
 
 	SendMessageW(infoPtr->hwndUpDown, UDM_SETPOS, 0
-		, MAKELONG(infoPtr->topmostVisible, 0));
+		, MAKELONG(*acroVisible, 0));
+
 }
 
 /******************************************************************************
@@ -3313,8 +3356,7 @@ static inline LRESULT _GetExtendedStyle (const TAB_INFO *infoPtr)
 
 static LRESULT _SetMaxRows (TAB_INFO *infoPtr, DWORD maxRows)
 {
-	infoPtr->tabMaxRows = maxRows;
-	// todo change
+	infoPtr->tabMaxRowSet = maxRows;
 	return 0;
 }
 
@@ -3441,6 +3483,7 @@ static LRESULT WINAPI TAB_WindowProc (HWND hwnd, UINT uMsg, WPARAM wParam, LPARA
 	case TCM_DISMISSTOOLTIPS: return _DismissToolTips(infoPtr);
 	case TCM_GETVERTICALMODEWIDTH: return _GetVerticalModeWidth(infoPtr);
 	case TCM_SETVERTICALMODEWIDTH: return _SetVerticalModeWidth(infoPtr, wParam);
+	case TCM_GETTOPMOSTROW: return _GetTopMostRow(infoPtr);
 
 	case WM_GETFONT: return _GetFont (infoPtr);
 	case WM_SETFONT: return _SetFont (infoPtr, (HFONT)wParam);

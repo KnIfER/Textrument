@@ -167,7 +167,7 @@ void loadProfile(TCHAR* path, std::map<std::string, std::string> & m, bool skipS
 	}
 }
 
-void loadProf(TCHAR* path, const TCHAR* name)
+bool loadProf(TCHAR* path, const TCHAR* name)
 {
 	if(Profile.size()==0)
 	{
@@ -176,6 +176,7 @@ void loadProf(TCHAR* path, const TCHAR* name)
 		if (PathFileExists(g_IniFilePath))
 		{
 			loadProfile(g_IniFilePath, Profile, false);
+			return true;
 		}
 		//auto len=lstrlen(g_IniFilePath);
 		//lstrcpy(g_IniFilePath+len, TEXT(".update"));
@@ -190,6 +191,7 @@ void loadProf(TCHAR* path, const TCHAR* name)
 		//	ProfDirty=true;
 		//}
 	}
+	return false;
 }
 
 void loadLanguge(TCHAR* path)

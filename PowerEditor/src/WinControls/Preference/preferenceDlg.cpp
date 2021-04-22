@@ -438,6 +438,7 @@ void PreferenceDlg::invalidateRadioBtns(bool forPrefDLg)
 		bool showTool = nppApp->_rebarTop.getIDVisible(REBAR_BAR_TOOLBAR);
 		::SendDlgItemMessage(_barsDlg.getHSelf(), IDC_CHECK_HIDE, BM_SETCHECK, showTool?BST_UNCHECKED:BST_CHECKED, 0);
 		::SendDlgItemMessage(_barsDlg.getHSelf(), IDC_CHECK_TAB_MULTILINE, BM_SETCHECK, TabBarPlus::isMultiLine(), 0); //tabBarStatus & TAB_MULTILINE
+		::SendDlgItemMessage(_barsDlg.getHSelf(), IDC_CHECK_TAB_VERTICAL, BM_SETCHECK, TabBarPlus::isVertical(), 0); 
 	}
 }
 

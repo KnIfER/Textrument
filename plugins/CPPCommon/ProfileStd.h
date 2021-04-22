@@ -35,7 +35,7 @@ bool PutProfString(char* name, char* data);
 
 bool PutProfInt(char* name, int val);
 
-void loadProf(TCHAR* path, const TCHAR* name);
+bool loadProf(TCHAR* path, const TCHAR* name);
 
 void loadLanguge(TCHAR* path);
 

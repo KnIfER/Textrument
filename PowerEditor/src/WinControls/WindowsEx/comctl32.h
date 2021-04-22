@@ -166,6 +166,10 @@ __declspec(selectany) HBRUSH  COMCTL32_hPattern55AABrush;
 #define TabCtrl_SetVerticalModeWidth(hwnd)\
         (int)SNDMSG((hwnd), TCM_GETVERTICALMODEWIDTH, 0, 0)
 
+#define TCM_GETTOPMOSTROW    (TCM_FIRST + 72)
+#define TabCtrl_GetTopMostRow(hwnd)\
+        (int)SNDMSG((hwnd), TCM_GETTOPMOSTROW, 0, 0)
+
 
 void ReadColors();
 #endif  /* __WINE_COMCTL32_H */

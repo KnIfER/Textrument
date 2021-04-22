@@ -363,7 +363,7 @@ void TabBarPlus::init(HINSTANCE hInst, HWND parent, bool isVertical, bool isMult
 
 	//TabCtrl_SetPadding(_hSelf, 0, 0);
 
-	TabCtrl_SetMaxRows(_hSelf, 5);
+	//TabCtrl_SetMaxRows(_hSelf, 5);
 
 	if (!_hSelf)
 	{
@@ -615,6 +615,49 @@ LRESULT TabBarPlus::runProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lPara
 						return TRUE;
 				}
 				setActiveTab(tabIndex);
+			}
+			else if (_isMultiLine || _isVertical) // don't scroll if in multi-line mode
+			{
+				RECT rcTabCtrl, rcLastTab;
+				::SendMessage(_hSelf, TCM_GETITEMRECT, lastTabIndex, reinterpret_cast<LPARAM>(&rcLastTab));
+				::GetClientRect(_hSelf, &rcTabCtrl);
+
+				// get index of the first visible tab
+				TC_HITTESTINFO hti;
+				LONG xy = NppParameters::getInstance()._dpiManager.scaleX(12); // an arbitrary coordinate inside the first visible tab
+				hti.pt = { xy, xy };
+
+				int scrollTabIndex = TabCtrl_GetTopMostRow(_hSelf);
+
+
+				//if (scrollTabIndex < 1 && (_isVertical ? rcLastTab.bottom < rcTabCtrl.bottom : rcLastTab.right < rcTabCtrl.right)) // nothing to scroll
+				//	return TRUE;
+
+				// maximal width/height of the msctls_updown32 class (arrow box in the tab bar), 
+				// this area may hide parts of the last tab and needs to be excluded
+				LONG maxLengthUpDownCtrl = NppParameters::getInstance()._dpiManager.scaleX(44); // sufficient static value
+
+																								// scroll forward as long as the last tab is hidden; scroll backward till the first tab
+				//if ((_isVertical ? ((rcTabCtrl.bottom - rcLastTab.bottom) < maxLengthUpDownCtrl) : ((rcTabCtrl.right - rcLastTab.right) < maxLengthUpDownCtrl)) || not isForward)
+				{
+					if (isForward)
+						++scrollTabIndex;
+					else
+						--scrollTabIndex;
+
+					if (scrollTabIndex < 0 || scrollTabIndex > TabCtrl_GetRowCount(_hSelf))
+						return TRUE;
+
+					// clear hover state of the close button,
+					// WM_MOUSEMOVE won't handle this properly since the tab position will change
+					if (_isCloseHover)
+					{
+						_isCloseHover = false;
+						::InvalidateRect(_hSelf, &_currentHoverTabRect, false);
+					}
+
+					::SendMessage(_hSelf, WM_VSCROLL, MAKEWPARAM(SB_THUMBPOSITION, scrollTabIndex), 0);
+				}
 			}
 			else if (not _isMultiLine) // don't scroll if in multi-line mode
 			{

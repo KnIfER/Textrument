@@ -1993,10 +1993,22 @@ void Notepad_plus::command(int id)
 			break;
 		}
 
+		case IDM_SETTING_VERTTABS :
 		case IDM_VIEW_DRAWTABBAR_VERTICAL :
 		{
-			TabBarPlus::setVertical(!TabBarPlus::isVertical());
+			bool val = !TabBarPlus::isVertical();
+			TabBarPlus::setVertical(val);
 			::SendMessage(_pPublicInterface->getHSelf(), WM_SIZE, 0, 0);
+			if(val) {
+				::SendMessage(_pPublicInterface->getHSelf(), WM_SIZE, 0, 0);
+			} else {
+				_mainDocTab.centerCurrentTab();
+				_subDocTab.centerCurrentTab();
+			}
+			checkMenuItem(IDM_SETTING_VERTTABS, val);
+			if(id==IDM_SETTING_VERTTABS&&_preference.isCreated()) {
+				_preference.invalidateRadioBtns();
+			}
 			break;
 		}
 

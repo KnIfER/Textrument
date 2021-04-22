@@ -591,6 +591,7 @@
 	#define	   IDM_SETTING_CUSTTOOLS  	    (IDM_SETTING + 105)
 	#define	   IDM_SETTING_WRAPTOOLS  	    (IDM_SETTING + 106)
 	#define	   IDM_SETTING_WRAPTABS  	    (IDM_SETTING + 107)
+	#define	   IDM_SETTING_VERTTABS  	    (IDM_SETTING + 108)
 
 #define    IDM_TOOL  (IDM + 8500)
 	#define	   IDM_TOOL_MD5_GENERATE  	            (IDM_TOOL + 1)
