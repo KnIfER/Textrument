@@ -1152,19 +1152,6 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 			return TRUE;
 		}
 
-		case WM_MOUSEWHEEL:
-		{
-			if (0 != (LOWORD(wParam) & MK_RBUTTON))
-			{
-				// redirect to the IDC_PREV_DOC or IDC_NEXT_DOC so that we have the unified process
-
-				nppParam._isTaskListRBUTTONUP_Active = true;
-				short zDelta = (short) HIWORD(wParam);
-				return ::SendMessage(hwnd, WM_COMMAND, zDelta>0?IDC_PREV_DOC:IDC_NEXT_DOC, 0);
-			}
-			return TRUE;
-		}
-
 		case WM_APPCOMMAND:
 		{
 			switch(GET_APPCOMMAND_LPARAM(lParam))
@@ -1763,11 +1750,6 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 		case WM_CONTEXTMENU:
 		{
 			//LogIs("WM_CONTEXTMENU!!!");
-			if (nppParam._isTaskListRBUTTONUP_Active)
-			{
-				nppParam._isTaskListRBUTTONUP_Active = false;
-			}
-			else
 			{
 				if ((HWND(wParam) == _mainEditView.getHSelf()) || (HWND(wParam) == _subEditView.getHSelf()))
 				{

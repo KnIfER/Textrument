@@ -428,6 +428,8 @@ HHOOK g_hMouse = NULL;
 
 bool bUseFluentBtnRClickMenu = true;
 
+bool which2scroll;
+
 //Hook
 LRESULT CALLBACK MenuMouseProc(int nCode, WPARAM wParam,  LPARAM lParam)
 {	
@@ -462,6 +464,88 @@ LRESULT CALLBACK MenuMouseProc(int nCode, WPARAM wParam,  LPARAM lParam)
 		}
 	}
 	return CallNextHookEx(g_hMouse, nCode, wParam, lParam); 
+}
+
+//Hook
+LRESULT CALLBACK ScrollbarMouseProc(int nCode, WPARAM wParam,  LPARAM lParam)
+{	
+	if(wParam == WM_MOUSEWHEEL)
+	{
+		MSLLHOOKSTRUCT *pMhs = (MSLLHOOKSTRUCT *)lParam;
+
+		(which2scroll?nppApp->_mainEditView
+			:nppApp->_subEditView).execute(WM_MOUSEWHEEL
+			, MAKELONG(0,GET_WHEEL_DELTA_WPARAM(pMhs->mouseData)), lParam);
+		
+		return TRUE;
+	}
+	else if(wParam == WM_LBUTTONUP)
+	{
+		UnhookWindowsHookEx (g_hMouse);
+	}
+	return CallNextHookEx(g_hMouse, nCode, wParam, lParam); 
+}
+
+void hookNcLeftButtonDown(MSG & msg)
+{
+	if ((which2scroll=msg.hwnd==nppApp->_mainEditView.getHSelf())
+		||msg.hwnd==nppApp->_subEditView.getHSelf())
+	{
+		//LogIs(1, "down!!!");
+		g_hMouse = SetWindowsHookEx(WH_MOUSE_LL, ScrollbarMouseProc, nppApp->getHinst(), 0);
+	}
+}
+
+void hookToolbarRightButtonDown(MSG & msg)
+{
+	POINT pt;
+	GetCursorPos(&pt);
+
+	auto & app = *nppApp;
+
+	int id = app.getButtonCommand(pt);
+
+	HMENU hMenu = app._pluginsManager.getMenuForCommand(id);
+
+	if(!hMenu)
+		switch (id)
+		{
+		case IDM_VIEW_ALL_CHARACTERS:
+		case IDM_VIEW_INDENT_GUIDE:
+			hMenu = ::GetSubMenu(app._mainMenuHandle, MENUINDEX_VIEW);
+			hMenu = GetSubMenu(hMenu, 6);
+			break;
+		case IDM_MACRO_STARTRECORDINGMACRO:
+		case IDM_MACRO_STOPRECORDINGMACRO:
+		case IDM_MACRO_PLAYBACKRECORDEDMACRO:
+		case IDM_MACRO_SAVECURRENTMACRO:
+		case IDM_MACRO_RUNMULTIMACRODLG:
+			hMenu = ::GetSubMenu(app._mainMenuHandle, MENUINDEX_MACRO);
+			break;
+		default:
+			break;
+		}
+
+	if(hMenu) {
+		trackingToolbarMenu = hMenu;
+
+		if (bUseFluentBtnRClickMenu)
+		{ // need to use mouse hook to dismiss the context menu when release
+		  // the mouse button outside of all menu items.
+			g_hMouse = SetWindowsHookEx(WH_MOUSE, MenuMouseProc, NULL, GetCurrentThreadId());
+		}
+
+		// Assuming the menu is shown below the tracking point. 
+		TrackPopupMenu(hMenu, app.bAllMenuRightClickable?TPM_RIGHTBUTTON:0, pt.x,  pt.y, 0, Notepad_plus_Window::gNppHWND, NULL);
+		trackingToolbarMenu = 0;
+
+		if (bUseFluentBtnRClickMenu)
+		{
+			UnhookWindowsHookEx (g_hMouse);
+		}
+
+		//LogIs(3, "Track done... %ld ", msg.message);
+	}
 }
 
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE, PWSTR pCmdLine, int)
@@ -702,6 +786,10 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE, PWSTR pCmdLine, int)
 				// if the message doesn't belong to the notepad_plus_plus's dialog
 				if (!notepad_plus_plus.isDlgsMsg(&msg))
 				{
+					if (msg.message==WM_NCLBUTTONDOWN)
+					{
+						hookNcLeftButtonDown(msg);
+					}
 					if (::TranslateAccelerator(notepad_plus_plus.getHSelf(), notepad_plus_plus.getAccTable(), &msg) == 0)
 					{
 						::TranslateMessage(&msg);
@@ -713,54 +801,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE, PWSTR pCmdLine, int)
 						//todo  ask whether the plugin icon has other specified function
 						//todo WM_MBUTTONUP
 						//todo provide context menu for all icons
-						POINT pt;
-						GetCursorPos(&pt);
-
-						auto & nppApp = notepad_plus_plus._notepad_plus_plus_core;
-						
-						int id = nppApp.getButtonCommand(pt);
-						
-						HMENU hMenu = nppApp._pluginsManager.getMenuForCommand(id);
-
-						if(!hMenu)
-						switch (id)
-						{
-							case IDM_VIEW_ALL_CHARACTERS:
-							case IDM_VIEW_INDENT_GUIDE:
-								hMenu = ::GetSubMenu(nppApp._mainMenuHandle, MENUINDEX_VIEW);
-								hMenu = GetSubMenu(hMenu, 6);
-							break;
-							case IDM_MACRO_STARTRECORDINGMACRO:
-							case IDM_MACRO_STOPRECORDINGMACRO:
-							case IDM_MACRO_PLAYBACKRECORDEDMACRO:
-							case IDM_MACRO_SAVECURRENTMACRO:
-							case IDM_MACRO_RUNMULTIMACRODLG:
-								hMenu = ::GetSubMenu(nppApp._mainMenuHandle, MENUINDEX_MACRO);
-							break;
-							default:
-							break;
-						}
-						
-						if(hMenu) {
-							trackingToolbarMenu = hMenu;
-
-							if (bUseFluentBtnRClickMenu)
-							{ // need to use mouse hook to dismiss the context menu when release
-								// the mouse button outside of all menu items.
-								g_hMouse = SetWindowsHookEx(WH_MOUSE, MenuMouseProc, NULL, GetCurrentThreadId());
-							}
-
-							// Assuming the menu is shown below the tracking point. 
-							TrackPopupMenu(hMenu, nppApp.bAllMenuRightClickable?TPM_RIGHTBUTTON:0, pt.x,  pt.y, 0, Notepad_plus_Window::gNppHWND, NULL);
-							trackingToolbarMenu = 0;
-
-							if (bUseFluentBtnRClickMenu)
-							{
-								UnhookWindowsHookEx (g_hMouse);
-							}
-
-							//LogIs(3, "Track done... %ld ", msg.message);
-						}
+						hookToolbarRightButtonDown(msg);
 					}
 				}
 			}
