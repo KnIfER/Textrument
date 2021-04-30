@@ -363,7 +363,7 @@ void TabBarPlus::init(HINSTANCE hInst, HWND parent, bool isVertical, bool isMult
 
 	//TabCtrl_SetPadding(_hSelf, 0, 0);
 
-	//TabCtrl_SetMaxRows(_hSelf, 5);
+	TabCtrl_SetMaxRows(_hSelf, 6);
 
 	if (!_hSelf)
 	{
@@ -438,25 +438,33 @@ void TabBarPlus::init(HINSTANCE hInst, HWND parent, bool isVertical, bool isMult
 	}
 }
 
+extern HWND mainAppWnd;
 
-void TabBarPlus::doOwnerDrawTab()
+void TabBarPlus::doOwnerDrawTab(bool invalidate)
 {
-	::SendMessage(_hwndArray[0], TCM_SETPADDING, 0, MAKELPARAM(6, 0));
+	bool isReduceTabBar = mainAppWnd?SendMessage(mainAppWnd, NPPM_INTERNAL_ISTABBARREDUCED, 0, 0)
+		:((nppParms->getNppGUI()._tabStatus & TAB_REDUCE) != 0);
+
 	for (int i = 0 ; i < _nbCtrl ; ++i)
 	{
 		if (_hwndArray[i])
 		{
-			LONG_PTR style = ::GetWindowLongPtr(_hwndArray[i], GWL_STYLE);
-			if (bUseSystemDraw)
-				style &= ~TCS_OWNERDRAWFIXED;
-			else
-				style |= TCS_OWNERDRAWFIXED;
-			::SetWindowLongPtr(_hwndArray[i], GWL_STYLE, style);
-			::InvalidateRect(_hwndArray[i], NULL, TRUE);
+			if (invalidate)
+			{
+				LONG_PTR style = ::GetWindowLongPtr(_hwndArray[i], GWL_STYLE);
+				if (bUseSystemDraw)
+					style &= ~TCS_OWNERDRAWFIXED;
+				else
+					style |= TCS_OWNERDRAWFIXED;
+				::SetWindowLongPtr(_hwndArray[i], GWL_STYLE, style);
+				::InvalidateRect(_hwndArray[i], NULL, TRUE);
+			}
 
 			const int paddingSizeDynamicW = NppParameters::getInstance()._dpiManager.scaleX(6);
-			const int paddingSizePlusClosebuttonDynamicW = NppParameters::getInstance()._dpiManager.scaleX(9);
-			::SendMessage(_hwndArray[i], TCM_SETPADDING, 0, MAKELPARAM(_drawTabCloseButton ? paddingSizePlusClosebuttonDynamicW : paddingSizeDynamicW, 0));
+			const int paddingSizePlusClosebuttonDynamicW = NppParameters::getInstance()._dpiManager.scaleX(isReduceTabBar?12:9);
+			TabCtrl_SetPadding(_hwndArray[i]
+				, _drawTabCloseButton ? paddingSizePlusClosebuttonDynamicW : paddingSizeDynamicW
+				, 0);
 		}
 	}
 }
@@ -1291,8 +1299,8 @@ void TabBarPlus::drawItem(DRAWITEMSTRUCT *pDrawItemStruct)
 		// 1 space distance to save icon
 		rect.bottom -= spaceUnit;
 	}
-	else if(bUseMyTabControl)
-	//else if(false)
+	//else if(bUseMyTabControl)
+	else if(false)
 	{
 		Flags |= DT_LEFT;
 		Flags |= DT_TOP;

@@ -179,7 +179,7 @@ public :
 		_draggingPoint.y = 0;
 	};
 
-	static void doOwnerDrawTab();
+	static void doOwnerDrawTab(bool invalidate=true);
 	static void doVertical();
 	static void doMultiLine();
 	static bool isOwnerDrawTab() {return true;};

@@ -242,7 +242,7 @@ void DocTabView::reSizeTo(RECT & rc)
 	{
 		int thisTop = rc.top;
 		TabBar::reSizeTo(rc);
-		//LogIs("reSizeTo:: %d %d %d %d", rc.left, rc.top, rc.right, rc.bottom);
+		//static int cc=0;LogIs("%d reSizeTo:: %d %d %d %d", cc++, rc.left, rc.top, rc.right, rc.bottom);
 		rc.left	 += borderWidth;
 		rc.right -= borderWidth * 2;
 		if(borderXComp) {

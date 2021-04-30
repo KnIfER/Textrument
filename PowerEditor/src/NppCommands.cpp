@@ -1924,13 +1924,14 @@ void Notepad_plus::command(int id)
 		case IDM_VIEW_REDUCETABBAR :
 		{
 			_toReduceTabBar = !_toReduceTabBar;
+			TabBarPlus::doOwnerDrawTab(false);
 
 			//Resize the  icon
 			int iconDpiDynamicalSize = NppParameters::getInstance()._dpiManager.scaleY(_toReduceTabBar?12:18);
 
 			//Resize the tab height
 			int tabDpiDynamicalWidth = NppParameters::getInstance()._dpiManager.scaleX(45);
-			int tabDpiDynamicalHeight = NppParameters::getInstance()._dpiManager.scaleY(_toReduceTabBar?22:25);
+			int tabDpiDynamicalHeight = NppParameters::getInstance()._dpiManager.scaleY(_toReduceTabBar?18:0);
 			TabCtrl_SetItemSize(_mainDocTab.getHSelf(), tabDpiDynamicalWidth, tabDpiDynamicalHeight);
 			TabCtrl_SetItemSize(_subDocTab.getHSelf(), tabDpiDynamicalWidth, tabDpiDynamicalHeight);
 			_docTabIconList.setIconSize(iconDpiDynamicalSize);

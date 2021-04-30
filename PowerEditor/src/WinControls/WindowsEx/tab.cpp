@@ -2806,7 +2806,7 @@ static LRESULT _SetItemSize (TAB_INFO *infoPtr, INT cx, INT cy)
 		bNeedPaint = TRUE;
 	}
 
-	if (infoPtr->tabHeight != cy)
+	//if (infoPtr->tabHeight != cy)
 	{
 		if ((infoPtr->fHeightSet = (cy != 0)))
 			infoPtr->tabHeight = cy;

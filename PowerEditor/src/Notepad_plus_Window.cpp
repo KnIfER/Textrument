@@ -154,6 +154,9 @@ void Notepad_plus_Window::init(HINSTANCE hInst, HWND parent, const TCHAR *cmdLin
 	if ((nppGUI._tabStatus & TAB_MULTILINE) != 0)
 		::SendMessage(_hSelf, WM_COMMAND, IDM_VIEW_DRAWTABBAR_MULTILINE, 0);
 
+	if (nppGUI._tabStatus & TAB_VERTICAL)
+		::SendMessage(_hSelf, WM_COMMAND, IDM_VIEW_DRAWTABBAR_VERTICAL, 0);
+
 	if (!nppGUI._menuBarShow)
 		::SetMenu(_hSelf, NULL);
 
