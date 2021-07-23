@@ -36,6 +36,7 @@
 #include "ScintillaEditView.h"
 #include "EncodingMapper.h"
 #include "uchardet.h"
+#include <io.h>
 
 static const int blockSize = 128 * 1024 + 4;
 static const int CR = 0x0D;
@@ -993,6 +994,8 @@ SavingStatus FileManager::saveBuffer(BufferID id, const TCHAR * filename, bool i
 		::GetLongPathName(fullpath, fullpath, MAX_FILE_PATH);
 	}
 
+	bool bUseRMode = true;
+
 	if (PathFileExists(fullpath))
 	{
 		attrib = ::GetFileAttributes(fullpath);
@@ -1003,6 +1006,9 @@ SavingStatus FileManager::saveBuffer(BufferID id, const TCHAR * filename, bool i
 			if (isHiddenOrSys)
 				::SetFileAttributes(filename, attrib & ~(FILE_ATTRIBUTE_HIDDEN | FILE_ATTRIBUTE_SYSTEM));
 		}
+	} 
+	else {
+		bUseRMode = false;
 	}
 
 	UniMode mode = buffer->getUnicodeMode();
@@ -1014,7 +1020,7 @@ SavingStatus FileManager::saveBuffer(BufferID id, const TCHAR * filename, bool i
 
 	int encoding = buffer->getEncoding();
 
-	FILE *fp = UnicodeConvertor.fopen(fullpath, TEXT("wbc"));
+	FILE *fp = UnicodeConvertor.fopen(fullpath, bUseRMode?TEXT("r+bc"):TEXT("wbc"));
 
 	if (!fp)
 	{
@@ -1056,6 +1062,11 @@ SavingStatus FileManager::saveBuffer(BufferID id, const TCHAR * filename, bool i
 		// check the language du fichier
 		LangType language = detectLanguageFromTextBegining((unsigned char *)buf, lengthDoc);
 
+		if (bUseRMode && items_written!=-1)
+		{
+			_chsize_s(_fileno(fp), items_written);
+		}
+
 		UnicodeConvertor.fclose();
 
 		// Error, we didn't write the entire document to disk.
@@ -1065,9 +1076,6 @@ SavingStatus FileManager::saveBuffer(BufferID id, const TCHAR * filename, bool i
 			_pscratchTilla->execute(SCI_SETDOCPOINTER, 0, _scratchDocDefault);
 			return SavingStatus::SaveWrittingFailed;
 		}
-
-		if (isHiddenOrSys)
-			::SetFileAttributes(fullpath, attrib);
 
 		if (isCopy) // Save As command
 		{

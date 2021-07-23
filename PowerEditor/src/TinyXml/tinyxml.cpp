@@ -24,6 +24,8 @@ distribution.
 
 #include <sstream>
 #include "tinyxml.h"
+#include "Shlwapi.h"
+#include <io.h>
 
 bool TiXmlBase::condenseWhiteSpace = true;
 
@@ -755,10 +757,16 @@ bool TiXmlDocument::LoadFile( const TCHAR* filename )
 bool TiXmlDocument::SaveFile( const TCHAR * filename ) const
 {
 	// The old c stuff lives on...
-	FILE* fp = generic_fopen( filename, TEXT("wc") );
+	bool bUseRMode = PathFileExists(filename);
+	FILE* fp = generic_fopen( filename, bUseRMode?TEXT("r+c"):TEXT("wc" ));
 	if ( fp )
 	{
-		Print( fp, 0 );
+		Print( fp, 0);
+		long docLength = ftell(fp);
+		if (bUseRMode && docLength>=0)
+		{
+			_chsize_s(_fileno(fp), docLength);
+		}
 		fflush( fp );
 		fclose( fp );
 		return true;
@@ -794,6 +802,8 @@ void TiXmlDocument::Print( FILE* cfile, int depth ) const
 		node->Print( cfile, depth );
 		generic_fprintf( cfile, TEXT("\n") );
 	}
+	//generic_fprintf( cfile, TEXT("<TML>Textrument XML File.</TML>\n") );
+	generic_fprintf( cfile, TEXT("                              \n") );
 }
 
 void TiXmlDocument::StreamOut( TIXML_OSTREAM * out ) const
