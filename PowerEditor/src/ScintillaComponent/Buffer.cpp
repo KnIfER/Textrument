@@ -1064,8 +1064,9 @@ SavingStatus FileManager::saveBuffer(BufferID id, const TCHAR * filename, bool i
 
 		if (bUseRMode && items_written!=-1)
 		{
-			_chsize_s(_fileno(fp), items_written);
+			_chsize_s(_fileno(fp), ftell(fp));
 		}
+
 
 		UnicodeConvertor.fclose();
 
