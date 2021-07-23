@@ -281,6 +281,9 @@ copy ..\src\contextMenu.xml ..\bin64\contextMenu.xml
     <PreBuildEvent>
       <Command>copy   /Y "$(projectdir)../../PowerEditor\src\MISC\resource.h"  "$(projectdir)../src\WinControls\Preference\resource.h"</Command>
     </PreBuildEvent>
+    <ResourceCompile>
+      <Culture>0x7804</Culture>
+    </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\src\MISC\Common\verifySignedfile.cpp" />
@@ -569,7 +572,9 @@ copy ..\src\contextMenu.xml ..\bin64\contextMenu.xml
     <ResourceCompile Include="..\src\WinControls\FindCharsInRange\findCharsInRange.rc" />
     <ResourceCompile Include="..\src\ScintillaComponent\FindReplaceDlg.rc" />
     <ResourceCompile Include="..\src\WinControls\FunctionList\functionListPanel.rc" />
-    <ResourceCompile Include="..\src\Notepad_plus.rc" />
+    <ResourceCompile Include="..\src\Notepad_plus.rc">
+      <Culture Condition="'$(Configuration)|$(Platform)'=='Unicode Release|x64'">0x0c00</Culture>
+    </ResourceCompile>
     <ResourceCompile Include="..\src\WinControls\PluginsAdmin\pluginsAdmin.rc" />
     <ResourceCompile Include="..\src\WinControls\Preference\preference.rc" />
     <ResourceCompile Include="..\src\WinControls\ProjectPanel\ProjectPanel.rc" />
