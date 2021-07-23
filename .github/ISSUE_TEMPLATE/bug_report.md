@@ -25,7 +25,7 @@ assignees: ''
 ### Debug Information  | 调试信息
 <!--- 从菜单->问号->调试信息中复制相关信息并粘贴至此。 |  Copy the debug info from the Application.  -->
 
-### Debug Information  | 额外信息
+### Extra Information  | 额外信息
 例如是否能在Notepad++中复现此问题。
 
 <!--- （ 截图 ）  -->
