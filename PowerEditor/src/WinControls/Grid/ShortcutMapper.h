@@ -70,8 +70,8 @@ public:
 							const KeyCombo & itemKeyCombo, const size_t & itemIndex) const;
 
 	generic_string getTextFromCombo(HWND hCombo);
-	bool isFilterValid(Shortcut);
-	bool isFilterValid(PluginCmdShortcut sc);
+	bool testFilterOnShortcut(Shortcut & sc);
+	bool testFilterOnShortcut(PluginCmdShortcut & sc);
 
 protected :
 	INT_PTR CALLBACK run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam);

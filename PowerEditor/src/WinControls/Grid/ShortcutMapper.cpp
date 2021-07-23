@@ -152,37 +152,90 @@ generic_string ShortcutMapper::getTextFromCombo(HWND hCombo)
 	return stringToLower(res);
 };
 
-bool ShortcutMapper::isFilterValid(Shortcut sc)
+
+#define NameItemSize 250
+
+// 图创文本的专有方法，从菜单的名称列表构建快捷键的类别目录，如"文件>>打开"。
+void buildCategoryName(int NPPs, TCHAR* itemName) 
 {
-	bool match = false;
-	generic_string shortcut_name = stringToLower(generic_string(sc.getName()));
-	if (_shortcutFilter.empty())
-	{
-		return true;
+	TCHAR* nameWrtAddr = itemName;
+	int nameWrtAddrOff = 0;
+	int lastNameIdx=0;
+	auto MenuHandle = _notepad_plus_plus_Kore->_mainMenuHandle;
+	for(int i=0;i<5;i++) {
+		int namePathPart = NPPs&(i==4?0xFFF:0x1FFF);
+		if(namePathPart) {
+			if(i>0) {
+				MenuHandle = GetSubMenu(MenuHandle, lastNameIdx);
+				if(!MenuHandle) break;
+				auto PathSep = _T(" >> ");
+				lstrcpy(nameWrtAddr+nameWrtAddrOff, PathSep);
+				nameWrtAddrOff+=lstrlen(PathSep);
+			}
+			int namePathLen = ::GetMenuString(MenuHandle, lastNameIdx=namePathPart-1, 
+				nameWrtAddr+nameWrtAddrOff, NameItemSize-nameWrtAddrOff, MF_BYPOSITION);
+
+			TCHAR* currWrtAddr = nameWrtAddr+nameWrtAddrOff;
+			for(int i=0;i<namePathLen;i++) {
+				if(currWrtAddr[i]=='(') {
+					namePathLen=i;
+					break;
+				}
+				if(currWrtAddr[i]=='&') {
+					//replace redundant '&' with zero-width space character (hex UTF-16 200b)
+					currWrtAddr[i]=0x200b;
+				}
+			}
+			nameWrtAddrOff+=namePathLen;
+			NPPs>>=13;
+		} 
+		else {
+			break;
+		}
 	}
+	itemName[nameWrtAddrOff] = '\0';
+}
+
+void ToLowerCase(generic_string & strToConvert)
+{
+	std::transform(strToConvert.begin(), strToConvert.end(), strToConvert.begin(), ::towlower);
+}
+
+bool ShortcutMapper::testFilterOnShortcut(Shortcut & sc)
+{
+	if (_shortcutFilter.empty()) return true;
+	generic_string shortcut_name = sc.getName(); ToLowerCase(shortcut_name);
 	// test the filter on the shortcut name
 	size_t match_pos = shortcut_name.find(_shortcutFilter);
-	if (match_pos != std::string::npos){
-		match = true;
+	bool match = match_pos != std::string::npos;
+	if (!match)
+	{
+		shortcut_name = sc.toString(); ToLowerCase(shortcut_name);
+		match_pos = shortcut_name.find(_shortcutFilter);
+		match = match_pos != std::string::npos;
+	}
+	if (!match)
+	{
+		CommandShortcut* cs = dynamic_cast<CommandShortcut*>(&sc);
+		if (cs)
+		{
+			buildCategoryName(cs->_category_path, universal_buffer);
+			shortcut_name = universal_buffer; ToLowerCase(shortcut_name);
+			match_pos = shortcut_name.find(_shortcutFilter);
+			match = match_pos != std::string::npos;
+		}
 	}
 	return match;
 }
 
-bool ShortcutMapper::isFilterValid(PluginCmdShortcut sc)
+bool ShortcutMapper::testFilterOnShortcut(PluginCmdShortcut & sc)
 {
-	// Do like a classic search on shortcut name, then search on the plugin name.
-	Shortcut shortcut = sc;
-	bool match = false;
-	generic_string module_name = stringToLower(generic_string(sc.getModuleName()));
-	if (isFilterValid(shortcut)){
+	if (testFilterOnShortcut(sc)){
 		return true;
 	}
+	generic_string module_name = stringToLower(generic_string(sc.getModuleName()));
 	size_t match_pos = module_name.find(_shortcutFilter);
-	if (match_pos != std::string::npos){
-		match = true;
-	}
-
-	return match;
+	return match_pos != std::string::npos;
 }
 
 void ShortcutMapper::fillOutBabyGrid()
@@ -194,8 +247,8 @@ void ShortcutMapper::fillOutBabyGrid()
 
 	size_t nbItems = 0;
 	NativeLangSpeaker* nativeLangSpeaker = nppParam.getNativeLangSpeaker();
-	generic_string nameStr = nativeLangSpeaker->getShortcutMapperLangStr("ColumnName", TEXT("Name"));
-	generic_string shortcutStr = nativeLangSpeaker->getShortcutMapperLangStr("ColumnShortcut", TEXT("Shortcut"));
+	generic_string nameStr = nativeLangSpeaker->getShortcutMapperLangStr("ColumnName", TEXT("名称"));
+	generic_string shortcutStr = nativeLangSpeaker->getShortcutMapperLangStr("ColumnShortcut", TEXT("快捷键"));
 
 	_babygrid.setText(0, 1, nameStr.c_str());
 	_babygrid.setText(0, 2, shortcutStr.c_str());
@@ -206,7 +259,7 @@ void ShortcutMapper::fillOutBabyGrid()
 		{
 			nbItems = nppParam.getUserShortcuts().size();
 			_babygrid.setLineColNumber(nbItems, 3);
-			generic_string categoryStr = nativeLangSpeaker->getShortcutMapperLangStr("ColumnCategory", TEXT("Category"));
+			generic_string categoryStr = nativeLangSpeaker->getShortcutMapperLangStr("ColumnCategory", TEXT("类别"));
 			_babygrid.setText(0, 3, categoryStr.c_str());
 		}
 		break;
@@ -250,14 +303,13 @@ void ShortcutMapper::fillOutBabyGrid()
 	{
 		case STATE_MENU:
 		{
-			const int itemSize = 250;
-			TCHAR itemName[itemSize+6];
+			TCHAR itemName[NameItemSize+6];
 			vector<CommandShortcut> & cshortcuts = nppParam.getUserShortcuts();
 			cs_index = 1;
 			int LastNPPs=0;
 			for (size_t i = 0; i < nbItems; ++i)
 			{
-				if (isFilterValid(cshortcuts[i]))
+				if (testFilterOnShortcut(cshortcuts[i]))
 				{
 					if (findKeyConflicts(nullptr, cshortcuts[i].getKeyCombo(), i))
 						isMarker = _babygrid.setMarker(true);
@@ -279,42 +331,7 @@ void ShortcutMapper::fillOutBabyGrid()
 					int NPPs = cshortcuts[i]._category_path;
 					if(NPPs) {
 						if(LastNPPs!=NPPs) { // Name Parts (Menu Idx): 0x1000 0x2000 0x2000 0x2000 0x2000
-							TCHAR* nameWrtAddr = itemName;
-							int nameWrtAddrOff = 0;
-							int lastNameIdx=0;
-							auto MenuHandle = _notepad_plus_plus_Kore->_mainMenuHandle;
-							for(int i=0;i<5;i++) {
-								int namePathPart = NPPs&(i==4?0xFFF:0x1FFF);
-								if(namePathPart) {
-									if(i>0) {
-										MenuHandle = GetSubMenu(MenuHandle, lastNameIdx);
-										if(!MenuHandle) break;
-										auto PathSep = _T(" >> ");
-										lstrcpy(nameWrtAddr+nameWrtAddrOff, PathSep);
-										nameWrtAddrOff+=lstrlen(PathSep);
-									}
-									int namePathLen = ::GetMenuString(MenuHandle, lastNameIdx=namePathPart-1, 
-										nameWrtAddr+nameWrtAddrOff, itemSize-nameWrtAddrOff, MF_BYPOSITION);
-
-									TCHAR* currWrtAddr = nameWrtAddr+nameWrtAddrOff;
-									for(int i=0;i<namePathLen;i++) {
-										if(currWrtAddr[i]=='(') {
-											namePathLen=i;
-											break;
-										}
-										if(currWrtAddr[i]=='&') {
-											//replace redundant '&' with zero-width space character (hex UTF-16 200b)
-											currWrtAddr[i]=0x200b;
-										}
-									}
-									nameWrtAddrOff+=namePathLen;
-									NPPs>>=13;
-								} 
-								else {
-									break;
-								}
-							}
-							itemName[nameWrtAddrOff] = '\0';
+							buildCategoryName(NPPs, itemName);
 							LastNPPs=NPPs;
 						}
 						_babygrid.setText(cs_index, 3, itemName);
@@ -340,7 +357,7 @@ void ShortcutMapper::fillOutBabyGrid()
 			cs_index = 1;
 			for (size_t i = 0; i < nbItems; ++i)
 			{
-				if (isFilterValid(cshortcuts[i]))
+				if (testFilterOnShortcut(cshortcuts[i]))
 				{
 					if (findKeyConflicts(nullptr, cshortcuts[i].getKeyCombo(), i))
 						isMarker = _babygrid.setMarker(true);
@@ -369,7 +386,7 @@ void ShortcutMapper::fillOutBabyGrid()
 			cs_index = 1;
 			for (size_t i = 0; i < nbItems; ++i)
 			{
-				if (isFilterValid(cshortcuts[i]))
+				if (testFilterOnShortcut(cshortcuts[i]))
 				{
 					if (findKeyConflicts(nullptr, cshortcuts[i].getKeyCombo(), i))
 						isMarker = _babygrid.setMarker(true);
@@ -399,7 +416,7 @@ void ShortcutMapper::fillOutBabyGrid()
 			cs_index = 1;
 			for (size_t i = 0; i < nbItems; ++i)
 			{
-				if (isFilterValid(cshortcuts[i]))
+				if (testFilterOnShortcut(cshortcuts[i]))
 				{
 					if (findKeyConflicts(nullptr, cshortcuts[i].getKeyCombo(), i))
 						isMarker = _babygrid.setMarker(true);
@@ -429,7 +446,7 @@ void ShortcutMapper::fillOutBabyGrid()
 			cs_index=1;
 			for (size_t i = 0; i < nbItems; ++i)
 			{
-				if (isFilterValid(cshortcuts[i]))
+				if (testFilterOnShortcut(cshortcuts[i]))
 				{
 					if (cshortcuts[i].isEnabled())
 					{
