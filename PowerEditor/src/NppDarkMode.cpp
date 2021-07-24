@@ -337,17 +337,17 @@ namespace NppDarkMode
 
 	bool isEnabled()
 	{
-		return true;
+		return _options.enable;
 	}
 
 	bool isDarkMenuEnabled()
 	{
-		return true;
+		return _options.enableMenubar;
 	}
 
 	bool isExperimentalActive()
 	{
-		return true;
+		return g_darkModeEnabled;
 	}
 
 	bool isExperimentalSupported()

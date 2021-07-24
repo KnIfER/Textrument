@@ -35,10 +35,10 @@
 #include "regExtDlg.h"
 #include "WordStyleDlg.h"
 
-class SettingsDlg : public StaticDialog
+class MiscSettingsDlg : public StaticDialog
 {
 public :
-	SettingsDlg() = default;
+	MiscSettingsDlg() = default;
 
 private :
 	INT_PTR CALLBACK run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam);
@@ -235,10 +235,32 @@ private :
 	INT_PTR CALLBACK run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam);
 };
 
+class DarkModeSubDlg : public StaticDialog
+{
+public:
+	DarkModeSubDlg() = default;
+
+private:
+	ColourPicker* _pBackgroundColorPicker = nullptr;
+	ColourPicker* _pSofterBackgroundColorPicker = nullptr;
+	ColourPicker* _pHotBackgroundColorPicker = nullptr;
+	ColourPicker* _pPureBackgroundColorPicker = nullptr;
+	ColourPicker* _pErrorBackgroundColorPicker = nullptr;
+	ColourPicker* _pTextColorPicker = nullptr;
+	ColourPicker* _pDarkerTextColorPicker = nullptr;
+	ColourPicker* _pDisabledTextColorPicker = nullptr;
+	ColourPicker* _pEdgeColorPicker = nullptr;
+	ColourPicker* _pLinkColorPicker = nullptr;
+
+	INT_PTR CALLBACK run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam);
+	void enableCustomizedColorCtrls(bool doEnable);
+};
+
+
 class PreferenceDlg : public StaticDialog
 {
 friend class NativeLangSpeaker;
-
+friend class Notepad_plus;
 public :
 	PreferenceDlg() = default;
 
@@ -278,7 +300,7 @@ private :
 	WindowVector _wVector;
 	BarsDlg _barsDlg;
 	MarginsDlg _marginsDlg;
-	SettingsDlg _settingsDlg;
+	MiscSettingsDlg _miscSettingsDlg;
 	RegExtDlg _fileAssocDlg;
 	LangMenuDlg _langMenuDlg;
 	Highlighting _highlighting;
@@ -293,5 +315,6 @@ private :
 	SettingsOnCloudDlg _settingsOnCloudDlg;
 	SearchEngineChoiceDlg _searchEngineDlg;
 	SearchingSettingsDlg _searchingSettingsDlg;
+	DarkModeSubDlg _darkModeSubDlg;
 };
 

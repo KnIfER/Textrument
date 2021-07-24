@@ -39,6 +39,7 @@
 #include "documentMap.h"
 #include "functionListPanel.h"
 #include "fileBrowser.h"
+#include "NppDarkMode.h"
 #include "wutils.h"
 #include "Shlobj.h"
 
@@ -95,6 +96,12 @@ LRESULT CALLBACK Notepad_plus_Window::Notepad_plus_Proc(HWND hwnd, UINT message,
 			Notepad_plus_Window *pM30ide = static_cast<Notepad_plus_Window *>((reinterpret_cast<LPCREATESTRUCT>(lParam))->lpCreateParams);
 			pM30ide->_hSelf = hwnd;
 			::SetWindowLongPtr(hwnd, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(pM30ide));
+			
+			if (NppDarkMode::isExperimentalSupported())
+			{
+				NppDarkMode::enableDarkScrollBarForWindowAndChildren(hwnd);
+			}
+
 			return TRUE;
 		}
 
@@ -114,11 +121,28 @@ LRESULT Notepad_plus_Window::runProc(HWND hwnd, UINT message, WPARAM wParam, LPA
 		{
 			try
 			{
+				NppDarkMode::setDarkTitleBar(hwnd);
+
 				_notepad_plus_plus_core._pPublicInterface = this;
 				setFontStack(&HFontWraps);
-				auto ret = _notepad_plus_plus_core.init(hwnd);;
+
+				LRESULT lRet = _notepad_plus_plus_core.init(hwnd);
+
+				if (NppDarkMode::isEnabled() && NppDarkMode::isExperimentalSupported())
+				{
+					RECT rcClient;
+					GetWindowRect(hwnd, &rcClient);
+
+					// Inform application of the frame change.
+					SetWindowPos(hwnd,
+						NULL,
+						rcClient.left, rcClient.top,
+						rcClient.right - rcClient.left, rcClient.bottom - rcClient.top,
+						SWP_FRAMECHANGED);
+				}
+
 				_toolbarHWND = _notepad_plus_plus_core._toolBar.getHSelf();
-				return ret;
+				return lRet;
 			}
 			catch (std::exception& ex)
 			{
@@ -152,13 +176,60 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 	LRESULT result = FALSE;
 	NppParameters& nppParam = NppParameters::getInstance();
 
+	if (NppDarkMode::isDarkMenuEnabled() && NppDarkMode::isEnabled() && NppDarkMode::runUAHWndProc(hwnd, message, wParam, lParam, &result))
+	{
+		return result;
+	}
+
 	switch (message)
 	{
 		case WM_NCACTIVATE:
 		{
 			// Note: lParam is -1 to prevent endless loops of calls
 			::SendMessage(_dockingManager.getHSelf(), WM_NCACTIVATE, wParam, -1);
+			result = ::DefWindowProc(hwnd, message, wParam, lParam);
+			if (NppDarkMode::isDarkMenuEnabled() && NppDarkMode::isEnabled())
+			{
+				NppDarkMode::drawUAHMenuNCBottomLine(hwnd);
+			}
+			return result;
+		}
+
+		case WM_NCPAINT:
+		{
+			result = ::DefWindowProc(hwnd, message, wParam, lParam);
+			if (NppDarkMode::isDarkMenuEnabled() && NppDarkMode::isEnabled())
+			{
+				NppDarkMode::drawUAHMenuNCBottomLine(hwnd);
+			}
+			return result;
+		}
+
+		case WM_ERASEBKGND:
+		{
+			if (NppDarkMode::isEnabled())
+			{
+				RECT rc = { 0 };
+				GetClientRect(hwnd, &rc);
+				FillRect((HDC)wParam, &rc, NppDarkMode::getBackgroundBrush());
+				return 0;
+			}
+			else
+			{
+				return ::DefWindowProc(hwnd, message, wParam, lParam);
+			}
+		}
+
+		case WM_SETTINGCHANGE:
+		{
+			NppDarkMode::handleSettingChange(hwnd, lParam);
 			return ::DefWindowProc(hwnd, message, wParam, lParam);
+		}
+
+		case NPPM_INTERNAL_REFRESHDARKMODE:
+		{
+			refreshDarkMode();
+			return TRUE;
 		}
 
 		case WM_DRAWITEM:
@@ -807,7 +878,14 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 			else
 			{
 				// see https://docs.microsoft.com/en-us/windows/win32/menurc/wm-command#remarks
-				isWindowMessaging=lParam?2:HIWORD(wParam);
+				if (lParam==0&&HIWORD(wParam)==66)
+				{
+					isWindowMessaging=-1;
+				}
+				else
+				{
+					isWindowMessaging=lParam?2:HIWORD(wParam);
+				}
 				command(LOWORD(wParam));
 				isWindowMessaging=0;
 			}
@@ -824,6 +902,12 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 				getCurrentOpenedFiles(currentSession, true);
 				nppParam.writeSession(currentSession);
 			}
+			return TRUE;
+		}
+
+		case NPPM_SUPRESSSCIMACRO:
+		{
+			isSciMacroSupressed = wParam;
 			return TRUE;
 		}
 
@@ -1398,13 +1482,13 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 
 		case WM_FRSAVE_INT:
 		{
-			_macro.push_back(recordedMacroStep(static_cast<int32_t>(wParam), 0, static_cast<long>(lParam), NULL, recordedMacroStep::mtSavedSnR));
+			_macro.push_back(recordedMacroStep(static_cast<int32_t>(wParam), 0, static_cast<long>(lParam), NULL, NULL, recordedMacroStep::mtSavedSnR));
 			break;
 		}
 
 		case WM_FRSAVE_STR:
 		{
-			_macro.push_back(recordedMacroStep(static_cast<int32_t>(wParam), 0, 0, reinterpret_cast<const TCHAR *>(lParam), recordedMacroStep::mtSavedSnR));
+			_macro.push_back(recordedMacroStep(static_cast<int32_t>(wParam), 0, 0, reinterpret_cast<const TCHAR *>(lParam), NULL, recordedMacroStep::mtSavedSnR));
 			break;
 		}
 
@@ -1492,7 +1576,7 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 
 		case NPPM_CREATESCINTILLAHANDLE:
 		{
-			return (LRESULT)_scintillaCtrls4Plugins.createSintilla((lParam == NULL?hwnd:reinterpret_cast<HWND>(lParam)));
+			return (LRESULT)_scintillaCtrls4Plugins.createSintilla((lParam ? reinterpret_cast<HWND>(lParam) : hwnd));
 		}
 
 		case NPPM_INTERNAL_GETSCINTEDTVIEW:
@@ -1774,6 +1858,26 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 
 		case WM_NOTIFY:
 		{
+			NMHDR* nmhdr = reinterpret_cast<NMHDR*>(lParam);
+			if (nmhdr->code == NM_CUSTOMDRAW && (nmhdr->hwndFrom == _toolBar.getHSelf()))
+			{
+				NMTBCUSTOMDRAW* nmtbcd = reinterpret_cast<NMTBCUSTOMDRAW*>(lParam);
+				if (nmtbcd->nmcd.dwDrawStage == CDDS_PREERASE)
+				{
+					if (NppDarkMode::isEnabled())
+					{
+						FillRect(nmtbcd->nmcd.hdc, &nmtbcd->nmcd.rc, NppDarkMode::getDarkerBackgroundBrush());
+						nmtbcd->clrText = NppDarkMode::getTextColor();
+						SetTextColor(nmtbcd->nmcd.hdc, NppDarkMode::getTextColor());
+						return CDRF_SKIPDEFAULT;
+					}
+					else
+					{
+						return CDRF_DODEFAULT;
+					}
+				}
+			}
+
 			SCNotification *notification = reinterpret_cast<SCNotification *>(lParam);
 			auto code = notification->nmhdr.code;
 			static bool customizationTweaking=false;
@@ -2024,7 +2128,7 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 
 		case WM_ACTIVATE:
 		{
-			if (wParam != WA_INACTIVE)
+			if (wParam != WA_INACTIVE && _pEditView && _pNonEditView)
 			{
 				_pEditView->getFocus();
 				auto x = _pEditView->execute(SCI_GETXOFFSET);
@@ -2989,6 +3093,25 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 				addHotSpot(pView);
 			}
 		}
+
+		//case NPPM_INTERNAL_UPDATETEXTZONEPADDING:
+		//{
+		//	ScintillaViewParams &svp = const_cast<ScintillaViewParams &>(nppParam.getSVP());
+		//	if (_beforeSpecialView._isDistractionFree)
+		//	{
+		//		int paddingLen = svp.getDistractionFreePadding(_pEditView->getWidth());
+		//		_pEditView->execute(SCI_SETMARGINLEFT, 0, paddingLen);
+		//		_pEditView->execute(SCI_SETMARGINRIGHT, 0, paddingLen);
+		//	}
+		//	else
+		//	{
+		//		_mainEditView.execute(SCI_SETMARGINLEFT, 0, svp._paddingLeft);
+		//		_mainEditView.execute(SCI_SETMARGINRIGHT, 0, svp._paddingRight);
+		//		_subEditView.execute(SCI_SETMARGINLEFT, 0, svp._paddingLeft);
+		//		_subEditView.execute(SCI_SETMARGINRIGHT, 0, svp._paddingRight);
+		//	}
+		//	return TRUE;
+		//}
 
 		default:
 		{
