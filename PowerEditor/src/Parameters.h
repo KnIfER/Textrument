@@ -39,8 +39,11 @@
 #include "dpiManager.h"
 #include <assert.h>
 #include <tchar.h>
+#include <map>
 
 #include "InsituDebug.h"
+
+#include "NppDarkMode.h"
 
 #define MAX_FILE_PATH MAX_PATH
 
@@ -771,6 +774,12 @@ public:
 	bool _doDoubleQuotes = false;
 };
 
+struct DarkModeConf final
+{
+	bool _isEnabled = false;
+	NppDarkMode::ColorTone _colorTone = NppDarkMode::blackTone;
+	NppDarkMode::Colors _customColors = NppDarkMode::getDarkModeDefaultColors();
+};
 
 struct NppGUI final
 {
@@ -918,6 +927,7 @@ struct NppGUI final
 
 	bool _useBigFonts = true;
 	bool _swiggle = true;
+	bool _ideaMultiSel = false;
 	int currentSettingsIndex = 0;
 
 	bool _dragOpenUseFilter = false;
@@ -926,6 +936,13 @@ struct NppGUI final
 	int _splitter_ratio = 50;
 	int _splitter_ratioBK = 50;
 	bool _splitter_isVisible;
+
+	bool _saveAllConfirm = true;
+	bool _markAllCaseSensitive = false;
+	bool _markAllWordOnly = true;
+	bool _replaceStopsWithoutFindingNext = false;
+
+	DarkModeConf _darkmode;
 };
 
 struct ScintillaViewParams
@@ -1074,6 +1091,7 @@ public:
 			this->_forcePureLC = ulc._forcePureLC;
 			this->_decimalSeparator = ulc._decimalSeparator;
 			this->_foldCompact = ulc._foldCompact;
+			this->_foldMarkdown = ulc._foldMarkdown;
 			int nbStyler = this->_styleArray.getNbStyler();
 			for (int i = 0 ; i < nbStyler ; ++i)
 			{
@@ -1111,6 +1129,7 @@ private:
 	int  _forcePureLC;
 	int _decimalSeparator;
 	bool _foldCompact;
+	bool _foldMarkdown;
 
 	// nakama zone
 	friend class Notepad_plus;
@@ -1130,6 +1149,7 @@ private:
 		_forcePureLC = PURE_LC_NONE;
 		_decimalSeparator = DECSEP_DOT;
 		_foldCompact = false;
+		_foldMarkdown = false;
 		_isCaseIgnored = false;
 		_allowFoldOfComments = false;
 
@@ -1277,7 +1297,8 @@ public:
 	{
 		for (size_t i = 0; i < _themeList.size(); ++i )
 		{
-			if (! (getElementFromIndex(i)).first.compare(themeName))
+			auto themeNameOnList = getElementFromIndex(i).first;
+			if (lstrcmp(themeName, themeNameOnList.c_str()) == 0)
 				return true;
 		}
 		return false;
@@ -1295,8 +1316,31 @@ public:
 		return _themeList[index];
 	}
 
+	void setThemeDirPath(generic_string themeDirPath) { _themeDirPath = themeDirPath; }
+	generic_string getThemeDirPath() const { return _themeDirPath; }
+
+	generic_string getDefaultThemeLabel() const { return TEXT("Default (stylers.xml)"); }
+
+	generic_string getSavePathFrom(const generic_string& path) const {
+		const auto iter = _themeStylerSavePath.find(path);
+		if (iter == _themeStylerSavePath.end())
+		{
+			return TEXT("");
+		}
+		else
+		{
+			return iter->second;
+		}
+	};
+
+	void addThemeStylerSavePath(generic_string key, generic_string val) {
+		_themeStylerSavePath[key] = val;
+	};
+
 private:
 	std::vector<std::pair<generic_string, generic_string>> _themeList;
+	std::map<generic_string, generic_string> _themeStylerSavePath;
+	generic_string _themeDirPath;
 	generic_string _stylesXmlPath;
 };
 
@@ -1446,7 +1490,10 @@ public:
 	bool writeScintillaParams();
 	void createXmlTreeFromGUIParams();
 
-	void writeStyles(LexerStylerArray & lexersStylers, StyleArray & globalStylers);
+	generic_string writeStyles(LexerStylerArray & lexersStylers, StyleArray & globalStylers); // return "" if saving file succeeds, otherwise return the new saved file path
+	HFONT getDefaultUIFont();
+	bool isSelectFgColorEnabled() const { return _isSelectFgColorEnabled; };
+	bool _isSelectFgColorEnabled = false;
 	bool insertTabInfo(const TCHAR *langName, int tabInfo);
 
 	LexerStylerArray & getLStylerArray() {return _lexerStylerArray;};

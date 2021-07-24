@@ -333,6 +333,10 @@ void ToolBar::reset(bool create)
 		if(wrap) {
 			style|=TBSTYLE_WRAPABLE;
 		}
+		if (NppDarkMode::isEnabled())
+		{
+			style |= TBSTYLE_CUSTOMERASE;
+		}
 		_hSelf = ::CreateWindowEx(
 					WS_EX_PALETTEWINDOW,
 					TOOLBARCLASSNAME,
@@ -346,6 +350,9 @@ void ToolBar::reset(bool create)
 					0);
 		// Send the TB_BUTTONSTRUCTSIZE message, which is required for 
 		// backward compatibility.
+
+		NppDarkMode::setDarkTooltips(_hSelf, NppDarkMode::ToolTipsType::toolbar);
+
 		::SendMessage(_hSelf, TB_BUTTONSTRUCTSIZE, sizeof(TBBUTTON), 0);
 		::SendMessage(_hSelf, TB_SETEXTENDEDSTYLE, 0, TBSTYLE_EX_HIDECLIPPEDBUTTONS);
 	}
@@ -703,6 +710,42 @@ void ToolBar::addToRebar(ReBar * rebar)
 	_rbBand.fMask   = RBBIM_CHILD | RBBIM_CHILDSIZE | RBBIM_IDEALSIZE | RBBIM_SIZE;
 }
 
+constexpr UINT_PTR g_rebarSubclassID = 42;
+
+LRESULT CALLBACK RebarSubclass(
+	HWND hWnd,
+	UINT uMsg,
+	WPARAM wParam,
+	LPARAM lParam,
+	UINT_PTR uIdSubclass,
+	DWORD_PTR dwRefData
+)
+{
+	UNREFERENCED_PARAMETER(dwRefData);
+	UNREFERENCED_PARAMETER(uIdSubclass);
+
+	switch (uMsg)
+	{
+	case WM_ERASEBKGND:
+		if (NppDarkMode::isEnabled())
+		{
+			RECT rc;
+			GetClientRect(hWnd, &rc);
+			FillRect((HDC)wParam, &rc, NppDarkMode::getDarkerBackgroundBrush());
+			return TRUE;
+		}
+		else
+		{
+			break;
+		}
+
+	case WM_NCDESTROY:
+		RemoveWindowSubclass(hWnd, RebarSubclass, g_rebarSubclassID);
+		break;
+	}
+	return DefSubclassProc(hWnd, uMsg, wParam, lParam);
+}
+
 void ReBar::init(HINSTANCE hInst, HWND hPere)
 {
 	Window::init(hInst, hPere);
@@ -711,8 +754,10 @@ void ReBar::init(HINSTANCE hInst, HWND hPere)
 							REBARCLASSNAME,
 							NULL,
 							WS_CHILD|WS_VISIBLE|WS_CLIPSIBLINGS|WS_CLIPCHILDREN|RBS_VARHEIGHT|
-							RBS_BANDBORDERS | CCS_NODIVIDER | CCS_NOPARENTALIGN,
+							CCS_NODIVIDER | CCS_NOPARENTALIGN,
 							0,0,0,0, _hParent, NULL, _hInst, NULL);
+
+	SetWindowSubclass(_hSelf, RebarSubclass, g_rebarSubclassID, 0);
 
 	REBARINFO rbi;
 	ZeroMemory(&rbi, sizeof(REBARINFO));

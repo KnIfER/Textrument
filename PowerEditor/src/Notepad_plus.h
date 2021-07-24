@@ -322,6 +322,8 @@ public:
 	ReBar _rebarTop;
 	ReBar _rebarBottom;
 
+	bool isSciMacroSupressed = false;
+
 	// Dialog
 	FindReplaceDlg _findReplaceDlg;
 	FindInFinderDlg _findInFinderDlg;
@@ -669,11 +671,13 @@ public:
 
 	void syncToolbarHwnd();
 
-	TCHAR* DumpToolbarButtons();
+	void DumpToolbarButtons(generic_string & customtoolbar_buildup);
 
 	void switchToIconMode(toolBarStatusType targetState, bool fromPrefDlg=false);
 
 	void invokeCurrentFile(int source);
+
+	void refreshDarkMode();
 };
 
 

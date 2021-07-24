@@ -53,6 +53,8 @@
 
 #include "InsituDebug.h"
 
+#include "NppDarkMode.h"
+
 using namespace std;
 
 enum tb_stat {tb_saved, tb_unsaved, tb_ro, tb_monitored};
@@ -356,8 +358,8 @@ LRESULT Notepad_plus::init(HWND hwnd)
 	_subEditView.execute(SCI_SETMOUSESELECTIONRECTANGULARSWITCH, true);
 
 	// Let Scintilla deal with some of the folding functionality
-	_mainEditView.execute(SCI_SETAUTOMATICFOLD, SC_AUTOMATICFOLD_SHOW);
-	_subEditView.execute(SCI_SETAUTOMATICFOLD, SC_AUTOMATICFOLD_SHOW);
+	_mainEditView.execute(SCI_SETAUTOMATICFOLD, SC_AUTOMATICFOLD_SHOW|SC_AUTOMATICFOLD_CHANGE );
+	_subEditView.execute(SCI_SETAUTOMATICFOLD, SC_AUTOMATICFOLD_SHOW|SC_AUTOMATICFOLD_CHANGE );
 
 	TabBarPlus::doDragNDrop(true);
 
@@ -464,8 +466,8 @@ LRESULT Notepad_plus::init(HWND hwnd)
     //if (nbUserCommand >= 1)
     {
 		::InsertMenu(hRunMenu, static_cast<UINT>(runPosBase + nbUserCommand + 1), MF_BYPOSITION,  static_cast<UINT>(-1), 0);
-        ::InsertMenu(hRunMenu, static_cast<UINT>(runPosBase + nbUserCommand + 2), MF_BYCOMMAND, IDM_SETTING_EDITCONTEXTMENU, TEXT("Edit Popup ContextMenu"));
-        ::InsertMenu(hRunMenu, static_cast<UINT>(runPosBase + nbUserCommand + 3), MF_BYCOMMAND, IDM_SETTING_SHORTCUT_MAPPER_RUN, TEXT("Modify Shortcut/Delete Command..."));
+        ::InsertMenu(hRunMenu, static_cast<UINT>(runPosBase + nbUserCommand + 2), MF_BYCOMMAND, IDM_SETTING_EDITCONTEXTMENU, TEXT("编辑弹出菜单"));
+        ::InsertMenu(hRunMenu, static_cast<UINT>(runPosBase + nbUserCommand + 3), MF_BYCOMMAND, IDM_SETTING_SHORTCUT_MAPPER_RUN, TEXT("管理快捷键..."));
     }
 
 	// Updater menu item
@@ -864,6 +866,11 @@ LRESULT Notepad_plus::init(HWND hwnd)
 	bNewTabFarRight=0;
 
 	checkMenuItem(IDM_VIEW_SWOGGLE, nppGUI._swiggle);
+	if (nppGUI._ideaMultiSel)
+	{
+		nppGUI._ideaMultiSel=false;
+		command(IDM_EDIT_COLUMNMODIDEA);
+	}
 	return TRUE;
 }
 
@@ -994,13 +1001,13 @@ void Notepad_plus::syncToolbarHwnd() {
 	}
 }
 
-TCHAR* Notepad_plus::DumpToolbarButtons() {
-	generic_string customtoolbar_buildup;
-	if(_toolBar.dirty) {
+void Notepad_plus::DumpToolbarButtons(generic_string & customtoolbar_buildup) {
+	if(_toolBar.dirty) 
+	{
 		_toolBar.retrieveCustomBtns();
 	}
 	if(!_toolBar._pTBB_CUSTOM) {
-		return (TCHAR*)customtoolbar_buildup.data();
+		return;
 	}
 	customtoolbar_buildup.clear();
 	// dump PluginID:CMD#1/2/3
@@ -1050,7 +1057,6 @@ TCHAR* Notepad_plus::DumpToolbarButtons() {
 		customtoolbar_buildup+=info->_moduleName;
 		customtoolbar_buildup+=_T(";");
 	}
-	return (TCHAR*)customtoolbar_buildup.data();
 }
 
 void Notepad_plus::killAllChildren()
@@ -2370,16 +2376,16 @@ int Notepad_plus::doReloadOrNot(const TCHAR *fn, bool dirty)
 	if (dirty)
 		return _nativeLangSpeaker.messageBox("DoReloadOrNotAndLooseChange",
 			_pPublicInterface->getHSelf(),
-			TEXT("\"$STR_REPLACE$\"\r\rThis file has been modified by another program.\rDo you want to reload it and lose the changes made in Notepad++?"),
-			TEXT("Reload"),
+			TEXT("“$STR_REPLACE$”\r\r此文件被另一个程序修改了。\r是否重新加载并放弃在Textrument中的变更？"),
+			TEXT("重新加载"),
 			MB_YESNO | MB_APPLMODAL | MB_ICONEXCLAMATION,
 			0, // not used
 			fn);
 	else
 		return _nativeLangSpeaker.messageBox("DoReloadOrNot",
 			_pPublicInterface->getHSelf(),
-			TEXT("\"$STR_REPLACE$\"\r\rThis file has been modified by another program.\rDo you want to reload it?"),
-			TEXT("Reload"),
+			TEXT("“$STR_REPLACE$”\r\r此文件被另一个程序修改了。\r是否重新加载？"),
+			TEXT("重新加载"),
 			MB_YESNO | MB_APPLMODAL | MB_ICONQUESTION,
 			0, // not used
 			fn);
@@ -2389,8 +2395,8 @@ int Notepad_plus::doCloseOrNot(const TCHAR *fn)
 {
 	return _nativeLangSpeaker.messageBox("DoCloseOrNot",
 		_pPublicInterface->getHSelf(),
-		TEXT("The file \"$STR_REPLACE$\" doesn't exist anymore.\rKeep this file in editor?"),
-		TEXT("Keep non existing file"),
+		TEXT("文件“$STR_REPLACE$”不在了。\r是否在编辑器里保留它？"),
+		TEXT("保留文件"),
 		MB_YESNO | MB_ICONQUESTION | MB_APPLMODAL,
 		0, // not used
 		fn);
@@ -2400,8 +2406,8 @@ int Notepad_plus::doDeleteOrNot(const TCHAR *fn)
 {
 	return _nativeLangSpeaker.messageBox("DoDeleteOrNot",
 		_pPublicInterface->getHSelf(),
-		TEXT("The file \"$STR_REPLACE$\"\rwill be moved to your Recycle Bin and this document will be closed.\rContinue?"),
-		TEXT("Delete file"),
+		TEXT("此文件“$STR_REPLACE$”\r将送至回收站并关闭。\r是否继续？"),
+		TEXT("删除文件"),
 		MB_YESNO | MB_ICONQUESTION | MB_APPLMODAL,
 		0, // not used
 		fn);
@@ -2951,9 +2957,14 @@ void Notepad_plus::setUniModeText()
 		cmdID += IDM_FORMAT_ENCODE;
 
 		const int itemSize = 64;
-		TCHAR uniModeText[itemSize];
+		TCHAR uniModeText[itemSize] = {};
 		::GetMenuString(_mainMenuHandle, cmdID, uniModeText, itemSize, MF_BYCOMMAND);
 		uniModeTextString = uniModeText;
+		// see NPP#Fix corrupted encoding text on status (10148)
+		// Remove the shortcut text from the menu text.
+		const size_t tabPos = uniModeTextString.find_last_of('\t');
+		if (tabPos != generic_string::npos)
+			uniModeTextString.resize(tabPos);
 	}
 	_statusBar.setText(uniModeTextString.c_str(), STATUSBAR_UNICODE_TYPE);
 }
@@ -3470,6 +3481,8 @@ LangType Notepad_plus::menuID2LangType(int cmdID)
             return L_TXT2TAGS;
         case IDM_LANG_VISUALPROLOG:
             return L_VISUALPROLOG;
+		case IDM_LANG_MARKDOWN :
+			return L_MARKDOWN;
 		case IDM_LANG_USER :
             return L_USER;
 		default:
@@ -7370,6 +7383,34 @@ void Notepad_plus::showQuote(const QuoteParams* quote) const
 	::CloseHandle(hThread);
 }
 
+int getPluginFirstCommandForName(generic_string & name)
+{
+	auto & infos = nppApp->_pluginsManager._pluginInfos;
+
+	for (size_t i = 0, len = infos.size() ; i < len ; ++i)
+	{
+		if (infos[i]->_moduleName == name)
+		{
+			return infos[i]->_funcItems[0]._cmdID;
+		}
+	}
+	return -1;
+}
+
+int getPluginFirstDynCommandForName(generic_string & name)
+{
+	auto & infos = nppApp->_pluginsManager._pluginInfos;
+
+	for (size_t i = 0, len = infos.size() ; i < len ; ++i)
+	{
+		if (infos[i]->_moduleName == name)
+		{
+			return infos[i]->_regstrDynCmdSt;
+		}
+	}
+	return -1;
+}
+
 void Notepad_plus::minimizeDialogs()
 {
 	_dockingManager.showFloatingContainers(false);
@@ -7688,4 +7729,148 @@ void Notepad_plus::switchToIconMode(toolBarStatusType targetState, bool fromPref
 	checkMenuItem((targetState+1)%3+IDM_SETTING_SMALLICON, false);
 	checkMenuItem((targetState+2)%3+IDM_SETTING_SMALLICON, false);
 	syncToolbarHwnd();
+}
+
+void Notepad_plus::refreshDarkMode()
+{
+	SendMessage(_pPublicInterface->getHSelf(), NPPM_SETEDITORBORDEREDGE, 0, NppParameters::getInstance().getSVP()._showBorderEdge);
+	if (NppDarkMode::isExperimentalSupported())
+	{
+		NppDarkMode::allowDarkModeForApp(NppDarkMode::isEnabled());
+	}
+	NppDarkMode::setDarkTitleBar(_pPublicInterface->getHSelf());
+
+	for (auto &hwndDlg : _hModelessDlgs)
+	{
+		NppDarkMode::setDarkTitleBar(hwndDlg);
+		::SendMessage(hwndDlg, NPPM_INTERNAL_REFRESHDARKMODE, 0, 0);
+		::RedrawWindow(hwndDlg, nullptr, nullptr, RDW_INVALIDATE | RDW_ERASE | RDW_FRAME | RDW_ALLCHILDREN);
+	}
+	for (auto &docCont : _dockingManager.getContainerInfo())
+	{
+		NppDarkMode::setDarkTitleBar(docCont->getCaptionWnd());
+	}
+
+	if (_pProjectPanel_1)
+	{
+		::SendMessage(_pProjectPanel_1->getHSelf(), NPPM_INTERNAL_REFRESHDARKMODE, 0, 0);
+	}
+	if (_pProjectPanel_2)
+	{
+		::SendMessage(_pProjectPanel_2->getHSelf(), NPPM_INTERNAL_REFRESHDARKMODE, 0, 0);
+	}
+	if (_pProjectPanel_3)
+	{
+		::SendMessage(_pProjectPanel_3->getHSelf(), NPPM_INTERNAL_REFRESHDARKMODE, 0, 0);
+	}
+	if (_pFuncList)
+	{
+		::SendMessage(_pFuncList->getHSelf(), NPPM_INTERNAL_REFRESHDARKMODE, 0, 0);
+	}
+	if (_pFileBrowser)
+	{
+		::SendMessage(_pFileBrowser->getHSelf(), NPPM_INTERNAL_REFRESHDARKMODE, 0, 0);
+	}
+
+	if (_pAnsiCharPanel)
+	{
+		::SendMessage(_pAnsiCharPanel->getHSelf(), NPPM_INTERNAL_REFRESHDARKMODE, 0, 0);
+	}
+	if (_pFileSwitcherPanel)
+	{
+		::SendMessage(_pFileSwitcherPanel->getHSelf(), NPPM_INTERNAL_REFRESHDARKMODE, 0, 0);
+	}
+
+	if (_pClipboardHistoryPanel)
+	{
+		::SendMessage(_pClipboardHistoryPanel->getHSelf(), NPPM_INTERNAL_REFRESHDARKMODE, 0, 0);
+	}
+
+	::SendMessage(_subEditView.getHSelf(), NPPM_INTERNAL_REFRESHDARKMODE, 0, 0);
+	::SendMessage(_mainEditView.getHSelf(), NPPM_INTERNAL_REFRESHDARKMODE, 0, 0);
+
+	::SendMessage(_mainDocTab.getHSelf(), NPPM_INTERNAL_REFRESHDARKMODE, 0, 0);
+	::SendMessage(_subDocTab.getHSelf(), NPPM_INTERNAL_REFRESHDARKMODE, 0, 0);
+
+	SendMessage(_incrementFindDlg.getHSelf(), NPPM_INTERNAL_REFRESHDARKMODE, 0, 0);
+	RedrawWindow(_pPublicInterface->getHSelf(), nullptr, nullptr, RDW_INVALIDATE | RDW_ERASE | RDW_FRAME | RDW_ALLCHILDREN);
+	SendMessage(_pPublicInterface->getHSelf(), NPPM_INTERNAL_CHANGETABBAEICONS, 0, NppDarkMode::isEnabled() ? 2 : 0);
+
+	toolBarStatusType state = _toolBar.getState();
+	switch (state)
+	{
+	case TB_SMALL:
+		_toolBar.reduce();
+		break;
+
+	case TB_LARGE:
+		_toolBar.enlarge();
+		break;
+
+	case TB_STANDARD:
+		// Force standard colorful icon to Fluent UI small icon in dark mode
+		if (NppDarkMode::isEnabled())
+			_toolBar.reduce();
+		break;
+	}
+
+
+	NppParameters& nppParams = NppParameters::getInstance();
+	ThemeSwitcher & themeSwitcher = nppParams.getThemeSwitcher();
+	generic_string themePath;
+	generic_string themeName;
+	const TCHAR darkModeXmlFileName[] = TEXT("DarkModeDefault.xml");
+	if (NppDarkMode::isEnabled())
+	{
+		themePath = themeSwitcher.getThemeDirPath();
+		PathAppendCompat(themePath, darkModeXmlFileName);
+
+		themeName = themeSwitcher.getThemeFromXmlFileName(themePath.c_str());
+	}
+	else
+	{
+		//use _stylerPath;
+
+		pair<generic_string, generic_string> & themeInfo = themeSwitcher.getElementFromIndex(0);
+		themePath = themeInfo.second;
+		themeName = themeSwitcher.getDefaultThemeLabel();
+	}
+
+	if (::PathFileExists(themePath.c_str()))
+	{
+		((NppGUI*)&nppParams.getNppGUI())->_themeName = (TCHAR*)themePath.c_str();
+
+		if (_configStyleDlg.isCreated())
+		{
+			_configStyleDlg.selectThemeByName((TCHAR*)themeName.c_str());
+		}
+		else
+		{
+			nppParams.reloadStylers((TCHAR*)themePath.c_str());
+			::SendMessage(_pPublicInterface->getHSelf(), WM_UPDATESCINTILLAS, 0, 0);
+		}
+	}
+
+	if (NppDarkMode::isExperimentalSupported())
+	{
+		RECT rcClient;
+
+		GetWindowRect(_pPublicInterface->getHSelf(), &rcClient);
+
+		// Inform application of the frame change.
+		SetWindowPos(_pPublicInterface->getHSelf(),
+			NULL,
+			rcClient.left, rcClient.top,
+			rcClient.right - rcClient.left, rcClient.bottom - rcClient.top,
+			SWP_FRAMECHANGED);
+
+		GetWindowRect(_findReplaceDlg.getHSelf(), &rcClient);
+
+		// Inform application of the frame change.
+		SetWindowPos(_findReplaceDlg.getHSelf(),
+			NULL,
+			rcClient.left, rcClient.top,
+			rcClient.right - rcClient.left, rcClient.bottom - rcClient.top,
+			SWP_FRAMECHANGED);
+	}
 }

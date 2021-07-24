@@ -184,6 +184,7 @@ static const WinMenuKeyDefinition winKeyDefs[] =
 	{ VK_NULL,    IDM_EDIT_SEARCHONINTERNET,                    false, false, false, nullptr },
 	{ VK_NULL,    IDM_EDIT_CHANGESEARCHENGINE,                  false, false, false, nullptr },
 //  { VK_NULL,    IDM_EDIT_COLUMNMODETIP,                       false, false, false, nullptr },
+	{ VK_NULL,    IDM_EDIT_COLUMNMODIDEA,                    false, false, false, nullptr },
 	{ VK_C,       IDM_EDIT_COLUMNMODE,                          false, true,  false, nullptr },
 	{ VK_NULL,    IDM_EDIT_CHAR_PANEL,                          false, false, false, nullptr },
 	{ VK_NULL,    IDM_EDIT_CLIPBOARDHISTORY_PANEL,              false, false, false, nullptr },
@@ -316,6 +317,7 @@ static const WinMenuKeyDefinition winKeyDefs[] =
 	{ VK_7,       IDM_VIEW_UNFOLD_7,                            false, true,  true,  nullptr },
 	{ VK_8,       IDM_VIEW_UNFOLD_8,                            false, true,  true,  nullptr },
 	{ VK_NULL,    IDM_VIEW_SUMMARY,                             false, false, false, nullptr },
+	{ VK_NULL,    IDM_VIEW_SWOGGLE,                             false, false, false, nullptr },
 	{ VK_NULL,    IDM_VIEW_PROJECT_PANEL_1,                     false, false, false, nullptr },
 	{ VK_NULL,    IDM_VIEW_PROJECT_PANEL_2,                     false, false, false, nullptr },
 	{ VK_NULL,    IDM_VIEW_PROJECT_PANEL_3,                     false, false, false, nullptr },
@@ -429,9 +431,16 @@ static const WinMenuKeyDefinition winKeyDefs[] =
 	{ VK_S,       IDM_SETTING,                                  true,  false, true,  nullptr },
 	{ VK_W,       IDM_DUMMY1,                                  true,  false, true,  nullptr },
 	{ VK_F4,      IDM_DUMMY2,                                  false,  true, true,  nullptr },
-	{ VK_NULL,       IDM_DUMMY3,                                 false,  false, false,  nullptr },
-	{ VK_NULL,       IDM_DUMMY4,                                 false,  false, false,  nullptr },
+	{ VK_X,       IDM_DUMMY3,                                 false,  true, false,  nullptr },
+	{ VK_X,       IDM_DUMMY4,                                 false,  true, true,  nullptr },
 	{ VK_NULL,       IDM_DUMMY5,                                 false,  false, false,  nullptr },
+	{ VK_NULL,       IDM_DUMMY6,                                 false,  false, false,  nullptr },
+	{ VK_NULL,       IDM_DUMMY7,                                 false,  false, false,  nullptr },
+	{ VK_NULL,       IDM_DUMMY8,                                 false,  false, false,  nullptr },
+	{ VK_NULL,       IDM_DUMMY9,                                 false,  false, false,  nullptr },
+	{ VK_NULL,       IDM_DUMMY10,                                 false,  false, false,  nullptr },
+	{ VK_NULL,       IDM_DUMMY11,                                 false,  false, false,  nullptr },
+	{ VK_NULL,       IDM_DUMMY12,                                 false,  false, false,  nullptr },
 };
 
 
@@ -937,14 +946,14 @@ bool NppParameters::reloadStylers(TCHAR* stylePath)
 	{
 		if (!_pNativeLangSpeaker)
 		{
-			::MessageBox(NULL, stylePathToLoad, TEXT("Load stylers.xml failed"), MB_OK);
+			::MessageBox(NULL, stylePathToLoad, TEXT("加载stylers.xml失败"), MB_OK);
 		}
 		else
 		{
 			_pNativeLangSpeaker->messageBox("LoadStylersFailed",
 				NULL,
-				TEXT("Load \"$STR_REPLACE$\" failed!"),
-				TEXT("Load stylers.xml failed"),
+				TEXT("加载“$STR_REPLACE$”失败！"),
+				TEXT("加载stylers.xml失败"),
 				MB_OK,
 				0,
 				stylePathToLoad);
@@ -1186,13 +1195,13 @@ bool NppParameters::load()
 				{
 					doRecover = _pNativeLangSpeaker->messageBox("LoadLangsFailed",
 						NULL,
-						TEXT("Load langs.xml failed!\rDo you want to recover your langs.xml?"),
-						TEXT("Configurator"),
+						TEXT("加载langs.xml失败！\r您是否要恢复您的langs.xml？"),
+						TEXT("配置"),
 						MB_YESNO);
 				}
 				else
 				{
-					doRecover = ::MessageBox(NULL, TEXT("Load langs.xml failed!\rDo you want to recover your langs.xml?"), TEXT("Configurator"), MB_YESNO);
+					doRecover = ::MessageBox(NULL, TEXT("加载langs.xml失败！\r您是否要恢复您的langs.xml？"), TEXT("配置"), MB_YESNO);
 				}
 			}
 		}
@@ -1217,13 +1226,13 @@ bool NppParameters::load()
 		{
 			_pNativeLangSpeaker->messageBox("LoadLangsFailedFinal",
 				NULL,
-				TEXT("Load langs.xml failed!"),
-				TEXT("Configurator"),
+				TEXT("加载 langs.xml 失败！"),
+				TEXT("配置"),
 				MB_OK);
 		}
 		else
 		{
-			::MessageBox(NULL, TEXT("Load langs.xml failed!"), TEXT("Configurator"), MB_OK);
+			::MessageBox(NULL, TEXT("加载 langs.xml 失败！"), TEXT("配置"), MB_OK);
 		}
 
 		delete _pXmlDoc;
@@ -1285,15 +1294,15 @@ bool NppParameters::load()
 		{
 			_pNativeLangSpeaker->messageBox("LoadStylersFailed",
 				NULL,
-				TEXT("Load \"$STR_REPLACE$\" failed!"),
-				TEXT("Load stylers.xml failed"),
+				TEXT("加载“$STR_REPLACE$”失败！"),
+				TEXT("加载stylers.xml失败"),
 				MB_OK,
 				0,
 				_stylerPath.c_str());
 		}
 		else
 		{
-			::MessageBox(NULL, _stylerPath.c_str(), TEXT("Load stylers.xml failed"), MB_OK);
+			::MessageBox(NULL, _stylerPath.c_str(), TEXT("加载stylers.xml失败"), MB_OK);
 		}
 		delete _pXmlUserStylerDoc;
 		_pXmlUserStylerDoc = NULL;
@@ -2601,12 +2610,12 @@ void NppParameters::getActions(TiXmlNode *node, Macro & macro)
 		(childNode->ToElement())->Attribute(TEXT("lParam"), &lParam);
 
 		const TCHAR *sParam = (childNode->ToElement())->Attribute(TEXT("sParam"));
-		if (!sParam)
-			sParam = TEXT("");
-		recordedMacroStep step(msg, wParam, lParam, sParam, type);
+
+		const TCHAR *sPlugin = (childNode->ToElement())->Attribute(TEXT("sPlugin"));
+
+		recordedMacroStep step(msg, wParam, lParam, sParam, sPlugin, type);
 		if (step.isValid())
 			macro.push_back(step);
-
 	}
 }
 
@@ -3194,6 +3203,10 @@ void NppParameters::insertMacro(TiXmlNode *macrosRoot, const MacroShortcut & mac
 		actionNode->ToElement()->SetAttribute(TEXT("wParam"), static_cast<int>(action._wParameter));
 		actionNode->ToElement()->SetAttribute(TEXT("lParam"), static_cast<int>(action._lParameter));
 		actionNode->ToElement()->SetAttribute(TEXT("sParam"), action._sParameter.c_str());
+		if (action._sPluginName.length())
+		{
+			actionNode->ToElement()->SetAttribute(TEXT("sPlugin"), action._sPluginName.c_str());
+		}
 	}
 }
 
@@ -3490,6 +3503,10 @@ void NppParameters::feedUserSettings(TiXmlNode *settingsRoot)
 		boolStr = (globalSettingNode->ToElement())->Attribute(TEXT("foldCompact"));
 		if (boolStr)
 			_userLangArray[_nbUserLang - 1]->_foldCompact = (lstrcmp(TEXT("yes"), boolStr) == 0);
+
+		boolStr = (globalSettingNode->ToElement())->Attribute(TEXT("foldMarkdown"));
+		if (boolStr)
+			_userLangArray[_nbUserLang - 1]->_foldMarkdown = (lstrcmp(TEXT("yes"), boolStr) == 0);
 	}
 
 	TiXmlNode *prefixNode = settingsRoot->FirstChildElement(TEXT("Prefix"));
@@ -4744,14 +4761,25 @@ void NppParameters::feedGUIParameters(TiXmlNode *node)
 
 		else if (!lstrcmp(nm, TEXT("ScintillaGlobalSettings")))
 		{
-			const TCHAR* val = element->Attribute(TEXT("enableMultiSelection"));
-			if (val)
-			{
-				if (lstrcmp(val, TEXT("yes")) == 0)
-					_nppGUI._enableMultiSelection = true;
-				else if (lstrcmp(val, TEXT("no")) == 0)
-					_nppGUI._enableMultiSelection = false;
-			}
+			//const TCHAR* val = element->Attribute(TEXT("enableMultiSelection"));
+			//if (val)
+			//{
+			//	if (lstrcmp(val, TEXT("yes")) == 0)
+			//		_nppGUI._enableMultiSelection = true;
+			//	else if (lstrcmp(val, TEXT("no")) == 0)
+			//		_nppGUI._enableMultiSelection = false;
+			//}
+			watchBooleanField(element, TEXT("enableMultiSelection"), _nppGUI._enableMultiSelection);
+			watchBooleanField(element, TEXT("ideaMultiSel"), _nppGUI._ideaMultiSel);
+
+			//val = element->Attribute(TEXT("ideaMultiSel"));
+			//if (val)
+			//{
+			//	if (lstrcmp(val, TEXT("yes")) == 0)
+			//		_nppGUI._ideaMultiSel = true;
+			//	else if (lstrcmp(val, TEXT("no")) == 0)
+			//		_nppGUI._ideaMultiSel = false;
+			//}
 		}
 
 		else if (!lstrcmp(nm, TEXT("AppPosition")))
@@ -5376,6 +5404,65 @@ void NppParameters::feedGUIParameters(TiXmlNode *node)
 				if (cli && cli[0])
 					_nppGUI._commandLineInterpreter.assign(cli);
 			}
+		}
+		else if (!lstrcmp(nm, TEXT("DarkMode")))
+		{
+			auto parseYesNoBoolAttribute = [&element](const TCHAR* name, bool defaultValue = false)->bool {
+				const TCHAR* val = element->Attribute(name);
+				if (val)
+				{
+					if (!lstrcmp(val, TEXT("yes")))
+						return true;
+					else if (!lstrcmp(val, TEXT("no")))
+						return false;
+				}
+				return defaultValue;
+			};
+
+			_nppGUI._darkmode._isEnabled = parseYesNoBoolAttribute(TEXT("enable"));
+
+			int i;
+			const TCHAR* val;
+			val = element->Attribute(TEXT("colorTone"), &i);
+			if (val)
+				_nppGUI._darkmode._colorTone = static_cast<NppDarkMode::ColorTone>(i);
+
+
+			val = element->Attribute(TEXT("customColorTop"), &i);
+			if (val)
+				_nppGUI._darkmode._customColors.pureBackground = i;
+
+			val = element->Attribute(TEXT("customColorMenuHotTrack"), &i);
+			if (val)
+				_nppGUI._darkmode._customColors.hotBackground = i;
+
+			val = element->Attribute(TEXT("customColorActive"), &i);
+			if (val)
+				_nppGUI._darkmode._customColors.softerBackground = i;
+
+			val = element->Attribute(TEXT("customColorMain"), &i);
+			if (val)
+				_nppGUI._darkmode._customColors.background = i;
+
+			val = element->Attribute(TEXT("customColorError"), &i);
+			if (val)
+				_nppGUI._darkmode._customColors.errorBackground = i;
+
+			val = element->Attribute(TEXT("customColorText"), &i);
+			if (val)
+				_nppGUI._darkmode._customColors.text = i;
+
+			val = element->Attribute(TEXT("customColorDarkText"), &i);
+			if (val)
+				_nppGUI._darkmode._customColors.darkerText = i;
+
+			val = element->Attribute(TEXT("customColorDisabledText"), &i);
+			if (val)
+				_nppGUI._darkmode._customColors.disabledText = i;
+
+			val = element->Attribute(TEXT("customColorEdge"), &i);
+			if (val)
+				_nppGUI._darkmode._customColors.edge = i;
 		}
 	}
 
@@ -6111,11 +6198,12 @@ void NppParameters::createXmlTreeFromGUIParams()
 		GUIConfigElement->SetAttribute(TEXT("blinkRate"), _nppGUI._caretBlinkRate);
 	}
 
-	// <GUIConfig name="ScintillaGlobalSettings" enableMultiSelection="no" />
+	// <GUIConfig name="ScintillaGlobalSettings" enableMultiSelection="no" ideaMultiSel="no"/>
 	{
 		TiXmlElement *GUIConfigElement = (newGUIRoot->InsertEndChild(TiXmlElement(TEXT("GUIConfig"))))->ToElement();
 		GUIConfigElement->SetAttribute(TEXT("name"), TEXT("ScintillaGlobalSettings"));
 		GUIConfigElement->SetAttribute(TEXT("enableMultiSelection"), _nppGUI._enableMultiSelection ? TEXT("yes") : TEXT("no"));
+		GUIConfigElement->SetAttribute(TEXT("ideaMultiSel"), _nppGUI._ideaMultiSel ? TEXT("yes") : TEXT("no"));
 	}
 
 	// <GUIConfig name="openSaveDir" value="0" defaultDirPath="" />
@@ -6205,7 +6293,9 @@ void NppParameters::createXmlTreeFromGUIParams()
 		{
 			iconNode = nppRoot->InsertEndChild(TiXmlElement(TEXT("Icons")));
 		}
-		(iconNode->ToElement())->SetAttribute(TEXT("Items"), nppApp->DumpToolbarButtons());
+		generic_string customtoolbar_buildup;
+		nppApp->DumpToolbarButtons(customtoolbar_buildup);
+		(iconNode->ToElement())->SetAttribute(TEXT("Items"), customtoolbar_buildup);
 		(iconNode->ToElement())->SetAttribute(TEXT("Wrap"), nppApp->_toolBar.wrap?_T("yes"):_T("no"));
 	}
 
@@ -6245,6 +6335,30 @@ void NppParameters::createXmlTreeFromGUIParams()
 		TiXmlElement *GUIConfigElement = (newGUIRoot->InsertEndChild(TiXmlElement(TEXT("GUIConfig"))))->ToElement();
 		GUIConfigElement->SetAttribute(TEXT("name"), TEXT("commandLineInterpreter"));
 		GUIConfigElement->InsertEndChild(TiXmlText(_nppGUI._commandLineInterpreter.c_str()));
+	}
+
+	// <GUIConfig name="DarkMode" enable="no" colorTone="0" />
+	{
+		TiXmlElement* GUIConfigElement = (newGUIRoot->InsertEndChild(TiXmlElement(TEXT("GUIConfig"))))->ToElement();
+		GUIConfigElement->SetAttribute(TEXT("name"), TEXT("DarkMode"));
+
+		auto setYesNoBoolAttribute = [&GUIConfigElement](const TCHAR* name, bool value) {
+			const TCHAR* pStr = value ? TEXT("yes") : TEXT("no");
+			GUIConfigElement->SetAttribute(name, pStr);
+		};
+
+		setYesNoBoolAttribute(TEXT("enable"), _nppGUI._darkmode._isEnabled);
+		GUIConfigElement->SetAttribute(TEXT("colorTone"), _nppGUI._darkmode._colorTone);
+
+		GUIConfigElement->SetAttribute(TEXT("customColorTop"), _nppGUI._darkmode._customColors.pureBackground);
+		GUIConfigElement->SetAttribute(TEXT("customColorMenuHotTrack"), _nppGUI._darkmode._customColors.hotBackground);
+		GUIConfigElement->SetAttribute(TEXT("customColorActive"), _nppGUI._darkmode._customColors.softerBackground);
+		GUIConfigElement->SetAttribute(TEXT("customColorMain"), _nppGUI._darkmode._customColors.background);
+		GUIConfigElement->SetAttribute(TEXT("customColorError"), _nppGUI._darkmode._customColors.errorBackground);
+		GUIConfigElement->SetAttribute(TEXT("customColorText"), _nppGUI._darkmode._customColors.text);
+		GUIConfigElement->SetAttribute(TEXT("customColorDarkText"), _nppGUI._darkmode._customColors.darkerText);
+		GUIConfigElement->SetAttribute(TEXT("customColorDisabledText"), _nppGUI._darkmode._customColors.disabledText);
+		GUIConfigElement->SetAttribute(TEXT("customColorEdge"), _nppGUI._darkmode._customColors.edge);
 	}
 
 	// <GUIConfig name="ScintillaPrimaryView" lineNumberMargin="show" bookMarkMargin="show" indentGuideLine="show" folderMarkStyle="box" lineWrapMethod="aligned" currentLineHilitingShow="show" scrollBeyondLastLine="no" rightClickKeepsSelection="no" disableAdvancedScrolling="no" wrapSymbolShow="hide" Wrap="no" borderEdge="yes" edge="no" edgeNbColumn="80" zoom="0" zoom2="0" whiteSpaceShow="hide" eolShow="hide" borderWidth="2" smoothFont="no" />
@@ -6752,6 +6866,8 @@ int NppParameters::langTypeToCommandID(LangType lt) const
 		case L_TEXT :
 			id = IDM_LANG_TEXT;	break;
 
+		case L_MARKDOWN :
+			id = IDM_LANG_MARKDOWN; break;
 
 		default :
 			if (lt >= L_EXTERNAL && lt < L_END)
@@ -6800,7 +6916,7 @@ generic_string NppParameters::getWinVerBitStr() const
 	}
 }
 
-void NppParameters::writeStyles(LexerStylerArray & lexersStylers, StyleArray & globalStylers)
+generic_string NppParameters::writeStyles(LexerStylerArray & lexersStylers, StyleArray & globalStylers)
 {
 	TiXmlNode *lexersRoot = (_pXmlUserStylerDoc->FirstChild(TEXT("NotepadPlus")))->FirstChildElement(TEXT("LexerStyles"));
 	for (TiXmlNode *childNode = lexersRoot->FirstChildElement(TEXT("LexerType"));
@@ -6894,7 +7010,17 @@ void NppParameters::writeStyles(LexerStylerArray & lexersStylers, StyleArray & g
 		}
 	}
 
-	_pXmlUserStylerDoc->SaveFile();
+	bool isSaved = _pXmlUserStylerDoc->SaveFile();
+	if (!isSaved)
+	{
+		auto savePath = _themeSwitcher.getSavePathFrom(_pXmlUserStylerDoc->Value());
+		if (!savePath.empty())
+		{
+			_pXmlUserStylerDoc->SaveFile(savePath.c_str());
+			return savePath;
+		}
+	}
+	return TEXT("");
 }
 
 
@@ -6996,6 +7122,7 @@ void NppParameters::insertUserLang2Tree(TiXmlNode *node, UserLangContainer *user
 		globalElement->SetAttribute(TEXT("caseIgnored"),			userLang->_isCaseIgnored ? TEXT("yes"):TEXT("no"));
 		globalElement->SetAttribute(TEXT("allowFoldOfComments"),	userLang->_allowFoldOfComments ? TEXT("yes"):TEXT("no"));
 		globalElement->SetAttribute(TEXT("foldCompact"),			userLang->_foldCompact ? TEXT("yes"):TEXT("no"));
+		globalElement->SetAttribute(TEXT("foldMarkdown"),			userLang->_foldMarkdown ? TEXT("yes"):TEXT("no"));
 		globalElement->SetAttribute(TEXT("forcePureLC"),			userLang->_forcePureLC);
 		globalElement->SetAttribute(TEXT("decimalSeparator"),	   userLang->_decimalSeparator);
 
@@ -7256,6 +7383,17 @@ void NppParameters::setUdlXmlDirtyFromXmlDoc(const TiXmlDocument* xmlDoc)
 			return;
 		}
 	}
+}
+
+HFONT NppParameters::getDefaultUIFont()
+{
+	static HFONT g_defaultMessageFont = []() {
+		NONCLIENTMETRICS ncm = { sizeof(ncm) };
+		SystemParametersInfo(SPI_GETNONCLIENTMETRICS, sizeof(ncm), &ncm, 0);
+
+		return CreateFontIndirect(&ncm.lfMessageFont);
+	}();
+	return g_defaultMessageFont;
 }
 
 Date::Date(const TCHAR *dateStr)
