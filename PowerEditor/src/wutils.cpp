@@ -25,7 +25,7 @@ void fetchFontStack(HWND h) {
 
 BOOL CALLBACK SetChildFont(HWND hwndChild, LPARAM lParam)
 {
-	SendMessage(hwndChild, WM_SETFONT, lParam, TRUE);
+	SendMessage(hwndChild, WM_SETFONT, lParam, FALSE);
 	return 1;
 }
 

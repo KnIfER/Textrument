@@ -242,9 +242,7 @@ friend class NativeLangSpeaker;
 public :
 	PreferenceDlg() = default;
 
-    void init(HINSTANCE hInst, HWND parent)	{
-        Window::init(hInst, parent);
-	};
+    void init(HINSTANCE hInst, HWND parent);
 
 	void NotifyReturnPressed();
 
@@ -252,14 +250,8 @@ public :
 
 	void buildDropFilters(std::vector<generic_string> & pattern);
 
-    void doDialog(bool isRTL = false) {
-    	if (!isCreated())
-		{
-			create(IDD_PREFERENCE_BOX, isRTL);
-			goToCenter();
-		}
-	    display();
-    };
+    void doDialog(bool isRTL = false);
+
 	bool renameDialogTitle(const TCHAR *internalName, const TCHAR *newName);
 	
 	int getListSelectedIndex() const {

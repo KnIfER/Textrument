@@ -88,7 +88,8 @@ extern Notepad_plus* nppApp;
 bool CreateFonts(bool init) {
 	if(hFontSubPanel==0) {
 		bool bigFonts = nppUIParms->_useBigFonts;
-		if(init && !bigFonts) {
+		if(init && !bigFonts) 
+		{
 			return false;
 		}
 		hFontSubPanel = CreateFontIndirectly(bigFonts?-19:-16, fontReUsable);
@@ -155,27 +156,27 @@ INT_PTR CALLBACK PreferenceDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM 
 		case WM_INITDIALOG :
 		{
 			_preferenceDlg = this;
-			_wVector.push_back(DlgInfo(&_barsDlg, TEXT("General"), TEXT("Global"), IDD_PREFERENCE_BAR_BOX));
-			_wVector.push_back(DlgInfo(&_marginsDlg, TEXT("Editing"), TEXT("Scintillas"), IDD_PREFERENCE_MARGEIN_BOX));
-			_wVector.push_back(DlgInfo(&_defaultNewDocDlg, TEXT("New Document"), TEXT("NewDoc"), IDD_PREFERENCE_NEWDOCSETTING_BOX));
-			_wVector.push_back(DlgInfo(&_defaultDirectoryDlg, TEXT("Directory"), TEXT("DefaultDir"), IDD_PREFERENCE_DEFAULTDIRECTORY_BOX));
-			_wVector.push_back(DlgInfo(&_recentFilesHistoryDlg, TEXT("Recent Files History"), TEXT("RecentFilesHistory"), IDD_PREFERENCE_RECENTFILESHISTORY_BOX));
-			_wVector.push_back(DlgInfo(&_fileAssocDlg, TEXT("File Association"), TEXT("FileAssoc"), IDD_REGEXT_BOX));
-			_wVector.push_back(DlgInfo(&_langMenuDlg, TEXT("Language"), TEXT("Language"), IDD_PREFERENCE_LANG_BOX));
-			_wVector.push_back(DlgInfo(&_highlighting, TEXT("Highlighting"), TEXT("Highlighting"), IDD_PREFERENCE_HILITE_BOX));
-			_wVector.push_back(DlgInfo(&_printSettingsDlg, TEXT("Print"), TEXT("Print"), IDD_PREFERENCE_PRINT_BOX));
-			_wVector.push_back(DlgInfo(&_searchingSettingsDlg, TEXT("Searching"), TEXT("Searching"), IDD_PREFERENCE_SEARCHINGSETTINGS_BOX));
-			_wVector.push_back(DlgInfo(&_backupDlg, TEXT("Backup"), TEXT("Backup"), IDD_PREFERENCE_BACKUP_BOX));
-			_wVector.push_back(DlgInfo(&_autoCompletionDlg, TEXT("Auto-Completion"), TEXT("AutoCompletion"), IDD_PREFERENCE_AUTOCOMPLETION_BOX));
-			_wVector.push_back(DlgInfo(&_multiInstDlg, TEXT("Multi-Instance"), TEXT("MultiInstance"), IDD_PREFERENCE_MULTIINSTANCE_BOX));
-			_wVector.push_back(DlgInfo(&_delimiterSettingsDlg, TEXT("Delimiter"), TEXT("Delimiter"), IDD_PREFERENCE_DELIMITERSETTINGS_BOX));
-			_wVector.push_back(DlgInfo(&_settingsOnCloudDlg, TEXT("Cloud"), TEXT("Cloud"), IDD_PREFERENCE_SETTINGSONCLOUD_BOX));
-			_wVector.push_back(DlgInfo(&_searchEngineDlg, TEXT("Search Engine"), TEXT("SearchEngine"), IDD_PREFERENCE_SEARCHENGINE_BOX));
-			_wVector.push_back(DlgInfo(&_settingsDlg, TEXT("MISC."), TEXT("MISC"), IDD_PREFERENCE_SETTING_BOX));
+			_wVector.push_back(DlgInfo(&_barsDlg, TEXT("常用"), TEXT("Global"), IDD_PREFERENCE_BAR_BOX));
+			_wVector.push_back(DlgInfo(&_marginsDlg, TEXT("编辑"), TEXT("Scintillas"), IDD_PREFERENCE_MARGEIN_BOX));
+			_wVector.push_back(DlgInfo(&_defaultNewDocDlg, TEXT("新建"), TEXT("NewDoc"), IDD_PREFERENCE_NEWDOCSETTING_BOX));
+			_wVector.push_back(DlgInfo(&_defaultDirectoryDlg, TEXT("目录"), TEXT("DefaultDir"), IDD_PREFERENCE_DEFAULTDIRECTORY_BOX));
+			_wVector.push_back(DlgInfo(&_recentFilesHistoryDlg, TEXT("最近文件记录"), TEXT("RecentFilesHistory"), IDD_PREFERENCE_RECENTFILESHISTORY_BOX));
+			_wVector.push_back(DlgInfo(&_fileAssocDlg, TEXT("文件关联"), TEXT("FileAssoc"), IDD_REGEXT_BOX));
+			_wVector.push_back(DlgInfo(&_langMenuDlg, TEXT("代码语言"), TEXT("Language"), IDD_PREFERENCE_LANG_BOX));
+			_wVector.push_back(DlgInfo(&_highlighting, TEXT("高亮"), TEXT("Highlighting"), IDD_PREFERENCE_HILITE_BOX));
+			_wVector.push_back(DlgInfo(&_printSettingsDlg, TEXT("打印"), TEXT("Print"), IDD_PREFERENCE_PRINT_BOX));
+			_wVector.push_back(DlgInfo(&_searchingSettingsDlg, TEXT("搜索"), TEXT("Searching"), IDD_PREFERENCE_SEARCHINGSETTINGS_BOX));
+			_wVector.push_back(DlgInfo(&_backupDlg, TEXT("备份"), TEXT("Backup"), IDD_PREFERENCE_BACKUP_BOX));
+			_wVector.push_back(DlgInfo(&_autoCompletionDlg, TEXT("自动完成"), TEXT("AutoCompletion"), IDD_PREFERENCE_AUTOCOMPLETION_BOX));
+			_wVector.push_back(DlgInfo(&_multiInstDlg, TEXT("多实例"), TEXT("MultiInstance"), IDD_PREFERENCE_MULTIINSTANCE_BOX));
+			_wVector.push_back(DlgInfo(&_delimiterSettingsDlg, TEXT("定界符"), TEXT("Delimiter"), IDD_PREFERENCE_DELIMITERSETTINGS_BOX));
+			_wVector.push_back(DlgInfo(&_settingsOnCloudDlg, TEXT("云同步"), TEXT("Cloud"), IDD_PREFERENCE_SETTINGSONCLOUD_BOX));
+			_wVector.push_back(DlgInfo(&_searchEngineDlg, TEXT("搜索引擎"), TEXT("SearchEngine"), IDD_PREFERENCE_SEARCHENGINE_BOX));
+			_wVector.push_back(DlgInfo(&_settingsDlg, TEXT("其他"), TEXT("MISC"), IDD_PREFERENCE_SETTING_BOX));
 
-			if(CreateFonts(true)) {
-				setWindowFont(_hSelf, hFontCategory);
-			}
+			//if(CreateFonts(true)) {
+			//	setWindowFont(_hSelf, hFontCategory);
+			//}
 
 			getClientRect(rSubPanel);
 			rSubPanel.top += nppParms->_dpiManager.scaleY(10);
@@ -1437,6 +1438,24 @@ INT_PTR CALLBACK DefaultNewDocDlg::run_dlgProc(UINT message, WPARAM wParam, LPAR
 }
 
 LONG_PTR DefaultDirectoryDlg::originalComboEditProc = NULL;
+
+void PreferenceDlg::init(HINSTANCE hInst, HWND parent)
+{
+	Window::init(hInst, parent);
+}
+
+void PreferenceDlg::doDialog(bool isRTL)
+{
+	if (!isCreated())
+	{
+		create(IDD_PREFERENCE_BOX, isRTL);
+		if(CreateFonts(true)) {
+			setWindowFont(_hSelf, hFontCategory);
+		}
+		goToCenter();
+	}
+	display();
+}
 
 void PreferenceDlg::NotifyReturnPressed(){
 	if(currentSettingsIndex==3) {
