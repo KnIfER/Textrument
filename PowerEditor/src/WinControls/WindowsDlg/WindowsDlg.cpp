@@ -874,7 +874,7 @@ void WindowsDlg::doClose()
 void WindowsDlg::doCount()
 {
 	NativeLangSpeaker* pNativeSpeaker = (NppParameters::getInstance()).getNativeLangSpeaker();
-	generic_string msg = pNativeSpeaker->getAttrNameStr(TEXT("Windows"), "Dialog", "Window", "title");
+	generic_string msg = pNativeSpeaker->getAttrNameStr(TEXT("窗口"), "Dialog", "Window", "title");
 	msg += TEXT(" [ ");
 	msg += to_wstring(_idxMap.size());
 	msg += TEXT(" ] ");

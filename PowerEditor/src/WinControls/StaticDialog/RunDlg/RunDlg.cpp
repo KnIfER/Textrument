@@ -307,11 +307,11 @@ INT_PTR CALLBACK RunDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam)
 							NativeLangSpeaker *pNativeLangSpeaker = nppParams.getNativeLangSpeaker();
 							auto nativeLangShortcutMapperMacro = pNativeLangSpeaker->getNativeLangMenuString(IDM_SETTING_EDITCONTEXTMENU);
 							if (!nativeLangShortcutMapperMacro)
-								nativeLangShortcutMapperMacro = (TCHAR*)TEXT("Edit Popup ContextMenu");
+								nativeLangShortcutMapperMacro = (TCHAR*)TEXT("编辑弹出菜单");
 							::InsertMenu(hRunMenu, posBase + nbCmd + 2, MF_BYCOMMAND, IDM_SETTING_EDITCONTEXTMENU, nativeLangShortcutMapperMacro);
 							nativeLangShortcutMapperMacro = pNativeLangSpeaker->getNativeLangMenuString(IDM_SETTING_SHORTCUT_MAPPER_MACRO);
 							if (!nativeLangShortcutMapperMacro)
-								nativeLangShortcutMapperMacro = (TCHAR*)TEXT("Modify Shortcut/Delete Command...");
+								nativeLangShortcutMapperMacro = (TCHAR*)TEXT("管理快捷键...");
 							::InsertMenu(hRunMenu, posBase + nbCmd + 3, MF_BYCOMMAND, IDM_SETTING_SHORTCUT_MAPPER_RUN, nativeLangShortcutMapperMacro);
                         }
 						nppParams.getAccelerator()->updateShortcuts();
