@@ -388,6 +388,8 @@ void TabBarPlus::init(HINSTANCE hInst, HWND parent, bool isVertical, bool isMult
 			throw std::runtime_error("TabBarPlus::init : tooltip CreateWindowEx() function return null");
 		}
 
+		NppDarkMode::setDarkTooltips(_tooltips, NppDarkMode::ToolTipsType::tooltip);
+
 		::SendMessage(_hSelf, TCM_SETTOOLTIPS, reinterpret_cast<WPARAM>(_tooltips), 0);
 	}
 
@@ -555,6 +557,12 @@ LRESULT TabBarPlus::runProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lPara
 			::SetWindowLongPtr(hwnd, GWL_STYLE, style);
 			::InvalidateRect(hwnd, NULL, TRUE);
 
+			return TRUE;
+		}
+
+		case NPPM_INTERNAL_REFRESHDARKMODE:
+		{
+			NppDarkMode::setDarkTooltips(hwnd, NppDarkMode::ToolTipsType::tabbar);
 			return TRUE;
 		}
 
@@ -1002,13 +1010,131 @@ LRESULT TabBarPlus::runProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lPara
 			}
 			return TRUE;
 		}
+		
+		case WM_ERASEBKGND:
+		{
+			if (!NppDarkMode::isEnabled())
+			{
+				break;
+			}
+
+			RECT rc = { 0 };
+			GetClientRect(hwnd, &rc);
+			FillRect((HDC)wParam, &rc, NppDarkMode::getDarkerBackgroundBrush());
+
+			return 1;
+		}
+
+		case WM_PAINT:
+		{
+			if (!NppDarkMode::isEnabled())
+			{
+				break;
+			}
+
+			LONG_PTR dwStyle = GetWindowLongPtr(hwnd, GWL_STYLE);
+			if (!(dwStyle & TCS_OWNERDRAWFIXED))
+			{
+				break;
+			}
+
+			PAINTSTRUCT ps;
+			HDC hdc = BeginPaint(hwnd, &ps);
+			FillRect(hdc, &ps.rcPaint, NppDarkMode::getDarkerBackgroundBrush());
+
+			UINT id = ::GetDlgCtrlID(hwnd);
+
+			auto holdPen = static_cast<HPEN>(::SelectObject(hdc, NppDarkMode::getEdgePen()));
+
+			HRGN holdClip = CreateRectRgn(0, 0, 0, 0);
+			if (1 != GetClipRgn(hdc, holdClip))
+			{
+				DeleteObject(holdClip);
+				holdClip = nullptr;
+			}
+
+			int topBarHeight = NppParameters::getInstance()._dpiManager.scaleX(4);
+
+			int nTabs = TabCtrl_GetItemCount(hwnd);
+			int nFocusTab = TabCtrl_GetCurFocus(hwnd);
+			int nSelTab = TabCtrl_GetCurSel(hwnd);
+			for (int i = 0; i < nTabs; ++i)
+			{
+				DRAWITEMSTRUCT dis = { ODT_TAB, id, (UINT)i, ODA_DRAWENTIRE, ODS_DEFAULT, hwnd, hdc };
+				TabCtrl_GetItemRect(hwnd, i, &dis.rcItem);
+
+				if (i == nFocusTab)
+				{
+					dis.itemState |= ODS_FOCUS;
+				}
+				if (i == nSelTab)
+				{
+					dis.itemState |= ODS_SELECTED;
+				}
+
+				dis.itemState |= ODS_NOFOCUSRECT; // maybe, does it handle it already?
+
+				RECT rcIntersect = { 0 };
+				if (IntersectRect(&rcIntersect, &ps.rcPaint, &dis.rcItem))
+				{
+					if (dwStyle & TCS_VERTICAL)
+					{
+						POINT edges[] = {
+							{dis.rcItem.left, dis.rcItem.bottom - 1},
+							{dis.rcItem.right, dis.rcItem.bottom - 1}
+						};
+						if (i != nSelTab && (i != nSelTab - 1))
+						{
+							edges[0].x += topBarHeight;
+						}
+						Polyline(hdc, edges, _countof(edges));
+						dis.rcItem.bottom -= 1;
+					}
+					else
+					{
+						POINT edges[] = {
+							{dis.rcItem.right - 1, dis.rcItem.top},
+							{dis.rcItem.right - 1, dis.rcItem.bottom}
+						};
+						if (i != nSelTab && (i != nSelTab - 1))
+						{
+							edges[0].y += topBarHeight;
+						}
+						Polyline(hdc, edges, _countof(edges));
+						dis.rcItem.right -= 1;
+					}
+
+					HRGN hClip = CreateRectRgnIndirect(&dis.rcItem);
+
+					SelectClipRgn(hdc, hClip);
+
+					drawItem(&dis, true);
+
+					DeleteObject(hClip);
+
+					SelectClipRgn(hdc, holdClip);
+				}
+			}
+
+			SelectClipRgn(hdc, holdClip);
+			if (holdClip)
+			{
+				DeleteObject(holdClip);
+				holdClip = nullptr;
+			}
+
+			SelectObject(hdc, holdPen);
+
+			EndPaint(hwnd, &ps);
+			return 0;
+		}
 	}
 
 	return ::CallWindowProc(_tabBarDefaultProc, hwnd, Message, wParam, lParam);
 }
 
 
-void TabBarPlus::drawItem(DRAWITEMSTRUCT *pDrawItemStruct)
+void TabBarPlus::drawItem(DRAWITEMSTRUCT *pDrawItemStruct, bool isDarkMode)
 {
 	RECT rect = pDrawItemStruct->rcItem;
 	int top = rect.top;
@@ -1039,7 +1165,7 @@ void TabBarPlus::drawItem(DRAWITEMSTRUCT *pDrawItemStruct)
 	int nSavedDC = ::SaveDC(hDC);
 
 	::SetBkMode(hDC, TRANSPARENT);
-	HBRUSH hBrush = ::CreateSolidBrush(::GetSysColor(COLOR_BTNFACE));
+	HBRUSH hBrush = ::CreateSolidBrush(!isDarkMode ? ::GetSysColor(COLOR_BTNFACE) : NppDarkMode::getBackgroundColor());
 	::FillRect(hDC, &rect, hBrush);
 	::DeleteObject((HGDIOBJ)hBrush);
 
@@ -1056,7 +1182,7 @@ void TabBarPlus::drawItem(DRAWITEMSTRUCT *pDrawItemStruct)
 		paddingDynamicTwoY = 0;
 	}
 
-	if (isSelected&&rowCount<=1)
+	if (isSelected&&rowCount<=1 && !isDarkMode)
 	{
 		// the drawing area of the active tab extends on all borders by default
 		rect.top += ::GetSystemMetrics(SM_CYEDGE);
@@ -1115,6 +1241,10 @@ void TabBarPlus::drawItem(DRAWITEMSTRUCT *pDrawItemStruct)
 	RECT barRect = rect;
 	if (isSelected)
 	{
+		if (isDarkMode)
+		{
+			::FillRect(hDC, &barRect, NppDarkMode::getSofterBackgroundBrush());
+		}
 		if (_drawInactiveTab && _inactiveBgColour==0xffffff)
 		{
 			hBrush = ::CreateSolidBrush(_inactiveBgColour);
@@ -1148,7 +1278,7 @@ void TabBarPlus::drawItem(DRAWITEMSTRUCT *pDrawItemStruct)
 	{
 		if (_drawInactiveTab)
 		{
-			hBrush = ::CreateSolidBrush(_inactiveBgColour);
+			hBrush = ::CreateSolidBrush(!isDarkMode ? _inactiveBgColour : NppDarkMode::getBackgroundColor());
 			::FillRect(hDC, &barRect, hBrush);
 			::DeleteObject((HGDIOBJ)hBrush);
 		}
@@ -1196,11 +1326,11 @@ void TabBarPlus::drawItem(DRAWITEMSTRUCT *pDrawItemStruct)
 		int idCloseImg;
 
 		if (_isCloseHover && (_currentHoverTabItem == nTab) && (_whichCloseClickDown == -1)) // hover
-			idCloseImg = IDR_CLOSETAB_HOVER;
+			idCloseImg = isDarkMode ? IDR_CLOSETAB_HOVER_DM : IDR_CLOSETAB_HOVER;
 		else if (_isCloseHover && (_currentHoverTabItem == nTab) && (_whichCloseClickDown == _currentHoverTabItem)) // pushed
-			idCloseImg = IDR_CLOSETAB_PUSH;
+			idCloseImg = isDarkMode ? IDR_CLOSETAB_PUSH_DM : IDR_CLOSETAB_PUSH;
 		else
-			idCloseImg = isSelected?IDR_CLOSETAB:IDR_CLOSETAB_INACT;
+			idCloseImg = isSelected ? (isDarkMode ? IDR_CLOSETAB_DM : IDR_CLOSETAB) : (isDarkMode ? IDR_CLOSETAB_INACT_DM : IDR_CLOSETAB_INACT);
 
 		HBITMAP hBmp = ::LoadBitmap(_hInst, MAKEINTRESOURCE(idCloseImg));
 		BITMAP bmp;
@@ -1322,7 +1452,13 @@ void TabBarPlus::drawItem(DRAWITEMSTRUCT *pDrawItemStruct)
 		rect.left += spaceUnit;
 	}
 
-	::SetTextColor(hDC, isSelected ? _activeTextColour : _inactiveTextColour);
+	COLORREF textColor = isSelected ? _activeTextColour : _inactiveTextColour;
+	if (isDarkMode)
+	{
+		textColor = NppDarkMode::invertLightnessSofter(textColor);
+	}
+
+	::SetTextColor(hDC, textColor);
 
 	::DrawText(hDC, decodedLabel, lstrlen(decodedLabel), &rect, Flags);
 

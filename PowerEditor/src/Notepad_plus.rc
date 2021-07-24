@@ -328,6 +328,11 @@ IDR_CLOSETAB_HOVER      BITMAP                  "icons/closeTabButton_hover.bmp"
 
 IDR_CLOSETAB_PUSH       BITMAP                  "icons/closeTabButton_push.bmp"
 
+IDR_CLOSETAB_DM                 BITMAP    "icons/darkMode/tabbar/closeTabButton.bmp"
+IDR_CLOSETAB_INACT_DM           BITMAP    "icons/darkMode/tabbar/closeTabButton_inact.bmp"
+IDR_CLOSETAB_HOVER_DM           BITMAP    "icons/darkMode/tabbar/closeTabButton_hover.bmp"
+IDR_CLOSETAB_PUSH_DM            BITMAP    "icons/darkMode/tabbar/closeTabButton_push.bmp"
+
 IDR_DOCMAP              BITMAP                  "icons/docMap.bmp"
 
 IDR_FUNC_LIST           BITMAP                  "icons/functionList.bmp"
