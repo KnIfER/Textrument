@@ -845,6 +845,13 @@ void Notepad_plus::command(int id)
 		case IDM_VIEW_SWOGGLE:
 		{
 			checkMenuItem(IDM_VIEW_SWOGGLE, nppUIParms->_swiggle=!nppUIParms->_swiggle);
+			if (isWindowMessaging==1)
+			{
+				generic_string msg = TEXT("切换至各面板 -");
+				msg += nppUIParms->_swiggle?TEXT(" √"):TEXT("--");
+				LogIs(msg.c_str());
+				// todo schedule vanish
+			}
 		}
 		break;
 
@@ -1464,6 +1471,22 @@ void Notepad_plus::command(int id)
 		}
 		break;
 
+        case IDM_EDIT_COLUMNMODIDEA :
+		{
+			checkMenuItem(id, nppUIParms->_ideaMultiSel=!nppUIParms->_ideaMultiSel);
+			int mode = nppUIParms->_ideaMultiSel?0:SCVS_RECTANGULARSELECTION;
+			_mainEditView.execute(SCI_SETVIRTUALSPACEOPTIONS, mode);
+			_subEditView.execute(SCI_SETVIRTUALSPACEOPTIONS, mode);
+			if (isWindowMessaging==1)
+			{
+				generic_string msg = TEXT("IDEA 列选模式 -");
+				msg += nppUIParms->_ideaMultiSel?TEXT(" √"):TEXT("--");
+				LogIs(msg.c_str());
+				// todo schedule vanish
+			}
+		}
+		break;
+
         case IDM_EDIT_COLUMNMODE :
 		{
 			bool isFirstTime = !_colEditorDlg.isCreated();
@@ -2035,7 +2058,16 @@ void Notepad_plus::command(int id)
 
 		case IDM_VIEW_POSTIT :
 		{
-			postItToggle();
+			if (!_beforeSpecialView._isDistractionFree)
+				postItToggle();
+		}
+		break;
+
+		case IDM_VIEW_DISTRACTIONFREE:
+		{
+			if ((_beforeSpecialView._isDistractionFree && _beforeSpecialView._isFullScreen && _beforeSpecialView._isPostIt) ||
+				(!_beforeSpecialView._isDistractionFree && !_beforeSpecialView._isFullScreen && !_beforeSpecialView._isPostIt))
+				distractionFreeToggle();
 		}
 		break;
 
@@ -3239,10 +3271,14 @@ void Notepad_plus::command(int id)
 					{
 						param = TEXT("-verbose -v");
 						param += VERSION_VALUE;
-
-						if (NppParameters::getInstance().isx64())
+						int archType = NppParameters::getInstance().archType();
+						if (archType == IMAGE_FILE_MACHINE_AMD64)
 						{
 							param += TEXT(" -px64");
+						}
+						else if (archType == IMAGE_FILE_MACHINE_ARM64)
+						{
+							param += TEXT(" -parm64");
 						}
 					}
 					Process updater(PluginsAdminDlg::_updaterFullPath, param.c_str(), PluginsAdminDlg::_updaterDir);
@@ -3360,6 +3396,7 @@ void Notepad_plus::command(int id)
         case IDM_LANG_SPICE :
         case IDM_LANG_TXT2TAGS :
         case IDM_LANG_VISUALPROLOG:
+        case IDM_LANG_MARKDOWN:
 		case IDM_LANG_USER :
 		{
             setLanguage(menuID2LangType(id));
@@ -3659,7 +3696,7 @@ void Notepad_plus::command(int id)
 			}
 	}
 
-	if (_recordingMacro && !bSupressingMacroRecording) {
+	if (_recordingMacro && !bSupressingMacroRecording && isWindowMessaging>=0) {
 		switch (id)
 		{
 			case IDM_FILE_NEW :
@@ -3828,8 +3865,28 @@ void Notepad_plus::command(int id)
 				_macro.push_back(recordedMacroStep(id));
 				break;
 			default:
-				if(id>=IDM_FORMAT_TODOS&&id<=IDM_FORMAT_ENCODE_END
-					|| (id >= ID_PLUGINS_CMD) && (id < ID_PLUGINS_CMD_LIMIT) ) { //bIsPluginMessaging
+				if(id>=IDM_FORMAT_TODOS&&id<=IDM_FORMAT_ENCODE_END) { //bIsPluginMessaging
+					_macro.push_back(recordedMacroStep(id));
+				}
+				if ((id >= ID_PLUGINS_CMD) && (id < ID_PLUGINS_CMD_LIMIT))
+				{
+					PluginInfo* pluginInfo = _pluginsManager.getInfoForCommand(id);
+					if (pluginInfo)
+					{
+						id = id-pluginInfo->_funcItems[0]._cmdID;
+						//LogIs(L"%s::%d", pluginInfo->_moduleName.c_str(), id);
+						_macro.push_back(recordedMacroStep(pluginInfo->_moduleName, id));
+					}
+				}
+				else if (_pluginsManager._dynamicIDAlloc.isInRange(id))
+				{
+					PluginInfo* pluginInfo = _pluginsManager.getInfoForDynCommand(id);
+					if (pluginInfo)
+					{
+						id = pluginInfo->_regstrDynCmdSt-id-1;
+						_macro.push_back(recordedMacroStep(pluginInfo->_moduleName, id));
+						break;
+					}
 					_macro.push_back(recordedMacroStep(id));
 				}
 				break;

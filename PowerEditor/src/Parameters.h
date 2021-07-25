@@ -72,6 +72,18 @@ const int TAB_HIDE = 0x100;
 const int TAB_QUITONEMPTY = 0x200;   
 const int TAB_ALTICONS = 0x800;
 
+#ifdef _WIN64
+
+#ifdef _M_ARM64
+#define ARCH_TYPE IMAGE_FILE_MACHINE_ARM64
+#else
+#define ARCH_TYPE IMAGE_FILE_MACHINE_AMD64
+#endif
+
+#else
+#define ARCH_TYPE IMAGE_FILE_MACHINE_I386
+
+#endif
 
 enum class EolType: std::uint8_t
 {
@@ -973,6 +985,22 @@ struct ScintillaViewParams
 	bool _doSmoothFont = false;
 	bool _showBorderEdge = true;
 	int _borderWidthXCompat = 4;
+	
+	unsigned char _paddingLeft = 0;  // 0-9 pixel
+	unsigned char _paddingRight = 0; // 0-9 pixel
+
+	// distractionFreeDivPart is used for divising the fullscreen pixel width.
+	// the result of division will be the left & right padding in Distraction Free mode
+	unsigned char _distractionFreeDivPart = 4;     // 3-9 parts
+
+	int getDistractionFreePadding(int editViewWidth) const {
+		const int defaultDiviser = 4;
+		int diviser = _distractionFreeDivPart > 2 ? _distractionFreeDivPart : defaultDiviser;
+		int paddingLen = editViewWidth / diviser;
+		if (paddingLen <= 0)
+			paddingLen = editViewWidth / defaultDiviser;
+		return paddingLen;
+	};
 };
 
 const int NB_LIST = 20;
@@ -1318,7 +1346,7 @@ public:
 		return _themeList[index];
 	}
 
-	void setThemeDirPath(generic_string themeDirPath) { _themeDirPath = themeDirPath; }
+	void setThemeDirPath(TCHAR* themeDirPath) { _themeDirPath = themeDirPath; }
 	generic_string getThemeDirPath() const { return _themeDirPath; }
 
 	generic_string getDefaultThemeLabel() const { return TEXT("Default (stylers.xml)"); }
@@ -1723,7 +1751,7 @@ public:
 	void setCloudChoice(const TCHAR *pathChoice);
 	void removeCloudChoice();
 	bool isCloudPathChanged() const;
-	bool isx64() const { return _isx64; };
+	int archType() const { return ARCH_TYPE; };
 
 	COLORREF getCurrentDefaultBgColor() const {
 		return _currentDefaultBgColor;

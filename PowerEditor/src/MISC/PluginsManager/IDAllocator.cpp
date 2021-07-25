@@ -50,4 +50,9 @@ int IDAllocator::allocate(int quantity)
 	return retVal;
 }
 
+int IDAllocator::tellNextId()
+{
+	return _nextID;
+}
+
 

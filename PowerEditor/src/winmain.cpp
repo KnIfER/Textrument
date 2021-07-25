@@ -30,6 +30,7 @@
 #include "Win32Exception.h"	//Win32 exception
 #include "MiniDumper.h"			//Write dump files
 #include "verifySignedfile.h"
+#include "NppDarkMode.h"
 #include "wutils.h"
 
 typedef std::vector<generic_string> ParamVector;
@@ -328,6 +329,7 @@ const TCHAR FLAG_NOTEPAD_COMPATIBILITY[] = TEXT("-notepadStyleCmdline");
 const TCHAR FLAG_OPEN_FOLDERS_AS_WORKSPACE[] = TEXT("-openFoldersAsWorkspace");
 const TCHAR FLAG_SETTINGS_DIR[] = TEXT("-settingsDir=");
 const TCHAR FLAG_TITLEBAR_ADD[] = TEXT("-titleAdd=");
+const TCHAR FLAG_APPLY_UDL[] = TEXT("-udl=");
 
 void doException(Notepad_plus_Window & notepad_plus_plus)
 {
@@ -428,7 +430,28 @@ HHOOK g_hMouse = NULL;
 
 bool bUseFluentBtnRClickMenu = true;
 
-bool which2scroll;
+bool bUseFastScroll = true;
+bool isFastScrollEntered = false;
+
+ScintillaEditView* which2scroll;
+
+void UnhookMouse()
+{
+	if (g_hMouse)
+	{
+		UnhookWindowsHookEx(g_hMouse);
+		g_hMouse = NULL;
+	}
+}
+
+void hookMouse(int Level, HOOKPROC proc)
+{
+	if (g_hMouse)
+	{
+		UnhookMouse();
+	}
+	g_hMouse = SetWindowsHookEx(Level, proc, nppApp->getHinst(), 0);
+}
 
 //Hook
 LRESULT CALLBACK MenuMouseProc(int nCode, WPARAM wParam,  LPARAM lParam)
@@ -466,34 +489,97 @@ LRESULT CALLBACK MenuMouseProc(int nCode, WPARAM wParam,  LPARAM lParam)
 	return CallNextHookEx(g_hMouse, nCode, wParam, lParam); 
 }
 
+void SendKey(WORD keyCode, bool up) 
+{
+	INPUT ip{INPUT_KEYBOARD};
+	ip.ki.dwFlags = up?KEYEVENTF_KEYUP:0;
+	ip.ki.wVk = keyCode;
+	SendInput(1, &ip, sizeof(INPUT));
+}
+
 //Hook
 LRESULT CALLBACK ScrollbarMouseProc(int nCode, WPARAM wParam,  LPARAM lParam)
 {	
-	if(wParam == WM_MOUSEWHEEL)
+	if(wParam == WM_MOUSEWHEEL && which2scroll)
 	{
 		MSLLHOOKSTRUCT *pMhs = (MSLLHOOKSTRUCT *)lParam;
 
-		(which2scroll?nppApp->_mainEditView
-			:nppApp->_subEditView).execute(WM_MOUSEWHEEL
+		which2scroll->execute(WM_MOUSEWHEEL
 			, MAKELONG(0,GET_WHEEL_DELTA_WPARAM(pMhs->mouseData)), lParam);
 		
 		return TRUE;
 	}
 	else if(wParam == WM_LBUTTONUP)
 	{
-		UnhookWindowsHookEx (g_hMouse);
+		UnhookMouse();
+		if (isFastScrollEntered)
+		{
+			SendKey(VK_SHIFT, true);
+
+			isFastScrollEntered = false;
+		}
 	}
 	return CallNextHookEx(g_hMouse, nCode, wParam, lParam); 
 }
 
 void hookNcLeftButtonDown(MSG & msg)
 {
-	if ((which2scroll=msg.hwnd==nppApp->_mainEditView.getHSelf())
-		||msg.hwnd==nppApp->_subEditView.getHSelf())
+	// https://docs.microsoft.com/en-us/windows/win32/inputdev/wm-nclbuttondown
+	// https://docs.microsoft.com/en-us/windows/win32/inputdev/wm-nchittest
+	if (msg.wParam==HTHSCROLL)
 	{
-		//LogIs(1, "down!!!");
-		g_hMouse = SetWindowsHookEx(WH_MOUSE_LL, ScrollbarMouseProc, nppApp->getHinst(), 0);
+		which2scroll = dynamic_cast<ScintillaEditView*>((Window*)GetWindowLongPtr(msg.hwnd, GWLP_USERDATA));
+		//LogIs(1, "down %d!!!", which2scroll);
+		if (which2scroll)
+		{
+			hookMouse(WH_MOUSE_LL, ScrollbarMouseProc);
+
+			if (bUseFastScroll)
+			{
+			}
+		}
 	}
+}
+
+void SendWndToBack()
+{
+	HWND window = nppApp->_pPublicInterface->getHSelf();
+	RECT rc;
+	GetWindowRect(window, &rc);
+	HWND wnd = GetWindow(window, GW_HWNDNEXT);
+	while (!IsWindowVisible(wnd) || IsIconic(wnd) || !IsWindowEnabled(wnd))
+	{
+		wnd = GetWindow(wnd, GW_HWNDNEXT);
+	}
+
+	::SetWindowPos(window, HWND_BOTTOM,rc.left,rc.top,rc.right-rc.left,rc.bottom-rc.top, SWP_NOREPOSITION);
+
+	SetForegroundWindow(wnd);
+	SetFocus(wnd);
+}
+
+//Hook
+LRESULT CALLBACK MinBoxMouseProc(int nCode, WPARAM wParam,  LPARAM lParam)
+{	
+	if(wParam == WM_RBUTTONUP)
+	{
+		//LogIs(1, "HTMINBUTTON %d!!!", msg);
+		SendWndToBack();
+
+		UnhookMouse();
+		//return TRUE;
+	}
+	return CallNextHookEx(g_hMouse, nCode, wParam, lParam); 
+}
+
+bool hookNcRightButtonDown(MSG & msg)
+{
+	if (msg.wParam==HTMINBUTTON)
+	{
+		hookMouse(WH_MOUSE_LL, MinBoxMouseProc);
+		return true;
+	}
+	return false;
 }
 
 void hookToolbarRightButtonDown(MSG & msg)
@@ -532,7 +618,7 @@ void hookToolbarRightButtonDown(MSG & msg)
 		if (bUseFluentBtnRClickMenu)
 		{ // need to use mouse hook to dismiss the context menu when release
 		  // the mouse button outside of all menu items.
-			g_hMouse = SetWindowsHookEx(WH_MOUSE, MenuMouseProc, NULL, GetCurrentThreadId());
+			hookMouse(WH_MOUSE, MenuMouseProc);
 		}
 
 		// Assuming the menu is shown below the tracking point. 
@@ -541,7 +627,7 @@ void hookToolbarRightButtonDown(MSG & msg)
 
 		if (bUseFluentBtnRClickMenu)
 		{
-			UnhookWindowsHookEx (g_hMouse);
+			UnhookMouse();
 		}
 
 		//LogIs(3, "Track done... %ld ", msg.message);
@@ -629,6 +715,19 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE, PWSTR pCmdLine, int)
 		nppParameters.setTitleBarAdd(titleBarAdditional);
 	}
 
+	generic_string udlName;
+	if (getParamValFromString(FLAG_APPLY_UDL, params, udlName))
+	{
+		if (udlName.length() >= 2)
+		{
+			if (udlName.front() == '"' && udlName.back() == '"')
+			{
+				udlName = udlName.substr(1, udlName.length() - 2);
+			}
+		}
+		cmdLineParams._udlName = udlName;
+	}
+
 	if (showHelp)
 		::MessageBox(NULL, COMMAND_ARG_HELP, TEXT("Notepad++ Command Argument Help"), MB_OK);
 
@@ -662,6 +761,8 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE, PWSTR pCmdLine, int)
 		TheFirstOne = false;
 
 	NppGUI & nppGui = const_cast<NppGUI &>(nppParameters.getNppGUI());
+
+	NppDarkMode::initDarkMode();
 
 	if (doFunctionListExport || doPrintAndQuit) // export functionlist feature will serialize fuctionlist on the disk, then exit Notepad++. So it's important to not launch into existing instance, and keep it silent.
 	{
@@ -789,6 +890,10 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE, PWSTR pCmdLine, int)
 					if (msg.message==WM_NCLBUTTONDOWN)
 					{
 						hookNcLeftButtonDown(msg);
+					}
+					if (msg.message==WM_NCRBUTTONDOWN && hookNcRightButtonDown(msg))
+					{
+						continue;
 					}
 					if (::TranslateAccelerator(notepad_plus_plus.getHSelf(), notepad_plus_plus.getAccTable(), &msg) == 0)
 					{

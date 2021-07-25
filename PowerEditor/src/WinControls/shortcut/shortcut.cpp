@@ -826,11 +826,34 @@ bool recordedMacroStep::isMacroable() const
 	}
 }
 
+extern int getPluginFirstCommandForName(generic_string & name);
+
+extern int getPluginFirstDynCommandForName(generic_string & name);
+
 void recordedMacroStep::PlayBack(Window* pNotepad, ScintillaEditView *pEditView)
 {
 	if (_macroType == mtMenuCommand)
 	{
-		::SendMessage(pNotepad->getHSelf(), WM_COMMAND, _wParameter, 0);
+		int id = _wParameter;
+		if (_sPluginName.length())
+		{
+			if (id<0)
+			{
+				int offset = getPluginFirstDynCommandForName(_sPluginName);
+				if (offset>=ID_PLUGINS_CMD_DYNAMIC)
+				{
+					id=offset-id-1;
+				}
+			}
+			else {
+				int offset = getPluginFirstCommandForName(_sPluginName);
+				if (offset>=ID_PLUGINS_CMD)
+				{
+					id+=offset;
+				}
+			}
+		}
+		::SendMessage(pNotepad->getHSelf(), WM_COMMAND, id, 0);
 	}
 	else
 	{

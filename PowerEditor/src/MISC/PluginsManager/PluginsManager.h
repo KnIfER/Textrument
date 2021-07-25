@@ -44,6 +44,8 @@ struct PluginCommand
 	PluginCommand(const TCHAR *pluginName, int funcID, PFUNCPLUGINCMD pFunc): _funcID(funcID), _pFunc(pFunc), _pluginName(pluginName){};
 };
 
+__declspec(selectany) int _regstrDynCmdMax=0;
+
 struct PluginInfo
 {
 	PluginInfo() = default;
@@ -72,6 +74,7 @@ struct PluginInfo
 	generic_string _funcName;
 	int _toolbarICStart=-1; // count from 0 from dynmaic icons
 	int _toolbarICCount=0;
+	int _regstrDynCmdSt=0;
 };
 
 struct LoadedDllInfo
@@ -149,6 +152,8 @@ public:
 	HMENU getMenuForCommand(int cmdID);
 
 	PluginInfo* getInfoForCommand(int cmdID);
+
+	PluginInfo* getInfoForDynCommand(int cmdID);
 
 	int getIdForCommand(int cmdID);
 

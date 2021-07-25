@@ -5186,7 +5186,7 @@ bool Notepad_plus::goToNextIndicator(int indicID2Search, bool isWrap) const
 
 void Notepad_plus::fullScreenToggle()
 {
-	if (!_beforeSpecialView.isFullScreen)	//toggle fullscreen on
+	if (!_beforeSpecialView._isFullScreen)	//toggle fullscreen on
 	{
 		_beforeSpecialView._winPlace.length = sizeof(_beforeSpecialView._winPlace);
 		::GetWindowPlacement(_pPublicInterface->getHSelf(), &_beforeSpecialView._winPlace);
@@ -5215,7 +5215,7 @@ void Notepad_plus::fullScreenToggle()
 
 		//Setup GUI
         int bs = buttonStatus_fullscreen;
-		if (_beforeSpecialView.isPostIt)
+		if (_beforeSpecialView._isPostIt)
         {
             bs |= buttonStatus_postit;
         }
@@ -5236,7 +5236,7 @@ void Notepad_plus::fullScreenToggle()
 		::ShowWindow(_pPublicInterface->getHSelf(), SW_HIDE);
 
 		//Set popup style for fullscreen window and store the old style
-		if (!_beforeSpecialView.isPostIt)
+		if (!_beforeSpecialView._isPostIt)
 		{
 			_beforeSpecialView.preStyle = ::SetWindowLongPtr(_pPublicInterface->getHSelf(), GWL_STYLE, WS_POPUP);
 			if (!_beforeSpecialView.preStyle)
@@ -5276,7 +5276,7 @@ void Notepad_plus::fullScreenToggle()
         _restoreButton.display(false);
 
 		//Setup GUI
-		if (!_beforeSpecialView.isPostIt)
+		if (!_beforeSpecialView._isPostIt)
 		{
 			//only change the GUI if postit isnt active
 			if (_beforeSpecialView.isMenuShown)
@@ -5288,7 +5288,7 @@ void Notepad_plus::fullScreenToggle()
 		}
 
 		//Set old style if not fullscreen
-		if (!_beforeSpecialView.isPostIt)
+		if (!_beforeSpecialView._isPostIt)
 		{
 			::SetWindowLongPtr( _pPublicInterface->getHSelf(), GWL_STYLE, _beforeSpecialView.preStyle);
 			//Redraw the window and refresh windowmanager cache, dont do anything else, sizing is done later on
@@ -5313,9 +5313,9 @@ void Notepad_plus::fullScreenToggle()
 		}
 	}
 	//::SetForegroundWindow(_pPublicInterface->getHSelf());
-	_beforeSpecialView.isFullScreen = !_beforeSpecialView.isFullScreen;
+	_beforeSpecialView._isFullScreen = !_beforeSpecialView._isFullScreen;
 	::SendMessage(_pPublicInterface->getHSelf(), WM_SIZE, 0, 0);
-    if (_beforeSpecialView.isPostIt)
+    if (_beforeSpecialView._isPostIt)
     {
         // show restore button on the right position
         RECT rect;
@@ -5334,7 +5334,7 @@ void Notepad_plus::fullScreenToggle()
 void Notepad_plus::postItToggle()
 {
 	NppParameters& nppParam = NppParameters::getInstance();
-	if (!_beforeSpecialView.isPostIt)	// PostIt disabled, enable it
+	if (!_beforeSpecialView._isPostIt)	// PostIt disabled, enable it
 	{
 		NppGUI & nppGUI = const_cast<NppGUI &>(nppParam.getNppGUI());
 		// get current status before switch to postIt
@@ -5352,7 +5352,7 @@ void Notepad_plus::postItToggle()
 		}
 		//Only check these if not fullscreen
         int bs = buttonStatus_postit;
-		if (_beforeSpecialView.isFullScreen)
+		if (_beforeSpecialView._isFullScreen)
         {
             bs |= buttonStatus_fullscreen;
         }
@@ -5371,7 +5371,7 @@ void Notepad_plus::postItToggle()
 		// PostIt!
 
 		//Set popup style for fullscreen window and store the old style
-		if (!_beforeSpecialView.isFullScreen)
+		if (!_beforeSpecialView._isFullScreen)
 		{
 			//Hide window so windows can properly update it
 			::ShowWindow(_pPublicInterface->getHSelf(), SW_HIDE);
@@ -5408,7 +5408,7 @@ void Notepad_plus::postItToggle()
         _restoreButton.display(false);
 
 		//Setup GUI
-		if (!_beforeSpecialView.isFullScreen)
+		if (!_beforeSpecialView._isFullScreen)
 		{
 			//only change the these parts of GUI if not already done by fullscreen
 			if (_beforeSpecialView.isMenuShown)
@@ -5427,7 +5427,7 @@ void Notepad_plus::postItToggle()
 			::SendMessage(_pPublicInterface->getHSelf(), WM_COMMAND, IDM_VIEW_ALWAYSONTOP, 0);
 
 		//restore window style if not fullscreen
-		if (!_beforeSpecialView.isFullScreen)
+		if (!_beforeSpecialView._isFullScreen)
 		{
 			//dwStyle |= (WS_CAPTION | WS_SIZEBOX);
 			::ShowWindow(_pPublicInterface->getHSelf(), SW_HIDE);
@@ -5439,8 +5439,94 @@ void Notepad_plus::postItToggle()
 		}
 	}
 
-	_beforeSpecialView.isPostIt = !_beforeSpecialView.isPostIt;
+	_beforeSpecialView._isPostIt = !_beforeSpecialView._isPostIt;
 	::SendMessage(_pPublicInterface->getHSelf(), WM_SIZE, 0, 0);
+}
+
+
+// Distraction Free mode uses full screen mode + post-it mode + setting padding on the both left & right sides.
+// In order to keep the coherence of data, when full screen mode or (and) post-it mode is (are) active,
+// Distraction Free mode should be innaccible, and vice versa.
+void Notepad_plus::distractionFreeToggle()
+{
+	// Toggle Distraction Free Mode
+	fullScreenToggle();
+	postItToggle();
+
+	// Get padding info
+	const ScintillaViewParams& svp = NppParameters::getInstance().getSVP();
+	int paddingLeft = 0;
+	int paddingRight = 0;
+
+
+	// Enable or disable Distraction Free Mode
+	if (_beforeSpecialView._isDistractionFree) // disable it
+	{
+		// restore another view if 2 views mode was on
+		if (_beforeSpecialView._was2ViewModeOn)
+		{
+			showView(otherView());
+			_beforeSpecialView._was2ViewModeOn = false;
+		}
+
+		// restore dockable panels
+		for (auto i : _beforeSpecialView._pVisibleDockingContainers)
+		{
+			i->display();
+		}
+		_dockingManager.resize();
+
+		// restore padding
+		paddingLeft = svp._paddingLeft;
+		paddingRight = svp._paddingRight;
+
+		// hide restore button
+		_restoreButton.setButtonStatus(0);
+		_restoreButton.display(false);
+	}
+	else // enable it
+	{
+		// check if 2 views mode is on
+		ScintillaEditView & nonFocusedView = (otherView() == MAIN_VIEW) ? _mainEditView : _subEditView;
+		if (nonFocusedView.isVisible())
+		{
+			hideView(otherView());
+			_beforeSpecialView._was2ViewModeOn = true;
+		}
+		else
+		{
+			_beforeSpecialView._was2ViewModeOn = false;
+		}
+
+		// check if any dockable panel is visible
+		std::vector<DockingCont*> & container = _dockingManager.getContainerInfo();
+		_beforeSpecialView._pVisibleDockingContainers.clear();
+		for (auto i : container)
+		{
+			if (i->isVisible())
+			{
+				_beforeSpecialView._pVisibleDockingContainers.push_back(i);
+			}
+		}
+
+		for (auto i : _beforeSpecialView._pVisibleDockingContainers)
+		{
+			i->display(false);
+		}
+		_dockingManager.resize();
+
+		// set padding
+		paddingLeft = paddingRight = svp.getDistractionFreePadding(_pEditView->getWidth());
+
+		// set state of restore button (it's already shown by fullScreen & postIt toggling)
+		_restoreButton.setButtonStatus(buttonStatus_distractionFree);
+	}
+
+	_beforeSpecialView._isDistractionFree = !_beforeSpecialView._isDistractionFree;
+
+	// set Distraction Free Mode paddin or restore the normal padding
+	_pEditView->execute(SCI_SETMARGINLEFT, 0, paddingLeft);
+	_pEditView->execute(SCI_SETMARGINRIGHT, 0, paddingRight);
 }
 
 void Notepad_plus::doSynScorll(HWND whichView)
@@ -7836,6 +7922,7 @@ void Notepad_plus::refreshDarkMode()
 		themeName = themeSwitcher.getDefaultThemeLabel();
 	}
 
+	//LogIs(L"themePath PathFileExists %s %d", themePath.c_str(), ::PathFileExists(themePath.c_str()));
 	if (::PathFileExists(themePath.c_str()))
 	{
 		((NppGUI*)&nppParams.getNppGUI())->_themeName = (TCHAR*)themePath.c_str();

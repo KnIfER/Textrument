@@ -33,19 +33,25 @@
 #include "StaticDialog.h"
 
 #define LICENCE_TXT \
-TEXT("Derivation of Notepad++(GPL) : This program is free software; you can redistribute it and/or \
+TEXT("NotepadPlus (GPL) : This program is free software; you can redistribute it and/or \
 modify it under the terms of the GNU General Public License \
 as published by the Free Software Foundation; either \
 version 2 of the License, or (at your option) any later version.\r\n\
 This program is distributed blablah~ \r\n\
 \r\n\
 \r\n\
-Grand-derivation of Scintilla ('free or commercial') : License for Scintilla and SciTE  \
+Scintilla ('free or commercial') : License for Scintilla and SciTE  \
 Copyright 1998-2002 by Neil Hodgson <neilh@scintilla.org> \r\n\
 All Rights Reserved  \r\n\
 Permission to use, copy, modify, and distribute this software and its documentation for any purpose \
 and without fee is hereby granted, provided that the above copyright notice appear in all copies and that \
 both that copyright notice and this permission notice appear in supporting documentation. \r\n\
+\r\n\
+\r\n\
+WINE (LGPL):\This library is free software; you can redistribute it and/or\
+modify it under the terms of the GNU Lesser General Public\
+License as published by the Free Software Foundation; either\
+version 2.1 of the License, or (at your option) any later version.\r\n\
 \r\n\
 \r\n\
 Powered by the Window™ operating system.")

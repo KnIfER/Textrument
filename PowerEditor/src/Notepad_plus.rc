@@ -638,6 +638,7 @@ BEGIN
         MENUITEM "总在最前",               IDM_VIEW_ALWAYSONTOP
         MENUITEM "切换全屏模式",     IDM_VIEW_FULLSCREENTOGGLE
         MENUITEM "便签模式",                     IDM_VIEW_POSTIT
+        MENUITEM "无念模式",      IDM_VIEW_DISTRACTIONFREE
         MENUITEM SEPARATOR
         POPUP "将当前文件显示到"
         BEGIN
@@ -1194,7 +1195,7 @@ BEGIN
     LTEXT           "bit",IDC_VERSION_BIT,150,20,140,11
     LTEXT           "Under the same blue sky",IDC_AUTHOR_NAME,70,32,80,8
     LTEXT           "Home:",IDC_STATIC,21,52,47,8
-    LTEXT           "https://github.com/NotMad-Text-Editor-Plugins",IDC_HOME_ADDR,50,52,220,8
+    LTEXT           "https://gitee.com/knziha/Textrument",IDC_HOME_ADDR,50,52,220,8
     GROUPBOX        "Licence Statments",IDC_STATIC,19,75,231,131,BS_CENTER
     DEFPUSHBUTTON   "好",IDOK,106,215,50,14,BS_FLAT
     EDITTEXT        IDC_LICENCE_EDIT,31,99,209,96,ES_MULTILINE | ES_AUTOVSCROLL | ES_READONLY | NOT WS_BORDER | WS_VSCROLL

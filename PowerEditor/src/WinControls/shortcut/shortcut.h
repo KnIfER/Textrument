@@ -288,14 +288,17 @@ struct recordedMacroStep {
 	uptr_t _wParameter = 0;
 	uptr_t _lParameter = 0;
 	generic_string _sParameter;
+	generic_string _sPluginName;
 	MacroTypeIndex _macroType = mtMenuCommand;
 	
 	recordedMacroStep(int iMessage, uptr_t wParam, uptr_t lParam, int codepage);
 	explicit recordedMacroStep(int iCommandID): _wParameter(iCommandID) {};
+	explicit recordedMacroStep(generic_string & pluginName, int iCommandID):_sPluginName(pluginName), _wParameter(iCommandID) {};
 
-	recordedMacroStep(int iMessage, uptr_t wParam, uptr_t lParam, const TCHAR *sParam, int type)
+	recordedMacroStep(int iMessage, uptr_t wParam, uptr_t lParam, const TCHAR *sParam, const TCHAR *sPlugin, int type)
 		: _message(iMessage), _wParameter(wParam), _lParameter(lParam), _macroType(MacroTypeIndex(type)){
 			_sParameter = (sParam)?generic_string(sParam):TEXT("");	
+			_sPluginName = (sPlugin)?generic_string(sPlugin):TEXT("");	
 	};
 
 	bool isValid() const {

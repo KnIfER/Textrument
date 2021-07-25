@@ -133,8 +133,17 @@ int PluginsManager::loadPlugin(const TCHAR *pluginFilePath)
 	{
 		pi->_moduleName = pluginFileName;
 
-		if (getBinaryArchitectureType(pluginFilePath) != ARCH_TYPE)
-			throw generic_string(ARCH_ERR_MSG);
+		int archType = nppParams.archType();
+		if (getBinaryArchitectureType(pluginFilePath) != archType)
+		{
+			const TCHAR *archErrMsg = TEXT("Cannot load 64-bit plugin."); // IMAGE_FILE_MACHINE_I386 by default
+			if (archType == IMAGE_FILE_MACHINE_ARM64)
+				archErrMsg = TEXT("Cannot load 32-bit or non-ARM64 plugin.");
+			else if(archType == IMAGE_FILE_MACHINE_AMD64)
+				archErrMsg = TEXT("Cannot load 32-bit plugin.");
+
+			throw generic_string(archErrMsg);
+		}
 
         const DWORD dwFlags = GetProcAddress(GetModuleHandle(TEXT("kernel32.dll")), "AddDllDirectory") != NULL ? LOAD_LIBRARY_SEARCH_DLL_LOAD_DIR | LOAD_LIBRARY_SEARCH_DEFAULT_DIRS : 0;
         pi->_hLib = ::LoadLibraryEx(pluginFilePath, NULL, dwFlags);
@@ -496,18 +505,21 @@ void PluginsManager::addInMenuFromPMIndex(int i)
 	}
 }
 
-HMENU PluginsManager::getMenuForCommand(int cmdID) {
+HMENU PluginsManager::getMenuForCommand(int cmdID) 
+{
 	auto id = _plugin_cid_table.find(cmdID);
 	if(id!=_plugin_cid_table.end()) {
 		int pluginid=id->second;
-		if(pluginid>=0&&pluginid<_pluginInfos.size()) {
+		if(pluginid>=0&&pluginid<_pluginInfos.size()) 
+		{
 			return _pluginInfos[pluginid]->_pluginMenu;
 		}
 	}
 	return 0;
 }
 
-PluginInfo* PluginsManager::getInfoForCommand(int cmdID) {
+PluginInfo* PluginsManager::getInfoForCommand(int cmdID) 
+{
 	auto id = _plugin_cid_table.find(cmdID);
 	if(id!=_plugin_cid_table.end()) {
 		int pluginid=id->second;
@@ -518,7 +530,25 @@ PluginInfo* PluginsManager::getInfoForCommand(int cmdID) {
 	return 0;
 }
 
-int PluginsManager::getIdForCommand(int cmdID) {
+PluginInfo* PluginsManager::getInfoForDynCommand(int cmdID) 
+{
+	if (cmdID<_regstrDynCmdMax)
+	{
+		for (size_t i = 0, len = _pluginInfos.size(); i < len ; ++i)
+		{
+			if (cmdID>=_pluginInfos[i]->_regstrDynCmdSt 
+				&& (i==len-1||cmdID<_pluginInfos[i+1]->_regstrDynCmdSt)
+				)
+			{
+				return _pluginInfos[i];
+			}
+		}
+	}
+	return NULL;
+}
+
+int PluginsManager::getIdForCommand(int cmdID) 
+{
 	auto id = _plugin_cid_table.find(cmdID);
 	if(id!=_plugin_cid_table.end()) {
 		int pluginid=id->second;
@@ -529,7 +559,8 @@ int PluginsManager::getIdForCommand(int cmdID) {
 	return -1;
 }
 
-HMENU PluginsManager::getMenuForModule(HINSTANCE moduleID) {
+HMENU PluginsManager::getMenuForModule(HINSTANCE moduleID) 
+{
 	auto id = _plugin_module_table.find((long)moduleID);
 	if(id!=_plugin_module_table.end()) {
 		int pluginid=id->second;
@@ -543,7 +574,7 @@ HMENU PluginsManager::getMenuForModule(HINSTANCE moduleID) {
 
 HMENU PluginsManager::setMenu(HMENU hMenu, const TCHAR *menuName, bool enablePluginAdmin)
 {
-	const TCHAR *nom_menu = (menuName && menuName[0])?menuName:TEXT("&Plugins");
+	const TCHAR *nom_menu = (menuName && menuName[0])?menuName:TEXT("插件(&P)");
 	size_t nbPlugin = _pluginInfos.size();
 
 	if (!_hPluginsMenu)
@@ -558,11 +589,11 @@ HMENU PluginsManager::setMenu(HMENU hMenu, const TCHAR *menuName, bool enablePlu
 
 		if (enablePluginAdmin)
 		{
-			::InsertMenu(_hPluginsMenu, i++, MF_BYPOSITION, IDM_SETTING_PLUGINADM, TEXT("Plugins Admin..."));
+			::InsertMenu(_hPluginsMenu, i++, MF_BYPOSITION, IDM_SETTING_PLUGINADM, TEXT("插件管理..."));
 			::InsertMenu(_hPluginsMenu, i++, MF_BYPOSITION | MF_SEPARATOR, 0, TEXT(""));
 		}
 
-		::InsertMenu(_hPluginsMenu, i, MF_BYPOSITION, IDM_SETTING_OPENPLUGINSDIR, TEXT("Open Plugins Folder..."));
+		::InsertMenu(_hPluginsMenu, i, MF_BYPOSITION, IDM_SETTING_OPENPLUGINSDIR, TEXT("打开插件文件夹..."));
 	}
 
 	for (size_t i = 0; i < nbPlugin; ++i)
@@ -665,10 +696,21 @@ void PluginsManager::notify(const SCNotification *notification)
 	if (_noMoreNotification) // this boolean should be enabled after NPPN_SHUTDOWN has been sent
 		return;
 
+	int isTBMOD = notification->nmhdr.code==NPPN_TBMODIFICATION;
 
 	for (size_t i = 0, len = _pluginInfos.size() ; i < len ; ++i)
 	{
+		if (isTBMOD)
+		{
+			_pluginInfos[i]->_regstrDynCmdSt = _dynamicIDAlloc.tellNextId();
+		}
+
 		notify(i, notification);
+
+		if (isTBMOD && i==len-1)
+		{
+			_regstrDynCmdMax = _dynamicIDAlloc.tellNextId();
+		}
 	}
 
 
@@ -716,7 +758,6 @@ void PluginsManager::relayNppMessages(UINT Message, WPARAM wParam, LPARAM lParam
 		}
 	}
 }
-
 
 bool PluginsManager::relayPluginMessages(UINT Message, WPARAM wParam, LPARAM lParam)
 {

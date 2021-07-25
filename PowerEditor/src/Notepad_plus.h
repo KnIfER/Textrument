@@ -94,8 +94,9 @@ struct TaskListInfo;
 
 struct VisibleGUIConf final
 {
-	bool isPostIt = false;
-	bool isFullScreen = false;
+	bool _isPostIt = false;
+	bool _isFullScreen = false;
+	bool _isDistractionFree = false;
 
 	//Used by both views
 	bool isMenuShown = true;
@@ -109,6 +110,10 @@ struct VisibleGUIConf final
 
 	//used by fullscreen only
 	WINDOWPLACEMENT _winPlace;
+
+	//used by distractionFree
+	bool _was2ViewModeOn = false;
+	std::vector<DockingCont*> _pVisibleDockingContainers;
 
 	VisibleGUIConf()
 	{
@@ -361,6 +366,7 @@ public:
 	VisibleGUIConf	_beforeSpecialView;
 	void fullScreenToggle();
 	void postItToggle();
+	void distractionFreeToggle();
 
 	// Keystroke macro recording and playback
 	Macro _macro;

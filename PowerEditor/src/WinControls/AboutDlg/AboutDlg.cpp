@@ -51,7 +51,7 @@ INT_PTR CALLBACK AboutDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM lPara
 			buildTime +=  wmc.char2wchar(__TIME__, CP_ACP);
 
 			NppParameters& nppParam = NppParameters::getInstance();
-			LPCTSTR bitness = nppParam.isx64() ? TEXT("(64-bit)") : TEXT("(32-bit)");
+			LPCTSTR bitness = nppParam.archType() == IMAGE_FILE_MACHINE_I386 ? TEXT("(32-bit)") : (nppParam.archType() == IMAGE_FILE_MACHINE_AMD64 ? TEXT("(64-bit)") : TEXT("(ARM 64-bit)"));
 			::SetDlgItemText(_hSelf, IDC_VERSION_BIT, bitness);
 
 			::SendMessage(compileDateHandle, WM_SETTEXT, 0, reinterpret_cast<LPARAM>(buildTime.c_str()));
@@ -64,7 +64,7 @@ INT_PTR CALLBACK AboutDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM lPara
 			//_nameBrand.create(::GetDlgItem(_hSelf, IDC_AUTHOR_NAME), TEXT("http://www.stellarium.org/"));
 
             _pageLink.init(_hInst, _hSelf);
-            _pageLink.create(::GetDlgItem(_hSelf, IDC_HOME_ADDR), TEXT("https://github.com/NotMad-Text-Editor-Plugins/NotMad-TODO"));
+            _pageLink.create(::GetDlgItem(_hSelf, IDC_HOME_ADDR), TEXT("https://gitee.com/knziha/Textrument"));
 
 			getClientRect(_rc);
 
@@ -128,7 +128,7 @@ INT_PTR CALLBACK DebugInfoDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM /
 
 			// Notepad++ version
 			_debugInfoStr = NOTEPAD_PLUS_VERSION;
-			_debugInfoStr += nppParam.isx64() ? TEXT("   (64-bit)") : TEXT("   (32-bit)");
+			_debugInfoStr += nppParam.archType() == IMAGE_FILE_MACHINE_I386 ? TEXT("   (32-bit)") : (nppParam.archType() == IMAGE_FILE_MACHINE_AMD64 ? TEXT("   (64-bit)") : TEXT("   (ARM 64-bit)"));
 			_debugInfoStr += TEXT("\r\n");
 
 			// Build time
@@ -335,7 +335,7 @@ void DoSaveOrNotBox::doDialog(bool isRTL)
 void DoSaveOrNotBox::changeLang()
 {
 	generic_string msg;
-	generic_string defaultMessage = TEXT("Save file \"$STR_REPLACE$\" ?");
+	generic_string defaultMessage = TEXT("保存文件 \"$STR_REPLACE$\" ?");
 	NativeLangSpeaker* nativeLangSpeaker = NppParameters::getInstance().getNativeLangSpeaker();
 
 	if (nativeLangSpeaker->changeDlgLang(_hSelf, "DoSaveOrNot"))

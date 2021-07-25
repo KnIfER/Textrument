@@ -38,6 +38,8 @@ public:
 	/// Returns -1 if not enough available
 	int allocate(int quantity);
 
+	int tellNextId();
+
 	bool isInRange(int id) { return (id >= _start && id < _nextID); }
 
 private:
