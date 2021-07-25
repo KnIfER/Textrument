@@ -209,8 +209,15 @@ INT_PTR CALLBACK ClipboardHistoryPanel::run_dlgProc(UINT message, WPARAM wParam,
         case WM_INITDIALOG :
         {
 			_hwndNextCbViewer = ::SetClipboardViewer(_hSelf);
-            return TRUE;
-        }
+			NppDarkMode::setDarkScrollBar(::GetDlgItem(_hSelf, IDC_LIST_CLIPBOARD));
+			return TRUE;
+		}
+
+		case NPPM_INTERNAL_REFRESHDARKMODE:
+		{
+			NppDarkMode::setDarkScrollBar(GetDlgItem(_hSelf, IDC_LIST_CLIPBOARD));
+			return TRUE;
+		}
 
 		case WM_CHANGECBCHAIN:
 			if (_hwndNextCbViewer == reinterpret_cast<HWND>(wParam))

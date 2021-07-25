@@ -486,7 +486,7 @@ LRESULT DockingCont::runProcCaption(HWND hwnd, UINT Message, WPARAM wParam, LPAR
 			}
 			else
 			{
-				toolTip.Show(rc, TEXT("Close"), pt.x, pt.y + 20);
+				toolTip.Show(rc, TEXT("关闭"), pt.x, pt.y + 20);
 			}
 			return TRUE;
 		}
@@ -532,14 +532,24 @@ void DockingCont::drawCaptionItem(DRAWITEMSTRUCT *pDrawItemStruct)
 	// begin with paint
 	::SetBkMode(hDc, TRANSPARENT);
 
-	if (_isActive == TRUE)
+	auto holdPen = static_cast<HPEN>(::SelectObject(hDc, NppDarkMode::isEnabled() ? NppDarkMode::getEdgePen() : hPen));
+
+	if (NppDarkMode::isEnabled())
 	{
-		bgbrush = ::CreateSolidBrush(::GetSysColor(COLOR_ACTIVECAPTION));
-		::SetTextColor(hDc, ::GetSysColor(COLOR_CAPTIONTEXT));
+		bgbrush = ::CreateSolidBrush(_isActive ? NppDarkMode::getSofterBackgroundColor() : NppDarkMode::getBackgroundColor());
+		SetTextColor(hDc, NppDarkMode::getTextColor());
 	}
 	else
 	{
-		bgbrush = ::CreateSolidBrush(::GetSysColor(COLOR_BTNFACE));
+		if (_isActive == TRUE)
+		{
+			bgbrush = ::CreateSolidBrush(::GetSysColor(COLOR_ACTIVECAPTION));
+			::SetTextColor(hDc, ::GetSysColor(COLOR_CAPTIONTEXT));
+		}
+		else
+		{
+			bgbrush = ::CreateSolidBrush(::GetSysColor(COLOR_BTNFACE));
+		}
 	}
 
 	// set text and/or caption grid
@@ -634,35 +644,62 @@ void DockingCont::drawCaptionItem(DRAWITEMSTRUCT *pDrawItemStruct)
 		::SelectObject(hDc, hOldFont);
 		::DeleteObject(hFont);
 	}
+	::SelectObject(hDc, holdPen);
 	::DeleteObject(hPen);
 	::DeleteObject(bgbrush);
 
 	// draw button
-	HDC dcMem = ::CreateCompatibleDC(NULL);
 
-	// select correct bitmap
-	if ((_isMouseOver == TRUE) && (_isMouseDown == TRUE))
-		hBmpCur = (HBITMAP)::LoadImage(_hInst, MAKEINTRESOURCE(IDB_CLOSE_DOWN), IMAGE_BITMAP, _closeButtonWidth, _closeButtonHeight, 0);
+	if (NppDarkMode::isEnabled())
+	{
+		::SelectObject(hDc, NppParameters::getInstance().getDefaultUIFont());
+
+		rc = pDrawItemStruct->rcItem;
+		if (_isTopCaption == TRUE)
+		{
+			rc.left = rc.right - _closeButtonWidth - _closeButtonPosLeftDynamic;
+		}
+		else
+		{
+			rc.bottom = rc.top + _closeButtonWidth + _closeButtonPosLeftDynamic; // non-dark uses Left instead of Top for the button pos so being consistent
+		}
+
+		if ((_isMouseOver == TRUE) && (_isMouseDown == TRUE))
+		{
+			::SetTextColor(hDc, RGB(0xFF, 0xFF, 0xFF));
+		}
+
+		::DrawText(hDc, L"x", 1, &rc, DT_VCENTER | DT_CENTER | DT_SINGLELINE);
+	}
 	else
-		hBmpCur = (HBITMAP)::LoadImage(_hInst, MAKEINTRESOURCE(IDB_CLOSE_UP), IMAGE_BITMAP, _closeButtonWidth, _closeButtonHeight, 0);
+	{
 
-	// blit bitmap into the destination
-	::GetObject(hBmpCur, sizeof(bmp), &bmp);
-	hBmpOld = (HBITMAP)::SelectObject(dcMem, hBmpCur);
-	hBmpNew = ::CreateCompatibleBitmap(dcMem, bmp.bmWidth, bmp.bmHeight);
+		HDC dcMem = ::CreateCompatibleDC(NULL);
 
-	rc = pDrawItemStruct->rcItem;
-	::SelectObject(hDc, hBmpNew);
+		// select correct bitmap
+		if ((_isMouseOver == TRUE) && (_isMouseDown == TRUE))
+			hBmpCur = (HBITMAP)::LoadImage(_hInst, MAKEINTRESOURCE(IDB_CLOSE_DOWN), IMAGE_BITMAP, _closeButtonWidth, _closeButtonHeight, 0);
+		else
+			hBmpCur = (HBITMAP)::LoadImage(_hInst, MAKEINTRESOURCE(IDB_CLOSE_UP), IMAGE_BITMAP, _closeButtonWidth, _closeButtonHeight, 0);
 
-	if (_isTopCaption == TRUE)
-		::BitBlt(hDc, rc.right - bmp.bmWidth - _closeButtonPosLeftDynamic, _closeButtonPosTopDynamic, bmp.bmWidth, bmp.bmHeight, dcMem, 0, 0, SRCCOPY);
-	else
-		::BitBlt(hDc, _closeButtonPosLeftDynamic, _closeButtonPosLeftDynamic, bmp.bmWidth, bmp.bmHeight, dcMem, 0, 0, SRCCOPY);
+		// blit bitmap into the destination
+		::GetObject(hBmpCur, sizeof(bmp), &bmp);
+		hBmpOld = (HBITMAP)::SelectObject(dcMem, hBmpCur);
+		hBmpNew = ::CreateCompatibleBitmap(dcMem, bmp.bmWidth, bmp.bmHeight);
 
-	::SelectObject(dcMem, hBmpOld);
-	::DeleteObject(hBmpCur);
-	::DeleteObject(hBmpNew);
-	::DeleteDC(dcMem);
+		rc = pDrawItemStruct->rcItem;
+		::SelectObject(hDc, hBmpNew);
+
+		if (_isTopCaption == TRUE)
+			::BitBlt(hDc, rc.right - bmp.bmWidth - _closeButtonPosLeftDynamic, _closeButtonPosTopDynamic, bmp.bmWidth, bmp.bmHeight, dcMem, 0, 0, SRCCOPY);
+		else
+			::BitBlt(hDc, _closeButtonPosLeftDynamic, _closeButtonPosLeftDynamic, bmp.bmWidth, bmp.bmHeight, dcMem, 0, 0, SRCCOPY);
+
+		::SelectObject(dcMem, hBmpOld);
+		::DeleteObject(hBmpCur);
+		::DeleteObject(hBmpNew);
+		::DeleteDC(dcMem);
+	}
 
 	::RestoreDC(hDc, nSavedDC);
 }
@@ -713,6 +750,112 @@ LRESULT DockingCont::runProcTab(HWND hwnd, UINT Message, WPARAM wParam, LPARAM l
 
 	switch (Message)
 	{
+				case WM_ERASEBKGND:
+		{
+			if (!NppDarkMode::isEnabled())
+			{
+				break;
+			}
+
+			return TRUE;
+		}
+
+		case WM_PAINT:
+		{
+			if (!NppDarkMode::isEnabled())
+			{
+				break;
+			}
+
+			LONG_PTR dwStyle = GetWindowLongPtr(hwnd, GWL_STYLE);
+			if (!(dwStyle & TCS_OWNERDRAWFIXED))
+			{
+				break;
+			}
+
+			PAINTSTRUCT ps;
+			HDC hdc = ::BeginPaint(hwnd, &ps);
+			::FillRect(hdc, &ps.rcPaint, NppDarkMode::getDarkerBackgroundBrush());
+
+			UINT id = ::GetDlgCtrlID(hwnd);
+
+			auto holdPen = static_cast<HPEN>(::SelectObject(hdc, NppDarkMode::getEdgePen()));
+
+			HRGN holdClip = CreateRectRgn(0, 0, 0, 0);
+			if (1 != GetClipRgn(hdc, holdClip))
+			{
+				DeleteObject(holdClip);
+				holdClip = nullptr;
+			}
+
+			int nTabs = TabCtrl_GetItemCount(hwnd);
+			int nFocusTab = TabCtrl_GetCurFocus(hwnd);
+			int nSelTab = TabCtrl_GetCurSel(hwnd);
+			for (int i = 0; i < nTabs; ++i)
+			{
+				DRAWITEMSTRUCT dis = { ODT_TAB, id, (UINT)i, ODA_DRAWENTIRE, ODS_DEFAULT, hwnd, hdc };
+				TabCtrl_GetItemRect(hwnd, i, &dis.rcItem);
+
+				if (i == nFocusTab)
+				{
+					dis.itemState |= ODS_FOCUS;
+				}
+				if (i == nSelTab)
+				{
+					dis.itemState |= ODS_SELECTED;
+				}
+
+				dis.itemState |= ODS_NOFOCUSRECT; // maybe, does it handle it already?
+
+				RECT rcIntersect = { 0 };
+				if (IntersectRect(&rcIntersect, &ps.rcPaint, &dis.rcItem))
+				{
+					dis.rcItem.top += NppParameters::getInstance()._dpiManager.scaleY(1);
+					dis.rcItem.right -= 1;
+					dis.rcItem.bottom += 2;
+
+					if (i == 0)
+					{
+						POINT edges[] = {
+							{dis.rcItem.left - 1, dis.rcItem.top},
+							{dis.rcItem.left - 1, dis.rcItem.bottom}
+						};
+						Polyline(hdc, edges, _countof(edges));
+					}
+					
+					{
+						POINT edges[] = {
+							{dis.rcItem.right, dis.rcItem.top},
+							{dis.rcItem.right, dis.rcItem.bottom}
+						};
+						Polyline(hdc, edges, _countof(edges));
+					}
+
+					HRGN hClip = CreateRectRgnIndirect(&dis.rcItem);
+
+					SelectClipRgn(hdc, hClip);
+
+					drawTabItem(&dis);
+
+					DeleteObject(hClip);
+
+					SelectClipRgn(hdc, holdClip);
+				}
+			}
+
+			SelectClipRgn(hdc, holdClip);
+			if (holdClip)
+			{
+				DeleteObject(holdClip);
+				holdClip = nullptr;
+			}
+
+			SelectObject(hdc, holdPen);
+
+			EndPaint(hwnd, &ps);
+			return 0;
+		}
+
 		case WM_LBUTTONDOWN:
 		{
 			_beginDrag	= TRUE;
@@ -938,20 +1081,34 @@ void DockingCont::drawTabItem(DRAWITEMSTRUCT *pDrawItemStruct)
 	rc.top += ::GetSystemMetrics(SM_CYEDGE);
 
 	::SetBkMode(hDc, TRANSPARENT);
-	HBRUSH hBrush = ::CreateSolidBrush(::GetSysColor(COLOR_BTNFACE));
-	::FillRect(hDc, &rc, hBrush);
-	::DeleteObject((HGDIOBJ)hBrush);
+	//HBRUSH hBrush = ::CreateSolidBrush(::GetSysColor(COLOR_BTNFACE));
+	//::FillRect(hDc, &rc, hBrush);
+	//::DeleteObject((HGDIOBJ)hBrush);
+
+	if (NppDarkMode::isEnabled())
+	{
+		RECT selectedRect = rc;
+		selectedRect.top -= 2;
+		selectedRect.bottom += 2;
+		if (isSelected)
+		{
+			::FillRect(hDc, &selectedRect, NppDarkMode::getSofterBackgroundBrush());
+		}
+		else
+		{
+			::FillRect(hDc, &selectedRect, NppDarkMode::getBackgroundBrush());
+		}
+	}
 
 	// draw orange bar
-	if (_bDrawOgLine && isSelected)
+	if (!NppDarkMode::isEnabled() && _bDrawOgLine && isSelected)
 	{
 		RECT barRect  = rc;
 		barRect.top  += rc.bottom - 4;
 
-		hBrush = ::CreateSolidBrush(RGB(250, 170, 60));
+		HBRUSH hBrush = ::CreateSolidBrush(RGB(250, 170, 60));
 		::FillRect(hDc, &barRect, hBrush);
-		::DeleteObject((HGDIOBJ)hBrush);
-
+		::DeleteObject(hBrush);
 	}
 
 	// draw icon if enabled
@@ -968,8 +1125,14 @@ void DockingCont::drawTabItem(DRAWITEMSTRUCT *pDrawItemStruct)
 			
 			ImageList_GetImageInfo(hImageList, iPosImage, &info);
 
-			int iconDpiDynamicalY = NppParameters::getInstance()._dpiManager.scaleY(7);
-			ImageList_Draw(hImageList, iPosImage, hDc, rc.left + 3, iconDpiDynamicalY, ILD_NORMAL);
+			int darkPaddingX = NppDarkMode::isEnabled() ? 1 : 0;
+			int darkPaddingY = NppDarkMode::isEnabled() ? 2 : (isSelected ? 1 : 0);
+
+			int iconDpiDynamicalX = isSelected ? rc.left + 3
+				: rc.left + (rc.right - rc.left - imageRect.right + imageRect.left) / 2 + darkPaddingX;
+			int iconDpiDynamicalY = NppParameters::getInstance()._dpiManager.scaleY(5) + darkPaddingY;
+
+			ImageList_Draw(hImageList, iPosImage, hDc, iconDpiDynamicalX, iconDpiDynamicalY, ILD_NORMAL);
 
 			if (isSelected)
 			{
@@ -981,7 +1144,7 @@ void DockingCont::drawTabItem(DRAWITEMSTRUCT *pDrawItemStruct)
 	if (isSelected)
 	{
 		COLORREF _unselectedColor = RGB(0, 0, 0);
-		::SetTextColor(hDc, _unselectedColor);
+		::SetTextColor(hDc, NppDarkMode::isEnabled() ? NppDarkMode::getTextColor() : _unselectedColor);
 
 		// draw text
 		rc.top -= ::GetSystemMetrics(SM_CYEDGE);
@@ -1034,17 +1197,33 @@ INT_PTR CALLBACK DockingCont::run_dlgProc(UINT Message, WPARAM wParam, LPARAM lP
 
 
 			// set min tab width
-			int tabDpiDynamicalMinWidth = NppParameters::getInstance()._dpiManager.scaleY(24);
+			int tabDpiDynamicalMinWidth = NppParameters::getInstance()._dpiManager.scaleX(24);
 			::SendMessage(_hContTab, TCM_SETMINTABWIDTH, 0, tabDpiDynamicalMinWidth);
 
 			break;
 		}
+		case WM_ERASEBKGND:
+		{
+			if (!NppDarkMode::isEnabled())
+			{
+				break;
+			}
+			RECT rc = { 0 };
+			getClientRect(rc);
+			::FillRect(reinterpret_cast<HDC>(wParam), &rc, NppDarkMode::getDarkerBackgroundBrush());
+			return TRUE;
+		}
+
 		case WM_DRAWITEM :
 		{
 			// draw tab or caption
 			if (reinterpret_cast<DRAWITEMSTRUCT *>(lParam)->CtlID == IDC_TAB_CONT)
 			{
-				drawTabItem(reinterpret_cast<DRAWITEMSTRUCT *>(lParam));
+				if (!NppDarkMode::isEnabled())
+				{
+					drawTabItem(reinterpret_cast<DRAWITEMSTRUCT*>(lParam));
+					return TRUE;
+				}
 				return TRUE;
 			}
 			else
@@ -1117,7 +1296,7 @@ INT_PTR CALLBACK DockingCont::run_dlgProc(UINT Message, WPARAM wParam, LPARAM lP
 				(rcWnd.left < pt.y) && (rcWnd.right  > pt.y))
 			{
 				_toDock = _isFloating;
-				//onSize();
+				//resize();
 				NotifyParent(DMM_DOCKALL);
 
 				if(pGripper_)
@@ -1331,7 +1510,7 @@ void DockingCont::onSize()
 	if (iItemCnt >= 1)
 	{
 		// resize to docked window
-		int tabDpiDynamicalHeight = NppParameters::getInstance()._dpiManager.scaleY(24);
+		int tabDpiDynamicalHeight = NppParameters::getInstance()._dpiManager.scaleY(16) + 8;
 		if (_isFloating == false) // 停靠窗口改变大小
 		{ 
 			// draw caption

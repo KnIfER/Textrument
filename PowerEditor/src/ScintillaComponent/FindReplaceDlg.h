@@ -136,6 +136,7 @@ public:
 	void openAll();
 	void wrapLongLinesToggle();
 	void copy();
+	void copyPathnames();
 	void beginNewFilesSearch();
 	void finishFilesSearch(int count, int searchedCount, bool isMatchLines, bool searchedEntireNotSelection);
 	void gotoNextFoundResult(int direction);

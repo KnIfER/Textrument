@@ -290,6 +290,7 @@ void FindReplaceDlg::create(int dialogID, bool isRTL, bool msgDestParent)
 	//::GetWindowRect(_hSelf, &rect);
 	getClientRect(rect);
 	_tab.init(_hInst, _hSelf, false, true);
+	NppDarkMode::subclassTabControl(_tab.getHSelf());
 	int tabDpiDynamicalHeight = nppParms->_dpiManager.scaleY(13);
 	_tab.setFont(TEXT("Tahoma"), tabDpiDynamicalHeight);
 	
@@ -828,6 +829,75 @@ INT_PTR CALLBACK FindReplaceDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 			return 0;
 		}
 
+		case WM_CTLCOLOREDIT:
+		{
+			if (NppDarkMode::isEnabled())
+			{
+				return NppDarkMode::onCtlColorSofter(reinterpret_cast<HDC>(wParam));
+			}
+			break;
+		}
+
+		case WM_CTLCOLORLISTBOX:
+		case WM_CTLCOLORDLG:
+		case WM_CTLCOLORSTATIC:
+		{
+			if (NppDarkMode::isEnabled())
+			{
+				return NppDarkMode::onCtlColorDarker(reinterpret_cast<HDC>(wParam));
+			}
+			break;
+		}
+
+		case WM_PRINTCLIENT:
+		{
+			if (NppDarkMode::isEnabled())
+			{
+				return TRUE;
+			}
+			break;
+		}
+
+		case WM_ERASEBKGND:
+		{
+			if (NppDarkMode::isEnabled())
+			{
+				RECT rcClient = { 0 };
+				GetClientRect(_hSelf, &rcClient);
+				FillRect((HDC)wParam, &rcClient, NppDarkMode::getBackgroundBrush());
+				return TRUE;
+			}
+			else
+			{
+				HWND hParent = ::GetParent(_hSelf);
+				HDC winDC = (HDC)wParam;
+				//RTL handling
+				POINT pt = { 0, 0 }, ptOrig = { 0, 0 };
+				::MapWindowPoints(_hSelf, hParent, &pt, 1);
+				::OffsetWindowOrgEx((HDC)wParam, pt.x, pt.y, &ptOrig);
+				LRESULT lResult = SendMessage(hParent, WM_ERASEBKGND, reinterpret_cast<WPARAM>(winDC), 0);
+				::SetWindowOrgEx(winDC, ptOrig.x, ptOrig.y, NULL);
+				return (BOOL)lResult;
+			}
+			break;
+		}
+
+		case NPPM_INTERNAL_REFRESHDARKMODE:
+		{
+			NppDarkMode::setDarkTooltips(_shiftTrickUpTip, NppDarkMode::ToolTipsType::tooltip);
+			NppDarkMode::setDarkTooltips(_2ButtonsTip, NppDarkMode::ToolTipsType::tooltip);
+			NppDarkMode::setDarkTooltips(_filterTip, NppDarkMode::ToolTipsType::tooltip);
+
+			HWND finder = getHFindResults();
+			if (finder)
+			{
+				NppDarkMode::setDarkScrollBar(finder);
+			}
+
+			NppDarkMode::autoThemeChildControls(_hSelf);
+			return TRUE;
+		}
+
 		case WM_SIZE:
 		{
 			resizeDialogElements(LOWORD(lParam));
@@ -836,6 +906,8 @@ INT_PTR CALLBACK FindReplaceDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 
 		case WM_INITDIALOG :
 		{
+			NppDarkMode::autoSubclassAndThemeChildControls(_hSelf);
+
 			RefreshComboFonts(1);
 
 			RECT arc;
@@ -893,13 +965,13 @@ INT_PTR CALLBACK FindReplaceDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 
 			 NativeLangSpeaker *pNativeSpeaker = nppParms->getNativeLangSpeaker();
 
-			 generic_string searchButtonTip = pNativeSpeaker->getLocalizedStrFromID("shift-change-direction-tip", TEXT("Use Shift+Enter to search in the opposite direction."));
+			 generic_string searchButtonTip = pNativeSpeaker->getLocalizedStrFromID("shift-change-direction-tip", TEXT("Shift+Enter 反向查找"));
 			 _shiftTrickUpTip = CreateToolTip(IDOK, _hSelf, _hInst, const_cast<PTSTR>(searchButtonTip.c_str()));
 
-			 generic_string checkboxTip = pNativeSpeaker->getLocalizedStrFromID("two-find-buttons-tip", TEXT("2 find buttons mode"));
+			 generic_string checkboxTip = pNativeSpeaker->getLocalizedStrFromID("two-find-buttons-tip", TEXT("双按钮模式"));
 			 _2ButtonsTip = CreateToolTip(IDC_2_BUTTONS_MODE, _hSelf, _hInst, const_cast<PTSTR>(checkboxTip.c_str()));
 
-			 generic_string findInFilesFilterTip = pNativeSpeaker->getLocalizedStrFromID("find-in-files-filter-tip", TEXT("Find in cpp, cxx, h, hxx && hpp:\r*.cpp *.cxx *.h *.hxx *.hpp\r\rFind in all files except exe, obj && log:\r*.* !*.exe !*.obj !*.log"));
+			 generic_string findInFilesFilterTip = pNativeSpeaker->getLocalizedStrFromID("find-in-files-filter-tip", TEXT("查找 cpp, cxx, h, hxx && hpp 文件:\r*.cpp *.cxx *.h *.hxx *.hpp\r\r查找除exe、obj、log之外所有文件：\r*.* !*.exe !*.obj !*.log"));
 			 _filterTip = CreateToolTip(IDD_FINDINFILES_FILTERS_STATIC, _hSelf, _hInst, const_cast<PTSTR>(findInFilesFilterTip.c_str()));
 
 			::SetWindowTextW(::GetDlgItem(_hSelf, IDC_FINDPREV), TEXT("▲ Find Last"));
@@ -1090,12 +1162,12 @@ INT_PTR CALLBACK FindReplaceDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 						NativeLangSpeaker *pNativeSpeaker = nppParamInst.getNativeLangSpeaker();
 						if (findStatus == FSEndReached)
 						{
-							generic_string msg = pNativeSpeaker->getLocalizedStrFromID("find-status-end-reached", TEXT("Find: Found the 1st occurrence from the top. The end of the document has been reached."));
+							generic_string msg = pNativeSpeaker->getLocalizedStrFromID("find-status-end-reached", TEXT("一查到底↓↓↓"));
 							setStatusbarMessage(msg, FSEndReached);
 						}
 						else if (findStatus == FSTopReached)
 						{
-							generic_string msg = pNativeSpeaker->getLocalizedStrFromID("find-status-top-reached", TEXT("Find: Found the 1st occurrence from the bottom. The beginning of the document has been reached."));
+							generic_string msg = pNativeSpeaker->getLocalizedStrFromID("find-status-top-reached", TEXT("↑↑↑一查到顶"));
 							setStatusbarMessage(msg, FSTopReached);
 						}
 					}
@@ -1108,7 +1180,19 @@ INT_PTR CALLBACK FindReplaceDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 				return TRUE;
 
 				case IDM_SEARCH_FIND:
-					goToCenter();
+					enableReplaceFunc(false); // enable relace false so only find
+					return TRUE;
+
+				case IDM_SEARCH_REPLACE:
+					enableReplaceFunc(true);
+					return TRUE;
+
+				case IDM_SEARCH_FINDINFILES:
+					enableFindInFilesFunc();
+					return TRUE;
+
+				case IDM_SEARCH_MARK:
+					enableMarkFunc();
 					return TRUE;
 
 				case IDREPLACE :
@@ -1314,7 +1398,7 @@ INT_PTR CALLBACK FindReplaceDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 						if ((*_ppEditView)->getCurrentBuffer()->isReadOnly())
 						{
 							NativeLangSpeaker *pNativeSpeaker = nppParamInst.getNativeLangSpeaker();
-							generic_string msg = pNativeSpeaker->getLocalizedStrFromID("find-status-replace-readonly", TEXT("Replace: Cannot replace text. The current document is read only."));
+							generic_string msg = pNativeSpeaker->getLocalizedStrFromID("find-status-replace-readonly", TEXT("只读文件不可编辑！"));
 							setStatusbarMessage(msg, FSNotFound);
 							return TRUE;
 						}
@@ -1336,17 +1420,17 @@ INT_PTR CALLBACK FindReplaceDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 						NativeLangSpeaker *pNativeSpeaker = nppParamInst.getNativeLangSpeaker();
 						if (nbReplaced < 0)
 						{
-							result = pNativeSpeaker->getLocalizedStrFromID("find-status-replaceall-re-malformed", TEXT("Replace All: The regular expression is malformed."));
+							result = pNativeSpeaker->getLocalizedStrFromID("find-status-replaceall-re-malformed", TEXT("正则表达式无效！"));
 						}
 						else
 						{
 							if (nbReplaced == 1)
 							{
-								result = pNativeSpeaker->getLocalizedStrFromID("find-status-replaceall-1-replaced", TEXT("Replace All: 1 occurrence was replaced"));
+								result = pNativeSpeaker->getLocalizedStrFromID("find-status-replaceall-1-replaced", TEXT("全部替换: 已替代 1 个匹配项"));
 							}
 							else
 							{
-								result = pNativeSpeaker->getLocalizedStrFromID("find-status-replaceall-nb-replaced", TEXT("Replace All: $INT_REPLACE$ occurrences were replaced"));
+								result = pNativeSpeaker->getLocalizedStrFromID("find-status-replaceall-nb-replaced", TEXT("全部替换: 已替代 $INT_REPLACE$ 个匹配项"));
 								result = stringReplace(result, TEXT("$INT_REPLACE$"), std::to_wstring(nbReplaced));
 							}
 							result += TEXT(" ");
@@ -1373,17 +1457,17 @@ INT_PTR CALLBACK FindReplaceDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 						NativeLangSpeaker *pNativeSpeaker = nppParamInst.getNativeLangSpeaker();
 						if (nbCounted < 0)
 						{
-							result = pNativeSpeaker->getLocalizedStrFromID("find-status-count-re-malformed", TEXT("Count: The regular expression to search is malformed."));
+							result = pNativeSpeaker->getLocalizedStrFromID("find-status-count-re-malformed", TEXT("正则表达式无效！"));
 						}
 						else
 						{
 							if (nbCounted == 1)
 							{
-								result = pNativeSpeaker->getLocalizedStrFromID("find-status-count-1-match", TEXT("Count: 1 match"));
+								result = pNativeSpeaker->getLocalizedStrFromID("find-status-count-1-match", TEXT("计数: 1 match"));
 							}
 							else
 							{
-								result = pNativeSpeaker->getLocalizedStrFromID("find-status-count-nb-matches", TEXT("Count: $INT_REPLACE$ matches"));
+								result = pNativeSpeaker->getLocalizedStrFromID("find-status-count-nb-matches", TEXT("计数: $INT_REPLACE$ matches"));
 								result = stringReplace(result, TEXT("$INT_REPLACE$"), std::to_wstring(nbCounted));
 							}
 							result += TEXT(" ");
@@ -1415,17 +1499,17 @@ INT_PTR CALLBACK FindReplaceDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 						NativeLangSpeaker *pNativeSpeaker = nppParamInst.getNativeLangSpeaker();
 						if (nbMarked < 0)
 						{
-							result = pNativeSpeaker->getLocalizedStrFromID("find-status-mark-re-malformed", TEXT("Mark: The regular expression to search is malformed."));
+							result = pNativeSpeaker->getLocalizedStrFromID("find-status-mark-re-malformed", TEXT("正则表达式无效！"));
 						}
 						else
 						{
 							if (nbMarked == 1)
 							{
-								result = pNativeSpeaker->getLocalizedStrFromID("find-status-mark-1-match", TEXT("Mark: 1 match"));
+								result = pNativeSpeaker->getLocalizedStrFromID("find-status-mark-1-match", TEXT("标记: 1 match"));
 							}
 							else
 							{
-								result = pNativeSpeaker->getLocalizedStrFromID("find-status-mark-nb-matches", TEXT("Mark: $INT_REPLACE$ matches"));
+								result = pNativeSpeaker->getLocalizedStrFromID("find-status-mark-nb-matches", TEXT("标记: $INT_REPLACE$ matches"));
 								result = stringReplace(result, TEXT("$INT_REPLACE$"), std::to_wstring(nbMarked));
 							}
 							result += TEXT(" ");
@@ -1811,7 +1895,7 @@ bool FindReplaceDlg::processFindNext(const TCHAR *txt2find, const FindOption *op
 			{	
 				generic_string newTxt2find = stringReplace(txt2find, TEXT("&"), TEXT("&&"));
 				NativeLangSpeaker *pNativeSpeaker = nppParms->getNativeLangSpeaker();
-				generic_string msg = pNativeSpeaker->getLocalizedStrFromID("find-status-cannot-find", TEXT("Find: Can't find the text \"$STR_REPLACE$\""));
+				generic_string msg = pNativeSpeaker->getLocalizedStrFromID("find-status-cannot-find", TEXT("查找：无法找到文本“$STR_REPLACE$”"));
 				msg = stringReplace(msg, TEXT("$STR_REPLACE$"), newTxt2find);
 				setStatusbarMessage(msg, FSNotFound);
 				
@@ -1835,11 +1919,11 @@ bool FindReplaceDlg::processFindNext(const TCHAR *txt2find, const FindOption *op
 		generic_string  msgGeneral;
 		if (posFind == -2)
 		{
-			msgGeneral = pNativeSpeaker->getLocalizedStrFromID("find-status-invalid-re", TEXT("Find: Invalid regular expression"));
+			msgGeneral = pNativeSpeaker->getLocalizedStrFromID("find-status-invalid-re", TEXT("正则表达式无效！"));
 		}
 		else
 		{
-			msgGeneral = pNativeSpeaker->getLocalizedStrFromID("find-status-search-failed", TEXT("Find: Search failed"));
+			msgGeneral = pNativeSpeaker->getLocalizedStrFromID("find-status-search-failed", TEXT("查找: Search failed"));
 		}
 
 		char szMsg [511] = "";
@@ -1887,7 +1971,7 @@ bool FindReplaceDlg::processReplace(const TCHAR *txt2find, const TCHAR *txt2repl
 	if ((*_ppEditView)->getCurrentBuffer()->isReadOnly())
 	{
 		NativeLangSpeaker *pNativeSpeaker = nppParms->getNativeLangSpeaker();
-		generic_string msg = pNativeSpeaker->getLocalizedStrFromID("find-status-replace-readonly", TEXT("Replace: Cannot replace text. The current document is read only."));
+		generic_string msg = pNativeSpeaker->getLocalizedStrFromID("find-status-replace-readonly", TEXT("无法编辑只读文件！"));
 		setStatusbarMessage(msg, FSNotFound);
 		return false;
 	}
@@ -1939,21 +2023,21 @@ bool FindReplaceDlg::processReplace(const TCHAR *txt2find, const TCHAR *txt2repl
 
 			if (status == FSEndReached)
 			{
-				generic_string msg = pNativeSpeaker->getLocalizedStrFromID("find-status-replace-end-reached", TEXT("Replace: Replaced the 1st occurrence from the top. The end of document has been reached."));
+				generic_string msg = pNativeSpeaker->getLocalizedStrFromID("find-status-replace-end-reached", TEXT("替换：替换到从上到下的首个匹配项。已查找至文档最底部。"));
 				setStatusbarMessage(msg, FSEndReached);
 			}
 			else if (status == FSTopReached)
 			{
-				generic_string msg = pNativeSpeaker->getLocalizedStrFromID("find-status-replace-top-reached", TEXT("Replace: Replaced the 1st occurrence from the bottom. The begin of document has been reached."));
+				generic_string msg = pNativeSpeaker->getLocalizedStrFromID("find-status-replace-top-reached", TEXT("替换：替换到从下到上的首个匹配项。已查找至文档最顶部。"));
 				setStatusbarMessage(msg, FSTopReached);
 			}
 			else
 			{
 				generic_string msg;
 				if (moreMatches)
-					msg = pNativeSpeaker->getLocalizedStrFromID("find-status-replaced-next-found", TEXT("Replace: 1 occurrence was replaced. The next occurrence found."));
+					msg = pNativeSpeaker->getLocalizedStrFromID("find-status-replaced-next-found", TEXT("替换：已替换1个匹配项，并找到了下一个。"));
 				else
-					msg = pNativeSpeaker->getLocalizedStrFromID("find-status-replaced-next-not-found", TEXT("Replace: 1 occurrence was replaced. No more occurrences were found."));
+					msg = pNativeSpeaker->getLocalizedStrFromID("find-status-replaced-next-not-found", TEXT("替换：已替换1个匹配项，找不到别的了。"));
 
 				setStatusbarMessage(msg, FSMessage);
 			}
@@ -1962,7 +2046,7 @@ bool FindReplaceDlg::processReplace(const TCHAR *txt2find, const TCHAR *txt2repl
 	else
 	{
 		NativeLangSpeaker *pNativeSpeaker = nppParms->getNativeLangSpeaker();
-		generic_string msg = pNativeSpeaker->getLocalizedStrFromID("find-status-replace-not-found", TEXT("Replace: no occurrence was found."));
+		generic_string msg = pNativeSpeaker->getLocalizedStrFromID("find-status-replace-not-found", TEXT("替换：没有找到匹配项。"));
 		setStatusbarMessage(msg, FSNotFound);
 	}
 
@@ -1996,7 +2080,7 @@ int FindReplaceDlg::processAll(ProcessOperation op, const FindOption *opt, bool 
 	if (op == ProcessReplaceAll && (*_ppEditView)->getCurrentBuffer()->isReadOnly())
 	{
 		NativeLangSpeaker *pNativeSpeaker = nppParms->getNativeLangSpeaker();
-		generic_string msg = pNativeSpeaker->getLocalizedStrFromID("find-status-replaceall-readonly", TEXT("Replace All: Cannot replace text. The current document is read only."));
+		generic_string msg = pNativeSpeaker->getLocalizedStrFromID("find-status-replaceall-readonly", TEXT("不可编辑只读文件！"));
 		setStatusbarMessage(msg, FSNotFound);
 		return 0;
 	}
@@ -2945,19 +3029,19 @@ generic_string FindReplaceDlg::getScopeInfoForStatusBar(FindOption const *pFindO
 
 	if (pFindOpt->_isInSelection)
 	{
-		scope += pNativeSpeaker->getLocalizedStrFromID("find-status-scope-selection", TEXT("in selected text"));
+		scope += pNativeSpeaker->getLocalizedStrFromID("find-status-scope-selection", TEXT("在选区中"));
 	}
 	else if (pFindOpt->_isWrapAround)
 	{
-		scope += pNativeSpeaker->getLocalizedStrFromID("find-status-scope-all", TEXT("in entire file"));
+		scope += pNativeSpeaker->getLocalizedStrFromID("find-status-scope-all", TEXT("在整个文件中"));
 	}
 	else if (pFindOpt->_whichDirection == DIR_UP)
 	{
-		scope += pNativeSpeaker->getLocalizedStrFromID("find-status-scope-backward", TEXT("from start-of-file to caret"));
+		scope += pNativeSpeaker->getLocalizedStrFromID("find-status-scope-backward", TEXT("从文件头到光标"));
 	}
 	else
 	{
-		scope += pNativeSpeaker->getLocalizedStrFromID("find-status-scope-forward", TEXT("from caret to end-of-file"));
+		scope += pNativeSpeaker->getLocalizedStrFromID("find-status-scope-forward", TEXT("从光标到文件尾"));
 	}
 
 	return scope;
@@ -3126,17 +3210,17 @@ void FindReplaceDlg::execSavedCommand(int cmd, uptr_t intValue, const generic_st
 						NativeLangSpeaker *pNativeSpeaker = nppParms->getNativeLangSpeaker();
 						if (nbReplaced < 0)
 						{
-							result = pNativeSpeaker->getLocalizedStrFromID("find-status-replaceall-re-malformed", TEXT("Replace All: The regular expression is malformed."));
+							result = pNativeSpeaker->getLocalizedStrFromID("find-status-replaceall-re-malformed", TEXT("正则表达式无效！"));
 						}
 						else
 						{
 							if (nbReplaced == 1)
 							{
-								result = pNativeSpeaker->getLocalizedStrFromID("find-status-replaceall-1-replaced", TEXT("Replace All: 1 occurrence was replaced"));
+								result = pNativeSpeaker->getLocalizedStrFromID("find-status-replaceall-1-replaced", TEXT("全部替换：已替换1个匹配项。"));
 							}
 							else
 							{
-								result = pNativeSpeaker->getLocalizedStrFromID("find-status-replaceall-nb-replaced", TEXT("Replace All: $INT_REPLACE$ occurrences were replaced"));
+								result = pNativeSpeaker->getLocalizedStrFromID("find-status-replaceall-nb-replaced", TEXT("全部替换：已替换$INT_REPLACE$个匹配项。"));
 								result = stringReplace(result, TEXT("$INT_REPLACE$"), std::to_wstring(nbReplaced));
 							}
 							result += TEXT(" ");
@@ -3154,17 +3238,17 @@ void FindReplaceDlg::execSavedCommand(int cmd, uptr_t intValue, const generic_st
 						NativeLangSpeaker *pNativeSpeaker = nppParms->getNativeLangSpeaker();
 						if (nbCounted < 0)
 						{
-							result = pNativeSpeaker->getLocalizedStrFromID("find-status-count-re-malformed", TEXT("Count: The regular expression to search is malformed."));
+							result = pNativeSpeaker->getLocalizedStrFromID("find-status-count-re-malformed", TEXT("正则表达式无效！"));
 						}
 						else
 						{
 							if (nbCounted == 1)
 							{
-								result = pNativeSpeaker->getLocalizedStrFromID("find-status-count-1-match", TEXT("Count: 1 match"));
+								result = pNativeSpeaker->getLocalizedStrFromID("find-status-count-1-match", TEXT("计数：1次匹配"));
 							}
 							else
 							{
-								result = pNativeSpeaker->getLocalizedStrFromID("find-status-count-nb-matches", TEXT("Count: $INT_REPLACE$ matches"));
+								result = pNativeSpeaker->getLocalizedStrFromID("find-status-count-nb-matches", TEXT("计数：$INT_REPLACE$次匹配"));
 								result = stringReplace(result, TEXT("$INT_REPLACE$"), std::to_wstring(nbCounted));
 							}
 							result += TEXT(" ");
@@ -3184,17 +3268,17 @@ void FindReplaceDlg::execSavedCommand(int cmd, uptr_t intValue, const generic_st
 						NativeLangSpeaker *pNativeSpeaker = nppParms->getNativeLangSpeaker();
 						if (nbMarked < 0)
 						{
-							result = pNativeSpeaker->getLocalizedStrFromID("find-status-mark-re-malformed", TEXT("Mark: The regular expression to search is malformed."));
+							result = pNativeSpeaker->getLocalizedStrFromID("find-status-mark-re-malformed", TEXT("正则表达式无效！"));
 						}
 						else
 						{
 							if (nbMarked == 1)
 							{
-								result = pNativeSpeaker->getLocalizedStrFromID("find-status-mark-1-match", TEXT("Mark: 1 match"));
+								result = pNativeSpeaker->getLocalizedStrFromID("find-status-mark-1-match", TEXT("标记：1次匹配"));
 							}
 							else
 							{
-								result = pNativeSpeaker->getLocalizedStrFromID("find-status-mark-nb-matches", TEXT("Mark: $INT_REPLACE$ matches"));
+								result = pNativeSpeaker->getLocalizedStrFromID("find-status-mark-nb-matches", TEXT("标记：$INT_REPLACE$次匹配"));
 								result = stringReplace(result, TEXT("$INT_REPLACE$"), std::to_wstring(nbMarked));
 							}
 							result += TEXT(" ");
@@ -3661,11 +3745,44 @@ void FindReplaceDlg::drawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
 		ptStr = TEXT("");
 	}
 	
+	if (NppDarkMode::isEnabled())
+	{
+		fgColor = NppDarkMode::getTextColor();
+
+		if (_statusbarFindStatus == FSNotFound)
+		{
+			fgColor = RGB(0xFF, 0x50, 0x50); // red
+		}
+		else if (_statusbarFindStatus == FSMessage)
+		{
+			fgColor = RGB(0x70, 0x70, 0xFF); // blue
+		}
+		else if (_statusbarFindStatus == FSTopReached || _statusbarFindStatus == FSEndReached)
+		{
+			fgColor = RGB(0x50, 0xFF, 0x50); // green
+		}
+	}
+
 	SetTextColor(lpDrawItemStruct->hDC, fgColor);
-	COLORREF bgColor = getCtrlBgColor(_statusBar.getHSelf());
+
+	COLORREF bgColor;
+	if (NppDarkMode::isEnabled())
+	{
+		bgColor = NppDarkMode::getBackgroundColor();
+	}
+	else
+	{
+		bgColor = getCtrlBgColor(_statusBar.getHSelf());
+	}
 	::SetBkColor(lpDrawItemStruct->hDC, bgColor);
 	RECT rect;
 	_statusBar.getClientRect(rect);
+
+	if (NppDarkMode::isEnabled())
+	{
+		rect.left += 2;
+	}
+
 	::DrawText(lpDrawItemStruct->hDC, ptStr, lstrlen(ptStr), &rect, DT_SINGLELINE | DT_VCENTER | DT_LEFT);
 
 	if (_statusbarTooltipMsg.length() == 0) return;
@@ -3710,15 +3827,15 @@ bool FindReplaceDlg::replaceInFilesConfirmCheck(generic_string directory, generi
 
 	NativeLangSpeaker* pNativeSpeaker = nppParms->getNativeLangSpeaker();
 
-	generic_string title = pNativeSpeaker->getLocalizedStrFromID("replace-in-files-confirm-title", TEXT("Are you sure?"));
+	generic_string title = pNativeSpeaker->getLocalizedStrFromID("replace-in-files-confirm-title", TEXT("确认?"));
 
-	generic_string msg = pNativeSpeaker->getLocalizedStrFromID("replace-in-files-confirm-directory", TEXT("Are you sure you want to replace all occurrences in :"));
+	generic_string msg = pNativeSpeaker->getLocalizedStrFromID("replace-in-files-confirm-directory", TEXT("您是否要替换下列范围内的所有匹配项："));
 	msg += TEXT("\r\r");
 	msg += directory;
 
 	msg += TEXT("\r\r");
 
-	generic_string msg2 = pNativeSpeaker->getLocalizedStrFromID("replace-in-files-confirm-filetype", TEXT("For file type :"));
+	generic_string msg2 = pNativeSpeaker->getLocalizedStrFromID("replace-in-files-confirm-filetype", TEXT("对这些文件类型："));
 	msg2 += TEXT("\r\r");
 	msg2 += fileTypes[0] ? fileTypes : TEXT("*.*");
 
@@ -3740,9 +3857,9 @@ bool FindReplaceDlg::replaceInProjectsConfirmCheck()
 
 	NativeLangSpeaker* pNativeSpeaker = (NppParameters::getInstance()).getNativeLangSpeaker();
 
-	generic_string title = pNativeSpeaker->getLocalizedStrFromID("replace-in-projects-confirm-title", TEXT("Are you sure?"));
+	generic_string title = pNativeSpeaker->getLocalizedStrFromID("replace-in-projects-confirm-title", TEXT("您确定么？"));
 
-	generic_string msg = pNativeSpeaker->getLocalizedStrFromID("replace-in-projects-confirm-message", TEXT("Do you want to replace all occurrences in all documents in the selected Project Panel(s)?"));
+	generic_string msg = pNativeSpeaker->getLocalizedStrFromID("replace-in-projects-confirm-message", TEXT("您是否要替换所选工程面板中所有文档中的所有匹配项？"));
 	int res = ::MessageBox(NULL, msg.c_str(), title.c_str(), MB_OKCANCEL | MB_DEFBUTTON2 | MB_TASKMODAL);
 
 	if (res == IDOK)
@@ -3761,8 +3878,8 @@ bool FindReplaceDlg::replaceInOpenDocsConfirmCheck(void)
 	bool confirmed = false;
 
 	NativeLangSpeaker* pNativeSpeaker = nppParms->getNativeLangSpeaker();
-	generic_string title = pNativeSpeaker->getLocalizedStrFromID("replace-in-open-docs-confirm-title", TEXT("Are you sure?"));
-	generic_string msg = pNativeSpeaker->getLocalizedStrFromID("replace-in-open-docs-confirm-message", TEXT("Are you sure you want to replace all occurrences in all open documents?"));
+	generic_string title = pNativeSpeaker->getLocalizedStrFromID("replace-in-open-docs-confirm-title", TEXT("替换确认"));
+	generic_string msg = pNativeSpeaker->getLocalizedStrFromID("replace-in-open-docs-confirm-message", TEXT("您是否要在所有打开的文档中替换所有匹配项？"));
 
 	int res = ::MessageBox(NULL, msg.c_str(), title.c_str(), MB_OKCANCEL | MB_DEFBUTTON2 | MB_TASKMODAL);
 
@@ -3777,7 +3894,7 @@ bool FindReplaceDlg::replaceInOpenDocsConfirmCheck(void)
 generic_string Finder::getHitsString(int count) const
 {
 	NativeLangSpeaker *pNativeSpeaker = nppParms->getNativeLangSpeaker();
-	generic_string text = pNativeSpeaker->getLocalizedStrFromID("find-result-hits", TEXT(""));
+	generic_string text = pNativeSpeaker->getLocalizedStrFromID("find-result-hits", TEXT("（匹配$INT_REPLACE$次）"));
 
 	if (text.empty())
 	{
@@ -3803,7 +3920,7 @@ generic_string Finder::getHitsString(int count) const
 void Finder::addSearchLine(const TCHAR *searchName)
 {
 	NativeLangSpeaker *pNativeSpeaker = nppParms->getNativeLangSpeaker();
-	generic_string str = pNativeSpeaker->getLocalizedStrFromID("find-result-title", TEXT("Search"));
+	generic_string str = pNativeSpeaker->getLocalizedStrFromID("find-result-title", TEXT("搜索"));
 	str += TEXT(" \"");
 	str += searchName;
 	str += TEXT("\" \r\n");
@@ -3862,17 +3979,8 @@ void Finder::addSearchHitCount(int count, int countSearched, bool isMatchLines, 
 		//  variation             "(0 hits in 0 files of 1 searched)"
 		// selection variations:  "(1 hit in 1 selection of 1 searched)"     " (0 hits in 0 selections of 1 searched)"
 		// line filter variation: "(1 hit in 1 file of 1 searched) - Line Filter Mode: only display the filtered results"
-
-		generic_string hitsIn = count == 1 ? TEXT("hit") : TEXT("hits");
-
-		generic_string fileOrSelection = searchedEntireNotSelection ? TEXT("file") : TEXT("selection");;
-		if (_nbFoundFiles != 1)
-		{
-			fileOrSelection += TEXT("s");
-		}
-
-		text = TEXT("(") + nbResStr + TEXT(" ") + hitsIn + TEXT(" in ") + nbFoundFilesStr + TEXT(" ") + 
-			fileOrSelection + TEXT(" of ") + nbSearchedFilesStr + TEXT(" searched") TEXT(")");
+		generic_string fileOrSelection = searchedEntireNotSelection ? TEXT("文件") : TEXT("选区");
+		text = nbFoundFilesStr + TEXT("个") + fileOrSelection + TEXT("中匹配到") + nbResStr + TEXT("次，总计查找") + nbSearchedFilesStr + TEXT("次)");
 	}
 	else
 	{
@@ -3883,7 +3991,7 @@ void Finder::addSearchHitCount(int count, int countSearched, bool isMatchLines, 
 
 	if (isMatchLines)
 	{
-		generic_string lineFilterModeInfo = pNativeSpeaker->getLocalizedStrFromID("find-result-title-info-extra", TEXT(" - Line Filter Mode: only display the filtered results"));
+		generic_string lineFilterModeInfo = pNativeSpeaker->getLocalizedStrFromID("find-result-title-info-extra", TEXT(" - 仅在搜索结果中查找"));
 		text += lineFilterModeInfo;
 	}
 
@@ -3930,11 +4038,26 @@ void Finder::removeAll()
 
 void Finder::openAll()
 {
-	size_t sz = _pMainFoundInfos->size();
-
-	for (size_t i = 0; i < sz; ++i)
+	for (auto&& path : getResultFilePaths())
 	{
-		::SendMessage(_hParent, WM_DOOPEN, 0, reinterpret_cast<LPARAM>(_pMainFoundInfos->at(i)._fullPath.c_str()));
+		::SendMessage(_hParent, WM_DOOPEN, 0, reinterpret_cast<LPARAM>(path.c_str()));
+	}
+}
+
+void Finder::copyPathnames()
+{
+	generic_string toClipboard;
+	for (auto&& path : getResultFilePaths())
+	{
+		toClipboard += path + TEXT("\r\n");
+	}
+	if (!toClipboard.empty())
+	{
+		if (!str2Clipboard(toClipboard, _hSelf))
+		{
+			assert(false);
+			::MessageBox(NULL, TEXT("Error placing pathnames into clipboard."), TEXT("Notepad++"), MB_ICONINFORMATION);
+		}
 	}
 }
 
@@ -4175,6 +4298,12 @@ INT_PTR CALLBACK Finder::run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam)
 					return TRUE;
 				}
 
+				case NPPM_INTERNAL_SCINTILLAFINDERCOPYPATHS:
+				{
+					copyPathnames();
+					return TRUE;
+				}
+
 				case NPPM_INTERNAL_SCINTILLAFINDERSELECTALL :
 				{
 					_scintView.execute(SCI_SELECTALL);
@@ -4217,15 +4346,17 @@ INT_PTR CALLBACK Finder::run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam)
 
 				NativeLangSpeaker *pNativeSpeaker = nppParms->getNativeLangSpeaker();
 
-				generic_string findInFinder = pNativeSpeaker->getLocalizedStrFromID("finder-find-in-finder", TEXT("Find in these found results..."));
-				generic_string closeThis = pNativeSpeaker->getLocalizedStrFromID("finder-close-this", TEXT("Close this finder"));
-				generic_string collapseAll = pNativeSpeaker->getLocalizedStrFromID("finder-collapse-all", TEXT("Collapse all"));
-				generic_string uncollapseAll = pNativeSpeaker->getLocalizedStrFromID("finder-uncollapse-all", TEXT("Uncollapse all"));
-				generic_string copy = pNativeSpeaker->getLocalizedStrFromID("finder-copy", TEXT("Copy"));
-				generic_string selectAll = pNativeSpeaker->getLocalizedStrFromID("finder-select-all", TEXT("Select all"));
-				generic_string clearAll = pNativeSpeaker->getLocalizedStrFromID("finder-clear-all", TEXT("Clear all"));
-				generic_string openAll = pNativeSpeaker->getLocalizedStrFromID("finder-open-all", TEXT("Open all"));
-				generic_string wrapLongLines = pNativeSpeaker->getLocalizedStrFromID("finder-wrap-long-lines", TEXT("Word wrap long lines"));
+				generic_string findInFinder = pNativeSpeaker->getLocalizedStrFromID("finder-find-in-finder", TEXT("结果中找..."));
+				generic_string closeThis = pNativeSpeaker->getLocalizedStrFromID("finder-close-this", TEXT("关闭"));
+				generic_string collapseAll = pNativeSpeaker->getLocalizedStrFromID("finder-collapse-all", TEXT("折叠全部"));
+				generic_string uncollapseAll = pNativeSpeaker->getLocalizedStrFromID("finder-uncollapse-all", TEXT("展开全部"));
+				generic_string copy = pNativeSpeaker->getLocalizedStrFromID("finder-copy", TEXT("复制"));
+				generic_string copyPaths = pNativeSpeaker->getLocalizedStrFromID("finder-copy-paths", TEXT("复制文件路径"));
+
+				generic_string selectAll = pNativeSpeaker->getLocalizedStrFromID("finder-select-all", TEXT("全选(&A)"));
+				generic_string clearAll = pNativeSpeaker->getLocalizedStrFromID("finder-clear-all", TEXT("清除全部(&C)"));
+				generic_string openAll = pNativeSpeaker->getLocalizedStrFromID("finder-open-all", TEXT("打开全部(&O)"));
+				generic_string wrapLongLines = pNativeSpeaker->getLocalizedStrFromID("finder-wrap-long-lines", TEXT("换行"));
 
 				tmp.push_back(MenuItemUnit(NPPM_INTERNAL_FINDINFINDERDLG, findInFinder));
 				if (_canBeVolatiled)
@@ -4235,6 +4366,7 @@ INT_PTR CALLBACK Finder::run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam)
 				tmp.push_back(MenuItemUnit(NPPM_INTERNAL_SCINTILLAFINDERUNCOLLAPSE, uncollapseAll));
 				tmp.push_back(MenuItemUnit(0, TEXT("Separator")));
 				tmp.push_back(MenuItemUnit(NPPM_INTERNAL_SCINTILLAFINDERCOPY, copy));
+				tmp.push_back(MenuItemUnit(NPPM_INTERNAL_SCINTILLAFINDERCOPYPATHS, copyPaths));
 				tmp.push_back(MenuItemUnit(NPPM_INTERNAL_SCINTILLAFINDERSELECTALL, selectAll));
 				tmp.push_back(MenuItemUnit(NPPM_INTERNAL_SCINTILLAFINDERCLEARALL, clearAll));
 				tmp.push_back(MenuItemUnit(0, TEXT("Separator")));
@@ -4314,15 +4446,54 @@ INT_PTR CALLBACK FindIncrementDlg::run_dlgProc(UINT message, WPARAM wParam, LPAR
 		// Make edit field red if not found
 		case WM_CTLCOLOREDIT :
 		{
+			auto hdc = reinterpret_cast<HDC>(wParam);
+
+			if (NppDarkMode::isEnabled())
+			{
+				if (FSNotFound != getFindStatus())
+				{
+					return NppDarkMode::onCtlColorSofter(hdc);
+				}
+				else // text not found
+				{
+					return NppDarkMode::onCtlColorError(hdc);
+				}
+			}
+
 			// if the text not found modify the background color of the editor
 			static HBRUSH hBrushBackground = CreateSolidBrush(BCKGRD_COLOR);
 			if (FSNotFound != getFindStatus())
 				return FALSE; // text found, use the default color
 
 			// text not found
-			SetTextColor((HDC)wParam, TXT_COLOR);
-			SetBkColor((HDC)wParam, BCKGRD_COLOR);
-			return (LRESULT)hBrushBackground;
+			SetTextColor(hdc, TXT_COLOR);
+			SetBkColor(hdc, BCKGRD_COLOR);
+			return reinterpret_cast<LRESULT>(hBrushBackground);
+		}
+		
+		case WM_CTLCOLORDLG:
+		case WM_CTLCOLORSTATIC:
+		{
+			if (!NppDarkMode::isEnabled())
+			{
+				return DefWindowProc(getHSelf(), message, wParam, lParam);
+			}
+
+			return NppDarkMode::onCtlColor(reinterpret_cast<HDC>(wParam));
+		}
+
+		case NPPM_INTERNAL_REFRESHDARKMODE:
+		{
+			NppDarkMode::autoThemeChildControls(getHSelf());
+			return TRUE;
+		}
+
+		case WM_INITDIALOG:
+		{
+			LRESULT lr = DefWindowProc(getHSelf(), message, wParam, lParam);
+
+			NppDarkMode::autoSubclassAndThemeChildControls(getHSelf());
+			return lr;
 		}
 
 		case WM_COMMAND : 

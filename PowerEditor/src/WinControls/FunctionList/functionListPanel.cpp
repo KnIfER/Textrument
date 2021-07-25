@@ -582,6 +582,14 @@ void FunctionListPanel::notified(LPNMHDR notification)
 	{
 		setClosed(1);
 	}
+	else if (notification->code == NM_CUSTOMDRAW && (notification->hwndFrom == _hToolbarMenu))
+	{
+		if (NppDarkMode::isEnabled())
+		{
+			auto nmtbcd = reinterpret_cast<LPNMTBCUSTOMDRAW>(notification);
+			FillRect(nmtbcd->nmcd.hdc, &nmtbcd->nmcd.rc, NppDarkMode::getBackgroundBrush());
+		}
+	}
 }
 
 BOOL FunctionListPanel::setTreeViewImageList(int root_id, int node_id, int leaf_id)
@@ -724,27 +732,55 @@ INT_PTR CALLBACK FunctionListPanel::run_dlgProc(UINT message, WPARAM wParam, LPA
 		// Make edit field red if not found
 		case WM_CTLCOLOREDIT :
 		{
-			// if the text not found modify the background color of the editor
-			static HBRUSH hBrushBackground = CreateSolidBrush(BCKGRD_COLOR);
 			TCHAR text2search[MAX_PATH] ;
 			::SendMessage(_hSearchEdit, WM_GETTEXT, MAX_PATH, reinterpret_cast<LPARAM>(text2search));
+			bool textFound = false;
 			if (text2search[0] == '\0')
 			{
-				return FALSE; // no text, use the default color
+				textFound = true; // no text, use the default color
 			}
 
-			HTREEITEM searchViewRoot = _treeViewSearchResult.getRoot();
-			if (searchViewRoot)
+			if (!textFound)
 			{
-				if (_treeViewSearchResult.getChildFrom(searchViewRoot))
-					return FALSE; // children on root found, use the default color
+				HTREEITEM searchViewRoot = _treeViewSearchResult.getRoot();
+				if (searchViewRoot)
+				{
+					if (_treeViewSearchResult.getChildFrom(searchViewRoot))
+					{
+						textFound = true; // children on root found, use the default color
+					}
+				}
+				else
+				{
+					textFound = true; // no root (no parser), use the default color
+				}
 			}
-			else
-				return FALSE; // no root (no parser), use the default color
+
+			auto hdc = reinterpret_cast<HDC>(wParam);
+
+			if (NppDarkMode::isEnabled())
+			{
+				if (textFound)
+				{
+					return NppDarkMode::onCtlColorSofter(hdc);
+				}
+				else // text not found
+				{
+					return NppDarkMode::onCtlColorError(hdc);
+				}
+			}
+
+			if (textFound)
+			{
+				return FALSE;
+			}
+
 			// text not found
-			SetTextColor((HDC)wParam, TXT_COLOR);
-			SetBkColor((HDC)wParam, BCKGRD_COLOR);
-			return (LRESULT)hBrushBackground;
+			// if the text not found modify the background color of the editor
+			static HBRUSH hBrushBackground = CreateSolidBrush(BCKGRD_COLOR);
+			SetTextColor(hdc, TXT_COLOR);
+			SetBkColor(hdc, BCKGRD_COLOR);
+			return reinterpret_cast<LRESULT>(hBrushBackground);
 		}
 
         case WM_INITDIALOG :
@@ -757,6 +793,9 @@ INT_PTR CALLBACK FunctionListPanel::run_dlgProc(UINT message, WPARAM wParam, LPA
 			int style = WS_CHILD | WS_VISIBLE | CCS_ADJUSTABLE | TBSTYLE_AUTOSIZE | TBSTYLE_FLAT | TBSTYLE_LIST | TBSTYLE_TRANSPARENT | BTNS_AUTOSIZE | BTNS_SEP | TBSTYLE_TOOLTIPS;
 			_hToolbarMenu = CreateWindowEx(0,TOOLBARCLASSNAME,NULL, style,
 								   0,0,0,0,_hSelf,nullptr, _hInst, NULL);
+
+			NppDarkMode::setDarkTooltips(_hToolbarMenu, NppDarkMode::ToolTipsType::toolbar);
+			NppDarkMode::setDarkLineAbovePanelToolbar(_hToolbarMenu);
 
 			oldFunclstToolbarProc = reinterpret_cast<WNDPROC>(::SetWindowLongPtr(_hToolbarMenu, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(funclstToolbarProc)));
 			TBBUTTON tbButtons[3];
@@ -818,6 +857,16 @@ INT_PTR CALLBACK FunctionListPanel::run_dlgProc(UINT message, WPARAM wParam, LPA
 			_treeView.display();
             return TRUE;
         }
+
+		case NPPM_INTERNAL_REFRESHDARKMODE:
+		{
+			NppDarkMode::setDarkTooltips(_hToolbarMenu, NppDarkMode::ToolTipsType::toolbar);
+			NppDarkMode::setDarkLineAbovePanelToolbar(_hToolbarMenu);
+
+			NppDarkMode::setDarkTooltips(_treeView.getHSelf(), NppDarkMode::ToolTipsType::treeview);
+			NppDarkMode::setTreeViewStyle(_treeView.getHSelf());
+			return TRUE;
+		}
 
 		case WM_DESTROY:
 			_treeView.destroy();

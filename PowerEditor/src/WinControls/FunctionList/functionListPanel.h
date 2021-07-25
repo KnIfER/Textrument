@@ -32,9 +32,7 @@
 #include "functionParser.h"
 #include "TreeView.h"
 
-#define FL_PANELTITLE     TEXT("Function List")
-#define FL_SORTTIP        TEXT("sort")
-#define FL_RELOADTIP      TEXT("Reload")
+#define FL_PANELTITLE     TEXT("函数列表")
 
 #define FL_FUCTIONLISTROOTNODE "FunctionList"
 #define FL_SORTLOCALNODENAME   "SortTip"
@@ -131,8 +129,8 @@ private:
 	long _findEndLine = -1;
 	HTREEITEM _findItem;
 
-	generic_string _sortTipStr = TEXT("Reload");
-	generic_string _reloadTipStr = TEXT("Sort");
+	generic_string _sortTipStr = TEXT("排序");
+	generic_string _reloadTipStr = TEXT("刷新");
 
 	std::vector<foundInfo> _foundFuncInfos;
 

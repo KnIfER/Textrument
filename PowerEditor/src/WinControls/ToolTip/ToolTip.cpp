@@ -29,6 +29,7 @@
 #include <iostream>
 #include <stdexcept>
 #include "ToolTip.h"
+#include "NppDarkMode.h"
 
 void ToolTip::init(HINSTANCE hInst, HWND hParent)
 {
@@ -42,6 +43,8 @@ void ToolTip::init(HINSTANCE hInst, HWND hParent)
 		{
 			throw std::runtime_error("ToolTip::init : CreateWindowEx() function return null");
 		}
+
+		NppDarkMode::setDarkTooltips(_hSelf, NppDarkMode::ToolTipsType::tooltip);
 
 		::SetWindowLongPtr(_hSelf, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(this));
 		_defaultProc = reinterpret_cast<WNDPROC>(::SetWindowLongPtr(_hSelf, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(staticWinProc)));

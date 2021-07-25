@@ -225,6 +225,7 @@ void Notepad_plus_Window::init(HINSTANCE hInst, HWND parent, const TCHAR *cmdLin
 	//  Get themes from both npp install themes dir and app data themes dir with the per user
 	//  overriding default themes of the same name.
 
+	// appDataThemeDir
     if (nppParams.getAppDataNppDir() && nppParams.getAppDataNppDir()[0])
     {
 		lstrcpy(universal_buffer, nppParams.getAppDataNppDir());
@@ -239,10 +240,16 @@ void Notepad_plus_Window::init(HINSTANCE hInst, HWND parent, const TCHAR *cmdLin
 
 	fileNames.clear();
 
+	// nppThemeDir
+
 	lstrcpy(universal_buffer, nppDir);
 	PathAppend(universal_buffer, TEXT("themes"));
 	lstrcat(universal_buffer, TEXT("\\"));
 	_notepad_plus_plus_core.getMatchedFileNames(universal_buffer, patterns, fileNames, false, false);
+	
+	// Set theme directory to their installation directory
+	themeSwitcher.setThemeDirPath(universal_buffer);
+
 	for (size_t i = 0, len = fileNames.size(); i < len ; ++i)
 	{
 		generic_string themeName( themeSwitcher.getThemeFromXmlFileName(fileNames[i].c_str()) );

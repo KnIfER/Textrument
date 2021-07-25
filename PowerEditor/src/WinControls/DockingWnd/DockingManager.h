@@ -57,7 +57,7 @@ public :
 
 	void showContainer(size_t uCont, bool display = true) {
 		_vContainer[uCont]->doDialog(display);
-		onSize();
+		resize();
 	}
 
 	void showFloatingContainers(bool show);
@@ -99,21 +99,9 @@ public :
 	int getDockedContSize(int iCont);
 	void setDockedContSize(int iCont, int iSize);
 	virtual void destroy();
+	void resize();
 
 private :
-
-	static LRESULT CALLBACK staticWinProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam);
-	LRESULT runProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam);
-	void onSize();
-
-	void	toggleTb(DockingCont* pContSrc, DockingCont* pContTgt, tTbData TbData, bool activate=true);
-
-	// test if container exists
-	BOOL ContExists(size_t iCont);
-	int	 FindEmptyContainer();
-	LRESULT SendNotify(HWND hWnd, UINT message);
-	
-private:
 	Window						**_ppWindow = nullptr;
 	RECT						_rcWork;
 	RECT						_rect;
@@ -126,5 +114,15 @@ private:
 	BOOL						_isInitialized = FALSE;
 	int							_iContMap[CONT_MAP_MAX];
 	std::vector<DockingSplitter *>	_vSplitter;
+
+	static LRESULT CALLBACK staticWinProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam);
+	LRESULT runProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam);
+
+	void	toggleTb(DockingCont* pContSrc, DockingCont* pContTgt, tTbData TbData, bool activate=true);
+
+	// test if container exists
+	BOOL ContExists(size_t iCont);
+	int	 FindEmptyContainer();
+	LRESULT SendNotify(HWND hWnd, UINT message);
 };
 

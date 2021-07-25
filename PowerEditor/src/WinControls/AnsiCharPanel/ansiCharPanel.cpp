@@ -70,6 +70,12 @@ INT_PTR CALLBACK AnsiCharPanel::run_dlgProc(UINT message, WPARAM wParam, LPARAM 
             return TRUE;
         }
 
+		case NPPM_INTERNAL_REFRESHDARKMODE:
+		{
+			NppDarkMode::setDarkListView(_listView.getHSelf());
+			return TRUE;
+		}
+
 		case WM_NOTIFY:
 		{
 			switch (((LPNMHDR)lParam)->code)

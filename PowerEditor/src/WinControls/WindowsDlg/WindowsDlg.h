@@ -30,8 +30,10 @@
 
 #include "SizeableDlg.h"
 #include "Common.h"
+#include "ContextMenu.h"
 
 class DocTabView;
+class Buffer;
 
 typedef enum {
 	WDT_ACTIVATE = 1,
@@ -84,6 +86,11 @@ protected :
 	void activateCurrent();
 	void doColumnSort();
 	void doCount();
+	void putItemsToClipboard(bool isFullPath);
+	Buffer* getBuffer(int index) const;
+
+	static LONG_PTR originalListViewProc;
+	static LRESULT CALLBACK listViewProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam);
 
 	HWND _hList = nullptr;
 	static RECT _lastKnownLocation;
@@ -94,6 +101,7 @@ protected :
 	int _currentColumn = -1;
 	int _lastSort = -1;
 	bool _reverseSort = false;
+	ContextMenu _listMenu;
 
 private:
 	virtual void init(HINSTANCE hInst, HWND parent);	

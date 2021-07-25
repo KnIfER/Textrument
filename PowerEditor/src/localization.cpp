@@ -73,14 +73,14 @@ MenuPosition menuPos[] = {
 	{ 2, 23, -1, "search-copyStyledText" },
 	{ 2, 25, -1, "search-bookmark" },
 
-	{ 3,  4, -1, "view-currentFileIn" },
-	{ 3,  6, -1, "view-showSymbol" },
-	{ 3,  7, -1, "view-zoom" },
-	{ 3,  8, -1, "view-moveCloneDocument" },
-	{ 3,  9, -1, "view-tab" },
-	{ 3, 18, -1, "view-collapseLevel" },
-	{ 3, 19, -1, "view-uncollapseLevel" },
-	{ 3, 24, -1, "view-project" },
+	{ 3,  5, -1, "view-currentFileIn" },
+	{ 3,  7, -1, "view-showSymbol" },
+	{ 3,  8, -1, "view-zoom" },
+	{ 3,  9, -1, "view-moveCloneDocument" },
+	{ 3, 10, -1, "view-tab" },
+	{ 3, 19, -1, "view-collapseLevel" },
+	{ 3, 20, -1, "view-uncollapseLevel" },
+	{ 3, 25, -1, "view-project" },
 
 	{ 4,  6, -1, "encoding-characterSets" },
 	{ 4,  6,  0, "encoding-arabic" },
@@ -915,6 +915,13 @@ void NativeLangSpeaker::changePrefereceDlgLang(PreferenceDlg & preference)
 	{
 		const wchar_t *nameW = wmc.char2wchar(titre, _nativeLangEncoding);
 		preference.renameDialogTitle(TEXT("Scintillas"), nameW);
+	}
+
+	changeDlgLang(preference._darkModeSubDlg.getHSelf(), "DarkMode", titre, titreMaxSize);
+	if (titre[0] != '\0')
+	{
+		const wchar_t* nameW = wmc.char2wchar(titre, _nativeLangEncoding);
+		preference.renameDialogTitle(TEXT("DarkMode"), nameW);
 	}
 
 	changeDlgLang(preference._defaultNewDocDlg.getHSelf(), "NewDoc", titre, titreMaxSize);

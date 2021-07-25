@@ -31,6 +31,7 @@
 #include "menuCmdID.h"
 #include "Parameters.h"
 #include "Notepad_plus.h"
+#include "resource.h"
 
 extern Notepad_plus* nppApp;
 
@@ -85,6 +86,13 @@ INT_PTR CALLBACK VerticalFileSwitcher::run_dlgProc(UINT message, WPARAM wParam, 
 
             return TRUE;
         }
+
+		case NPPM_INTERNAL_REFRESHDARKMODE:
+		{
+			NppDarkMode::setDarkListView(_fileListView.getHSelf());
+			NppDarkMode::setDarkTooltips(_fileListView.getHSelf(), NppDarkMode::ToolTipsType::listview);
+			return TRUE;
+		}
 
 		case WM_NOTIFY:
 		{

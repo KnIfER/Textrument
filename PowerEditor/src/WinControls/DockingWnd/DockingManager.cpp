@@ -274,7 +274,7 @@ LRESULT DockingManager::runProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM l
 		case WM_MOVE:
 		case WM_SIZE:
 		{
-			onSize();
+			resize();
 			break;
 		}
 		case WM_DESTROY:
@@ -380,7 +380,7 @@ LRESULT DockingManager::runProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM l
 							}
 							break;
 					}
-					onSize();
+					resize();
 					break;
 				}
 			}
@@ -431,7 +431,7 @@ LRESULT DockingManager::runProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM l
 	return ::DefWindowProc(_hSelf, message, wParam, lParam);
 }
 
-void DockingManager::onSize()
+void DockingManager::resize()
 {
     reSizeTo(_rect);
 }
@@ -605,8 +605,8 @@ void DockingManager::createDockableDlg(tTbData data, int iCont, bool isVisible)
 		// create image list if not exist
 		if (_hImageList == NULL)
 		{
-			int iconDpiDynamicalSize = NppParameters::getInstance()._dpiManager.scaleY(14);
-			_hImageList = ::ImageList_Create(iconDpiDynamicalSize,iconDpiDynamicalSize,ILC_COLOR8, 0, 0);
+			int iconDpiDynamicalSize = NppParameters::getInstance()._dpiManager.scaleY(12) + 2;
+			_hImageList = ::ImageList_Create(iconDpiDynamicalSize, iconDpiDynamicalSize, ILC_COLOR32 | ILC_MASK, 0, 0);
 		}
 
 		// add icon
@@ -774,7 +774,7 @@ void DockingManager::setDockedContSize(int iCont, int iSize)
 		_dockData.rcRegion[iCont].right = iSize;
 	else
 		return;
-	onSize();
+	resize();
 }
 
 int DockingManager::getDockedContSize(int iCont)
@@ -892,7 +892,7 @@ DockingCont* DockingManager::toggleVisTb(DockingCont* pContSrc, UINT message, LP
 
 	// at first hide container and resize
 	pContSrc->doDialog(false);
-	onSize();
+	resize();
 
 	if (prcFloat != NULL)
 	{
@@ -970,7 +970,7 @@ void DockingManager::toggleVisTbWnd(DockingCont* pContSrc, DockingCont* pContTgt
 
 	// at first hide container and resize
 	pContSrc->doDialog(false);
-	onSize();
+	resize();
 
 	for (size_t iTb = 0, len = vTbData.size(); iTb < len; ++iTb)
 	{
