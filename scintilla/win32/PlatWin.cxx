@@ -3470,6 +3470,7 @@ void Platform::DebugDisplay(const char *s) {
 	::OutputDebugStringA(s);
 }
 
+//取消注释可以打开调试
 //#define TRACE
 
 #ifdef TRACE

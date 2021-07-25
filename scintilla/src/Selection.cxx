@@ -347,12 +347,14 @@ void Selection::SetSelection(SelectionRange range) {
 }
 
 void Selection::AddSelection(SelectionRange range) {
+	//Platform::DebugPrintf("AddSelection=%d\n", Count());
 	TrimSelection(range);
 	ranges.push_back(range);
 	mainRange = ranges.size() - 1;
 }
 
 void Selection::AddSelectionWithoutTrim(SelectionRange range) {
+	//Platform::DebugPrintf("AddSelectionWithoutTrim=%d\n", Count());
 	ranges.push_back(range);
 	mainRange = ranges.size() - 1;
 }

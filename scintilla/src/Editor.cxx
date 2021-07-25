@@ -578,7 +578,7 @@ SelectionPosition Editor::SelectionEnd() {
 	return sel.RangeMain().End();
 }
 
-void Editor::SetRectangularRange() {
+void Editor::SetRectangularRange(std::set<Sci::Line>* lns) {
 	if (sel.IsRectangular()) {
 		const int xAnchor = XFromPosition(sel.Rectangular().anchor);
 		int xCaret = XFromPosition(sel.Rectangular().caret);
@@ -591,29 +591,75 @@ void Editor::SetRectangularRange() {
 			pdoc->SciLineFromPosition(sel.Rectangular().caret.Position());
 		const int increment = (lineCaret > lineAnchorRect) ? 1 : -1;
 		AutoSurface surface(this);
+		bool hasLen=false;
+		bool bNonRectMS = (virtualSpaceOptions & SCVS_RECTANGULARSELECTION) == 0;
+		bool selOpened=false;
 		for (Sci::Line line=lineAnchorRect; line != lineCaret+increment; line += increment) {
+			if (lns && lns->find(line)==lns->end())
+			{
+				continue;
+			}
 			SelectionRange range(
 				view.SPositionFromLineX(surface, *this, line, xCaret, vs),
 				view.SPositionFromLineX(surface, *this, line, xAnchor, vs));
-			if ((virtualSpaceOptions & SCVS_RECTANGULARSELECTION) == 0)
+			if (bNonRectMS) {
 				range.ClearVirtualSpace();
-			if (line == lineAnchorRect)
-				sel.SetSelection(range);
-			else
+				if (!hasLen && !lns && range.Length())
+				{
+					hasLen=true;
+				}
+			}
+			if (selOpened)
+			{
 				sel.AddSelectionWithoutTrim(range);
+			}
+			else
+			{
+				sel.SetSelection(range);
+				selOpened=true;
+			}
+		}
+		if (hasLen)
+		{
+			int bf = sel.Count();
+			for (int i = sel.Count()-1; i >= 0; i--)
+			{
+				if (!sel.Range(i).Length())
+				{
+					sel.DropSelection(i);
+				}
+			}
+			//Platform::DebugPrintf("hasLen bf=%d, now=%d\n", bf, sel.Count());
 		}
 	}
 }
 
 void Editor::ThinRectangularRange() {
 	if (sel.IsRectangular()) {
+		bool bNonRectMS = (virtualSpaceOptions & SCVS_RECTANGULARSELECTION) == 0;
+		if (bNonRectMS && sel.Count())
+		{
+			return;
+		}
 		sel.selType = Selection::selThin;
 		if (sel.Rectangular().caret < sel.Rectangular().anchor) {
 			sel.Rectangular() = SelectionRange(sel.Range(sel.Count()-1).caret, sel.Range(0).anchor);
 		} else {
 			sel.Rectangular() = SelectionRange(sel.Range(sel.Count()-1).anchor, sel.Range(0).caret);
 		}
-		SetRectangularRange();
+		if (bNonRectMS)
+		{
+			std::set<Sci::Line> lns;
+			for (int i = sel.Count()-1; i >= 0; i--)
+			{
+				lns.insert(pdoc->SciLineFromPosition(sel.Range(i).anchor.Position()));
+			}
+			SetRectangularRange(&lns);
+		}
+		else
+		{
+			SetRectangularRange();
+		}
 	}
 }
 
@@ -1416,6 +1462,7 @@ void Editor::ScrollRange(SelectionRange range) {
 }
 
 void Editor::EnsureCaretVisible(bool useMargin, bool vert, bool horiz) {
+	if(sel.selType != Selection::selRectangle || virtualSpaceOptions & SCVS_RECTANGULARSELECTION)
 	SetXYScroll(XYScrollToMakeVisible(SelectionRange(posDrag.IsValid() ? posDrag : sel.RangeMain().caret),
 		static_cast<XYScrollOptions>((useMargin?xysUseMargin:0)|(vert?xysVertical:0)|(horiz?xysHorizontal:0)),
 		caretPolicies));
@@ -4516,7 +4563,9 @@ void Editor::MouseLeave() {
 
 static constexpr bool AllowVirtualSpace(int virtualSpaceOptions, bool rectangular) noexcept {
 	return (!rectangular && ((virtualSpaceOptions & SCVS_USERACCESSIBLE) != 0))
-		|| (rectangular && ((virtualSpaceOptions & SCVS_RECTANGULARSELECTION) != 0));
+		|| (rectangular 
+			//&& ((virtualSpaceOptions & SCVS_RECTANGULARSELECTION) != 0)
+			);
 }
 
 void Editor::ButtonDownWithModifiers(Point pt, unsigned int curTime, int modifiers) {
@@ -4780,7 +4829,8 @@ void Editor::ButtonMoveWithModifiers(Point pt, unsigned int, int modifiers) {
 	}
 
 	SelectionPosition movePos = SPositionFromLocation(pt, false, false,
-		AllowVirtualSpace(virtualSpaceOptions, sel.IsRectangular()));
+		AllowVirtualSpace(virtualSpaceOptions, sel.IsRectangular())
+	);
 	movePos = MovePositionOutsideChar(movePos, sel.MainCaret() - movePos.Position());
 
 	if (inDragDrop == ddInitial) {
@@ -5525,7 +5575,9 @@ void Editor::FoldAll(int action) {
 
 void Editor::FoldChanged(Sci::Line line, int levelNow, int levelPrev) {
 	if (levelNow & SC_FOLDLEVELHEADERFLAG) {
-		if (!(levelPrev & SC_FOLDLEVELHEADERFLAG)) {
+		if (!(levelPrev & SC_FOLDLEVELHEADERFLAG) 
+			|| (levelNow&SC_FOLDLEVELNUMBERMASK)>(levelPrev&SC_FOLDLEVELNUMBERMASK)
+			) {
 			// Adding a fold point.
 			if (pcs->SetExpanded(line, true)) {
 				RedrawSelMargin();

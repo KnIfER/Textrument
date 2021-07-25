@@ -7,7 +7,7 @@
 
 #ifndef EDITOR_H
 #define EDITOR_H
-
+#include <set>
 namespace Scintilla {
 
 /**
@@ -315,7 +315,7 @@ protected:	// ScintillaBase subclass needs access to much of Editor
 	bool SelectionEmpty() const noexcept;
 	SelectionPosition SelectionStart();
 	SelectionPosition SelectionEnd();
-	void SetRectangularRange();
+	void SetRectangularRange(std::set<Sci::Line>* lns=0);
 	void ThinRectangularRange();
 	void InvalidateSelection(SelectionRange newMain, bool invalidateWholeSelection=false);
 	void InvalidateWholeSelection();
