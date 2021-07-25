@@ -330,6 +330,7 @@ LexicalClass lexicalClasses[] = {
 };
 
 }
+static ILexer5* Lexer=0;
 
 class LexerPython : public DefaultLexer {
 	WordList keywords;
@@ -410,12 +411,16 @@ public:
 	}
 
 	static ILexer5 *LexerFactoryPython() {
-		return new LexerPython();
+		return Lexer=new LexerPython();
 	}
 
 private:
 	void ProcessLineEnd(StyleContext &sc, std::vector<SingleFStringExpState> &fstringStateStack, SingleFStringExpState *&currentFStringExp, bool &inContinuedString);
 };
+
+ILexer5 *LexerPythonFactory() {
+	return Lexer;
+}
 
 Sci_Position SCI_METHOD LexerPython::PropertySet(const char *key, const char *val) {
 	if (osPython.PropertySet(&options, key, val)) {

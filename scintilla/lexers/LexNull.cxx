@@ -22,6 +22,7 @@
 #include "StyleContext.h"
 #include "CharacterSet.h"
 #include "LexerModule.h"
+#include "windows.h"
 
 using namespace Scintilla;
 
@@ -35,4 +36,42 @@ static void ColouriseNullDoc(Sci_PositionU startPos, Sci_Position length, int, W
 	}
 }
 
-LexerModule lmNull(SCLEX_NULL, ColouriseNullDoc, "null");
+static void FoldNULLDoc(Sci_PositionU startPos, Sci_Position length, int /* initStyle */, WordList *[], Accessor &styler) {
+
+	//::MessageBoxA(NULL, ("111"), (""), MB_OK);
+	int visibleCharsCurrent, visibleCharsNext;
+	int levelCurrent, levelNext;
+	Sci_PositionU i, lineEnd;
+	Sci_PositionU lengthDoc   = startPos + length;
+	Sci_Position  lineCurrent = styler.GetLine(startPos);
+
+	i       = styler.LineStart(lineCurrent  );
+	lineEnd = styler.LineStart(lineCurrent+1)-1;
+	if(lineEnd>=lengthDoc) lineEnd = lengthDoc-1;
+	while(styler[lineEnd]=='\n' || styler[lineEnd]=='\r') lineEnd--;
+	for(visibleCharsCurrent=0, levelCurrent=SC_FOLDLEVELBASE; !visibleCharsCurrent && i<=lineEnd; i++){
+		if(isspacechar(styler[i])) levelCurrent++;
+		else                       visibleCharsCurrent=1;
+	}
+
+	for(; i<lengthDoc; lineCurrent++) {
+		i       = styler.LineStart(lineCurrent+1);
+		lineEnd = styler.LineStart(lineCurrent+2)-1;
+		if(lineEnd>=lengthDoc) lineEnd = lengthDoc-1;
+		while(styler[lineEnd]=='\n' || styler[lineEnd]=='\r') lineEnd--;
+		for(visibleCharsNext=0, levelNext=SC_FOLDLEVELBASE; !visibleCharsNext && i<=lineEnd; i++){
+			if(isspacechar(styler[i])) levelNext++;
+			else                       visibleCharsNext=1;
+		}
+		int lev = levelCurrent;
+		if(!visibleCharsCurrent) lev |= SC_FOLDLEVELWHITEFLAG;
+		else if(levelNext > levelCurrent) lev |= SC_FOLDLEVELHEADERFLAG;
+		styler.SetLevel(lineCurrent, lev);
+		levelCurrent = levelNext;
+		visibleCharsCurrent = visibleCharsNext;
+	}
+}
+
+//LexerModule lmNull(SCLEX_NULL, ColouriseNullDoc, "null");
+
+LexerModule lmNull(SCLEX_NULL, ColouriseNullDoc, "null", FoldNULLDoc);

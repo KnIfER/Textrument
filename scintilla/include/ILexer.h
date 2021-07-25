@@ -23,6 +23,7 @@ public:
 	virtual char SCI_METHOD StyleAt(Sci_Position position) const = 0;
 	virtual Sci_Position SCI_METHOD LineFromPosition(Sci_Position position) const = 0;
 	virtual Sci_Position SCI_METHOD LineStart(Sci_Position line) const = 0;
+	virtual ptrdiff_t SCI_METHOD LinesTotal() const = 0;
 	virtual int SCI_METHOD GetLevel(Sci_Position line) const = 0;
 	virtual int SCI_METHOD SetLevel(Sci_Position line, int level) = 0;
 	virtual int SCI_METHOD GetLineState(Sci_Position line) const = 0;

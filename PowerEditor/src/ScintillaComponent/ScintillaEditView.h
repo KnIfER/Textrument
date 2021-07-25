@@ -203,9 +203,9 @@ public:
 	{
 		--_refCount;
 
-		if ((!_refCount)&&(_hLib))
+		if ((!_refCount)&&(_SciInit))
 		{
-			::FreeLibrary(_hLib);
+			Scintilla_ReleaseResources();
 
 			for (BufferStyleMap::iterator it(_hotspotStyles.begin()); it != _hotspotStyles.end(); ++it )
 			{
@@ -439,6 +439,8 @@ public:
 		return long(execute(SCI_TEXTHEIGHT));
 	};
 
+	int getTextZoneWidth() const;
+
 	void gotoLine(int line){
 		if (line < execute(SCI_GETLINECOUNT))
 			execute(SCI_GOTOLINE,line);
@@ -646,12 +648,12 @@ public:
 	void changeTextDirection(bool isRTL);
 	bool isTextDirectionRTL() const;
 	void setPositionRestoreNeeded(bool val) { _positionRestoreNeeded = val; };
-	static HMODULE loadSciLexerDll();
 	void markedTextToClipboard(int indiStyle, bool doAll = false);
 	void removeAnyDuplicateLines();
 
 protected:
-	static HINSTANCE _hLib;
+	static bool _SciInit;
+
 	static int _refCount;
 
     static UserDefineDialog _userDefineDlg;
@@ -754,10 +756,7 @@ protected:
 		setLexer(SCLEX_PERL, L_PERL, LIST_0);
 	};
 
-	void setPythonLexer() {
-		setLexer(SCLEX_PYTHON, L_PYTHON, LIST_0 | LIST_1);
-		execute(SCI_SETPROPERTY, reinterpret_cast<WPARAM>("fold.quotes.python"), reinterpret_cast<LPARAM>("1"));
-	};
+	inline void setPythonLexer();
 
 	void setBatchLexer() {
 		setLexer(SCLEX_BATCH, L_BATCH, LIST_0);

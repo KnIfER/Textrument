@@ -33,6 +33,8 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #include "LexerModule.h"
 #include "PropSetSimple.h"
 
+#include "CharacterSet.h"
+
 using namespace Scintilla;
 
 #define CL_CURRENT  0x1
@@ -59,7 +61,8 @@ using namespace Scintilla;
 #define FORWARD_WHITESPACE_FOUND        1
 #define FORWARD_KEYWORD_FOUND           2
 
-#define SC_ISCOMMENTLINE      0x8000
+#define SC_ISCOMMENTLINE      0x8000 
+#//define SC_ISBLOCKDELIMITTER  0x10000 // folding markdown :: useless. hate
 #define MULTI_PART_LIMIT      100
 
 #define PURE_LC_NONE    0   // must be in synch with the same values in PowerEditor/src/Parameters.h
@@ -1217,8 +1220,23 @@ static void readLastNested(vector<nestedInfo> & lastNestedGroup, int & newState,
     }
 }
 
+extern ILexer5 *LexerPythonFactory();
+ILexer5 *Lexer=0;
+static void FoldUserDocMarkdown(Sci_PositionU startPos, Sci_Position length, int initStyle
+    , WordList *[], Accessor &styler);
+
 static void ColouriseUserDoc(Sci_PositionU startPos, Sci_Position length, int initStyle, WordList *kwLists[], Accessor &styler)
 {
+    bool foldMD = strlen(styler.pprops->Get("userDefine.markdown"));
+    if (false)
+    {
+        Lexer = LexerPythonFactory();
+        if (Lexer)
+        {
+            Lexer->Lex(startPos, length, initStyle, styler.MultiByteAccess());
+        }
+        return;
+    }
     bool foldComments = styler.GetPropertyInt("userDefine.allowFoldOfComments", 0) != 0;
     bool ignoreCase   = styler.GetPropertyInt("userDefine.isCaseIgnored",       0) != 0;
     bool foldCompact  = styler.GetPropertyInt("userDefine.foldCompact",         0) != 0;
@@ -1656,6 +1674,7 @@ static void ColouriseUserDoc(Sci_PositionU startPos, Sci_Position length, int in
         if (sc.More() == false)
             finished = false;   // colorize last word, even if file does not end with whitespace char
 
+
         switch (sc.state)
         {
             case SCE_USER_STYLE_DELIMITER1:
@@ -1723,7 +1742,9 @@ static void ColouriseUserDoc(Sci_PositionU startPos, Sci_Position length, int in
 
                 // out of current state?
                 if (prevState != newState)
+                {
                     break;
+                }
 
                 // quick replacement for SCE_USER_STYLE_DEFAULT (important for nested keywords)
                 if (isWhiteSpace(sc.ch) && !isWhiteSpace(sc.chPrev))
@@ -2266,25 +2287,48 @@ static void ColouriseUserDoc(Sci_PositionU startPos, Sci_Position length, int in
                 if (levelPrev != 0)
                 {
                     // foldVector[lineCurrent - 1] = levelPrev;
-                    styler.SetLevel(lineCurrent - 1, levelPrev);
+                    if (!foldMD)
+                    {
+                        styler.SetLevel(lineCurrent - 1, levelPrev);
+                    }
                     levelPrev = 0;
                 }
             }
 
             lev = levelMinCurrent | levelNext << 16;
+
+            //bool bb = delimEntered && delimEnteredLn==lineCurrent
+            //    || sc.currentLine==lineCurrent&&sc.state==SCE_USER_STYLE_DELIMITER2;
+            //if (bb)
+            //{
+            //    lev |= SC_ISBLOCKDELIMITTER;
+            //}
+            //TCHAR buffer[100]={0};
+            //wsprintf(buffer,TEXT("isDelim=%d=%d=%d"), bb, sc.currentLine, lineCurrent);e
+            //::MessageBox(NULL, buffer, TEXT(""), MB_OK);
+
+            if (foldMD)
+            {
+                lev = styler.LevelAt(lineCurrent);
+            } 
+            else {
+                if (visibleChars == false && foldCompact)
+                    lev |= SC_FOLDLEVELWHITEFLAG;
+                if (levelMinCurrent < levelNext)
+                    lev |= SC_FOLDLEVELHEADERFLAG;
+            }
             if (foldComments && isCommentLine == COMMENTLINE_YES)
                 lev |= SC_ISCOMMENTLINE;
-            if (visibleChars == false && foldCompact)
-                lev |= SC_FOLDLEVELWHITEFLAG;
-            if (levelMinCurrent < levelNext)
-                lev |= SC_FOLDLEVELHEADERFLAG;
-            // foldVector.push_back(lev);
+            // foldVector.push_back(lv);
             styler.SetLevel(lineCurrent, lev);
 
-            for (int i=0; i<nlCount; ++i)   // multi-line multi-part keyword
+            if (!foldMD)
             {
-                // foldVector.push_back(levelNext | levelNext << 16);  // TODO: what about SC_ISCOMMENTLINE?
-                styler.SetLevel(lineCurrent++, levelNext | levelNext << 16);
+                for (int i=0; i<nlCount; ++i)   // multi-line multi-part keyword
+                {
+                    // foldVector.push_back(levelNext | levelNext << 16);  // TODO: what about SC_ISCOMMENTLINE?
+                    styler.SetLevel(lineCurrent++, levelNext | levelNext << 16);
+                }
             }
             nlCount = 0;
 
@@ -2303,22 +2347,225 @@ static void ColouriseUserDoc(Sci_PositionU startPos, Sci_Position length, int in
             sc.Forward();
     }
     sc.Complete();
+
+    if (false)
+    {
+        Lexer = LexerPythonFactory();
+        if (Lexer)
+        {
+            Lexer->Lex(startPos, length, 0, styler.MultiByteAccess());
+        }
+        return;
+    }
 }
 
-static void FoldUserDoc(Sci_PositionU /* startPos */, Sci_Position /* length */, int /*initStyle*/, WordList *[],  Accessor & /* styler */)
+// 反正折叠规则本身就不够完美……
+static void FoldUserDocMarkdown(Sci_PositionU startPos, Sci_Position length, int initStyle
+    , WordList *[], Accessor &styler) 
 {
-    // this function will not be used in final version of the code.
-    // it should remain commented out as it is useful for debugging purposes !!!
-    // perhaps ifdef block would be a wiser choice, but commenting out works just fine for the time being
+    Sci_PositionU position=startPos
+        , lenDoc = startPos+length;
+    Sci_Position ln = styler.GetLine(position);
+    Sci_Position lnSt = ln, lnEd;
 
-    // int lineCurrent = styler.GetLine(startPos);
-    // vector<int>::iterator iter = foldVectorStatic->begin() + lineCurrent;
+    bool foldWhiteSpace = styler.GetPropertyInt("userDefine.foldCompact", 0) != 0;
 
-    // for (; iter != foldVectorStatic->end(); ++iter)
-    // {
-        // styler.SetLevel(lineCurrent++, *iter);
-    // }
+    int baseLevel = SC_FOLDLEVELBASE;
+
+    int markedLevel=0;
+    int prevLn=ln-1;
+    int prvLevelMarked=styler.LevelAt(prevLn);
+    if (!foldWhiteSpace)
+    {
+        while (prvLevelMarked&SC_FOLDLEVELEMPTYFLAG)
+        {
+            if (prevLn>0)
+            {
+                prevLn--;
+            }
+            else {
+                break;
+            }
+            prvLevelMarked=styler.LevelAt(prevLn);
+        }
+    }
+    int prevprev  = prvLevelMarked;
+    if (prvLevelMarked)
+    {
+        prvLevelMarked=(prvLevelMarked&SC_FOLDLEVELNUMBERMASK)-baseLevel;
+    }
+
+    position = styler.LineStart(ln-1);
+    lnEd = styler.LineEnd(ln-1);
+    markedLevel=0;
+    // 从行首开始，数 #
+    if ((styler.LevelAt(ln-1)&SC_ISCOMMENTLINE)==0)
+    {
+        for(int i=position; i<=lnEd; i++){
+            if (styler[i]!='#') {
+                break;
+            }
+            else {
+                markedLevel++;
+            }
+        }
+    }
+    if (markedLevel)
+    {
+        prvLevelMarked = markedLevel;
+    }
+    position=startPos;
+    bool isCommentLine;
+    // 迭代所有行
+    for(; position<lenDoc; ln++) {
+        isCommentLine = styler.LevelAt(ln) & SC_ISCOMMENTLINE;
+        //isCommentLine = false;
+        if (isCommentLine)
+        {
+            //TCHAR buffer[100]={0};
+            //wsprintf(buffer,TEXT("isComment=%d"), ln+1);
+            //::MessageBox(NULL, buffer, TEXT(""), MB_OK);
+        }
+
+        position = styler.LineStart(ln+0); // 行首
+        lnEd = styler.LineStart(ln+1)-1; // 行末
+        if(lnEd>=lenDoc) lnEd = lenDoc-1; // sanity check
+        
+        markedLevel=0;
+        bool isEmpty=true;
+        bool findOpening=true;
+        // 从行首开始，数 #
+        int i=position;
+        //for(; i<=lnEd && i<3 && isspacechar(styler[i]); i++) ;
+        for(; i<=lnEd; i++){
+            if (findOpening)
+            {
+                if (styler[i]=='#') {
+                    if (isCommentLine)
+                    {
+                        isEmpty=false;
+                        break;
+                    }
+                    markedLevel++;
+                    if (isEmpty)
+                    {
+                        isEmpty=false;
+                    }
+                    continue;
+                }
+                else {
+                    findOpening=false;
+                }
+            }
+            if (!(isEmpty=isspacechar(styler[i]))) 
+            {
+                break;
+            }
+        }
+
+        int lv = (prvLevelMarked) + baseLevel;
+
+        if(markedLevel) lv = markedLevel-1+baseLevel;
+
+        if(markedLevel) lv |= SC_FOLDLEVELHEADERFLAG;
+
+        if(isEmpty) {
+            if (foldWhiteSpace)
+            {
+                lv |= SC_FOLDLEVELWHITEFLAG;
+            }
+            else {
+                // has empty lines, need to checked again in the second pass.
+                lv = baseLevel;
+            }
+            lv |= SC_FOLDLEVELEMPTYFLAG;
+        }
+        if (isCommentLine
+           // && styler[position]=='#'
+            )
+        {
+            lv |= SC_ISCOMMENTLINE;
+        }
+       //TCHAR buffer[100]={0};
+       //wsprintf(buffer,TEXT("line=%d markedLevel=%d prvLevelMarked=%d prevpewv=%d isEmpty=%d"), ln, markedLevel, prvLevelMarked, prevprev, isEmpty);
+       //::MessageBox(NULL, buffer, TEXT(""), MB_OK);
+
+        styler.SetLevel(ln, lv);
+
+
+        if (markedLevel>0)
+        {
+            prvLevelMarked = markedLevel;
+        }
+    }
+
+    // second pass
+    if(!foldWhiteSpace) 
+    {
+        // 不完美，就当做特性好了
+        lnEd = ln;
+        lenDoc = styler.GetLevelCount();
+        position=startPos;
+        prvLevelMarked = 0;
+        int prvSeekingMark = 0;
+        markedLevel = prevprev;
+        for(ln=prevLn+1; ln<lnEd; ln++) {
+            int level = styler.LevelAt(ln);
+            if (level&SC_FOLDLEVELEMPTYFLAG)
+            {
+                // if next marked is not header, set to same level
+                // if next marked is header, next level > this level , set to same level
+                // if next marked is header, next level == this level , nothing
+                // if next marked is header, next level < this level , nothing
+                if(prvSeekingMark<ln+1) {
+                    prvSeekingMark=ln+1;
+                    for(; prvSeekingMark<lenDoc; prvSeekingMark++) {
+                        prvLevelMarked = styler.LevelAt(prvSeekingMark);
+                        if ((prvLevelMarked&SC_FOLDLEVELEMPTYFLAG)==0)
+                        {
+                            break;
+                        }
+                        if (prvSeekingMark==lenDoc-1)
+                        {
+                            prvLevelMarked |= SC_FOLDLEVELHEADERFLAG;
+                        }
+                    }
+                }
+
+               //TCHAR buffer[100]={0};
+               //wsprintf(buffer,TEXT("ln=[%d-%d], NXT_HEADER = %d   NXTLV = %d   LNLV = %d")
+               //    , (int)ln, prvSeekingMark, (prvLevelMarked&SC_FOLDLEVELHEADERFLAG)!=0
+               //    , prvLevelMarked&SC_FOLDLEVELNUMBERMASK, markedLevel&SC_FOLDLEVELNUMBERMASK);
+               //::MessageBox(NULL, buffer, TEXT(""), MB_OK);
+
+                bool b1=prvLevelMarked&SC_FOLDLEVELHEADERFLAG;
+                if (!b1||b1&&(prvLevelMarked&SC_FOLDLEVELNUMBERMASK)+1>(markedLevel&SC_FOLDLEVELNUMBERMASK))
+                {
+                    styler.SetLevel(ln, markedLevel);
+                }
+            }
+            else {
+                markedLevel = level;
+                if (markedLevel&SC_FOLDLEVELHEADERFLAG)
+                {
+                    markedLevel += 1;
+                }
+                
+            }
+        }
+    }
+
 }
+
+
+static void FoldUserDoc(Sci_PositionU startPos, Sci_Position length, int initStyle, WordList * keywordList[],  Accessor & styler)
+{
+    if(strlen(styler.pprops->Get("userDefine.markdown"))) 
+    {
+        FoldUserDocMarkdown(startPos, length, initStyle, keywordList, styler);
+    }
+}
+
 
 static const char * const userDefineWordLists[] = {
             "Primary keywords and identifiers",

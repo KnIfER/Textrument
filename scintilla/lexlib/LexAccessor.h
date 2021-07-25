@@ -173,6 +173,9 @@ public:
 	void SetLevel(Sci_Position line, int level) {
 		pAccess->SetLevel(line, level);
 	}
+	int GetLevelCount() {
+		return pAccess->LinesTotal();
+	}
 	void IndicatorFill(Sci_Position start, Sci_Position end, int indicator, int value) {
 		pAccess->DecorationSetCurrentIndicator(indicator);
 		pAccess->DecorationFillRange(start, value, end - start);

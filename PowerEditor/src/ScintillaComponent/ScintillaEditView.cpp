@@ -39,7 +39,7 @@ using namespace std;
 extern NppParameters * nppParms;
 
 // initialize the static variable
- 
+bool ScintillaEditView::_SciInit = false;
 int ScintillaEditView::_refCount = 0;
 UserDefineDialog ScintillaEditView::_userDefineDlg;
 
@@ -158,6 +158,7 @@ LanguageName ScintillaEditView::langNames[L_EXTERNAL+1] = {
 {TEXT("spice"),			TEXT("Spice"),				TEXT("spice file"),										L_SPICE,		SCLEX_SPICE},
 {TEXT("txt2tags"),		TEXT("txt2tags"),			TEXT("txt2tags file"),									L_TXT2TAGS,		SCLEX_TXT2TAGS},
 {TEXT("visualprolog"),	TEXT("Visual Prolog"),		TEXT("Visual Prolog file"),								L_VISUALPROLOG,	SCLEX_VISUALPROLOG},
+{TEXT("Markdown"),		TEXT("Markdown"),			TEXT("Markdown document file"),						    L_MARKDOWN,		IDM_LANG_MARKDOWN},
 {TEXT("ext"),			TEXT("External"),			TEXT("External"),										L_EXTERNAL,		SCLEX_NULL}
 };
 
@@ -188,46 +189,20 @@ int getNbDigits(int aNum, int base)
 	return nbChiffre;
 }
 
-HINSTANCE ScintillaEditView::_hLib = 0;
-
-HMODULE ScintillaEditView::loadSciLexerDll()
-{
-	auto data = nppParms->getNppPath();
-	lstrcpy(universal_buffer, data);
-	::PathAppend(universal_buffer, TEXT("SciLexer.dll"));
-
-	//generic_string sciLexerPath = moduleFileName;//getSciLexerFullPathName(moduleFileName, 1024);
-
-	// Do not check dll signature if npp is running in debug mode
-	// This is helpful for developers to skip signature checking
-	// while analyzing issue or modifying the lexer dll
-#ifndef _DEBUG
-	SecurityGard securityGard;
-	bool isOK = securityGard.checkModule(universal_buffer, nm_scilexer);
-
-	if (!isOK)
-	{
-		::MessageBox(NULL,
-			TEXT("Authenticode check failed:\rsigning certificate or hash is not recognized"),
-			TEXT("Library verification failed"),
-			MB_OK | MB_ICONERROR);
-		return nullptr;
-	}
-#endif // !_DEBUG
-	_hLib = ::LoadLibrary(universal_buffer);
-	return _hLib;
-}
-
 void ScintillaEditView::init(HINSTANCE hInst, HWND hPere)
 {
-	if (!_hLib)
+	if (!_SciInit)
 	{
-		throw std::runtime_error("ScintillaEditView::init : SCINTILLA ERROR - Can not load the dynamic library");
+		if (!Scintilla_RegisterClasses(hInst))
+		{
+			throw std::runtime_error("ScintillaEditView::init : SCINTILLA ERROR - Scintilla_RegisterClasses failed");
+		}
+		_SciInit = true;
 	}
 
 	Window::init(hInst, hPere);
    _hSelf = ::CreateWindowEx(
-					WS_EX_CLIENTEDGE,\
+					0,\
 					TEXT("Scintilla"),\
 					TEXT("Notepad++"),\
 					WS_CHILD | WS_VSCROLL | WS_HSCROLL | WS_CLIPCHILDREN | WS_EX_RTLREADING,\
@@ -241,6 +216,8 @@ void ScintillaEditView::init(HINSTANCE hInst, HWND hPere)
 	{
 		throw std::runtime_error("ScintillaEditView::init : CreateWindowEx() function return null");
 	}
+
+	NppDarkMode::setDarkScrollBar(_hSelf);
 
 	_pScintillaFunc = (SCINTILLA_FUNC)::SendMessage(_hSelf, SCI_GETDIRECTFUNCTION, 0, 0);
 	_pScintillaPtr = (SCINTILLA_PTR)::SendMessage(_hSelf, SCI_GETDIRECTPOINTER, 0, 0);
@@ -383,6 +360,12 @@ LRESULT ScintillaEditView::scintillaNew_Proc(HWND hwnd, UINT Message, WPARAM wPa
 {
 	switch (Message)
 	{
+		case NPPM_INTERNAL_REFRESHDARKMODE:
+		{
+			NppDarkMode::setDarkScrollBar(_hSelf);
+			return TRUE;
+		}
+
 		case WM_MOUSEHWHEEL :
 		{
 			::CallWindowProc(_scintillaDefaultProc, hwnd, WM_HSCROLL, ((short)HIWORD(wParam) > 0)?SB_LINERIGHT:SB_LINELEFT, NULL);
@@ -808,6 +791,7 @@ void ScintillaEditView::setUserLexer(const TCHAR *userLangName)
 	execute(SCI_SETPROPERTY, reinterpret_cast<WPARAM>("userDefine.isCaseIgnored"),		  reinterpret_cast<LPARAM>(userLangContainer->_isCaseIgnored ? "1":"0"));
 	execute(SCI_SETPROPERTY, reinterpret_cast<WPARAM>("userDefine.allowFoldOfComments"),  reinterpret_cast<LPARAM>(userLangContainer->_allowFoldOfComments ? "1":"0"));
 	execute(SCI_SETPROPERTY, reinterpret_cast<WPARAM>("userDefine.foldCompact"),		  reinterpret_cast<LPARAM>(userLangContainer->_foldCompact ? "1":"0"));
+	execute(SCI_SETPROPERTY, reinterpret_cast<WPARAM>("userDefine.markdown"),		  reinterpret_cast<LPARAM>(userLangContainer->_foldMarkdown ? "1":""));
 
     char name[] = "userDefine.prefixKeywords0";
 	for (int i=0 ; i<SCE_USER_TOTAL_KEYWORD_GROUPS ; ++i)
@@ -1343,6 +1327,12 @@ void ScintillaEditView::setWordChars()
 		addCustomWordChars();
 }
 
+
+void ScintillaEditView::setPythonLexer() {
+	setLexer(SCLEX_PYTHON, L_PYTHON, LIST_0 | LIST_1);
+	execute(SCI_SETPROPERTY, reinterpret_cast<WPARAM>("fold.quotes.python"), reinterpret_cast<LPARAM>("1"));
+};
+
 void ScintillaEditView::defineDocType(LangType typeDoc)
 {
     StyleArray & stylers = NppParameters::getInstance().getMiscStylerArray();
@@ -1520,14 +1510,6 @@ void ScintillaEditView::defineDocType(LangType typeDoc)
 
 		case L_INI :
 			setIniLexer(); break;
-
-		case L_USER : {
-			const TCHAR * langExt = _currentBuffer->getUserDefineLangName();
-			if (langExt[0])
-				setUserLexer(langExt);
-			else
-				setUserLexer();
-			break; }
 
         case L_ASCII :
 		{
@@ -1742,12 +1724,27 @@ void ScintillaEditView::defineDocType(LangType typeDoc)
 		case L_VISUALPROLOG:
 			setVisualPrologLexer(); break;
 
+		case L_MARKDOWN:
+			setLexer(SCLEX_PYTHON, L_MARKDOWN, LIST_0 | LIST_1);
+			break;
+
+		case L_USER : 
+		{
+			const TCHAR * langExt = _currentBuffer->getUserDefineLangName();
+			if (langExt[0])
+				setUserLexer(langExt);
+			else
+				setUserLexer();
+			break; 
+		}
+
 		case L_TEXT :
 		default :
-			if (typeDoc >= L_EXTERNAL && typeDoc < NppParameters::getInstance().L_END)
-				setExternalLexer(typeDoc);
-			else
-				execute(SCI_SETLEXER, (_codepage == CP_CHINESE_TRADITIONAL)?SCLEX_MAKEFILE:SCLEX_NULL);
+			//if (typeDoc >= L_EXTERNAL && typeDoc < NppParameters::getInstance().L_END)
+			//	setExternalLexer(typeDoc);
+			//else
+			//	execute(SCI_SETLEXER, (_codepage == CP_CHINESE_TRADITIONAL)?SCLEX_MAKEFILE:SCLEX_NULL);
+			setLexer(SCLEX_NULL, L_TEXT, LIST_0 | LIST_1);
 			break;
 
 	}
@@ -2598,7 +2595,8 @@ void ScintillaEditView::expand(size_t& line, bool doExpand, bool force, int visL
 
 void ScintillaEditView::performGlobalStyles()
 {
-	StyleArray & stylers = NppParameters::getInstance().getMiscStylerArray();
+	NppParameters& nppParams = NppParameters::getInstance();
+	StyleArray & stylers = nppParams.getMiscStylerArray();
 
 	int i = stylers.getStylerIndexByName(TEXT("Current line background colour"));
 	if (i != -1)
@@ -2607,15 +2605,20 @@ void ScintillaEditView::performGlobalStyles()
 		execute(SCI_SETCARETLINEBACK, style._bgColor);
 	}
 
-    COLORREF selectColorBack = grey;
+	COLORREF selectColorBack = grey;
+	COLORREF selectColorFore = black;
 
 	i = stylers.getStylerIndexByName(TEXT("Selected text colour"));
 	if (i != -1)
     {
         Style & style = stylers.getStyler(i);
 		selectColorBack = style._bgColor;
+		selectColorFore = style._fgColor;
     }
 	execute(SCI_SETSELBACK, 1, selectColorBack);
+
+	if (nppParams.isSelectFgColorEnabled())
+		execute(SCI_SETSELFORE, 1, selectColorFore);
 
     COLORREF caretColor = black;
 	i = stylers.getStylerIndexByID(SCI_SETCARETFORE);
@@ -2679,7 +2682,7 @@ void ScintillaEditView::performGlobalStyles()
 	COLORREF foldfgColor = white, foldbgColor = grey, activeFoldFgColor = red;
 	getFoldColor(foldfgColor, foldbgColor, activeFoldFgColor);
 
-	ScintillaViewParams & svp = (ScintillaViewParams &)NppParameters::getInstance().getSVP();
+	ScintillaViewParams & svp = (ScintillaViewParams &)nppParams.getSVP();
 	for (int j = 0 ; j < NB_FOLDER_STATE ; ++j)
 		defineMarker(_markersArray[FOLDER_TYPE][j], _markersArray[svp._folderStyle][j], foldfgColor, foldbgColor, activeFoldFgColor);
 
@@ -3724,13 +3727,29 @@ generic_string ScintillaEditView::getEOLString()
 
 void ScintillaEditView::setBorderEdge(bool doWithBorderEdge)
 {
+	long style = static_cast<long>(::GetWindowLongPtr(_hSelf, GWL_STYLE));
 	long exStyle = static_cast<long>(::GetWindowLongPtr(_hSelf, GWL_EXSTYLE));
 
-	if (doWithBorderEdge)
-		exStyle |= WS_EX_CLIENTEDGE;
-	else
+	if (NppDarkMode::isEnabled())
+	{
 		exStyle &= ~WS_EX_CLIENTEDGE;
 
+		if (doWithBorderEdge)
+			style |= WS_BORDER;
+		else
+			style &= ~WS_BORDER;
+	}
+	else
+	{
+		style &= ~WS_BORDER;
+
+		if (doWithBorderEdge)
+			exStyle |= WS_EX_CLIENTEDGE;
+		else
+			exStyle &= ~WS_EX_CLIENTEDGE;
+	}
+
+	::SetWindowLongPtr(_hSelf, GWL_STYLE, style);
 	::SetWindowLongPtr(_hSelf, GWL_EXSTYLE, exStyle);
 	::SetWindowPos(_hSelf, NULL, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER | SWP_FRAMECHANGED);
 }
@@ -3753,6 +3772,19 @@ void ScintillaEditView::getFoldColor(COLORREF& fgColor, COLORREF& bgColor, COLOR
 		Style & style = stylers.getStyler(i);
 		activeFgColor = style._fgColor;
 	}
+}
+
+int ScintillaEditView::getTextZoneWidth() const
+{
+	RECT editorRect;
+	getClientRect(editorRect);
+
+	int marginWidths = 0;
+	for (int m = 0; m < 4; ++m)
+	{
+		marginWidths += static_cast<int32_t>(execute(SCI_GETMARGINWIDTHN, m));
+	}
+	return editorRect.right - editorRect.left - marginWidths;
 }
 
 void ScintillaEditView::markedTextToClipboard(int indiStyle, bool doAll /*= false*/)

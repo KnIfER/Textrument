@@ -495,6 +495,7 @@ typedef sptr_t (*SciFnDirect)(sptr_t ptr, unsigned int iMessage, uptr_t wParam, 
 #define SC_FOLDLEVELBASE 0x400
 #define SC_FOLDLEVELWHITEFLAG 0x1000
 #define SC_FOLDLEVELHEADERFLAG 0x2000
+#define SC_FOLDLEVELEMPTYFLAG 0x4000
 #define SC_FOLDLEVELNUMBERMASK 0x0FFF
 #define SCI_SETFOLDLEVEL 2222
 #define SCI_GETFOLDLEVEL 2223
