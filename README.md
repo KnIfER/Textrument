@@ -1,48 +1,26 @@
-![](../master/PowerEditor/src/icons/npp.ico)What is Textrument ?
+![](../master/PowerEditor/src/icons/npp.ico)何为图创文本 ? | WHAT
 ===================
-Text + Instrument = Textrument
+Text（`文本`） + Instrument（`器具`） = Textrument（`图创文本`）
 
-It is a derivation of Npp and scintilla. 
+根据自己的理解和需求，我对旧产品进行了各种升级和改造，并愿以此铸造文字之器。
 
-Ultimate Goal:
+日常使用推荐编辑器之王vscode，本产品胜在轻量小巧、定制方便，一切皆有可能。
+
+与旧产品有何区别? | WHY
 ===================
-To play music and edit midi in it. To learn math and poem in it.
+1. 修改了文件保存方式，旧产品在磁盘写满时，会写入空文件，可能导致数据丢失。图创文本鉴于此加以改进，能写多少数据就写多少数据，保护数据毫不让步。原理是用r+标志打开文件。 | **Value** you data by preventing NULL corruption.
 
-Screenshoot 
-===================
+2. 升级可停靠窗口。预览方式升级为显示透明窗口，区别于旧产品直接在桌面画布上进行绘制。窗口布局保存在会话(session)中，因此不同的会话可有不同的界面布局。 | Updated **Docking** / Preview System.
 
-see https://zhuanlan.zhihu.com/p/266298572
+3. 放大设置面本、搜索框等常用界面的字体（可选），使用更轻松。 | Larger Fonts(WIP).
 
+4. 宏录制与回放更方便。“重复运行宏”可遍历打开的所有文件。右击相关菜单与工具栏按钮可触发更多功能。 | Easier access to recorded **marcos** via Right-Click Context Menu on the Toolbar button.
 
-Why it's still WIP? 
-===================
-仍然存在丢失会话的可能，还有其他问题，心虚不敢放release……
+5. 为其他工具栏按钮增加右键菜单。 | Other **Right-Click Context Menu** on the Toolbar buttons( WIP：  plugins, increment search, zoom, ...)
 
+6. 优化滚动条的使用体验。已有功能：shift+鼠标点击=快速滚动，shift+鼠标滚轮=横向滚动，在此基础上，支持一边拖拽横向滚动条，一边使用鼠标滚轮进行垂直滚动。 | **Better horizontal scrollbar**.
 
-Some dev logs
-===================
+7. 完善 Scintilla 组件，让其同时支持IDEA式多行列选模式，与传统的方形列选模式。两种列选择模式的切换快捷键为 Alt+Shift+C。 | **IDEA**-favored **Column Selection Mode**.
 
-[Npp 魔改笔记](https://blog.csdn.net/sinat_27171121/article/details/108002522)
-1. 第一波质感图标 (via Material design icons)  [404876e](../../commit/404876e0c9af42b5935ab96ae97f1e4561dacb32)
-2. ~~改进搜索~~ [49db2b2](../../commit/49db2b2b1eae8ba8ecb3e0c020fdca6573bc359f)
-3. 追加“文档列表面板”菜单项 [007333c](../../commit/007333cd4553beeec66468e6ed7138c8870da27d)
-4. 非模态的快捷键对话框 [dfe867f](../../commit/dfe867fcee42f28e371edf732b6e33f255b96214)
-5. 带偏移的行跳转(line:offset) [57123af](../../commit/57123afc9ff735a85dacc4e2fde24fdb94f95ed6)
-
-6. 工具栏显示插件的大图标 (含默认图标)  [e6b867e](../../commit/e6b867e407673f7d49fd729a354812f0a8d0c012)
-
-
-How To Build Textrument
----------------
-
-[build guide](BUILD.md)
-
-
-Contribution
-------------
-
-All efforts are welcomed, code style unlimited.   
-
-[Plugins](https://github.com/NotMad-Text-Editor-Plugins/)  
-
+8. 编码种增设二进制模式。此模式下不转义一些特殊字符，可以很好地配合Hex Editor插件。 | Binary encoding mode.
 
