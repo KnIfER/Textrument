@@ -1539,8 +1539,7 @@ static void TAB_SetItemBounds (TAB_INFO *infoPtr)
 				,thisRow,upperRow,nextRowSep,upperRowWidth
 				,thisBorrowCount,itemToBorrowWid;
 
-			UINT avgTabItemWid = win_width && infoPtr->uNumItem && infoPtr->uNumRows
-				?win_width/(infoPtr->uNumItem/infoPtr->uNumRows):0;
+			//UINT avgTabItemWid = win_width && infoPtr->uNumItem && infoPtr->uNumRows?win_width/(infoPtr->uNumItem/infoPtr->uNumRows):0;
 			TAB_ITEM *curr;
 			//Even out rows
 			int maxBorrowSz = infoPtr->uNumRows;
@@ -3143,6 +3142,8 @@ static LRESULT _Create (HWND hwnd, LPARAM lParam)
 	infoPtr->bUnicode        = IsWindowUnicode (hwnd);
 	infoPtr->cbInfo          = sizeof(LPARAM);
 
+	infoPtr->himl = 0;
+
 	TRACE("Created tab control, hwnd [%p]\n", hwnd);
 
 	/* The tab control always has the WS_CLIPSIBLINGS style. Even
@@ -3425,7 +3426,6 @@ static INT _StyleChanged(TAB_INFO *infoPtr, WPARAM wStyleType, const STYLESTRUCT
 	if (wStyleType != GWL_STYLE) return 0;
 
 	infoPtr->dwStyle = lpss->styleNew;
-
 	TAB_SetItemBounds (infoPtr);
 	InvalidateRect(infoPtr->hwnd, NULL, TRUE);
 
