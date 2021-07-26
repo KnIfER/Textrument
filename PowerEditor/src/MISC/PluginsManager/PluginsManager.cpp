@@ -664,11 +664,16 @@ void PluginsManager::notify(size_t indexPluginInfo, const SCNotification *notifi
 
 	if (_pluginInfos[indexPluginInfo]->_hLib)
 	{
-		// To avoid the plugin change the data in SCNotification
-		// Each notification to pass to a plugin is a copy of SCNotification instance
 		SCNotification scNotif = *notification;
 		try
 		{
+			if (indexPluginInfo>0 && memcmp(&scNotif, notification, sizeof(SCNotification))!=0)
+			{
+#ifdef _DEBUG
+				LogIs("%s 不准改！", _pluginInfos[indexPluginInfo]->_moduleName.c_str());
+#endif
+				scNotif = *notification; 
+			}
 			_pluginInfos[indexPluginInfo]->_pBeNotified(&scNotif);
 		}
 		catch (std::exception& e)

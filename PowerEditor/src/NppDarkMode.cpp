@@ -22,13 +22,22 @@
 
 #include <Uxtheme.h>
 #include <Vssym32.h>
-
-#include "Parameters.h"
 #include "resource.h"
 
 #include <Shlwapi.h>
 
 #pragma comment(lib, "uxtheme.lib")
+
+
+#ifndef PluginToolbar
+#include "Parameters.h"
+#define DPI_SCALEX(value)\
+	NppParameters::getInstance()._dpiManager.scaleX(value)
+#else
+#include "PluginDefinition.h"
+#define DPI_SCALEX(value)\
+	value
+#endif
 
 namespace NppDarkMode
 {
@@ -282,16 +291,74 @@ namespace NppDarkMode
 
 	static Options _options;			// actual runtime options
 
+
+#ifdef PluginToolbar
+	void pluginRequestDarkModeConfig(Options & opt)
+	{
+		const int sz = sizeof(Options)+1+sizeof(Colors);
+		char buffer[sz]{};
+		::SendMessage(nppData._nppHandle, NPPM_REQUEST_DARKCONF, sz, (LPARAM)buffer);
+		opt = *((Options*)buffer);
+		g_colorToneChoice = (ColorTone)buffer[sizeof(Options)];
+		tCustom.change(*((Colors*)&buffer[sizeof(Options)+1]));
+		//LogIs(2, "_options.enable::%d", opt.enable);
+	}
+#else
+	void handlePluginRequestDarkModeConfig(char* buffer, int sz)
+	{
+		sz-=sizeof(Options);
+		if (sz>=0)
+		{
+			*((Options*)buffer) = _options;
+		}
+		sz-=1;
+		if (sz>=0)
+		{
+			buffer[sizeof(Options)] = g_colorToneChoice;
+		}
+		sz-=sizeof(Colors);
+		if (sz>=0)
+		{
+			*((Colors*)&buffer[sizeof(Options)+1]) = tCustom._colors;
+		}
+	}
+#endif
+	float Luminance(int rbg)
+	{
+		return 0.2126*(0xff&(rbg>>16)) + 0.7152*(0xff&(rbg>>8)) + 0.0722*(0xff&(rbg));
+	}
+
 	Options configuredOptions()
 	{
-		NppGUI nppGui = NppParameters::getInstance().getNppGUI();
 		Options opt;
+#ifndef PluginToolbar
+		NppGUI nppGui = NppParameters::getInstance().getNppGUI();
 		opt.enable = nppGui._darkmode._isEnabled;
 		opt.enableMenubar = opt.enable;
 
 		g_colorToneChoice = nppGui._darkmode._colorTone;
 		tCustom.change(nppGui._darkmode._customColors);
-
+#else
+		if (legacy)
+		{
+			//HTHEME hTheme = GetWindowTheme(nppData._nppHandle);
+			//TCHAR buffer[256]; /LogIs(2, " %lu ", GetThemeColor(hTheme, ));
+			int editorBgColor;// = SendMessage(nppData._scintillaMainHandle, SCI_STYLEGETBACK, 0, 0);
+			editorBgColor = SendMessage(nppData._nppHandle, NPPM_GETEDITORDEFAULTBACKGROUNDCOLOR, 0, 0);
+			//LogIs(2, " %x %.2f ", editorBgColor, Luminance(editorBgColor));
+			bool isDark = Luminance(editorBgColor)<150;
+			opt.enable = isDark;
+			opt.enableMenubar = isDark;
+			g_colorToneChoice = blackTone;
+		} 
+		else 
+		{
+			pluginRequestDarkModeConfig(opt);
+		}
+		//opt.enable = true;
+		//opt.enableMenubar = true;
+		//g_colorToneChoice = blackTone;
+#endif
 		return opt;
 	}
 
@@ -331,8 +398,10 @@ namespace NppDarkMode
 			return;
 		}
 
+#ifndef PluginToolbar
 		HWND hwndRoot = GetAncestor(hwnd, GA_ROOTOWNER);
 		::SendMessage(hwndRoot, NPPM_INTERNAL_REFRESHDARKMODE, 0, 0);
+#endif
 	}
 
 	bool isEnabled()
@@ -352,7 +421,7 @@ namespace NppDarkMode
 
 	bool isExperimentalSupported()
 	{
-		return true;
+		return g_darkModeSupported;
 	}
 
 	COLORREF invertLightness(COLORREF c)
@@ -818,7 +887,9 @@ namespace NppDarkMode
 		}
 		else
 		{
+#ifndef PluginToolbar
 			assert(false);
+#endif // !PluginToolbar
 		}
 
 		// states of BP_CHECKBOX and BP_RADIOBUTTON are the same
@@ -1224,12 +1295,12 @@ namespace NppDarkMode
 					::SendMessage(hWnd, TCM_GETITEM, i, reinterpret_cast<LPARAM>(&tci));
 
 					RECT rcText = rcItem;
-					rcText.left += NppParameters::getInstance()._dpiManager.scaleX(6);
-					rcText.right -= NppParameters::getInstance()._dpiManager.scaleX(3);
+					rcText.left += DPI_SCALEX(6);
+					rcText.right -= DPI_SCALEX(3);
 
 					if (i == nSelTab)
 					{
-						rcText.bottom -= NppParameters::getInstance()._dpiManager.scaleX(4);
+						rcText.bottom -= DPI_SCALEX(4);
 					}
 
 					DrawText(hdc, label, -1, &rcText, DT_LEFT | DT_VCENTER | DT_SINGLELINE);
@@ -1302,7 +1373,7 @@ namespace NppDarkMode
 				auto holdBrush = ::SelectObject(hdc, NppDarkMode::getDarkerBackgroundBrush());
 
 				RECT arrowRc = {
-				rc.right - NppParameters::getInstance()._dpiManager.scaleX(17), rc.top + 1,
+				rc.right - DPI_SCALEX(17), rc.top + 1,
 				rc.right - 1, rc.bottom - 1
 				};
 
@@ -1344,7 +1415,7 @@ namespace NppDarkMode
 				::SetTextColor(hdc, isHot ? NppDarkMode::getTextColor() : NppDarkMode::getDarkerTextColor());
 				::SetBkColor(hdc, isHot ? NppDarkMode::getHotBackgroundColor() : NppDarkMode::getBackgroundColor());
 				::ExtTextOut(hdc,
-					arrowRc.left + (arrowRc.right - arrowRc.left) / 2 - NppParameters::getInstance()._dpiManager.scaleX(4),
+					arrowRc.left + (arrowRc.right - arrowRc.left) / 2 - DPI_SCALEX(4),
 					arrowRc.top + 3,
 					ETO_OPAQUE | ETO_CLIPPED,
 					&arrowRc, L"˅",

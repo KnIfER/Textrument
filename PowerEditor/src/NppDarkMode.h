@@ -78,6 +78,8 @@ namespace NppDarkMode
 	bool isDarkMenuEnabled();
 	bool isExperimentalSupported();
 
+	void handlePluginRequestDarkModeConfig(char* buffer, int sz);
+
 	COLORREF invertLightness(COLORREF c);
 	COLORREF invertLightnessSofter(COLORREF c);
 

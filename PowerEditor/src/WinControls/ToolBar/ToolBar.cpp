@@ -28,6 +28,7 @@
 #include <stdexcept>
 #include "ToolBar.h"
 #include "shortcut.h"
+#include "NppDarkMode.h"
 
 //strange, what happened?
 

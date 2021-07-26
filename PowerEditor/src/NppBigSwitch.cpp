@@ -229,6 +229,15 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 		case NPPM_INTERNAL_REFRESHDARKMODE:
 		{
 			refreshDarkMode();
+
+			BufferID id = _pEditView->getCurrentBufferID();
+
+			// 通知各插件黑暗模式发生变化
+			SCNotification scnN;
+			scnN.nmhdr.code = NPPN_DARKCONF_CHANGED;
+			scnN.nmhdr.hwndFrom = reinterpret_cast<void *>(lParam);
+			scnN.nmhdr.idFrom = reinterpret_cast<uptr_t>(id);
+			_pluginsManager.notify(&scnN);
 			return TRUE;
 		}
 
@@ -2536,6 +2545,7 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 		}
 
 		case NPPM_ADDTOOLBARICON:
+		case NPPM_ADDTOOLBARICON_FORDARKMODE:
 		{
 			auto CMDID = static_cast<UINT>(wParam);
 			auto info = _pluginsManager.getInfoForCommand(CMDID);
@@ -2926,6 +2936,12 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 			return (message == NPPM_GETEDITORDEFAULTFOREGROUNDCOLOR
 					?(NppParameters::getInstance()).getCurrentDefaultFgColor()
 					:(NppParameters::getInstance()).getCurrentDefaultBgColor());
+		}
+		
+		case NPPM_REQUEST_DARKCONF:
+		{
+			NppDarkMode::handlePluginRequestDarkModeConfig((char*)lParam, (int)wParam);
+			return TRUE;
 		}
 
 		//deprecated case NPPM_SHOWDOCSWITCHER:

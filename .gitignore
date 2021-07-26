@@ -2,6 +2,7 @@ Updates
 
 **/bin/
 秘籍
+文库
 build_x64
 build_Win32
 boost_*
@@ -168,3 +169,4 @@ PowerEditor/src/MISC/md5/RCa06792
 plugins/plugins_dev.props
 plugins/BrowserWidget.props
 NppSaveAsAdmin
+文库/Win32/ModifyMenu的用法.md

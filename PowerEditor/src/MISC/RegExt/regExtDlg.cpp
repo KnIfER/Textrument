@@ -34,7 +34,7 @@
 
 const TCHAR* nppName   = TEXT("Notepad++_file");
 const TCHAR* nppBackup = TEXT("Notepad++_backup");
-const TCHAR* nppDoc    = TEXT("Notepad++ Document");
+const TCHAR* nppDoc    = TEXT("Textrument Document");
 
 const int nbSupportedLang = 10;
 const int nbExtMax = 27;

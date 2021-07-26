@@ -457,6 +457,9 @@ enum Platform { PF_UNKNOWN, PF_X86, PF_X64, PF_IA64 };
 		// INT NPPM_GETLINENUMBERWIDTHMODE(0, 0)
 		// Get line number margin width in dynamic width mode (LINENUMWIDTH_DYNAMIC) or constant width mode (LINENUMWIDTH_CONSTANT)
 
+	#define NPPM_ADDTOOLBARICON_FORDARKMODE (NPPMSG + 101)
+
+
 
 	#define NPPM_GETNOTMADVERSION (NPPMSG + 666)
 	#define NPPM_SHOWBIGGERFONTS (NPPMSG + 667)
@@ -476,6 +479,7 @@ enum Platform { PF_UNKNOWN, PF_X86, PF_X64, PF_IA64 };
 	#define NPPM_SELCARET (NPPMSG + 681)
 	#define NPPM_GETBUFFERIDFROMPATH (NPPMSG + 682)
 	#define NPPM_SUPRESSSCIMACRO (NPPMSG + 683)
+	#define NPPM_REQUEST_DARKCONF (NPPMSG + 684)
 
 #define	RUNCOMMAND_USER    (WM_USER + 3000)
 	#define NPPM_GETFULLCURRENTPATH		(RUNCOMMAND_USER + FULL_CURRENT_PATH)
@@ -658,3 +662,6 @@ enum Platform { PF_UNKNOWN, PF_X86, PF_X64, PF_IA64 };
 	//scnNotification->nmhdr.code = NPPN_FILEDELETED;
 	//scnNotification->nmhdr.hwndFrom = hwndNpp;
 	//scnNotification->nmhdr.idFrom = BufferID;
+
+
+	#define NPPN_DARKCONF_CHANGED (NPPMSG + 666) // 通知各插件黑暗模式发生变化
