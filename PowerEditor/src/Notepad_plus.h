@@ -147,6 +147,7 @@ struct QuoteParams
 };
 
 class FileDialog;
+class CustomFileDialog;
 class Notepad_plus_Window;
 class AnsiCharPanel;
 class ClipboardHistoryPanel;
@@ -197,6 +198,7 @@ public:
 	bool fileCloseAllToRight();
 	bool fileCloseAllUnchanged();
 	bool fileSave(BufferID id = BUFFER_INVALID);
+	bool fileSaveAllConfirm();
 	bool fileSaveAll();
 	bool fileSaveSpecific(const generic_string& fileNameToSave);
 	bool fileSaveAs(BufferID id = BUFFER_INVALID, bool isSaveCopy = false, bool forbidSaveAsOpenedCheck=false);
@@ -610,6 +612,7 @@ public:
 
     generic_string exts2Filters(const generic_string& exts, int maxExtsLen = -1) const; // maxExtsLen default value -1 makes no limit of whole exts length
 	int setFileOpenSaveDlgFilters(FileDialog & fDlg, bool showAllExt, int langType = -1); // showAllExt should be true if it's used for open file dialog - all set exts should be used for filtering files
+	int setFileOpenSaveDlgFilters(CustomFileDialog & fDlg, bool showAllExt, int langType = -1); // showAllExt should be true if it's used for open file dialog - all set exts should be used for filtering files
 	Style * getStyleFromName(const TCHAR *styleName);
 	bool dumpFiles(const TCHAR * outdir, const TCHAR * fileprefix = TEXT(""));	//helper func
 	void drawTabbarColoursFromStylerArray();

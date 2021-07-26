@@ -22,7 +22,6 @@
 #endif
 #include <comdef.h>		// _com_error
 #include <comip.h>		// _com_ptr_t
-
 #include "CustomFileDialog.h"
 #include "Parameters.h"
 
@@ -36,9 +35,8 @@ template<class T>
 const GUID ComTraits<T>::uid = __uuidof(T);
 
 // Smart pointer alias for COM objects that makes reference counting easier.
-template<class T>
-using com_ptr = _com_ptr_t<_com_IIID<T, &ComTraits<T>::uid>>;
-
+template<class T, class InterfaceT = T>
+using com_ptr = _com_ptr_t<_com_IIID<T, &ComTraits<InterfaceT>::uid>>;
 
 namespace // anonymous
 {
@@ -49,6 +47,9 @@ namespace // anonymous
 		generic_string name;
 		generic_string ext;
 	};
+
+	static const int IDC_FILE_CUSTOM_CHECKBOX = 4;
+	static const int IDC_FILE_TYPE_CHECKBOX = IDC_FILE_CUSTOM_CHECKBOX + 1;
 
 	// Returns a first extension from the extension specification string.
 	// Multiple extensions are separated with ';'.
@@ -136,27 +137,36 @@ namespace // anonymous
 		return result;
 	}
 
-	bool setDialogFolder(IFileDialog* dialog, const TCHAR* folder)
+	bool setDialogFolder(IFileDialog* dialog, const TCHAR* path)
 	{
-		IShellItem* psi = nullptr;
-		HRESULT hr = SHCreateItemFromParsingName(folder,
-			0,
-			IID_IShellItem,
-			reinterpret_cast<void**>(&psi));
+		com_ptr<IShellItem> shellItem;
+		HRESULT hr = SHCreateItemFromParsingName(path,
+			nullptr,
+			IID_PPV_ARGS(&shellItem));
+		if (SUCCEEDED(hr) && shellItem && !::PathIsDirectory(path))
+		{
+			com_ptr<IShellItem> parentItem;
+			hr = shellItem->GetParent(&parentItem);
+			if (SUCCEEDED(hr))
+				shellItem = parentItem;
+		}
 		if (SUCCEEDED(hr))
-			hr = dialog->SetFolder(psi);
+			hr = dialog->SetFolder(shellItem);
 		return SUCCEEDED(hr);
 	}
 
 	generic_string getDialogFileName(IFileDialog* dialog)
 	{
 		generic_string fileName;
-		PWSTR pszFilePath = nullptr;
-		HRESULT hr = dialog->GetFileName(&pszFilePath);
-		if (SUCCEEDED(hr) && pszFilePath)
+		if (dialog)
 		{
-			fileName = pszFilePath;
-			CoTaskMemFree(pszFilePath);
+			PWSTR pszFilePath = nullptr;
+			HRESULT hr = dialog->GetFileName(&pszFilePath);
+			if (SUCCEEDED(hr) && pszFilePath)
+			{
+				fileName = pszFilePath;
+				CoTaskMemFree(pszFilePath);
+			}
 		}
 		return fileName;
 	}
@@ -170,7 +180,7 @@ namespace // anonymous
 		return {};
 	}
 
-	// Backups the current directory in constructor and restores it in destructor.
+	// Backs up the current directory in constructor and restores it in destructor.
 	// This is needed in case dialog changes the current directory.
 	class CurrentDirBackup
 	{
@@ -181,12 +191,6 @@ namespace // anonymous
 		}
 		~CurrentDirBackup()
 		{
-			NppParameters& params = NppParameters::getInstance();
-			if (params.getNppGUI()._openSaveDir == dir_last)
-			{
-				::GetCurrentDirectory(MAX_PATH, _dir);
-				params.setWorkingDir(_dir);
-			}
 			::SetCurrentDirectory(_dir);
 		}
 	private:
@@ -197,22 +201,9 @@ namespace // anonymous
 
 ///////////////////////////////////////////////////////////////////////////////
 
-class FileDialogEventHandler : public IFileDialogEvents
+class FileDialogEventHandler : public IFileDialogEvents, public IFileDialogControlEvents
 {
 public:
-	static HRESULT createInstance(const std::vector<Filter>& filterSpec, REFIID riid, void **ppv)
-	{
-		*ppv = nullptr;
-		FileDialogEventHandler *pDialogEventHandler = new (std::nothrow) FileDialogEventHandler(filterSpec);
-		HRESULT hr = pDialogEventHandler ? S_OK : E_OUTOFMEMORY;
-		if (SUCCEEDED(hr))
-		{
-			hr = pDialogEventHandler->QueryInterface(riid, ppv);
-			pDialogEventHandler->Release();
-		}
-		return hr;
-	}
-
 	// IUnknown methods
 
 	IFACEMETHODIMP QueryInterface(REFIID riid, void** ppv) override
@@ -225,6 +216,13 @@ public:
 		{
 			// Increment the reference count and return the pointer.
 			*ppv = static_cast<IFileDialogEvents*>(this);
+			AddRef();
+			return NOERROR;
+		}
+		else if (riid == __uuidof(IFileDialogControlEvents))
+		{
+			// Increment the reference count and return the pointer.
+			*ppv = static_cast<IFileDialogControlEvents*>(this);
 			AddRef();
 			return NOERROR;
 		}
@@ -246,8 +244,9 @@ public:
 
 	// IFileDialogEvents methods
 
-	IFACEMETHODIMP OnFileOk(IFileDialog*) override
+	IFACEMETHODIMP OnFileOk(IFileDialog* dlg) override
 	{
+		_lastUsedFolder = getDialogFolder(dlg);
 		return S_OK;
 	}
 	IFACEMETHODIMP OnFolderChange(IFileDialog*) override
@@ -255,59 +254,121 @@ public:
 		// First launch order: 3. Custom controls are added but inactive.
 		return S_OK;
 	}
-	IFACEMETHODIMP OnFolderChanging(IFileDialog*, IShellItem*) override
+	IFACEMETHODIMP OnFolderChanging(IFileDialog*, IShellItem* psi) override
 	{
+		// Called when the current dialog folder is about to change.
 		// First launch order: 2. Buttons are added, correct window title.
+		_lastUsedFolder = getFilename(psi);
 		return S_OK;
 	}
-	IFACEMETHODIMP OnSelectionChange(IFileDialog* dlg) override
+	IFACEMETHODIMP OnSelectionChange(IFileDialog*) override
 	{
 		// First launch order: 4. Main window is shown.
-		if (!_dialog)
-			initDialog(dlg);
+		if (shouldInitControls())
+			initControls();
 		return S_OK;
 	}
 	IFACEMETHODIMP OnShareViolation(IFileDialog*, IShellItem*, FDE_SHAREVIOLATION_RESPONSE*) override
 	{
 		return S_OK;
 	}
-	IFACEMETHODIMP OnTypeChange(IFileDialog* dlg) override
+	IFACEMETHODIMP OnTypeChange(IFileDialog*) override
 	{
 		// First launch order: 1. Inactive, window title might be wrong.
-		generic_string name = getDialogFileName(dlg);
-		if (changeExt(name, dlg))
-			dlg->SetFileName(name.c_str());
+		UINT dialogIndex = 0;
+		if (SUCCEEDED(_dialog->GetFileTypeIndex(&dialogIndex)))
+		{
+			// Enable checkbox if type was changed.
+			if (OnTypeChange(dialogIndex))
+				_customize->SetCheckButtonState(IDC_FILE_TYPE_CHECKBOX, TRUE);
+		}
 		return S_OK;
 	}
+
+	bool OnTypeChange(UINT dialogIndex)
+	{
+		if (dialogIndex == 0)
+			return false;
+		// Remember the current file type index.
+		// Since GetFileTypeIndex() might return the old value in some cases.
+		// Specifically, when called after SetFileTypeIndex().
+		_currentType = dialogIndex;
+		generic_string name = getDialogFileName(_dialog);
+		if (changeExt(name, dialogIndex - 1))
+			return SUCCEEDED(_dialog->SetFileName(name.c_str()));
+		return false;
+	}
+
 	IFACEMETHODIMP OnOverwrite(IFileDialog*, IShellItem*, FDE_OVERWRITE_RESPONSE*) override
 	{
 		return S_OK;
 	}
 
-private:
+	// IFileDialogControlEvents methods
 
-	// Use createInstance() instead
-	FileDialogEventHandler(const std::vector<Filter>& filterSpec) : _cRef(1), _filterSpec(filterSpec)
+	IFACEMETHODIMP OnItemSelected(IFileDialogCustomize*, DWORD, DWORD) override
+	{
+		return E_NOTIMPL;
+	}
+
+	IFACEMETHODIMP OnButtonClicked(IFileDialogCustomize*, DWORD) override
+	{
+		return E_NOTIMPL;
+	}
+
+	IFACEMETHODIMP OnCheckButtonToggled(IFileDialogCustomize*, DWORD id, BOOL bChecked) override
+	{
+		if (id == IDC_FILE_TYPE_CHECKBOX)
+		{
+			UINT newFileType = 0;
+			if (bChecked)
+			{
+				newFileType = _lastSelectedType;
+			}
+			else
+			{
+				if (_currentType != 0 && _currentType != _wildcardType)
+					_lastSelectedType = _currentType;
+				newFileType = _wildcardType;
+			}
+			_dialog->SetFileTypeIndex(newFileType);
+			OnTypeChange(newFileType);
+			return S_OK;
+		}
+		return E_NOTIMPL;
+	}
+
+	IFACEMETHODIMP OnControlActivating(IFileDialogCustomize*, DWORD) override
+	{
+		return E_NOTIMPL;
+	}
+
+
+	FileDialogEventHandler(IFileDialog* dlg, const std::vector<Filter>& filterSpec, int fileIndex, int wildcardIndex)
+		: _cRef(1), _dialog(dlg), _customize(dlg), _filterSpec(filterSpec), _currentType(fileIndex + 1),
+		_lastSelectedType(fileIndex + 1), _wildcardType(wildcardIndex >= 0 ? wildcardIndex + 1 : 0)
 	{
 		_staticThis = this;
 	}
+
 	~FileDialogEventHandler()
 	{
 		_staticThis = nullptr;
 	}
+
+	const generic_string& getLastUsedFolder() const { return _lastUsedFolder; }
+
+private:
 	FileDialogEventHandler(const FileDialogEventHandler&) = delete;
 	FileDialogEventHandler& operator=(const FileDialogEventHandler&) = delete;
 	FileDialogEventHandler(FileDialogEventHandler&&) = delete;
 	FileDialogEventHandler& operator=(FileDialogEventHandler&&) = delete;
 
-	// Inits dialog pointer and overrides window procedures for file name edit and ok button.
+	// Overrides window procedures for file name edit and ok button.
 	// Call this as late as possible to ensure all the controls of the dialog are created.
-	void initDialog(IFileDialog * d)
+	void initControls()
 	{
-		assert(!_dialog);
-		_dialog = d;
-		_okButtonProc = nullptr;
-		_fileNameProc = nullptr;
+		assert(_dialog);
 		com_ptr<IOleWindow> pOleWnd = _dialog;
 		if (pOleWnd)
 		{
@@ -316,20 +377,22 @@ private:
 			if (SUCCEEDED(hr) && hwndDlg)
 			{
 				EnumChildWindows(hwndDlg, &EnumChildProc, 0);
+				if (_staticThis->_hwndButton)
+					_staticThis->_okButtonProc = (WNDPROC)SetWindowLongPtr(_staticThis->_hwndButton, GWLP_WNDPROC, (LPARAM)&OkButtonWndProc);
 			}
 		}
 	}
 
-	// Changes the name extension according to currently selected file type index.
-	bool changeExt(generic_string& name, IFileDialog* dlg)
+	bool shouldInitControls() const
 	{
-		UINT typeIndex = 0;
-		if (FAILED(dlg->GetFileTypeIndex(&typeIndex)))
-			return false;
-		// Index starts from 1
-		if (typeIndex > 0 && typeIndex - 1 < _filterSpec.size())
+		return !_okButtonProc && !_fileNameProc;
+	}
+
+	bool changeExt(generic_string& name, int extIndex)
+	{
+		if (extIndex >= 0 && extIndex < static_cast<int>(_filterSpec.size()))
 		{
-			const generic_string ext = get1stExt(_filterSpec[typeIndex - 1].ext);
+			const generic_string ext = get1stExt(_filterSpec[extIndex].ext);
 			if (!endsWith(ext, _T(".*")))
 				return replaceExt(name, ext);
 		}
@@ -365,7 +428,7 @@ private:
 			// Name is a file path.
 			// Add file extension if missing.
 			if (!hasExt(fileName))
-				nameChanged |= changeExt(fileName, _dialog);
+				nameChanged |= changeExt(fileName, _currentType - 1);
 		}
 		// Update the edit box text.
 		// It will update the address if the path is a directory.
@@ -401,6 +464,7 @@ private:
 	{
 		const int bufferLen = MAX_PATH;
 		static TCHAR buffer[bufferLen];
+
 		if (GetClassName(hwnd, buffer, bufferLen) != 0)
 		{
 			if (lstrcmpi(buffer, _T("ComboBox")) == 0)
@@ -410,20 +474,43 @@ private:
 				HWND hwndChild = FindWindowEx(hwnd, nullptr, _T("Edit"), _T(""));
 				if (hwndChild)
 				{
-					_fileNameProc = (WNDPROC)SetWindowLongPtr(hwndChild, GWLP_WNDPROC, (LPARAM)&FileNameWndProc);
+					_staticThis->_fileNameProc = (WNDPROC)SetWindowLongPtr(hwndChild, GWLP_WNDPROC, (LPARAM)&FileNameWndProc);
 					_staticThis->_hwndNameEdit = hwndChild;
 				}
 			}
 			else if (lstrcmpi(buffer, _T("Button")) == 0)
 			{
-				// The button of interest has a focus by default.
+				// Find the OK button.
+				// Label could be "Open" or "Save".
+				// Label could be localized (that's why can't search by window text).
+				// Dialog could have other buttons ("Cancel", "Help", etc).
+				// Don't rely on the order of the EnumChildWindows() traversal since it could be changed.
 				LONG style = GetWindowLong(hwnd, GWL_STYLE);
-				if (style & BS_DEFPUSHBUTTON)
-					_okButtonProc = (WNDPROC)SetWindowLongPtr(hwnd, GWLP_WNDPROC, (LPARAM)&OkButtonWndProc);
+				if (IsWindowEnabled(hwnd) && (style & (WS_CHILDWINDOW | WS_GROUP)))
+				{
+					DWORD type = style & 0xF;
+					DWORD appearance = style & 0xF0;
+					if ((type == BS_PUSHBUTTON || type == BS_DEFPUSHBUTTON) && (appearance == BS_TEXT))
+					{
+						// Get the leftmost button.
+						if (_staticThis->_hwndButton)
+						{
+							RECT rc1 = {};
+							RECT rc2 = {};
+							if (GetWindowRect(hwnd, &rc1) && GetWindowRect(_staticThis->_hwndButton, &rc2))
+							{
+								if (rc1.left < rc2.left)
+									_staticThis->_hwndButton = hwnd;
+							}
+						}
+						else
+						{
+							_staticThis->_hwndButton = hwnd;
+						}
+					}
+				}
 			}
 		}
-		if (_okButtonProc && _fileNameProc)
-			return FALSE;	// Found all children, stop enumeration.
 		return TRUE;
 	}
 
@@ -447,7 +534,7 @@ private:
 		}
 		if (pressed)
 			_staticThis->onPreFileOk();
-		return CallWindowProc(_okButtonProc, hwnd, msg, wparam, lparam);
+		return CallWindowProc(_staticThis->_okButtonProc, hwnd, msg, wparam, lparam);
 	}
 
 	static LRESULT CALLBACK FileNameWndProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
@@ -479,22 +566,26 @@ private:
 				processingReturn = false;
 			}
 		}
-		return CallWindowProc(_fileNameProc, hwnd, msg, wparam, lparam);
+		return CallWindowProc(_staticThis->_fileNameProc, hwnd, msg, wparam, lparam);
 	}
 
-	static WNDPROC _okButtonProc;
-	static WNDPROC _fileNameProc;
 	static FileDialogEventHandler* _staticThis;
 
 	long _cRef;
-	IFileDialog* _dialog = nullptr;
+	com_ptr<IFileDialog> _dialog;
+	com_ptr<IFileDialogCustomize> _customize;
 	const std::vector<Filter> _filterSpec;
+	generic_string _lastUsedFolder;
 	HWND _hwndNameEdit = nullptr;
+	HWND _hwndButton = nullptr;
+	WNDPROC _okButtonProc = nullptr;
+	WNDPROC _fileNameProc = nullptr;
+	UINT _currentType = 0;  // File type currenly selected in dialog.
+	UINT _lastSelectedType = 0;  // Last selected non-wildcard file type.
+	UINT _wildcardType = 0;  // Wildcard *.* file type index (usually 1).
 	bool _monitorKeyboard = true;
 };
 
-WNDPROC FileDialogEventHandler::_okButtonProc;
-WNDPROC FileDialogEventHandler::_fileNameProc;
 FileDialogEventHandler* FileDialogEventHandler::_staticThis;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -520,6 +611,16 @@ public:
 			NULL,
 			CLSCTX_INPROC_SERVER,
 			IID_PPV_ARGS(&_dialog));
+		_customize = _dialog;
+
+		// Init the event handler.
+		// Pass the initially selected file type.
+		if (SUCCEEDED(hr))
+			_events.Attach(new FileDialogEventHandler(_dialog, _filterSpec, _fileTypeIndex, _wildcardIndex));
+
+		// If "assign type" is OFF, then change the file type to *.*
+		if (_enableFileTypeCheckbox && !_fileTypeCheckboxValue && _wildcardIndex >= 0)
+			_fileTypeIndex = _wildcardIndex;
 
 		if (SUCCEEDED(hr) && _title)
 			hr = _dialog->SetTitle(_title);
@@ -564,7 +665,10 @@ public:
 
 		// The selected index should be set after the file types are set.
 		if (SUCCEEDED(hr) && _fileTypeIndex >= 0)
-			hr = _dialog->SetFileTypeIndex(_fileTypeIndex + 1); // This index is 1-based
+			hr = _dialog->SetFileTypeIndex(_fileTypeIndex + 1); // This index is 1-based.
+
+		if (_enableFileTypeCheckbox)
+			addCheckbox(IDC_FILE_TYPE_CHECKBOX, _fileTypeCheckboxLabel.c_str(), _fileTypeCheckboxValue);
 
 		if (SUCCEEDED(hr))
 			return addControls();
@@ -595,47 +699,71 @@ public:
 
 	bool addControls()
 	{
-		_customize = _dialog;
 		if (!_customize)
 			return false;
 		if (_checkboxLabel && _checkboxLabel[0] != '\0')
 		{
-			// todo separate active and enabled. currently used as enabled.
-			HRESULT hr = _customize->AddCheckButton(IDC_FILE_CHECKBOX, _checkboxLabel, _isCheckboxActive);
-			//if (SUCCEEDED(hr) && !_isCheckboxActive)
-			//{
-			//	hr = _customize->SetControlState(IDC_FILE_CHECKBOX, CDCS_INACTIVE | CDCS_VISIBLE);
-			//	return SUCCEEDED(hr);
-			//}
+			return addCheckbox(IDC_FILE_CUSTOM_CHECKBOX, _checkboxLabel, false, _isCheckboxActive);
 		}
 		return true;
 	}
 
+	bool addCheckbox(int id, const TCHAR* label, bool value, bool enabled = true)
+	{
+		if (!_customize)
+			return false;
+		HRESULT hr = _customize->AddCheckButton(id, label, value ? TRUE : FALSE);
+		if (SUCCEEDED(hr) && !enabled)
+		{
+			hr = _customize->SetControlState(id, CDCS_INACTIVE | CDCS_VISIBLE);
+			return SUCCEEDED(hr);
+		}
+		return SUCCEEDED(hr);
+	}
+
 	bool show()
 	{
+		assert(_dialog);
+		if (!_dialog)
+			return false;
+
+		HRESULT hr = S_OK;
+		DWORD dwCookie = 0;
+		com_ptr<IFileDialogEvents> dialogEvents = _events;
+		if (dialogEvents)
+		{
+			hr = _dialog->Advise(dialogEvents, &dwCookie);
+			if (FAILED(hr))
+				dialogEvents.Release();
+		}
+
 		bool okPressed = false;
-		HRESULT hr = FileDialogEventHandler::createInstance(_filterSpec, IID_PPV_ARGS(&_events));
 		if (SUCCEEDED(hr))
 		{
-			DWORD dwCookie;
-			hr = _dialog->Advise(_events, &dwCookie);
-			if (SUCCEEDED(hr))
-			{
-				hr = _dialog->Show(_hwndOwner);
-				okPressed = SUCCEEDED(hr);
+			hr = _dialog->Show(_hwndOwner);
+			okPressed = SUCCEEDED(hr);
 
-				_dialog->Unadvise(dwCookie);
+			NppParameters& params = NppParameters::getInstance();
+			if (okPressed && params.getNppGUI()._openSaveDir == dir_last)
+			{
+				// Note: IFileDialog doesn't modify the current directory.
+				// At least, after it is hidden, the current directory is the same as before it was shown.
+				params.setWorkingDir(_events->getLastUsedFolder().c_str());
 			}
 		}
+
+		if (dialogEvents)
+			_dialog->Unadvise(dwCookie);
+
 		return okPressed;
 	}
 
-	BOOL getCheckboxState() const
+	BOOL getCheckboxState(int id) const
 	{
 		if (_customize)
 		{
 			BOOL bChecked = FALSE;
-			HRESULT hr = _customize->GetCheckButtonState(IDC_FILE_CHECKBOX, &bChecked);
+			HRESULT hr = _customize->GetCheckButtonState(id, &bChecked);
 			if (SUCCEEDED(hr))
 				return bChecked;
 		}
@@ -695,8 +823,6 @@ public:
 		return result;
 	}
 
-	static const int IDC_FILE_CHECKBOX = 4;
-
 	HWND _hwndOwner = nullptr;
 	const TCHAR* _title = nullptr;
 	const TCHAR* _defExt = nullptr;
@@ -706,18 +832,22 @@ public:
 	const TCHAR* _initialFileName = nullptr;
 	bool _isCheckboxActive = true;
 	std::vector<Filter> _filterSpec;
-	int _fileTypeIndex = -1;
+	int _fileTypeIndex = -1;	// preferred file type index
+	int _wildcardIndex = -1;	// *.* file type index
 	bool _hasReadonly = false;	// set during the result handling
+	bool _enableFileTypeCheckbox = false;
+	bool _fileTypeCheckboxValue = false;	// initial value
+	generic_string _fileTypeCheckboxLabel;
 
 private:
 	com_ptr<IFileDialog> _dialog;
 	com_ptr<IFileDialogCustomize> _customize;
-	com_ptr<IFileDialogEvents> _events;
+	com_ptr<FileDialogEventHandler, IFileDialogEvents> _events;
 };
 
 ///////////////////////////////////////////////////////////////////////////////
 
-CustomFileDialog::CustomFileDialog(HWND hwnd) : _impl{std::make_unique<Impl>()}
+CustomFileDialog::CustomFileDialog(HWND hwnd) : _impl{ std::make_unique<Impl>() }
 {
 	_impl->_hwndOwner = hwnd;
 
@@ -749,6 +879,9 @@ void CustomFileDialog::setExtFilter(const TCHAR *extText, const TCHAR *exts)
 			++pos;
 		}
 	}
+
+	if (newExts.find(_T("*.*")) == 0)
+		_impl->_wildcardIndex = static_cast<int>(_impl->_filterSpec.size());
 
 	_impl->_filterSpec.push_back({ extText, newExts });
 }
@@ -793,12 +926,28 @@ void CustomFileDialog::setExtIndex(int extTypeIndex)
 
 bool CustomFileDialog::getCheckboxState() const
 {
-	return _impl->getCheckboxState();
+	return _impl->getCheckboxState(IDC_FILE_CUSTOM_CHECKBOX);
 }
 
 bool CustomFileDialog::isReadOnly() const
 {
 	return _impl->_hasReadonly;
+}
+
+void CustomFileDialog::enableFileTypeCheckbox(const generic_string& text, bool value)
+{
+	assert(!text.empty());
+	if (!text.empty())
+	{
+		_impl->_fileTypeCheckboxLabel = text;
+		_impl->_enableFileTypeCheckbox = true;
+		_impl->_fileTypeCheckboxValue = value;
+	}
+}
+
+bool CustomFileDialog::getFileTypeCheckboxValue() const
+{
+	return _impl->getCheckboxState(IDC_FILE_TYPE_CHECKBOX);
 }
 
 generic_string CustomFileDialog::doSaveDlg()

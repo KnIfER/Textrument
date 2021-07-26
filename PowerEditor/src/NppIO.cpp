@@ -244,8 +244,8 @@ BufferID Notepad_plus::doOpen(const generic_string& fileName, bool isRecursive, 
 				} else {
 					int res = _nativeLangSpeaker.messageBox("CreateNewFileOrNot",
 						_pPublicInterface->getHSelf(),
-						TEXT("\"$STR_REPLACE$\" doesn't exist. Create it?"),
-						TEXT("Create new file"),
+						TEXT("“$STR_REPLACE$”不存在。新建一个？"),
+						TEXT("创建新文件"),
 						MB_YESNO,
 						0,
 						longFileName);
@@ -261,8 +261,8 @@ BufferID Notepad_plus::doOpen(const generic_string& fileName, bool isRecursive, 
 						{
 							_nativeLangSpeaker.messageBox("CreateNewFileError",
 								_pPublicInterface->getHSelf(),
-								TEXT("Cannot create the file \"$STR_REPLACE$\"."),
-								TEXT("Create new file"),
+								TEXT("无法创建文件“$STR_REPLACE$”。"),
+								TEXT("创建新文件"),
 								MB_OK,
 								0,
 								longFileName);
@@ -427,8 +427,8 @@ BufferID Notepad_plus::doOpen(const generic_string& fileName, bool isRecursive, 
             {
                 ok2Open = IDYES == _nativeLangSpeaker.messageBox("NbFileToOpenImportantWarning",
 					_pPublicInterface->getHSelf(),
-                    TEXT("$INT_REPLACE$ files are about to be opened.\rAre you sure to open them?"),
-                    TEXT("Amount of files to open is too large"),
+                    TEXT("即将打开 $INT_REPLACE$ 个文件。\r确定要打开吗？"),
+                    TEXT("即将打开的文件过多"),
                     MB_YESNO|MB_APPLMODAL,
 					static_cast<int32_t>(nbFiles2Open));
             }
@@ -443,8 +443,8 @@ BufferID Notepad_plus::doOpen(const generic_string& fileName, bool isRecursive, 
         {
 			_nativeLangSpeaker.messageBox("OpenFileError",
 				_pPublicInterface->getHSelf(),
-				TEXT("Can not open file \"$STR_REPLACE$\"."),
-				TEXT("ERROR"),
+				TEXT("无法打开文件“$STR_REPLACE$”。"),
+				TEXT("出错"),
 				MB_OK,
 				0,
 				longFileName);
@@ -471,8 +471,8 @@ bool Notepad_plus::doReload(BufferID id, bool alert)
 	{
 		int answer = _nativeLangSpeaker.messageBox("DocReloadWarning",
 			_pPublicInterface->getHSelf(),
-			TEXT("Are you sure you want to reload the current file and lose the changes made in Notepad++?"),
-			TEXT("Reload"),
+			TEXT("您确定要重新加载当前文件并失去在Textrument所做的修改吗？"),
+			TEXT("重载警告"),
 			MB_YESNO | MB_ICONEXCLAMATION | MB_APPLMODAL);
 		if (answer != IDYES)
 			return false;
@@ -526,8 +526,8 @@ bool Notepad_plus::doSave(BufferID id, const TCHAR * filename, bool isCopy)
 	{
 		_nativeLangSpeaker.messageBox("BufferInvalidWarning",
 			_pPublicInterface->getHSelf(),
-			TEXT("Cannot save: Buffer is invalid."),
-			TEXT("Save failed"),
+			TEXT("无法保存：缓冲区无效。"),
+			TEXT("保存失败"),
 			MB_OK | MB_ICONWARNING);
 
 		return false;
@@ -557,8 +557,8 @@ bool Notepad_plus::doSave(BufferID id, const TCHAR * filename, bool isCopy)
 	{
 		_nativeLangSpeaker.messageBox("NotEnoughRoom4Saving",
 			_pPublicInterface->getHSelf(),
-			TEXT("Failed to save file.\nIt seems there's not enough space on disk to save file."),
-			TEXT("Save failed"),
+			TEXT("无法保存文件.\n似乎没有足够的磁盘空间。"),
+			TEXT("保存失败"),
 			MB_OK);
 	}
 	else if (res == SavingStatus::SaveOpenFailed)
@@ -571,8 +571,8 @@ bool Notepad_plus::doSave(BufferID id, const TCHAR * filename, bool isCopy)
 			{                   // Open the 2nd Notepad++ instance in Admin mode, then close the 1st instance.
 				int openInAdminModeRes = _nativeLangSpeaker.messageBox("OpenInAdminMode",
 				_pPublicInterface->getHSelf(),
-				TEXT("This file cannot be saved and it may be protected.\rDo you want to launch Notepad++ in Administrator mode?"),
-				TEXT("Save failed"),
+				TEXT("文件无法保存，它可能受到保护。\n是否要用管理员模式启动Textrument？"),
+				TEXT("保存失败"),
 				MB_YESNO);
 
 				if (openInAdminModeRes == IDYES)
@@ -588,8 +588,8 @@ bool Notepad_plus::doSave(BufferID id, const TCHAR * filename, bool isCopy)
 					{
 						_nativeLangSpeaker.messageBox("OpenInAdminModeFailed",
 							_pPublicInterface->getHSelf(),
-							TEXT("Notepad++ cannot be opened in Administrator mode."),
-							TEXT("Open in Administrator mode failed"),
+							TEXT("Textrument不能用管理员模式打开。"),
+							TEXT("管理员模式开启失败"),
 							MB_OK);
 					}
 					else
@@ -603,8 +603,8 @@ bool Notepad_plus::doSave(BufferID id, const TCHAR * filename, bool isCopy)
 			{    // open only the file to save in Notepad++ of Administrator mode by keeping the current instance.
 				int openInAdminModeRes = _nativeLangSpeaker.messageBox("OpenInAdminModeWithoutCloseCurrent",
 				_pPublicInterface->getHSelf(),
-				TEXT("The file cannot be saved and it may be protected.\rDo you want to launch Notepad++ in Administrator mode?"),
-				TEXT("Save failed"),
+				TEXT("文件无法保存，它可能受到保护。\r是否要用管理员模式启动Textrument？"),
+				TEXT("保存失败"),
 				MB_YESNO);
 
 				if (openInAdminModeRes == IDYES)
@@ -629,8 +629,8 @@ bool Notepad_plus::doSave(BufferID id, const TCHAR * filename, bool isCopy)
 					{
 						_nativeLangSpeaker.messageBox("OpenInAdminModeFailed",
 							_pPublicInterface->getHSelf(),
-							TEXT("Notepad++ cannot be opened in Administrator mode."),
-							TEXT("Open in Administrator mode failed"),
+							TEXT("Textrument不能用管理员模式打开。"),
+							TEXT("管理员模式开启失败"),
 							MB_OK);
 					}
 				}
@@ -887,6 +887,81 @@ int Notepad_plus::setFileOpenSaveDlgFilters(FileDialog & fDlg, bool showAllExt, 
     return ltIndex;
 }
 
+int Notepad_plus::setFileOpenSaveDlgFilters(CustomFileDialog & fDlg, bool showAllExt, int langType)
+{
+	NppParameters& nppParam = NppParameters::getInstance();
+	NppGUI & nppGUI = (NppGUI & )nppParam.getNppGUI();
+
+	int i = 0;
+	Lang *l = NppParameters::getInstance().getLangFromIndex(i++);
+
+	int ltIndex = 0;
+	bool ltFound = false;
+	while (l)
+	{
+		LangType lid = l->getLangID();
+
+		bool inExcludedList = false;
+
+		for (size_t j = 0, len = nppGUI._excludedLangList.size() ; j < len ; ++j)
+		{
+			if (lid == nppGUI._excludedLangList[j]._langType)
+			{
+				inExcludedList = true;
+				break;
+			}
+		}
+
+		if (!inExcludedList)
+		{
+			const TCHAR *defList = l->getDefaultExtList();
+			const TCHAR *userList = NULL;
+
+			LexerStylerArray &lsa = (NppParameters::getInstance()).getLStylerArray();
+			const TCHAR *lName = l->getLangName();
+			LexerStyler *pLS = lsa.getLexerStylerByName(lName);
+
+			if (pLS)
+				userList = pLS->getLexerUserExt();
+
+			generic_string list(TEXT(""));
+			if (defList)
+				list += defList;
+			if (userList)
+			{
+				list += TEXT(" ");
+				list += userList;
+			}
+
+			generic_string stringFilters = exts2Filters(list, showAllExt ? -1 : 40);
+			const TCHAR *filters = stringFilters.c_str();
+			if (filters[0])
+			{
+				fDlg.setExtFilter(getLangDesc(lid, false).c_str(), filters);
+
+				//
+				// Get index of lang type to find
+				//
+				if (langType != -1 && !ltFound)
+				{
+					ltFound = langType == lid;
+				}
+
+				if (langType != -1 && !ltFound)
+				{
+					++ltIndex;
+				}
+			}
+		}
+		l = (NppParameters::getInstance()).getLangFromIndex(i++);
+	}
+
+	if (!ltFound)
+		return -1;
+	return ltIndex;
+}
+
+
 
 bool Notepad_plus::fileClose(BufferID id, int curView)
 {
@@ -968,8 +1043,8 @@ bool Notepad_plus::fileCloseAll(bool doDeleteBackup, bool isSnapshotMode)
 
 					int res = _nativeLangSpeaker.messageBox("NoBackupDoSaveFile",
 						_pPublicInterface->getHSelf(),
-						TEXT("Your backup file cannot be found (deleted from outside).\rSave it otherwise your data will be lost\rDo you want to save file \"$STR_REPLACE$\" ?"),
-						TEXT("Save"),
+						TEXT("无法访问您的临时文件备份（外部删除）。\r请保存文件，否则您的数据将丢失。\r是否保存文件“$STR_REPLACE$” ？"),
+						TEXT("保存"),
 						MB_YESNOCANCEL | MB_ICONQUESTION | MB_APPLMODAL,
 						0, // not used
 						buf->getFullPathName());
@@ -1051,8 +1126,8 @@ bool Notepad_plus::fileCloseAll(bool doDeleteBackup, bool isSnapshotMode)
 
 					int res = _nativeLangSpeaker.messageBox("NoBackupDoSaveFile",
 						_pPublicInterface->getHSelf(),
-						TEXT("Your backup file cannot be found (deleted from outside).\rSave it otherwise your data will be lost\rDo you want to save file \"$STR_REPLACE$\" ?"),
-						TEXT("Save"),
+						TEXT("无法访问您的临时文件备份（外部删除）。\r请保存文件，否则您的数据将丢失。\r是否保存文件“$STR_REPLACE$” ？"),
+						TEXT("保存"),
 						MB_YESNOCANCEL | MB_ICONQUESTION | MB_APPLMODAL,
 						0, // not used
 						buf->getFullPathName());
@@ -1548,8 +1623,8 @@ bool Notepad_plus::fileSave(BufferID id)
 			{
 				int res = _nativeLangSpeaker.messageBox("FileBackupFailed",
 					_pPublicInterface->getHSelf(),
-					TEXT("The previous version of the file could not be saved into the backup directory at \"$STR_REPLACE$\".\r\rDo you want to save the current file anyways?"),
-					TEXT("File Backup Failed"),
+					TEXT("此文件的先前版本无法保存到备份目录“$STR_REPLACE$”。\r\r是否继续保存当前文件？"),
+					TEXT("文件备份失败"),
 					MB_YESNO | MB_ICONERROR,
 					0,
 					fn_bak.c_str());
@@ -1587,30 +1662,77 @@ bool Notepad_plus::fileSaveSpecific(const generic_string& fileNameToSave)
 	}
 }
 
-bool Notepad_plus::fileSaveAll()
+LRESULT CALLBACK CBHookProc(int nCode, WPARAM wParam, LPARAM lParam)
 {
-	if (viewVisible(MAIN_VIEW))
+	HWND hwnd = (HWND)wParam;
+	if (nCode == HCBT_ACTIVATE)
 	{
-		for (size_t i = 0; i < _mainDocTab.nbItem(); ++i)
+		SetDlgItemText(hwnd, IDCANCEL, L"始终选“是”");
+	}
+	return 0;
+}
+
+bool Notepad_plus::fileSaveAllConfirm()
+{
+	bool confirmed = false;
+
+	if (NppParameters::getInstance().getNppGUI()._saveAllConfirm)
+	{
+		HHOOK hHook = SetWindowsHookEx(WH_CBT, CBHookProc, nullptr, GetCurrentThreadId());
+		int answer = _nativeLangSpeaker.messageBox("SaveAllConfirm",
+			_pPublicInterface->getHSelf(),
+			TEXT("确认要保存全部文档吗?"),
+			TEXT("确认保存全部"),
+			MB_YESNOCANCEL | MB_DEFBUTTON2);
+		UnhookWindowsHookEx(hHook);
+		if (answer == IDYES)
 		{
-			BufferID idToSave = _mainDocTab.getBufferByIndex(i);
-			fileSave(idToSave);
+			confirmed = true;
 		}
+
+		if (answer == IDCANCEL)
+		{
+			NppParameters::getInstance().getNppGUI()._saveAllConfirm = false;
+			//uncheck the "Enable save all confirm dialog" checkbox in Preference-> MISC settings
+			//_preference._miscSubDlg.setChecked(IDC_CHECK_SAVEALLCONFIRM, false);
+			confirmed = true;
+		}
+	}
+	else
+	{
+		confirmed = true;
 	}
 
-	if (viewVisible(SUB_VIEW))
+	return confirmed;
+}
+
+bool Notepad_plus::fileSaveAll()
+{
+	if ( fileSaveAllConfirm() )
 	{
-		for (size_t i = 0; i < _subDocTab.nbItem(); ++i)
+		if (viewVisible(MAIN_VIEW))
 		{
-			BufferID idToSave = _subDocTab.getBufferByIndex(i);
-			fileSave(idToSave);
+			for (size_t i = 0; i < _mainDocTab.nbItem(); ++i)
+			{
+				BufferID idToSave = _mainDocTab.getBufferByIndex(i);
+				fileSave(idToSave);
+			}
 		}
+
+		if (viewVisible(SUB_VIEW))
+		{
+			for (size_t i = 0; i < _subDocTab.nbItem(); ++i)
+			{
+				BufferID idToSave = _subDocTab.getBufferByIndex(i);
+				fileSave(idToSave);
+			}
+		}
+		checkDocState();
 	}
-	checkDocState();
 	return true;
 }
 
-TCHAR* LastSavedPath;
+//generic_string LastSavedPath;
 
 bool Notepad_plus::fileSaveAs(BufferID id, bool isSaveCopy, bool forbidSaveAsOpenedCheck)
 {
@@ -1622,55 +1744,45 @@ bool Notepad_plus::fileSaveAs(BufferID id, bool isSaveCopy, bool forbidSaveAsOpe
 	generic_string origPathname = buf->getFullPathName();
 	bool wasUntitled = buf->isUntitled();
 
-	FileDialog fDlg(_pPublicInterface->getHSelf(), _pPublicInterface->getHinst());
+	CustomFileDialog fDlg(_pPublicInterface->getHSelf());
 
-	fDlg.setExtFilter(TEXT("All types"), TEXT(".*"), NULL);
+	fDlg.setExtFilter(TEXT("All types"), TEXT(".*"));
 
 	LangType langType = buf->getLangType();
 
-	int langTypeIndex = 0;
-	if (!((NppParameters::getInstance()).getNppGUI()._setSaveDlgExtFiltToAllTypes
-		//&&  buf->isUntitled() && langType == L_TEXT
-		))
-	{
-		langTypeIndex = setFileOpenSaveDlgFilters(fDlg, false, langType);
-	}
+	const bool defaultAllTypes = NppParameters::getInstance().getNppGUI()._setSaveDlgExtFiltToAllTypes;
+	const int langTypeIndex = setFileOpenSaveDlgFilters(fDlg, false, langType);
 
-
-	fDlg.setDefFileName(forbidSaveAsOpenedCheck&&LastSavedPath?LastSavedPath:buf->getFileName());
+	fDlg.setDefFileName(buf->getFileName());
 
 	fDlg.setExtIndex(langTypeIndex + 1); // +1 for "All types"
+
+	const generic_string checkboxLabel = _nativeLangSpeaker.getLocalizedStrFromID("file-save-assign-type",
+		TEXT("自动追加后缀(&A)"));
+	fDlg.enableFileTypeCheckbox(checkboxLabel, !defaultAllTypes);
 
 	// Disable file autodetection before opening save dialog to prevent use-after-delete bug.
 	NppParameters& nppParam = NppParameters::getInstance();
 	auto cdBefore = nppParam.getNppGUI()._fileAutoDetection;
-	(const_cast<NppGUI &>(nppParam.getNppGUI()))._fileAutoDetection = cdDisabled;
+	(nppParam.getNppGUI())._fileAutoDetection = cdDisabled;
 
-	TCHAR *pfn = fDlg.doSaveDlg();
+	generic_string fn = fDlg.doSaveDlg();
 
-	if(forbidSaveAsOpenedCheck) {
-		if(!LastSavedPath) {
-			LastSavedPath = new TCHAR[MAX_FILE_PATH];
-			ZeroMemory(LastSavedPath, MAX_FILE_PATH*sizeof(TCHAR));
-		}
-		lstrcpy(LastSavedPath, pfn);
-	}
+	// Remember the selected state
+	(nppParam.getNppGUI())._setSaveDlgExtFiltToAllTypes = !fDlg.getFileTypeCheckboxValue();
 
 	// Enable file autodetection again.
-	(const_cast<NppGUI &>(nppParam.getNppGUI()))._fileAutoDetection = cdBefore;
+	(nppParam.getNppGUI())._fileAutoDetection = cdBefore;
 
-	if (pfn)
+	if (!fn.empty())
 	{
-		BufferID other = BUFFER_INVALID;
-		if(!forbidSaveAsOpenedCheck) {
-			other = _pDocTab->findBufferByName(pfn);
-			if (other == BUFFER_INVALID)
-				other = _pNonDocTab->findBufferByName(pfn);
-		}
+		BufferID other = _pDocTab->findBufferByName(fn.c_str());
+		if (other == BUFFER_INVALID)
+			other = _pNonDocTab->findBufferByName(fn.c_str());
 
-		if (forbidSaveAsOpenedCheck || other == BUFFER_INVALID)	//can save, as both (same and other) view don't contain buffer
+		if (other == BUFFER_INVALID)	//can save, as both (same and other) view don't contain buffer
 		{
-			bool res = doSave(bufferID, pfn, isSaveCopy);
+			bool res = doSave(bufferID, fn.c_str(), isSaveCopy);
 			//buf->setNeedsLexing(true);	//commented to fix wrapping being removed after save as (due to SCI_CLEARSTYLE or something, seems to be Scintilla bug)
 			//Changing lexer after save seems to work properly
 			if (!wasUntitled && !isSaveCopy)
@@ -1683,18 +1795,18 @@ bool Notepad_plus::fileSaveAs(BufferID id, bool isSaveCopy, bool forbidSaveAsOpe
 		{
 			_nativeLangSpeaker.messageBox("FileAlreadyOpenedInNpp",
 				_pPublicInterface->getHSelf(),
-				TEXT("The file is already opened in Notepad++."),
-				TEXT("ERROR"),
+				TEXT("此文件已经在Textrument中打开"),
+				TEXT("错误"),
 				MB_OK | MB_ICONSTOP);
 			switchToFile(other);
 			return false;
 		}
 	}
 	else // cancel button is pressed
-    {
-        checkModifiedDocument(true);
+	{
+		checkModifiedDocument(true);
 		return false;
-    }
+	}
 }
 
 bool Notepad_plus::fileRename(BufferID id)
@@ -1714,16 +1826,20 @@ bool Notepad_plus::fileRename(BufferID id)
 	bool isFileExisting = PathFileExists(buf->getFullPathName()) != FALSE;
 	if (isFileExisting)
 	{
-		FileDialog fDlg(_pPublicInterface->getHSelf(), _pPublicInterface->getHinst());
+		CustomFileDialog fDlg(_pPublicInterface->getHSelf());
 
-		fDlg.setExtFilter(TEXT("All types"), TEXT(".*"), NULL);
+		fDlg.setExtFilter(TEXT("All types"), TEXT(".*"));
 		setFileOpenSaveDlgFilters(fDlg, false);
-
+		fDlg.setFolder(buf->getFullPathName());
 		fDlg.setDefFileName(buf->getFileName());
-		TCHAR *pfn = fDlg.doSaveDlg();
 
-		if (pfn)
-			success = MainFileManager.moveFile(bufferID, pfn);
+		generic_string title = _nativeLangSpeaker.getLocalizedStrFromID("file-rename-title", TEXT("重命名"));
+		fDlg.setTitle(title.c_str());
+
+		generic_string fn = fDlg.doSaveDlg();
+
+		if (!fn.empty())
+			success = MainFileManager.moveFile(bufferID, fn.c_str());
 	}
 	else
 	{
@@ -1734,14 +1850,14 @@ bool Notepad_plus::fileRename(BufferID id)
 		// Reserved characters: < > : " / \ | ? *
 		std::wstring reservedChars = TEXT("<>:\"/\\|\?*");
 
-		generic_string title = _nativeLangSpeaker.getLocalizedStrFromID("tabrename-title", TEXT("Rename Current Tab"));
-		generic_string staticName = _nativeLangSpeaker.getLocalizedStrFromID("tabrename-newname", TEXT("New Name: "));
+		generic_string staticName = _nativeLangSpeaker.getLocalizedStrFromID("tabrename-newname", TEXT("新的文件名: "));
 
 		StringDlg strDlg;
+		generic_string title = _nativeLangSpeaker.getLocalizedStrFromID("tabrename-title", TEXT("重命名当前文件"));
 		strDlg.init(_pPublicInterface->getHinst(), _pPublicInterface->getHSelf(), title.c_str(), staticName.c_str(), buf->getFileName(), 0, reservedChars.c_str(), true);
 
-		TCHAR *tabNewName;
-		while (tabNewName = reinterpret_cast<TCHAR *>(strDlg.doDialog()))
+		TCHAR *tabNewName = reinterpret_cast<TCHAR *>(strDlg.doDialog());
+		if (tabNewName)
 		{
 			BufferID sameNamedBufferId = _pDocTab->findBufferByName(tabNewName);
 			if (sameNamedBufferId == BUFFER_INVALID)
@@ -1753,8 +1869,8 @@ bool Notepad_plus::fileRename(BufferID id)
 			{
 				_nativeLangSpeaker.messageBox("RenameTabTemporaryNameAlreadyInUse",
 					_pPublicInterface->getHSelf(),
-					TEXT("The specified name is already in use on another tab."),
-					TEXT("Rename failed"),
+					TEXT("此名称已在其他标签页使用。"),
+					TEXT("重命名失败"),
 					MB_OK | MB_ICONSTOP);
 			}
 			else
@@ -1777,7 +1893,6 @@ bool Notepad_plus::fileRename(BufferID id)
 					if (bRes)
 						::DeleteFile(oldBackUpFile.c_str());
 				}
-				break;
 			}
 		}
 	}
@@ -1818,8 +1933,8 @@ bool Notepad_plus::fileDelete(BufferID id)
 		{
 			_nativeLangSpeaker.messageBox("DeleteFileFailed",
 				_pPublicInterface->getHSelf(),
-				TEXT("Delete File failed"),
-				TEXT("Delete File"),
+				TEXT("文件删除失败"),
+				TEXT("删除文件"),
 				MB_OK);
 
 			scnN.nmhdr.code = NPPN_FILEDELETEFAILED;
@@ -2265,8 +2380,8 @@ bool Notepad_plus::fileLoadSession(const TCHAR *fn)
 		{
 			_nativeLangSpeaker.messageBox("SessionFileInvalidError",
 				NULL,
-				TEXT("Session file is either corrupted or not valid."),
-				TEXT("Could not Load Session"),
+				TEXT("会话文件出现损坏/无效。"),
+				TEXT("无法加载会话"),
 				MB_OK);
 		}
 		else {
@@ -2325,7 +2440,7 @@ const TCHAR * Notepad_plus::fileSaveSession(size_t nbFile, TCHAR ** fileNames)
 	}
 	fDlg.setExtFilter(TEXT("All types"), TEXT(".*"));
 	const generic_string checkboxLabel = _nativeLangSpeaker.getLocalizedStrFromID("session-svlayout",
-		TEXT("Save Window Layout to Session"));
+		TEXT("保存布局"));
 	fDlg.setCheckbox(checkboxLabel.c_str(), nppParms->bSaveLayoutToSession);
 	sessionFileName = fDlg.doSaveDlg();
 

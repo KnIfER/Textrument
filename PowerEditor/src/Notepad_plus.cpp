@@ -158,8 +158,6 @@ Notepad_plus::Notepad_plus()
 	NppGUI & nppGUI = *nppUIParms;
 	nppApp = this;
 
-	ScintillaEditView::loadSciLexerDll();
-
 	TiXmlDocumentA *nativeLangDocRootA = nppParam.getNativeLangA();
     _nativeLangSpeaker.init(nativeLangDocRootA);
 
@@ -2189,8 +2187,8 @@ bool Notepad_plus::findInFilelist(std::vector<generic_string> & fileNames)
 
 	if (nbTotal != 0)
 	{
-		const NppParameters& nppParam = NppParameters::getInstance();
-		const NppGUI& nppGui = nppParam.getNppGUI();
+		NppParameters& nppParam = NppParameters::getInstance();
+		NppGUI& nppGui = nppParam.getNppGUI();
 		if (!nppGui._findDlgAlwaysVisible)
 		{
 			_findReplaceDlg.display(false);
@@ -2257,8 +2255,8 @@ bool Notepad_plus::findInOpenedFiles()
 
 	if (nbTotal != 0)
 	{
-		const NppParameters& nppParam = NppParameters::getInstance();
-		const NppGUI& nppGui = nppParam.getNppGUI();
+		NppParameters& nppParam = NppParameters::getInstance();
+		NppGUI& nppGui = nppParam.getNppGUI();
 		if (!nppGui._findDlgAlwaysVisible)
 		{
 			_findReplaceDlg.display(false);
@@ -2314,8 +2312,8 @@ bool Notepad_plus::findInCurrentFile(bool isEntireDoc)
 
 	if (nbTotal != 0)
 	{
-		const NppParameters& nppParam = NppParameters::getInstance();
-		const NppGUI& nppGui = nppParam.getNppGUI();
+		NppParameters& nppParam = NppParameters::getInstance();
+		NppGUI& nppGui = nppParam.getNppGUI();
 		if (!nppGui._findDlgAlwaysVisible)
 		{
 			_findReplaceDlg.display(false);
