@@ -56,14 +56,14 @@ public :
 	void showContainer(HWND hCont, bool display = true);
 
 	void showContainer(size_t uCont, bool display = true) {
-		_vContainer[uCont]->doDialog(display);
+		_vPanels[uCont]->doDialog(display);
 		resize();
 	}
 
 	void showFloatingContainers(bool show);
 
 	void updateContainerInfo(HWND hClient);
-	void createDockableDlg(tTbData data, int iCont = CONT_LEFT, bool isVisible = false);
+	void createDockableDlg(tTbData data, int iCont = APP_LAYOUT_RNG_LEFT, bool isVisible = false);
 	void setActiveTab(int iCont, int iItem, bool bMustSet=false);
 	void showDockableDlg(HWND hDlg, BOOL view);
 	void showDockableDlg(TCHAR* pszName, BOOL view);
@@ -78,7 +78,7 @@ public :
 
 	// get all container in vector
 	std::vector<DockingCont*> & getContainerInfo() {
-		return _vContainer;
+		return _vPanels;
 	};
 	// get dock data (sized areas)
 	void getDockInfo(tDockMgr *pDockData) {
@@ -87,13 +87,13 @@ public :
 
 	// setting styles of docking
 	void setStyleCaption(BOOL captionOnTop) {
-		_vContainer[CONT_TOP]->setCaptionTop(captionOnTop);
-		_vContainer[CONT_BOTTOM]->setCaptionTop(captionOnTop);
+		_vPanels[APP_LAYOUT_RNG_TOP]->setCaptionTop(captionOnTop);
+		_vPanels[APP_LAYOUT_RNG_BOTTOM]->setCaptionTop(captionOnTop);
 	};
 
 	void setTabStyle(BOOL orangeLine) {
-		for (size_t i = 0; i < _vContainer.size(); ++i)
-			_vContainer[i]->setTabStyle(orangeLine);
+		for (size_t i = 0; i < _vPanels.size(); ++i)
+			_vPanels[i]->setTabStyle(orangeLine);
 	};
 
 	int getDockedContSize(int iCont);
@@ -108,7 +108,7 @@ private :
 	Window						**_ppMainWindow = nullptr;
 	std::vector<HWND>			_vImageList;
 	HIMAGELIST					_hImageList = nullptr;
-	std::vector<DockingCont*>	_vContainer;
+	std::vector<DockingCont*>	_vPanels;
 	tDockMgr					_dockData;
 	static BOOL					_isRegistered;
 	BOOL						_isInitialized = FALSE;

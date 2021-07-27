@@ -246,5 +246,8 @@ public:
 	Gripper* _pGripper;
 
 	bool _toDock;
+
+	// only for docked panels
+	int _rngIdx = -1;
 };
 

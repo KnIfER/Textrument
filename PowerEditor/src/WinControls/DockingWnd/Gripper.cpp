@@ -420,6 +420,11 @@ bool Gripper::onButtonUp()
 		pDockCont = workHitTest(pt);
 	}
 
+	if (pDockCont != NULL)
+	{
+		altToSplitPanel(pDockCont);
+	}
+
 	/* add dependency to other container class */
 	if (pDockCont == NULL)
 	{
@@ -522,14 +527,12 @@ bool Gripper::onButtonUp()
 		::SendMessage(pContMove->getHSelf(), WM_SIZE, 0, 0);
 		return true;
 	}
-	else if (_pCont != pDockCont)
+	else if (_pCont != pDockCont)  // Important CHECK
 	{
 		// 当检测到的鼠标下窗口与当前窗口不一致时，
 		//     移动元素到新的停靠窗口（已存在的、已关闭的） / 或者悬浮对话框（已存在的）
-		// 调用的是无返回值的 toggleActiveTb（移动一个子元素） / 或者 toggleVisTb（移动整个容器）
+		// 调用的是无返回值的 toggleActiveTbWnd（移动一个子元素） / 或者 toggleVisTbWnd（移动整个容器）
 		// passsing a copy of the float shape. 
-		RECT rcPrint = _pCont->getDataOfActiveTb()->rcFloat;
-		//rcPrint = pDockCont->getDataOfActiveTb()->rcFloat;
 		if (!pDockCont->isVisible())
 		{ 
 			// the docking panel |pDockCont| now remembers it's new floating position.
@@ -548,6 +551,7 @@ bool Gripper::onButtonUp()
 		}
 
 		#if DEBUG_DOCKING_PREVIEW
+		RECT rcPrint = _pCont->getDataOfActiveTb()->rcFloat;
 		RECT rcPrint1 = pDockCont->getDataOfActiveTb()->rcFloat;
 		LogIs(true, (HWND)-1 , TEXT("onButtonUp1 floatSz =%d, %d, %d, %d    ---data.rc---    %d, %d, %d, %d ")
 			, rcPrint.left, rcPrint.right, rcPrint.top, rcPrint.bottom
@@ -872,6 +876,16 @@ void Gripper::getMousePoints(POINT* pt, POINT* ptPrev)
 	_ptOld	= *pt;
 }
 
+void Gripper::altToSplitPanel(DockingCont* & pnl)
+{
+	boolean bAltSplitPanelEnabled = true;
+	if (bAltSplitPanelEnabled && pnl && pnl->_rngIdx>=0 && GetKeyState(VK_MENU)&0x80)
+	{
+		//LogIs("ALT 键按下表示分割窗口，置入另一子窗口中 : %d", pnl->_rngIdx);
+		pnl = _pDockMgr->getContainerInfo()[(pnl->_rngIdx+APP_LAYOUT_RNG_MAX/2)%APP_LAYOUT_RNG_MAX];
+	}
+}
+
 void Gripper::getMovingRect(POINT pt, RECT *rc)
 {
 	RECT			rcCorr			= {0};
@@ -889,6 +903,8 @@ void Gripper::getMovingRect(POINT pt, RECT *rc)
 
 	if (pContHit != NULL)
 	{
+		altToSplitPanel(pContHit);
+
 		/* get rect of client */
 		::GetWindowRect(pContHit->getHSelf(), rc);
 
@@ -973,20 +989,22 @@ DockingCont* Gripper::dlgsHitTest(POINT pt)
 
 	RECT	rc	= {0};
 
+	//list<DockingCont*> dockedContsZOrder{};
+
 	auto iter = dockingContsZOrder.begin();
 	//if(0)
 	while(iter!=dockingContsZOrder.end())
 	{ 
 		// first loop, check for floating dialogs
 		auto cI = iter._Ptr->_Myval;
-		if((_startMoveFromTab||cI!=_pCont)&&cI->isFloating()&&cI->isVisible())
+		if ((_startMoveFromTab||cI!=_pCont) && cI->isVisible() && cI->isFloating())
 		{
 			cI->getWindowRect(rc);
-			if(rc.left<=pt.x&&rc.right>=pt.x&&rc.top<=pt.y&&rc.bottom>=pt.y)
+			if(rc.left<=pt.x&&rc.right>=pt.x&&rc.top<=pt.y&&rc.bottom>=pt.y)// 在这个悬浮窗口内
 			{
 				// todo is 24px too small?
 				if (pt.y<(rc.top + 24))
-				{
+				{ // inside of the caption | 在标题栏之内
 					return cI;
 				}
 				if(_startMoveFromTab)
@@ -1002,21 +1020,38 @@ DockingCont* Gripper::dlgsHitTest(POINT pt)
 		}
 		iter++;
 	} 
-	iter = dockingContsZOrder.begin();
-	while(iter!=dockingContsZOrder.end())
-	{ 
-		// second loop, check for docked dialogs
-		auto cI = iter._Ptr->_Myval;
-		if(!cI->isFloating()&&cI->isVisible())
+	//iter = dockedContsZOrder.begin();
+	//while(iter!=dockedContsZOrder.end())
+	//{ 
+	//	// second loop, check for docked dialogs
+	//	auto cI = iter._Ptr->_Myval;
+	//	//if(!cI->isFloating()&&cI->isVisible())
+	//	{
+	//		//cI->getWindowRect(rc);
+	//		GetWindowRect(cI->getCaptionWnd(), &rc);
+	//		if(rc.left<=pt.x&&rc.right>=pt.x&&rc.top<=pt.y&&rc.bottom>=pt.y)
+	//		{
+	//			if (GetKeyState(VK_MENU)&0x80) // ALT 键按下表示置入另一子窗口中。
+	//			{
+	//				LogIs("ALT 键按下 %d", cI.get);
+	//			}
+	//			return cI;
+	//		}
+	//	}
+	//	iter++;
+	//}
+	auto vPnl = _pDockMgr->getContainerInfo();
+	for (size_t rgnIdx = 0; rgnIdx < APP_LAYOUT_RNG_MAX; rgnIdx++)
+	{
+		auto cI = vPnl[rgnIdx];
+		if (cI->isVisible())
 		{
-			//cI->getWindowRect(rc);
 			GetWindowRect(cI->getCaptionWnd(), &rc);
 			if(rc.left<=pt.x&&rc.right>=pt.x&&rc.top<=pt.y&&rc.bottom>=pt.y)
 			{
 				return cI;
 			}
 		}
-		iter++;
 	}
 
 	/* doesn't hit a container */
@@ -1025,50 +1060,50 @@ DockingCont* Gripper::dlgsHitTest(POINT pt)
 
 DockingCont* Gripper::contHitTest(POINT pt)
 {
-	vector<DockingCont*>	vCont	= _pDockMgr->getContainerInfo();
+	vector<DockingCont*>	vPnls	= _pDockMgr->getContainerInfo();
 	HWND					hWnd	= ::WindowFromPoint(pt);
 	//HWND					hWnd	= ::ChildWindowFromPointEx(_pCont->getHParent(), pt, CWP_SKIPDISABLED|CWP_SKIPINVISIBLE);
 
-	for (size_t iCont = 0, len = vCont.size(); iCont < len; ++iCont)
+	for (size_t iCont = 0, len = vPnls.size(); iCont < len; ++iCont)
 	{
 		//if(vCont[iCont]==_pCont&&!isCreated) continue;
 		/* test if within caption */
-		if (hWnd == vCont[iCont]->getCaptionWnd())
+		if (hWnd == vPnls[iCont]->getCaptionWnd())
 		{
-			if (vCont[iCont]->isFloating())
+			if (vPnls[iCont]->isFloating())
 			{
 				RECT	rc	= {0};
 
-				vCont[iCont]->getWindowRect(rc);
+				vPnls[iCont]->getWindowRect(rc);
 				if ((rc.top < pt.y) && (pt.y < (rc.top + 24)))
 				{
 					/* when it is the same container start moving immediately */
-					if (vCont[iCont] == _pCont)
+					if (vPnls[iCont] == _pCont)
 					{
 						return NULL;
 					}
 					else
 					{
-						return vCont[iCont];
+						return vPnls[iCont];
 					}
 				}
 			}
 			else
 			{
-				return vCont[iCont];
+				return vPnls[iCont];
 			}
 		}
 
 		/* test only tabs that are visible */
-		if (::IsWindowVisible(vCont[iCont]->getTabWnd()))
+		if (::IsWindowVisible(vPnls[iCont]->getTabWnd()))
 		{
 			/* test if within tab (rect test is used, because of drag and drop behaviour) */
 			RECT		rc	= {0};
 
-			::GetWindowRect(vCont[iCont]->getTabWnd(), &rc);
+			::GetWindowRect(vPnls[iCont]->getTabWnd(), &rc);
 			if (::PtInRect(&rc, pt))
 			{
-				return vCont[iCont];
+				return vPnls[iCont];
 			}
 		}
 	}
@@ -1101,7 +1136,7 @@ DockingCont* Gripper::workHitTest(POINT pt, RECT *rc)
 	}
 
 	/* now search if cusor hits a possible docking area */
-	for (int iWork = 0; iWork < DOCKCONT_MAX; ++iWork)
+	for (int iWork = 0; iWork < APP_LAYOUT_RNG_MAX; ++iWork)
 	{
 		if (vCont[iWork]!=_pCont&&!vCont[iWork]->isVisible())
 		{
@@ -1117,19 +1152,19 @@ DockingCont* Gripper::workHitTest(POINT pt, RECT *rc)
 			/* set fix hit test with */
 			switch(iWork)
 			{
-				case CONT_LEFT:
+				case APP_LAYOUT_RNG_LEFT:
 					rcCont.right   = rcCont.left + HIT_TEST_THICKNESS;
 					rcCont.left   -= HIT_TEST_THICKNESS;
 					break;
-				case CONT_RIGHT:
+				case APP_LAYOUT_RNG_RIGHT:
 					rcCont.left    = rcCont.right - HIT_TEST_THICKNESS;
 					rcCont.right  += HIT_TEST_THICKNESS;
 					break;
-				case CONT_TOP:
+				case APP_LAYOUT_RNG_TOP:
 					rcCont.bottom  = rcCont.top + HIT_TEST_THICKNESS;
 					rcCont.top    -= HIT_TEST_THICKNESS;
 					break;
-				case CONT_BOTTOM:
+				case APP_LAYOUT_RNG_BOTTOM:
 					rcCont.top     = rcCont.bottom - HIT_TEST_THICKNESS;
 					rcCont.bottom += HIT_TEST_THICKNESS;
 					break;

@@ -194,7 +194,7 @@ void DockingCont::doDialog(bool willBeShown, bool isFloating)
 tTbData* DockingCont::createToolbar(tTbData data, bool visible)
 {
 	tTbData *pTbData = new tTbData;
-
+	data.magicNum = 0x666;
 	*pTbData = data;
 
 	// force window style of client window
@@ -1861,6 +1861,11 @@ void DockingCont::selectTab(int iTab)
 		int maxWidth = 0;
 		int iItemCnt = static_cast<int32_t>(::SendMessage(_hContTab, TCM_GETITEMCOUNT, 0, 0));
 
+		if (iTab>=iItemCnt)
+		{
+			return;
+		}
+
 		// get data of new active dialog
 		tcItem.mask		= TCIF_PARAM;
 		::SendMessage(_hContTab, TCM_GETITEM, iTab, reinterpret_cast<LPARAM>(&tcItem));
@@ -1905,10 +1910,24 @@ void DockingCont::selectTab(int iTab)
 		{
 			const TCHAR *pszTabTxt = NULL;
 
-			::SendMessage(_hContTab, TCM_GETITEM, iItem, reinterpret_cast<LPARAM>(&tcItem));
-			if (!tcItem.lParam)
+			if (!::SendMessage(_hContTab, TCM_GETITEM, iItem, reinterpret_cast<LPARAM>(&tcItem)) 
+				|| !tcItem.lParam)
 				continue;
-			pszTabTxt = reinterpret_cast<tTbData*>(tcItem.lParam)->pszName;
+
+			auto td = reinterpret_cast<tTbData*>(tcItem.lParam);
+
+			pszTabTxt = td->pszName;
+
+			if (td->magicNum!=0x666 && ::SendMessage(_hContTab, TCM_DELETEITEM, iItem, 0))
+			{ // sainty check
+				iItem--;
+				iItemCnt--;
+				continue;
+			}
+
+			if(pszTabTxt==NULL) {
+				continue;
+			}
 
 			// get current font width
 			GetTextExtentPoint32(hDc, pszTabTxt, lstrlen(pszTabTxt), &size);

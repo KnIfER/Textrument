@@ -37,11 +37,15 @@
 #define	CAPTION_BOTTOM			FALSE
 
 //   defines for docking manager
-#define	CONT_LEFT		0
-#define	CONT_RIGHT		1
-#define	CONT_TOP		2
-#define	CONT_BOTTOM		3
-#define	DOCKCONT_MAX	4
+#define	APP_LAYOUT_RNG_LEFT		 0
+#define	APP_LAYOUT_RNG_RIGHT	 1
+#define	APP_LAYOUT_RNG_TOP		 2
+#define	APP_LAYOUT_RNG_BOTTOM	 3
+#define	APP_LAYOUT_RNG_LEFT_SUB		 4
+#define	APP_LAYOUT_RNG_RIGHT_SUB	 5
+#define	APP_LAYOUT_RNG_TOP_SUB		 6
+#define	APP_LAYOUT_RNG_BOTTOM_SUB	 7
+#define	APP_LAYOUT_RNG_MAX	     8
 
 // mask params for plugins of internal dialogs
 #define DWS_ICONTAB			0x00000001			// Icon for tabs are available
@@ -50,10 +54,10 @@
 #define DWS_PARAMSALL		(DWS_ICONTAB|DWS_ICONBAR|DWS_ADDINFO)
 
 // default docking values for first call of plugin
-#define DWS_DF_CONT_LEFT	(CONT_LEFT	<< 28)	// default docking on left
-#define DWS_DF_CONT_RIGHT	(CONT_RIGHT	<< 28)	// default docking on right
-#define DWS_DF_CONT_TOP		(CONT_TOP	<< 28)	// default docking on top
-#define DWS_DF_CONT_BOTTOM	(CONT_BOTTOM << 28)	// default docking on bottom
+#define DWS_DF_CONT_LEFT	(APP_LAYOUT_RNG_LEFT	<< 28)	// default docking on left
+#define DWS_DF_CONT_RIGHT	(APP_LAYOUT_RNG_RIGHT	<< 28)	// default docking on right
+#define DWS_DF_CONT_TOP		(APP_LAYOUT_RNG_TOP	<< 28)	// default docking on top
+#define DWS_DF_CONT_BOTTOM	(APP_LAYOUT_RNG_BOTTOM << 28)	// default docking on bottom
 #define DWS_DF_FLOATING		0x80000000			// default state is floating
 
 
@@ -71,12 +75,13 @@ typedef struct {
 	RECT		rcFloat;		// floating position
 	int			iPrevCont;		// stores the privious container (toggling between float and dock)
 	const TCHAR*	pszModuleName;	// it's the plugin file name. It's used to identify the plugin
+	int magicNum;
 } tTbData;
 
 
 typedef struct {
 	HWND		hWnd;							// the docking manager wnd
-	RECT		rcRegion[DOCKCONT_MAX];			// position of docked dialogs
+	RECT		rcRegion[APP_LAYOUT_RNG_MAX];			// position of docked dialogs
 } tDockMgr;
 
 

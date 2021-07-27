@@ -73,6 +73,7 @@ public:
 	DockingCont * contHitTest(POINT pt);
 	DockingCont * dlgsHitTest(POINT pt);
 	DockingCont * workHitTest(POINT pt, RECT *rcCont = NULL);
+	void altToSplitPanel(DockingCont* & pnl);
 
 	void initTabInformation();
 
