@@ -87,7 +87,7 @@ struct PluginUpdateInfo
 	generic_string _id;           // Plugin package ID: SHA-256 hash
 	generic_string _repository;
 	bool _isVisible = true;       // if false then it should not be displayed 
-
+	float loadTm;
 	generic_string describe();
 	PluginUpdateInfo() = default;
 	PluginUpdateInfo(const generic_string& fullFilePath, const generic_string& fileName);

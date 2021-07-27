@@ -120,6 +120,10 @@ static WORD getBinaryArchitectureType(const TCHAR *filePath)
 	#define	LOAD_LIBRARY_SEARCH_DEFAULT_DIRS	0x00001000
 #endif
 
+#include <set>
+
+std::set<TCHAR*, PluginsManager::ptrCmp> dllSet;
+
 int PluginsManager::loadPlugin(const TCHAR *pluginFilePath)
 {
 	const TCHAR *pluginFileName = ::PathFindFileName(pluginFilePath);
@@ -131,6 +135,7 @@ int PluginsManager::loadPlugin(const TCHAR *pluginFilePath)
 	PluginInfo *pi = new PluginInfo;
 	try
 	{
+		long tm = clock();
 		pi->_moduleName = pluginFileName;
 
 		int archType = nppParams.archType();
@@ -270,9 +275,11 @@ int PluginsManager::loadPlugin(const TCHAR *pluginFilePath)
 			::SendMessage(_nppData._scintillaMainHandle, SCI_LOADLEXERLIBRARY, 0, reinterpret_cast<LPARAM>(pDllName));
 
 		}
-		addInLoadedDlls(pluginFilePath, pluginFileName);
 		_pluginInfos.push_back(pi);
-		return static_cast<int32_t>(_pluginInfos.size() - 1);
+		pi->loadInfo = new LoadedDllInfo{pluginFilePath, clock()-tm};
+		int ret = _pluginInfos.size()-1;
+		installPluginMenuAt(ret);
+		return static_cast<int32_t>(ret);
 	}
 	catch (std::exception& e)
 	{
@@ -314,10 +321,16 @@ int PluginsManager::loadPlugin(const TCHAR *pluginFilePath)
 	}
 }
 
+bool PluginsManager::isInLoadedDlls(const TCHAR *fn)
+{
+	auto pluginID = _plugin_module_name_table.find((TCHAR *)fn);
+	return pluginID!=_plugin_module_name_table.end();
+}
+
+
 bool PluginsManager::loadPluginsV2(const TCHAR* dir)
 {
-	if (_isDisabled)
-		return false;
+	//if (_isDisabled) return false;
 
 	vector<generic_string> dllNames;
 
@@ -459,10 +472,14 @@ bool PluginsManager::removeShortcutByCmdID(int cmdID)
 	return true;
 }
 
-void PluginsManager::addInMenuFromPMIndex(int i)
+void PluginsManager::installPluginMenuAt(int i)
 {
     vector<PluginCmdShortcut> & pluginCmdSCList = (NppParameters::getInstance()).getPluginCommandList();
-	auto & plug = *_pluginInfos[i];
+	PluginInfo & plug = *_pluginInfos[i];
+	if (plug._pluginMenu!=0)
+	{
+		// todo first remve the old menu and the old PluginCommands
+	}
 	::InsertMenu(_hPluginsMenu, i, MF_BYPOSITION | MF_POPUP, (UINT_PTR)plug._pluginMenu, plug._funcName.c_str());
 	_plugin_module_table[(long)plug._hLib] = i;
 	_plugin_module_name_table[(TCHAR*)plug._moduleName.data()] = i;
@@ -575,7 +592,6 @@ HMENU PluginsManager::getMenuForModule(HINSTANCE moduleID)
 HMENU PluginsManager::setMenu(HMENU hMenu, const TCHAR *menuName, bool enablePluginAdmin)
 {
 	const TCHAR *nom_menu = (menuName && menuName[0])?menuName:TEXT("插件(&P)");
-	size_t nbPlugin = _pluginInfos.size();
 
 	if (!_hPluginsMenu)
 	{
@@ -584,21 +600,12 @@ HMENU PluginsManager::setMenu(HMENU hMenu, const TCHAR *menuName, bool enablePlu
 
 		int i = 1;
 
-		if (nbPlugin > 0)
-			::InsertMenu(_hPluginsMenu, 0, MF_BYPOSITION | MF_SEPARATOR, 0, TEXT(""));
+		::InsertMenu(_hPluginsMenu, 0, MF_BYPOSITION | MF_SEPARATOR, 0, TEXT(""));
 
-		if (enablePluginAdmin)
-		{
-			::InsertMenu(_hPluginsMenu, i++, MF_BYPOSITION, IDM_SETTING_PLUGINADM, TEXT("插件管理..."));
-			::InsertMenu(_hPluginsMenu, i++, MF_BYPOSITION | MF_SEPARATOR, 0, TEXT(""));
-		}
+		::InsertMenu(_hPluginsMenu, i++, MF_BYPOSITION, IDM_SETTING_PLUGINADM, TEXT("插件管理..."));
+		::InsertMenu(_hPluginsMenu, i++, MF_BYPOSITION | MF_SEPARATOR, 0, TEXT(""));
 
 		::InsertMenu(_hPluginsMenu, i, MF_BYPOSITION, IDM_SETTING_OPENPLUGINSDIR, TEXT("打开插件文件夹..."));
-	}
-
-	for (size_t i = 0; i < nbPlugin; ++i)
-	{
-		addInMenuFromPMIndex(static_cast<int32_t>(i));
 	}
 	return _hPluginsMenu;
 }
@@ -827,9 +834,9 @@ bool PluginsManager::allocateMarker(int numberRequired, int *start)
 generic_string PluginsManager::getLoadedPluginNames() const
 {
 	generic_string pluginPaths;
-	for (size_t i = 0; i < _loadedDlls.size(); ++i)
+	for (size_t i = 0; i < _pluginInfos.size(); ++i)
 	{
-		pluginPaths += _loadedDlls[i]._fileName;
+		pluginPaths += _pluginInfos[i]->_moduleName;
 		pluginPaths += TEXT(" ");
 	}
 	return pluginPaths;

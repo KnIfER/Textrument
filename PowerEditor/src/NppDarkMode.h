@@ -71,8 +71,12 @@ namespace NppDarkMode
 		customizedTone = 32
 	};
 
-	void initDarkMode();				// pulls options from NppParameters
-	void refreshDarkMode(HWND hwnd, bool forceRefresh = false);	// attempts to apply new options from NppParameters, sends NPPM_INTERNAL_REFRESHDARKMODE to hwnd's top level parent
+	// pulls options from NppParameters
+	void initDarkMode();				
+	// attempts to apply new options from NppParameters, sends NPPM_INTERNAL_REFRESHDARKMODE to hwnd's top level parent
+	void refreshDarkMode(HWND hwnd, bool forceRefresh = false);
+	// Plugin read Darkmode, but don't apply.
+	void pluginReadDarkMode(); 
 
 	bool isEnabled();
 	bool isDarkMenuEnabled();

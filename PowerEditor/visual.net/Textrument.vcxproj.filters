@@ -11,7 +11,6 @@
     <ClCompile Include="..\src\WinControls\AnsiCharPanel\ansiCharPanel.cpp" />
     <ClCompile Include="..\src\ScintillaComponent\AutoCompletion.cpp" />
     <ClCompile Include="..\src\WinControls\AnsiCharPanel\asciiListView.cpp" />
-    <ClCompile Include="..\src\WinControls\DockingWnd\DirectGripper.cpp" />
     <ClCompile Include="..\src\WinControls\DocumentMap\documentSnapshot.cpp" />
     <ClCompile Include="..\src\WinControls\Grid\BabyGrid.cpp" />
     <ClCompile Include="..\src\WinControls\Grid\BabyGridWrapper.cpp" />
@@ -25,11 +24,7 @@
     <ClCompile Include="..\src\WinControls\ContextMenu\ContextMenu.cpp" />
     <ClCompile Include="..\src\WinControls\InsituDebug.cpp" />
     <ClCompile Include="..\src\WinControls\OpenSaveFileDialog\CustomFileDialog.cpp" />
-    <ClCompile Include="..\src\WinControls\PluginsAdmin\pluginsAdmin.cpp" />
     <ClCompile Include="..\src\WinControls\TabBar\ControlsTab.cpp" />
-    <ClCompile Include="..\src\WinControls\DockingWnd\DockingCont.cpp" />
-    <ClCompile Include="..\src\WinControls\DockingWnd\DockingManager.cpp" />
-    <ClCompile Include="..\src\WinControls\DockingWnd\DockingSplitter.cpp" />
     <ClCompile Include="..\src\ScintillaComponent\DocTabView.cpp" />
     <ClCompile Include="..\src\WinControls\DocumentMap\documentMap.cpp" />
     <ClCompile Include="..\src\EncodingMapper.cpp" />
@@ -138,6 +133,21 @@
     <ClCompile Include="..\src\DarkMode\DarkMode.cpp">
       <Filter>DarkMode</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\WinControls\PluginsAdmin\pluginsAdmin.cpp">
+      <Filter>PluginList</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\WinControls\DockingWnd\DirectGripper.cpp">
+      <Filter>Docking</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\WinControls\DockingWnd\DockingCont.cpp">
+      <Filter>Docking</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\WinControls\DockingWnd\DockingManager.cpp">
+      <Filter>Docking</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\WinControls\DockingWnd\DockingSplitter.cpp">
+      <Filter>Docking</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\clipboardFormats.h" />
@@ -160,8 +170,6 @@
     <ClInclude Include="..\src\WinControls\AnsiCharPanel\asciiListView.h" />
     <ClInclude Include="..\src\WinControls\ColourPicker\ColourPopupResource.h" />
     <ClInclude Include="..\src\WinControls\ColourPicker\WordStyleDlgRes.h" />
-    <ClInclude Include="..\src\WinControls\DockingDebug.h" />
-    <ClInclude Include="..\src\WinControls\DockingWnd\DirectGripper.h" />
     <ClInclude Include="..\src\WinControls\DocumentMap\documentMap_rc.h" />
     <ClInclude Include="..\src\WinControls\DocumentMap\documentSnapshot.h" />
     <ClInclude Include="..\src\WinControls\DocumentMap\documentSnapshot_rc.h" />
@@ -180,20 +188,12 @@
     <ClInclude Include="..\src\WinControls\ContextMenu\ContextMenu.h" />
     <ClInclude Include="..\src\WinControls\InsituDebug.h" />
     <ClInclude Include="..\src\WinControls\OpenSaveFileDialog\CustomFileDialog.h" />
-    <ClInclude Include="..\src\WinControls\PluginsAdmin\pluginsAdmin.h" />
-    <ClInclude Include="..\src\WinControls\PluginsAdmin\pluginsAdminRes.h" />
     <ClInclude Include="..\src\WinControls\ReadDirectoryChanges\targetver.h" />
     <ClInclude Include="..\src\WinControls\shortcut\shortcutRc.h" />
     <ClInclude Include="..\src\WinControls\StaticDialog\RunDlg\RunDlg_rc.h" />
     <ClInclude Include="..\src\WinControls\Preference\preference_rc.h" />
     <ClInclude Include="..\src\WinControls\Preference\resource.h" />
     <ClInclude Include="..\src\WinControls\TabBar\ControlsTab.h" />
-    <ClInclude Include="..\src\WinControls\DockingWnd\Docking.h" />
-    <ClInclude Include="..\src\WinControls\DockingWnd\DockingCont.h" />
-    <ClInclude Include="..\src\WinControls\DockingWnd\DockingDlgInterface.h" />
-    <ClInclude Include="..\src\WinControls\DockingWnd\DockingManager.h" />
-    <ClInclude Include="..\src\WinControls\DockingWnd\dockingResource.h" />
-    <ClInclude Include="..\src\WinControls\DockingWnd\DockingSplitter.h" />
     <ClInclude Include="..\src\ScintillaComponent\DocTabView.h" />
     <ClInclude Include="..\src\WinControls\DocumentMap\documentMap.h" />
     <ClInclude Include="..\src\EncodingMapper.h" />
@@ -312,6 +312,36 @@
     <ClInclude Include="..\src\DarkMode\UAHMenuBar.h">
       <Filter>DarkMode</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\WinControls\PluginsAdmin\pluginsAdminRes.h">
+      <Filter>PluginList</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\WinControls\PluginsAdmin\pluginsAdmin.h">
+      <Filter>PluginList</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\WinControls\DockingWnd\DirectGripper.h">
+      <Filter>Docking</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\WinControls\DockingWnd\Docking.h">
+      <Filter>Docking</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\WinControls\DockingWnd\DockingCont.h">
+      <Filter>Docking</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\WinControls\DockingDebug.h">
+      <Filter>Docking</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\WinControls\DockingWnd\DockingDlgInterface.h">
+      <Filter>Docking</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\WinControls\DockingWnd\DockingManager.h">
+      <Filter>Docking</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\WinControls\DockingWnd\dockingResource.h">
+      <Filter>Docking</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\WinControls\DockingWnd\DockingSplitter.h">
+      <Filter>Docking</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\src\MISC\md5\md5Dlgs.rc" />
@@ -319,14 +349,12 @@
     <ResourceCompile Include="..\src\WinControls\ClipboardHistory\clipboardHistoryPanel.rc" />
     <ResourceCompile Include="..\src\WinControls\ColourPicker\ColourPopup.rc" />
     <ResourceCompile Include="..\src\ScintillaComponent\columnEditor.rc" />
-    <ResourceCompile Include="..\src\WinControls\DockingWnd\DockingGUIWidget.rc" />
     <ResourceCompile Include="..\src\WinControls\DocumentMap\documentMap.rc" />
     <ResourceCompile Include="..\src\WinControls\DocumentMap\documentSnapshot.rc" />
     <ResourceCompile Include="..\src\WinControls\FindCharsInRange\findCharsInRange.rc" />
     <ResourceCompile Include="..\src\ScintillaComponent\FindReplaceDlg.rc" />
     <ResourceCompile Include="..\src\WinControls\FunctionList\functionListPanel.rc" />
     <ResourceCompile Include="..\src\Notepad_plus.rc" />
-    <ResourceCompile Include="..\src\WinControls\PluginsAdmin\pluginsAdmin.rc" />
     <ResourceCompile Include="..\src\WinControls\Preference\preference.rc" />
     <ResourceCompile Include="..\src\WinControls\ProjectPanel\ProjectPanel.rc" />
     <ResourceCompile Include="..\src\WinControls\StaticDialog\RunDlg\RunDlg.rc" />
@@ -339,6 +367,12 @@
     <ResourceCompile Include="..\src\WinControls\WindowsDlg\WindowsDlg.rc" />
     <ResourceCompile Include="..\src\WinControls\ColourPicker\WordStyleDlg.rc" />
     <ResourceCompile Include="..\src\WinControls\FileBrowser\fileBrowser.rc" />
+    <ResourceCompile Include="..\src\WinControls\PluginsAdmin\pluginsAdmin.rc">
+      <Filter>PluginList</Filter>
+    </ResourceCompile>
+    <ResourceCompile Include="..\src\WinControls\DockingWnd\DockingGUIWidget.rc">
+      <Filter>Docking</Filter>
+    </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\src\icons\allChars_off.ico" />
@@ -494,6 +528,12 @@
   <ItemGroup>
     <Filter Include="DarkMode">
       <UniqueIdentifier>{e3b739d2-5d53-4ec9-9764-f9580a16c8e2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PluginList">
+      <UniqueIdentifier>{7c2aed4f-3141-41f5-8314-a48c89d3741e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Docking">
+      <UniqueIdentifier>{5a8e2404-4755-4ba0-9d5d-ad674b25af09}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

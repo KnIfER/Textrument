@@ -422,7 +422,9 @@ LRESULT Notepad_plus::init(HWND hwnd)
 	_scintillaCtrls4Plugins.init(_pPublicInterface->getHinst(), hwnd);
 	_pluginsManager.init(nppData);
 
+	_pluginsManager.setMenu(_mainMenuHandle, NULL, true);
 	_pluginsManager.loadPluginsV2(nppParam.getPluginRootDir());
+
     _restoreButton.init(_pPublicInterface->getHinst(), hwnd);
 
 	// ------------ //
@@ -543,7 +545,6 @@ LRESULT Notepad_plus::init(HWND hwnd)
 
 	//Plugin menu
 	_pluginsAdminDlg.setPluginsManager(&_pluginsManager);
-	_pluginsManager.setMenu(_mainMenuHandle, NULL, true);
 
 	//Main menu is loaded, now load context menu items
 	nppParam.getContextMenuFromXmlTree(_mainMenuHandle, _pluginsManager.getMenuHandle());
@@ -883,10 +884,10 @@ void Notepad_plus::reInitDockingSystem(DockingManagerData* dockingData)
 
 	DockingManagerData& dmd = dockingData?*dockingData:nppGUI._dockingData;
 
-	_dockingManager.setDockedContSize(CONT_LEFT  , dmd._leftWidth);
-	_dockingManager.setDockedContSize(CONT_RIGHT , dmd._rightWidth);
-	_dockingManager.setDockedContSize(CONT_TOP	 , dmd._topHeight);
-	_dockingManager.setDockedContSize(CONT_BOTTOM, dmd._bottomHight);
+	_dockingManager.setDockedContSize(APP_LAYOUT_RNG_LEFT  , dmd._leftWidth);
+	_dockingManager.setDockedContSize(APP_LAYOUT_RNG_RIGHT , dmd._rightWidth);
+	_dockingManager.setDockedContSize(APP_LAYOUT_RNG_TOP	 , dmd._topHeight);
+	_dockingManager.setDockedContSize(APP_LAYOUT_RNG_BOTTOM, dmd._bottomHight);
 
 	std::map<int, PluginDlgDockingInfo*> addedDlgMap;
 
@@ -1168,10 +1169,10 @@ void Notepad_plus::saveDockingParams()
 	NppGUI & nppGUI = const_cast<NppGUI &>((NppParameters::getInstance()).getNppGUI());
 
 	// Save the docking information
-	nppGUI._dockingData._leftWidth		= _dockingManager.getDockedContSize(CONT_LEFT);
-	nppGUI._dockingData._rightWidth		= _dockingManager.getDockedContSize(CONT_RIGHT);
-	nppGUI._dockingData._topHeight		= _dockingManager.getDockedContSize(CONT_TOP);
-	nppGUI._dockingData._bottomHight	= _dockingManager.getDockedContSize(CONT_BOTTOM);
+	nppGUI._dockingData._leftWidth		= _dockingManager.getDockedContSize(APP_LAYOUT_RNG_LEFT);
+	nppGUI._dockingData._rightWidth		= _dockingManager.getDockedContSize(APP_LAYOUT_RNG_RIGHT);
+	nppGUI._dockingData._topHeight		= _dockingManager.getDockedContSize(APP_LAYOUT_RNG_TOP);
+	nppGUI._dockingData._bottomHight	= _dockingManager.getDockedContSize(APP_LAYOUT_RNG_BOTTOM);
 
 	// clear the container tab information (active tab)
 	nppGUI._dockingData._containerTabInfo.clear();
@@ -1210,7 +1211,7 @@ void Notepad_plus::saveDockingParams()
 		}
 
 		// save the position, when container is a floated one
-		if (i >= DOCKCONT_MAX)
+		if (i >= APP_LAYOUT_RNG_MAX)
 		{
 			RECT	rc{0,0,0,0};
 			// saving the docking data parameters
@@ -1251,7 +1252,7 @@ void Notepad_plus::saveDockingParams()
 		{
 			int floatCont	= 0;
 
-			if (nppGUI._dockingData._pluginDockInfo[i]._currContainer >= DOCKCONT_MAX)
+			if (nppGUI._dockingData._pluginDockInfo[i]._currContainer >= APP_LAYOUT_RNG_MAX)
 				floatCont = nppGUI._dockingData._pluginDockInfo[i]._currContainer;
 			else
 				floatCont = nppGUI._dockingData._pluginDockInfo[i]._prevContainer;
@@ -5609,7 +5610,7 @@ bool Notepad_plus::getIntegralDockingData(tTbData & dockData, int & iCont, bool 
 
 			if (dockData.iPrevCont != -1)
 			{
-				int cont = (pddi._currContainer < DOCKCONT_MAX ? pddi._prevContainer : pddi._currContainer);
+				int cont = (pddi._currContainer < APP_LAYOUT_RNG_MAX ? pddi._prevContainer : pddi._currContainer);
 				RECT rc;
 				if (dockingData.getFloatingRCFrom(cont, rc))
 					dockData.rcFloat = rc;

@@ -362,6 +362,11 @@ namespace NppDarkMode
 		return opt;
 	}
 
+	void pluginReadDarkMode()
+	{
+		_options = configuredOptions();
+	}
+
 	void initDarkMode()
 	{
 		_options = configuredOptions();

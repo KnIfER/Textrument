@@ -41,9 +41,6 @@
 #include "PluginsManager.h"
 #include "verifySignedfile.h"
 
-#define TEXTFILE        256
-#define IDR_PLUGINLISTJSONFILE  101
-
 using namespace std;
 using nlohmann::json;
 
@@ -350,13 +347,13 @@ void PluginsAdminDlg::create(int dialogID, bool isRTL, bool msgDestParent)
 	descRect.right -= marge * 2;
 
 	NativeLangSpeaker *pNativeSpeaker = nppParms->getNativeLangSpeaker();
-	generic_string pluginStr = pNativeSpeaker->getAttrNameStr(TEXT("Plugin"), "PluginAdmin", "Plugin");
-	generic_string vesionStr = pNativeSpeaker->getAttrNameStr(TEXT("Version"), "PluginAdmin", "Version");
-	//generic_string stabilityStr = pNativeSpeaker->getAttrNameStr(TEXT("Stability"), "PluginAdmin", "Stability");
+	generic_string pluginStr = pNativeSpeaker->getAttrNameStr(TEXT("插件"), "PluginAdmin", "Plugin");
+	generic_string vesionStr = pNativeSpeaker->getAttrNameStr(TEXT("版本"), "PluginAdmin", "Version");
+	generic_string loading = pNativeSpeaker->getAttrNameStr(TEXT("加载时间"), "PluginAdmin", "Loading");
 
 	_availableList.addColumn(columnInfo(pluginStr, nppParms->_dpiManager.scaleX(200)));
 	_availableList.addColumn(columnInfo(vesionStr, nppParms->_dpiManager.scaleX(100)));
-	//_availableList.addColumn(columnInfo(stabilityStr, nppParms->_dpiManager.scaleX(70)));
+	//_availableList.addColumn(columnInfo(loading, nppParms->_dpiManager.scaleX(70)));
 	_availableList.setViewStyleOption(LVS_EX_CHECKBOXES);
 
 	_availableList.initView(_hInst, _hSelf);
@@ -364,7 +361,7 @@ void PluginsAdminDlg::create(int dialogID, bool isRTL, bool msgDestParent)
 	
 	_updateList.addColumn(columnInfo(pluginStr, nppParms->_dpiManager.scaleX(200)));
 	_updateList.addColumn(columnInfo(vesionStr, nppParms->_dpiManager.scaleX(100)));
-	//_updateList.addColumn(columnInfo(stabilityStr, nppParms->_dpiManager.scaleX(70)));
+	//_updateList.addColumn(columnInfo(loading, nppParms->_dpiManager.scaleX(70)));
 	_updateList.setViewStyleOption(LVS_EX_CHECKBOXES);
 
 	_updateList.initView(_hInst, _hSelf);
@@ -372,7 +369,7 @@ void PluginsAdminDlg::create(int dialogID, bool isRTL, bool msgDestParent)
 
 	_installedList.addColumn(columnInfo(pluginStr, nppParms->_dpiManager.scaleX(200)));
 	_installedList.addColumn(columnInfo(vesionStr, nppParms->_dpiManager.scaleX(100)));
-	//_installedList.addColumn(columnInfo(stabilityStr, nppParms->_dpiManager.scaleX(70)));
+	_installedList.addColumn(columnInfo(loading, nppParms->_dpiManager.scaleX(70)));
 	_installedList.setViewStyleOption(LVS_EX_CHECKBOXES);
 
 	_installedList.initView(_hInst, _hSelf);
@@ -428,22 +425,11 @@ vector<PluginUpdateInfo*> PluginViewList::fromUiIndexesToPluginInfos(const std::
 
 PluginsAdminDlg::PluginsAdminDlg()
 {
-	// get plugin-list path
-	lstrcpy(_pluginListFullPath, nppParms->getPluginConfDir());
-
-#ifdef DEBUG // if not debug, then it's release
-	// load from nppPluginList.json instead of nppPluginList.dll
-	PathAppend(_pluginListFullPath, TEXT("nppPluginList.json"));
-#else //RELEASE
-	PathAppend(_pluginListFullPath, TEXT("nppPluginList.dll"));
-#endif
 }
 
 generic_string PluginsAdminDlg::getPluginListVerStr() const
 {
-	Version v;
-	v.setVersionFrom(_pluginListFullPath);
-	return v.toString();
+	return TEXT("1.0");
 }
 
 bool PluginsAdminDlg::exitToInstallRemovePlugins(Operation op, const vector<PluginUpdateInfo*>& puis)
@@ -619,7 +605,10 @@ void PluginViewList::pushBack(PluginUpdateInfo* pi)
 	values2Add.push_back(pi->_displayName);
 	Version v = pi->_version;
 	values2Add.push_back(v.toString());
-	//values2Add.push_back(TEXT("Yes"));
+	TCHAR buffer[512]{0};
+	_stprintf(buffer,TEXT("%.3f"), pi->loadTm);
+	values2Add.push_back(buffer);
+
 
 	// add in order
 	size_t i = _ui.findAlphabeticalOrderPos(pi->_displayName, _sortType == DISPLAY_NAME_ALPHABET_ENCREASE ? _ui.sortEncrease : _ui.sortDecrease);
@@ -699,52 +688,17 @@ typedef const char * (__cdecl * PFUNCGETPLUGINLIST)();
 
 bool PluginsAdminDlg::updateListAndLoadFromJson()
 {
-	HMODULE hLib = NULL;
 	try
 	{
-		// GUP.exe doesn't work under XP
-		if (nppParms->getWinVersion() > WV_XP
-			&&::PathFileExists(_pluginListFullPath)
-			//&&::PathFileExists(_updaterFullPath)
-			)
+		json j;
+
+		HRSRC rc = ::FindResource(NULL, MAKEINTRESOURCE(IDR_PLUGINLISTJSONFILE), MAKEINTRESOURCE(TEXTFILE));
+		if (rc)
 		{
-			// check the signature on default location : %APPDATA%\Notepad++\plugins\config\pl\nppPluginList.dll or NPP_INST_DIR\plugins\config\pl\nppPluginList.dll
-			SecurityGard securityGard;
-			if (securityGard.checkModule(_pluginListFullPath, nm_pluginList)
-				&&securityGard.checkModule(_updaterFullPath, nm_gup)
-				) {
-				json j;
-
-#ifdef DEBUG // if not debug, then it's release
-				// load from nppPluginList.json instead of nppPluginList.dll
-				ifstream nppPluginListJson(_pluginListFullPath);
-				nppPluginListJson >> j;
-#else //RELEASE
-
-				hLib = ::LoadLibraryEx(_pluginListFullPath, 0, LOAD_LIBRARY_AS_DATAFILE_EXCLUSIVE);
-
-				if (!hLib)
-				{
-					// Error treatment
-					//printStr(TEXT("LoadLibrary PB!!!"));
-					return false;
-				}
-
-				HRSRC rc = ::FindResource(hLib, MAKEINTRESOURCE(IDR_PLUGINLISTJSONFILE), MAKEINTRESOURCE(TEXTFILE));
-				if (!rc)
-				{
-					::FreeLibrary(hLib);
-					return false;
-				}
-
-				HGLOBAL rcData = ::LoadResource(hLib, rc);
-				if (!rcData)
-				{
-					::FreeLibrary(hLib);
-					return false;
-				}
-
-				auto size = ::SizeofResource(hLib, rc);
+			HGLOBAL rcData = ::LoadResource(NULL, rc);
+			if (rcData)
+			{
+				auto size = ::SizeofResource(NULL, rc);
 				auto data = static_cast<const char*>(::LockResource(rcData));
 
 				char* buffer = new char[size + 1];
@@ -755,38 +709,21 @@ bool PluginsAdminDlg::updateListAndLoadFromJson()
 
 				delete[] buffer;
 
-#endif
-				// if absent then download it
-
-
-				// check the update for nppPluginList.json
-
-
-				// download update if present
-
-
 				// load pl.json
-				// 
-
 				loadFromJson(_availableList, j);
-
 				// initialize update list view
 				checkUpdates();
-
 				// initialize installed list view
 				loadFromPluginInfos();
-
-				::FreeLibrary(hLib);
 				return true;
 			}
 		}
+		return false;
 	}
 	catch (...)
 	{
 		// whichever exception
 	}
-	if (hLib)
-		::FreeLibrary(hLib);
 	return false;
 }
 
@@ -798,31 +735,38 @@ bool PluginsAdminDlg::loadFromPluginInfos()
 
 	// Search from loaded plugins, if loaded plugins are in the available list,
 	// add them into installed plugins list, and hide them from the available list
-	for (const auto& i : _pPluginsManager->_loadedDlls)
+	for (const auto& i : _pPluginsManager->_pluginInfos)
 	{
-		if (i._fileName.length() >= MAX_PATH)
+		const auto& plug = *i;
+		if (plug._moduleName.length() >= MAX_PATH)
 			continue;
-
+		auto fn = plug._moduleName.c_str();
+		auto pluginID = _pPluginsManager->_plugin_module_name_table.find((TCHAR *)fn);
+		float loadTm = plug.loadInfo->_loadingTm/1000.f;
 		// user file name (without ext. to find whole info in available list
 		TCHAR fnNoExt[MAX_PATH];
-		wcscpy_s(fnNoExt, i._fileName.c_str());
+		wcscpy_s(fnNoExt, fn);
 		::PathRemoveExtension(fnNoExt);
 
 		int listIndex;
 		PluginUpdateInfo* foundInfo = _availableList.findPluginInfoFromFolderName(fnNoExt, listIndex);
+
+
+
 		if (!foundInfo)
 		{
-			PluginUpdateInfo* pui = new PluginUpdateInfo(i._fullFilePath, i._fileName);
+			PluginUpdateInfo* pui = new PluginUpdateInfo(plug.loadInfo->_fullFilePath, plug._moduleName);
+			pui->loadTm = loadTm;
 			_installedList.pushBack(pui);
 		}
 		else
 		{
 			// Add new updated info to installed list
 			PluginUpdateInfo* pui = new PluginUpdateInfo(*foundInfo);
-			pui->_fullFilePath = i._fullFilePath;
-			pui->_version.setVersionFrom(i._fullFilePath);
+			pui->_fullFilePath = plug.loadInfo->_fullFilePath;
+			pui->_version.setVersionFrom(plug.loadInfo->_fullFilePath);
+			pui->loadTm = loadTm;
 			_installedList.pushBack(pui);
-
 			// Hide it from the available list
 			_availableList.hideFromListIndex(listIndex);
 

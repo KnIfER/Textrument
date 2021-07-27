@@ -46,16 +46,29 @@ struct PluginCommand
 
 __declspec(selectany) int _regstrDynCmdMax=0;
 
+
+struct LoadedDllInfo
+{
+	generic_string _fullFilePath;
+	long _loadingTm;
+};
+
+__declspec(selectany) LoadedDllInfo dummyLoadInfo{};
+
 struct PluginInfo
 {
 	PluginInfo() = default;
 	~PluginInfo()
 	{
-		if (_pluginMenu)
+		if (_pluginMenu) {
 			::DestroyMenu(_pluginMenu);
+			_pluginMenu = 0;
+		}
 
-		if (_hLib)
+		if (_hLib) {
 			::FreeLibrary(_hLib);
+			_hLib = 0;
+		}
 	}
 
 	HINSTANCE _hLib = nullptr;
@@ -75,14 +88,7 @@ struct PluginInfo
 	int _toolbarICStart=-1; // count from 0 from dynmaic icons
 	int _toolbarICCount=0;
 	int _regstrDynCmdSt=0;
-};
-
-struct LoadedDllInfo
-{
-	generic_string _fullFilePath;
-	generic_string _fileName;
-
-	LoadedDllInfo(const generic_string & fullFilePath, const generic_string & fileName) : _fullFilePath(fullFilePath), _fileName(fileName) {};
+	LoadedDllInfo* loadInfo = &dummyLoadInfo;
 };
 
 class PluginsManager
@@ -113,7 +119,7 @@ public:
 	void runPluginCommand(size_t i);
 	void runPluginCommand(const TCHAR *pluginName, int commandID);
 
-    void addInMenuFromPMIndex(int i);
+    void installPluginMenuAt(int i);
 	HMENU setMenu(HMENU hMenu, const TCHAR *menuName, bool enablePluginAdmin = false);
 	bool getShortcutByCmdID(int cmdID, ShortcutKey *sk);
 	bool removeShortcutByCmdID(int cmdID);
@@ -165,7 +171,6 @@ public:
 	HMENU _hPluginsMenu = NULL;
 
 	std::vector<PluginCommand> _pluginsCommands;
-	std::vector<LoadedDllInfo> _loadedDlls;
 	bool _isDisabled = false;
 	IDAllocator _dynamicIDAlloc;
 	IDAllocator _markerAlloc;
@@ -189,17 +194,7 @@ public:
 		::MessageBox(NULL, msg.c_str(), TEXT("Plugin Exception"), MB_OK);
 	}
 
-	bool isInLoadedDlls(const TCHAR *fn) const
-	{
-		for (size_t i = 0; i < _loadedDlls.size(); ++i)
-			if (generic_stricmp(fn, _loadedDlls[i]._fileName.c_str()) == 0)
-				return true;
-		return false;
-	}
-
-	void addInLoadedDlls(const TCHAR *fullPath, const TCHAR *fn) {
-		_loadedDlls.push_back(LoadedDllInfo(fullPath, fn));
-	}
+	bool isInLoadedDlls(const TCHAR *fn);
 };
 
 #define EXT_LEXER_DECL __stdcall

@@ -666,7 +666,16 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE, PWSTR pCmdLine, int)
 
 	CmdLineParams cmdLineParams;
 	cmdLineParams._isNoTab = isInList(FLAG_NOTABBAR, params);
+
 	cmdLineParams._isNoPlugin = isInList(FLAG_NO_PLUGIN, params);
+
+	if (GetKeyState(VK_SHIFT)&0x80)
+	{
+		// 按住 shift 以快速启动，放弃加载绝大多数插件。
+		cmdLineParams._isNoPlugin = true;
+	}
+	//cmdLineParams._isNoPlugin = true;
+
 	cmdLineParams._isReadOnly = isInList(FLAG_READONLY, params);
 	cmdLineParams._isNoSession = isInList(FLAG_NOSESSION, params);
 	cmdLineParams._isPreLaunch = isInList(FLAG_SYSTRAY, params);
