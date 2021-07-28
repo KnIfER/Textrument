@@ -895,6 +895,11 @@ void Notepad_plus::reInitDockingSystem(DockingManagerData* dockingData)
 	_dockingManager.setDockedContSize(APP_LAYOUT_RNG_TOP_SUB	 , dmd._topHeightSub);
 	_dockingManager.setDockedContSize(APP_LAYOUT_RNG_BOTTOM_SUB, dmd._bottomHightSub);
 
+	_dockingManager._TopExtrudeLeft =  dmd._TopExtrudeLeft ;
+	_dockingManager._TopExtrudeRight = dmd._TopExtrudeRight;
+	_dockingManager._BotExtrudeLeft =  dmd._BotExtrudeLeft ;
+	_dockingManager._BotExtrudeRight = dmd._BotExtrudeRight;
+
 	std::map<int, PluginDlgDockingInfo*> addedDlgMap;
 
 	std::vector<DockingCont*> & vCont =  _dockingManager.getContainerInfo();
@@ -1185,6 +1190,11 @@ void Notepad_plus::saveDockingParams()
 	nppGUI._dockingData._rightWidthSub	= _dockingManager.getDockedContSize(APP_LAYOUT_RNG_RIGHT_SUB);
 	nppGUI._dockingData._topHeightSub	= _dockingManager.getDockedContSize(APP_LAYOUT_RNG_TOP_SUB);
 	nppGUI._dockingData._bottomHightSub	= _dockingManager.getDockedContSize(APP_LAYOUT_RNG_BOTTOM_SUB);
+
+	nppGUI._dockingData._TopExtrudeLeft =  _dockingManager._TopExtrudeLeft ;
+	nppGUI._dockingData._TopExtrudeRight = _dockingManager._TopExtrudeRight;
+	nppGUI._dockingData._BotExtrudeLeft =  _dockingManager._BotExtrudeLeft ;
+	nppGUI._dockingData._BotExtrudeRight = _dockingManager._BotExtrudeRight;
 
 	// clear the container tab information (active tab)
 	nppGUI._dockingData._containerTabInfo.clear();

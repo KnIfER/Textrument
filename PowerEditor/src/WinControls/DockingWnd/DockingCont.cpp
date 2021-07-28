@@ -507,6 +507,69 @@ LRESULT DockingCont::runProcCaption(HWND hwnd, UINT Message, WPARAM wParam, LPAR
 			::RedrawWindow(hwnd, NULL, NULL, TRUE);
 			return TRUE;
 		}
+		case WM_CONTEXTMENU:
+		{
+			if (!isFloating())
+			{
+				HMENU _hDockedPanelMenu = ::CreatePopupMenu();
+				int IDM_DOCKCNT_SLPITWND = 1;
+				int IDM_DOCKCNT_EXTRUDELEFT = 2;
+				int IDM_DOCKCNT_EXTRUDERIGHT = 3;
+				::InsertMenu(_hDockedPanelMenu, 0, MF_BYCOMMAND, IDM_DOCKCNT_SLPITWND, TEXT("分割窗口(&T)"));
+				if(_rngIdx==APP_LAYOUT_RNG_TOP_SUB
+					||_rngIdx==APP_LAYOUT_RNG_TOP
+					||_rngIdx==APP_LAYOUT_RNG_BOTTOM_SUB
+					||_rngIdx==APP_LAYOUT_RNG_BOTTOM
+					) {
+					::InsertMenu(_hDockedPanelMenu, 0, MF_BYCOMMAND, IDM_DOCKCNT_EXTRUDELEFT, TEXT("占据左边界(&Z)"));
+					::InsertMenu(_hDockedPanelMenu, 0, MF_BYCOMMAND, IDM_DOCKCNT_EXTRUDERIGHT, TEXT("占据右边界(&Y)"));
+					//auto & dockData = nppParms->getNppGUI()._dockingData;
+					auto & dockData = nppApp->_dockingManager;
+					bool b1 = _rngIdx==APP_LAYOUT_RNG_TOP?dockData._TopExtrudeLeft:dockData._BotExtrudeLeft;
+					bool b2 = _rngIdx==APP_LAYOUT_RNG_TOP?dockData._TopExtrudeRight:dockData._BotExtrudeRight;
+					CheckMenuItem(_hDockedPanelMenu, IDM_DOCKCNT_EXTRUDELEFT, MF_BYCOMMAND|(b1?MF_CHECKED:MF_UNCHECKED));
+					CheckMenuItem(_hDockedPanelMenu, IDM_DOCKCNT_EXTRUDERIGHT, MF_BYCOMMAND|(b2?MF_CHECKED:MF_UNCHECKED));
+				}
+
+				POINT pt;
+				GetCursorPos(&pt);
+
+				int cmd = TrackPopupMenu(_hDockedPanelMenu, TPM_RETURNCMD, pt.x,  pt.y, 0, _hSelf, NULL);
+
+				// todo manage _hDockedPanelMenu.
+				DestroyMenu(_hDockedPanelMenu);
+
+				if (cmd==IDM_DOCKCNT_SLPITWND)
+				{
+					auto pnl = nppApp->_dockingManager.getContainerInfo()[(_rngIdx+APP_LAYOUT_RNG_MAX/2)%APP_LAYOUT_RNG_MAX];
+					if (pnl->isVisible())
+					{
+						pnl->display(false);
+					}
+					else
+					{
+						pnl->display();
+						//if (pnl->getElementCnt()==0)
+						{
+							pnl->_pszCaption = TEXT("Dockable");
+							//::SetWindowText(pnl->_hCaption, L"…");
+						}
+					}
+					nppApp->_dockingManager.resize();
+				}
+				else if(cmd==IDM_DOCKCNT_EXTRUDELEFT || cmd==IDM_DOCKCNT_EXTRUDERIGHT) {
+					auto & dockData = nppApp->_dockingManager;
+					bool & b1 = (cmd==IDM_DOCKCNT_EXTRUDELEFT)?
+						(_rngIdx==APP_LAYOUT_RNG_TOP?dockData._TopExtrudeLeft:dockData._BotExtrudeLeft)
+						:(_rngIdx==APP_LAYOUT_RNG_TOP?dockData._TopExtrudeRight:dockData._BotExtrudeRight);
+					b1 = !b1;
+					dockData.resize();
+				}
+
+				//LogIs(2, "asd");
+				return TRUE;
+			}
+		}
 		default:
 			break;
 	}
@@ -1236,7 +1299,14 @@ INT_PTR CALLBACK DockingCont::run_dlgProc(UINT Message, WPARAM wParam, LPARAM lP
 
 		case WM_CONTEXTMENU:
 		{
-			rcDebug=true;
+
+			if (true)
+			{
+				//LogIs(2, "asd");
+			}
+
+			//rcDebug=true;
+
 
 			#if DEBUG_DOCKING_PREVIEW
 			RECT rcPrint = getDataOfActiveTb()->rcFloat;
@@ -1496,6 +1566,8 @@ INT_PTR CALLBACK DockingCont::run_dlgProc(UINT Message, WPARAM wParam, LPARAM lP
 	return FALSE;
 }
 
+extern bool bSystemInitialized;
+
 void DockingCont::onSize()
 {
 	//if(1) return;
@@ -1506,8 +1578,10 @@ void DockingCont::onSize()
 	UINT iTabOff = 0;
 
 	getClientRect(rc);
+	
+	//LogIs(2, "%d, %d ", _rngIdx, bSystemInitialized);
 
-	if (iItemCnt >= 1)
+	if (iItemCnt >= 1 || (!_isFloating && bSystemInitialized))
 	{
 		// resize to docked window
 		int tabDpiDynamicalHeight = NppParameters::getInstance()._dpiManager.scaleY(16) + 8;

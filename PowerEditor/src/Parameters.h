@@ -360,6 +360,11 @@ struct DockingManagerData final
 	int _topHeightSub = 0;
 	int _bottomHightSub = 0;
 
+	bool _TopExtrudeLeft =  true;
+	bool _TopExtrudeRight = true;
+	bool _BotExtrudeLeft =  true;
+	bool _BotExtrudeRight = true;
+
 	std::vector<FloatingWindowInfo> _floatingWindowInfo;
 	std::vector<PluginDlgDockingInfo> _pluginDockInfo;
 	std::vector<ContainerTabInfo> _containerTabInfo;

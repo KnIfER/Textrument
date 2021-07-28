@@ -167,6 +167,11 @@ void Gripper::startGrip(DockingCont* pCont, DockingManager* pDockMgr, bool creat
 	_pDockMgr   = pDockMgr;
 	_pCont		= pCont;
 
+	if (pCont->getDataOfAllTb().size()==0)
+	{
+		return;
+	}
+
 	_pDockMgr->getDockInfo(&_dockData);
 
 	if(create)

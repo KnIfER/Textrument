@@ -526,15 +526,34 @@ void DockingManager::reSizeTo(RECT & rc)
 	bool TopVisible = TopVis || TopVis1;
 	bool BotVisible = BotVis || BotVis1;
 
-	bool TopExtrudeLeft =  TopVisible && true;
-	bool TopExtrudeRight = TopVisible && true;
-	bool BotExtrudeLeft =  BotVisible && true;
-	bool BotExtrudeRight = BotVisible && true;
+	bool TopExtrudeLeft =  TopVisible && _TopExtrudeLeft ;
+	bool TopExtrudeRight = TopVisible && _TopExtrudeRight;
+	bool BotExtrudeLeft =  BotVisible && _BotExtrudeLeft ;
+	bool BotExtrudeRight = BotVisible && _BotExtrudeRight;
 
-	int LeftW = _dockData.rcRegion[APP_LAYOUT_RNG_LEFT].right+SPLITTER_WIDTH;
-	int RightW = _dockData.rcRegion[APP_LAYOUT_RNG_RIGHT].right+SPLITTER_WIDTH;
-	int TopH = _dockData.rcRegion[APP_LAYOUT_RNG_TOP].bottom+SPLITTER_WIDTH;
-	int BotH = _dockData.rcRegion[APP_LAYOUT_RNG_BOTTOM].bottom+SPLITTER_WIDTH;
+	RECT & rcAppRgn_Left = _dockData.rcRegion[APP_LAYOUT_RNG_LEFT];
+	RECT & rcAppRgn_Right = _dockData.rcRegion[APP_LAYOUT_RNG_RIGHT];
+	RECT & rcAppRgn_Top = _dockData.rcRegion[APP_LAYOUT_RNG_TOP];
+	RECT & rcAppRgn_Bot = _dockData.rcRegion[APP_LAYOUT_RNG_BOTTOM];
+
+	if (bSetAllPnlsByRatio)
+	{
+		if (rc.right)
+		{
+			rcAppRgn_Left.right = rc.right*_vPanels[APP_LAYOUT_RNG_LEFT]->_ratio;
+			rcAppRgn_Right.right = rc.right*_vPanels[APP_LAYOUT_RNG_RIGHT]->_ratio;
+		}
+		if (rc.bottom)
+		{
+			rcAppRgn_Top.bottom = rc.bottom*_vPanels[APP_LAYOUT_RNG_TOP]->_ratio;
+			rcAppRgn_Bot.bottom = rc.bottom*_vPanels[APP_LAYOUT_RNG_BOTTOM]->_ratio;
+		}
+	}
+
+	int LeftW = rcAppRgn_Left.right+SPLITTER_WIDTH;
+	int RightW = rcAppRgn_Right.right+SPLITTER_WIDTH;
+	int TopH = rcAppRgn_Top.bottom+SPLITTER_WIDTH;
+	int BotH = rcAppRgn_Bot.bottom+SPLITTER_WIDTH;
 
 
 	// 四方界 定形分
@@ -542,14 +561,9 @@ void DockingManager::reSizeTo(RECT & rc)
 
 
 	// 左极界 
-	RECT & rcAppRgn_Left = _dockData.rcRegion[APP_LAYOUT_RNG_LEFT];
 	rcAppRgn_Left.left     = rc.left;
 	rcAppRgn_Left.top      = _rcWork.top;
 	rcAppRgn_Left.bottom   = _rcWork.bottom;
-	if (bSetAllPnlsByRatio && rc.right)
-	{
-		rcAppRgn_Left.right = rc.right*_vPanels[APP_LAYOUT_RNG_LEFT]->_ratio;
-	}
 	if (TopExtrudeLeft)
 	{
 		rcAppRgn_Left.top     += TopH;
@@ -611,11 +625,6 @@ void DockingManager::reSizeTo(RECT & rc)
 
 
 	// 右极界 
-	RECT & rcAppRgn_Right = _dockData.rcRegion[APP_LAYOUT_RNG_RIGHT];
-	if (bSetAllPnlsByRatio && rc.right)
-	{
-		rcAppRgn_Right.right = rc.right*_vPanels[APP_LAYOUT_RNG_RIGHT]->_ratio;
-	}
 	rcAppRgn_Right.left    = rc.right - rcAppRgn_Right.right;
 	rcAppRgn_Right.top     = _rcWork.top;
 	rcAppRgn_Right.bottom  = _rcWork.bottom;
@@ -685,7 +694,6 @@ void DockingManager::reSizeTo(RECT & rc)
 
 
 	// 顶界
-	RECT & rcAppRgn_Top = _dockData.rcRegion[APP_LAYOUT_RNG_TOP];
 	rcAppRgn_Top.left      = rc.left;
 	rcAppRgn_Top.top       = rc.top;
 	rcAppRgn_Top.right     = rc.right-rc.left;
@@ -697,10 +705,6 @@ void DockingManager::reSizeTo(RECT & rc)
 	if (RightVisible && !TopExtrudeRight)
 	{
 		rcAppRgn_Top.right -= RightW;
-	}
-	if (bSetAllPnlsByRatio && rc.bottom)
-	{
-		rcAppRgn_Top.bottom = rc.bottom*_vPanels[APP_LAYOUT_RNG_TOP]->_ratio;
 	}
 	if (TopVisible)
 	{
@@ -754,7 +758,6 @@ void DockingManager::reSizeTo(RECT & rc)
 
 
 	// 底界
-	RECT & rcAppRgn_Bot = _dockData.rcRegion[APP_LAYOUT_RNG_BOTTOM];
 	rcAppRgn_Bot.left   = rc.left;
 	rcAppRgn_Bot.top    = rc.top + rc.bottom - rcAppRgn_Bot.bottom;
 	rcAppRgn_Bot.right  = rc.right-rc.left;
@@ -766,10 +769,6 @@ void DockingManager::reSizeTo(RECT & rc)
 	if (RightVisible && !BotExtrudeRight)
 	{
 		rcAppRgn_Bot.right -= RightW;
-	}
-	if (bSetAllPnlsByRatio && rc.bottom)
-	{
-		rcAppRgn_Bot.bottom = rc.bottom*_vPanels[APP_LAYOUT_RNG_BOTTOM]->_ratio;
 	}
 	RECT		rcBottomTmp	= rcAppRgn_Bot;
 	if (BotVisible)

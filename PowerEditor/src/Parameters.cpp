@@ -5747,6 +5747,18 @@ void NppParameters::feedDockingManager(TiXmlNode *node, DockingManagerData & doc
 	if (element->Attribute(TEXT("bottomSub"), &i))
 		dockingData._bottomHightSub = i;
 
+	if (element->Attribute(TEXT("TEL"), &i))
+		dockingData._TopExtrudeLeft = i;
+
+	if (element->Attribute(TEXT("TER"), &i))
+		dockingData._TopExtrudeRight = i;
+
+	if (element->Attribute(TEXT("BEL"), &i))
+		dockingData._BotExtrudeLeft = i;
+
+	if (element->Attribute(TEXT("BER"), &i))
+		dockingData._BotExtrudeRight = i;
+
 
 
 	for (TiXmlNode *childNode = node->FirstChildElement(TEXT("FloatingWindow"));
@@ -6512,6 +6524,11 @@ void NppParameters::insertDockingParamNode(TiXmlNode *GUIRoot, DockingManagerDat
 	DMNode.SetAttribute(TEXT("rightSub"), dmd._rightWidthSub);
 	DMNode.SetAttribute(TEXT("topSub"), dmd._topHeightSub);
 	DMNode.SetAttribute(TEXT("bottomSub"), dmd._bottomHightSub);
+
+	DMNode.SetAttribute(TEXT("TEL"), dmd._TopExtrudeLeft);
+	DMNode.SetAttribute(TEXT("TER"), dmd._TopExtrudeRight);
+	DMNode.SetAttribute(TEXT("BEL"), dmd._BotExtrudeLeft);
+	DMNode.SetAttribute(TEXT("BER"), dmd._BotExtrudeRight);
 
 	if (isLayoutFromSession)
 	{

@@ -101,6 +101,10 @@ public :
 	virtual void destroy();
 	void resize();
 
+	bool _TopExtrudeLeft =  true;
+	bool _TopExtrudeRight = true;
+	bool _BotExtrudeLeft =  true;
+	bool _BotExtrudeRight = true;
 private :
 	Window						**_ppWindow = nullptr;
 	RECT						_rcWork;

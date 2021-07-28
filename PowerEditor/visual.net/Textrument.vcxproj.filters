@@ -1,9 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Manifest Include="..\src\notepad++.exe.manifest" />
-  </ItemGroup>
-  <ItemGroup>
     <ClCompile Include="..\src\MISC\Common\verifySignedfile.cpp" />
     <ClCompile Include="..\src\MISC\md5\md5Dlgs.cpp" />
     <ClCompile Include="..\src\MISC\sha2\sha-256.cpp" />
@@ -49,12 +46,6 @@
     <ClCompile Include="..\src\WinControls\AnsiCharPanel\ListView.cpp" />
     <ClCompile Include="..\src\localization.cpp" />
     <ClCompile Include="..\src\MISC\Exception\MiniDumper.cpp" />
-    <ClCompile Include="..\src\Notepad_plus.cpp" />
-    <ClCompile Include="..\src\Notepad_plus_Window.cpp" />
-    <ClCompile Include="..\src\NppBigSwitch.cpp" />
-    <ClCompile Include="..\src\NppCommands.cpp" />
-    <ClCompile Include="..\src\NppIO.cpp" />
-    <ClCompile Include="..\src\NppNotification.cpp" />
     <ClCompile Include="..\src\uchardet\nsBig5Prober.cpp" />
     <ClCompile Include="..\src\uchardet\nsCharSetProber.cpp" />
     <ClCompile Include="..\src\uchardet\nsEscCharsetProber.cpp" />
@@ -79,8 +70,6 @@
     <ClCompile Include="..\src\MISC\RegExt\regExtDlg.cpp" />
     <ClCompile Include="..\src\WinControls\StaticDialog\RunDlg\RunDlg.cpp" />
     <ClCompile Include="..\src\WinControls\shortcut\RunMacroDlg.cpp" />
-    <ClCompile Include="..\src\ScintillaComponent\ScintillaCtrls.cpp" />
-    <ClCompile Include="..\src\ScintillaComponent\ScintillaEditView.cpp" />
     <ClCompile Include="..\src\WinControls\shortcut\shortcut.cpp" />
     <ClCompile Include="..\src\WinControls\Grid\ShortcutMapper.cpp" />
     <ClCompile Include="..\src\WinControls\TrayIcon\trayIconControler.cpp" />
@@ -91,7 +80,6 @@
     <ClCompile Include="..\src\WinControls\SplitterContainer\SplitterContainer.cpp" />
     <ClCompile Include="..\src\WinControls\StaticDialog\StaticDialog.cpp" />
     <ClCompile Include="..\src\WinControls\StatusBar\StatusBar.cpp" />
-    <ClCompile Include="..\src\WinControls\TabBar\TabBar.cpp" />
     <ClCompile Include="..\src\WinControls\TaskList\TaskList.cpp" />
     <ClCompile Include="..\src\WinControls\TaskList\TaskListDlg.cpp" />
     <ClCompile Include="..\src\TinyXml\tinystr.cpp" />
@@ -107,14 +95,11 @@
     <ClCompile Include="..\src\uchardet\uchardet.cpp" />
     <ClCompile Include="..\src\WinControls\AboutDlg\URLCtrl.cpp" />
     <ClCompile Include="..\src\ScintillaComponent\UserDefineDialog.cpp" />
-    <ClCompile Include="..\src\Utf8_16.cpp" />
     <ClCompile Include="..\src\WinControls\VerticalFileSwitcher\VerticalFileSwitcher.cpp" />
     <ClCompile Include="..\src\WinControls\VerticalFileSwitcher\VerticalFileSwitcherListView.cpp" />
     <ClCompile Include="..\src\MISC\Exception\Win32Exception.cpp" />
     <ClCompile Include="..\src\WinControls\WindowsDlg\WindowsDlg.cpp" />
     <ClCompile Include="..\src\WinControls\WindowsEx\comctl32.cpp" />
-    <ClCompile Include="..\src\WinControls\WindowsEx\tab.cpp" />
-    <ClCompile Include="..\src\winmain.cpp" />
     <ClCompile Include="..\src\WinControls\WindowsDlg\WinMgr.cpp" />
     <ClCompile Include="..\src\WinControls\WindowsDlg\WinRect.cpp" />
     <ClCompile Include="..\src\WinControls\ColourPicker\WordStyleDlg.cpp" />
@@ -154,6 +139,45 @@
     <ClCompile Include="..\src\WinControls\Preference\preferenceDlg.cpp">
       <Filter>Preference</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\WinControls\TabBar\TabBar.cpp">
+      <Filter>Tabbar</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\WinControls\WindowsEx\tab.cpp">
+      <Filter>Tabbar</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Notepad_plus.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Notepad_plus_Window.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\NppBigSwitch.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\NppCommands.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\NppIO.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\NppNotification.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\winmain.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ScintillaComponent\ScintillaCtrls.cpp">
+      <Filter>TextView</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ScintillaComponent\ScintillaEditView.cpp">
+      <Filter>TextView</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Utf8_16.cpp">
+      <Filter>TextView</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\WinControls\DockingWnd\SubPanelPlaceHolder.cpp">
+      <Filter>Docking</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\clipboardFormats.h" />
@@ -167,8 +191,6 @@
     <ClInclude Include="..\src\MISC\sha2\sha-256.h" />
     <ClInclude Include="..\src\ScintillaComponent\columnEditor_rc.h" />
     <ClInclude Include="..\src\ScintillaComponent\FindReplaceDlg_rc.h" />
-    <ClInclude Include="..\src\ScintillaComponent\ScintillaRef.h" />
-    <ClInclude Include="..\src\Utf8.h" />
     <ClInclude Include="..\src\WinControls\AboutDlg\AboutDlg.h" />
     <ClInclude Include="..\src\WinControls\AnsiCharPanel\ansiCharPanel.h" />
     <ClInclude Include="..\src\ScintillaComponent\AutoCompletion.h" />
@@ -221,9 +243,6 @@
     <ClInclude Include="..\src\localizationstring.h" />
     <ClInclude Include="..\src\menuCmdID.h" />
     <ClInclude Include="..\src\MISC\Exception\MiniDumper.h" />
-    <ClInclude Include="..\src\Notepad_plus.h" />
-    <ClInclude Include="..\src\MISC\PluginsManager\Notepad_plus_msgs.h" />
-    <ClInclude Include="..\src\Notepad_plus_Window.h" />
     <ClInclude Include="..\src\uchardet\nsBig5Prober.h" />
     <ClInclude Include="..\src\uchardet\nsCharSetProber.h" />
     <ClInclude Include="..\src\uchardet\nsCodingStateMachine.h" />
@@ -254,8 +273,6 @@
     <ClInclude Include="..\src\WinControls\StaticDialog\RunDlg\RunDlg.h" />
     <ClInclude Include="..\src\WinControls\shortcut\RunMacroDlg.h" />
     <ClInclude Include="..\src\WinControls\shortcut\RunMacroDlg_rc.h" />
-    <ClInclude Include="..\src\ScintillaComponent\ScintillaCtrls.h" />
-    <ClInclude Include="..\src\ScintillaComponent\ScintillaEditView.h" />
     <ClInclude Include="..\src\WinControls\shortcut\shortcut.h" />
     <ClInclude Include="..\src\WinControls\Grid\ShortcutMapper.h" />
     <ClInclude Include="..\src\WinControls\Grid\ShortcutMapper_rc.h" />
@@ -266,7 +283,6 @@
     <ClInclude Include="..\src\WinControls\SplitterContainer\SplitterContainer.h" />
     <ClInclude Include="..\src\WinControls\StaticDialog\StaticDialog.h" />
     <ClInclude Include="..\src\WinControls\StatusBar\StatusBar.h" />
-    <ClInclude Include="..\src\WinControls\TabBar\TabBar.h" />
     <ClInclude Include="..\src\WinControls\TaskList\TaskList.h" />
     <ClInclude Include="..\src\WinControls\TaskList\TaskListDlg.h" />
     <ClInclude Include="..\src\WinControls\TaskList\TaskListDlg_rc.h" />
@@ -283,12 +299,10 @@
     <ClInclude Include="..\src\ScintillaComponent\UserDefineDialog.h" />
     <ClInclude Include="..\src\ScintillaComponent\UserDefineLangReference.h" />
     <ClInclude Include="..\src\ScintillaComponent\UserDefineResource.h" />
-    <ClInclude Include="..\src\Utf8_16.h" />
     <ClInclude Include="..\src\WinControls\VerticalFileSwitcher\VerticalFileSwitcher.h" />
     <ClInclude Include="..\src\WinControls\VerticalFileSwitcher\VerticalFileSwitcher_rc.h" />
     <ClInclude Include="..\src\WinControls\VerticalFileSwitcher\VerticalFileSwitcherListView.h" />
     <ClInclude Include="..\src\MISC\Exception\Win32Exception.h" />
-    <ClInclude Include="..\src\WinControls\Window.h" />
     <ClInclude Include="..\src\WinControls\WindowsDlg\WindowsDlg.h" />
     <ClInclude Include="..\src\WinControls\WindowsDlg\WindowsDlgRc.h" />
     <ClInclude Include="..\src\WinControls\WindowsDlg\WinMgr.h" />
@@ -356,6 +370,42 @@
     <ClInclude Include="..\src\WinControls\Preference\preference_rc.h">
       <Filter>Preference</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\WinControls\TabBar\TabBar.h">
+      <Filter>Tabbar</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Notepad_plus.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\MISC\PluginsManager\Notepad_plus_msgs.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Notepad_plus_Window.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\ScintillaComponent\ScintillaCtrls.h">
+      <Filter>TextView</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\ScintillaComponent\ScintillaEditView.h">
+      <Filter>TextView</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\ScintillaComponent\ScintillaRef.h">
+      <Filter>TextView</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Utf8.h">
+      <Filter>TextView</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Utf8_16.h">
+      <Filter>TextView</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\WinControls\DockingWnd\SubPanelPlaceHolder.h">
+      <Filter>Docking</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\WinControls\DockingWnd\SubPanelPlaceHolder_rc.h">
+      <Filter>Docking</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\WinControls\Window.h">
+      <Filter>Core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\src\MISC\md5\md5Dlgs.rc" />
@@ -368,7 +418,6 @@
     <ResourceCompile Include="..\src\WinControls\FindCharsInRange\findCharsInRange.rc" />
     <ResourceCompile Include="..\src\ScintillaComponent\FindReplaceDlg.rc" />
     <ResourceCompile Include="..\src\WinControls\FunctionList\functionListPanel.rc" />
-    <ResourceCompile Include="..\src\Notepad_plus.rc" />
     <ResourceCompile Include="..\src\WinControls\ProjectPanel\ProjectPanel.rc" />
     <ResourceCompile Include="..\src\WinControls\StaticDialog\RunDlg\RunDlg.rc" />
     <ResourceCompile Include="..\src\WinControls\shortcut\RunMacroDlg.rc" />
@@ -388,6 +437,12 @@
     </ResourceCompile>
     <ResourceCompile Include="..\src\WinControls\Preference\preference.rc">
       <Filter>Preference</Filter>
+    </ResourceCompile>
+    <ResourceCompile Include="..\src\Notepad_plus.rc">
+      <Filter>Core</Filter>
+    </ResourceCompile>
+    <ResourceCompile Include="..\src\WinControls\DockingWnd\SubPanelPlaceHolder.rc">
+      <Filter>Docking</Filter>
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
@@ -452,7 +507,6 @@
     <Image Include="..\src\icons\monitoring_on.ico" />
     <Image Include="..\src\icons\new_on.ico" />
     <Image Include="..\src\icons\newFile.bmp" />
-    <Image Include="..\src\icons\npp.ico" />
     <Image Include="..\src\icons\open_off.ico" />
     <Image Include="..\src\icons\open_on.ico" />
     <Image Include="..\src\icons\openFile.bmp" />
@@ -533,6 +587,9 @@
     <Image Include="..\src\icons\zoomOut.bmp" />
     <Image Include="..\src\icons\zoomOut_off.ico" />
     <Image Include="..\src\icons\zoomOut_on.ico" />
+    <Image Include="..\src\icons\npp.ico">
+      <Filter>Core</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\src\icons\new_off.ico" />
@@ -554,5 +611,19 @@
     <Filter Include="Preference">
       <UniqueIdentifier>{7df30699-9681-49f2-8513-87971939116f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Tabbar">
+      <UniqueIdentifier>{1d9024d4-40ac-443d-a5b3-015cddfd4a80}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core">
+      <UniqueIdentifier>{77833f73-6ebc-41bc-9344-c1bdc8ee1f2a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="TextView">
+      <UniqueIdentifier>{f41d2d3c-b3f3-481e-b26e-618e3833e503}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <Manifest Include="..\src\notepad++.exe.manifest">
+      <Filter>Core</Filter>
+    </Manifest>
   </ItemGroup>
 </Project>

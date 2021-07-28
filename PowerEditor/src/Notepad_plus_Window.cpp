@@ -66,6 +66,7 @@ namespace // anonymous
 
 
 
+bool bSystemInitialized=false;
 
 
 void Notepad_plus_Window::init(HINSTANCE hInst, HWND parent, const TCHAR *cmdLine, CmdLineParams *cmdLineParams)
@@ -285,6 +286,8 @@ void Notepad_plus_Window::init(HINSTANCE hInst, HWND parent, const TCHAR *cmdLin
 	scnN.nmhdr.hwndFrom = _hSelf;
 	scnN.nmhdr.idFrom = 0;
 	_notepad_plus_plus_core._pluginsManager.notify(&scnN);
+
+	bSystemInitialized = true;
 
 	if (!cmdLineParams->_easterEggName.empty())
 	{
