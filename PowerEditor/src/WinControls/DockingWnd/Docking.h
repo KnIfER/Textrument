@@ -37,6 +37,8 @@
 #define	CAPTION_BOTTOM			FALSE
 
 //   defines for docking manager
+#define	APP_LAYOUT_WIDTH		 -1
+#define	APP_LAYOUT_HEIGHT		 -2
 #define	APP_LAYOUT_RNG_LEFT		 0
 #define	APP_LAYOUT_RNG_RIGHT	 1
 #define	APP_LAYOUT_RNG_TOP		 2

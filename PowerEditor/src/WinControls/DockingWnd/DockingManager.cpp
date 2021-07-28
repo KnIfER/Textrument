@@ -43,6 +43,8 @@ extern HWND StatusBarHWND;
 
 extern DirectGripper * dGripper;
 
+bool bSetAllPnlsByRatio = true;
+
 //Window of event handling DockingManager (can only be one)
 static	HWND			hWndServer	= NULL;
 //Next hook in line
@@ -173,7 +175,11 @@ void DockingManager::init(HINSTANCE hInst, HWND hWnd, Window ** ppWin)
 		pCont->doDialog(false);
 		::SetParent(pCont->getHSelf(), _hParent);
 
-		if ((iCont == APP_LAYOUT_RNG_TOP) || (iCont == APP_LAYOUT_RNG_BOTTOM))
+		if (iCont == APP_LAYOUT_RNG_TOP 
+			|| iCont == APP_LAYOUT_RNG_BOTTOM
+			|| iCont == APP_LAYOUT_RNG_LEFT_SUB
+			|| iCont == APP_LAYOUT_RNG_RIGHT_SUB
+			)
 			_vSplitter[iCont]->init(_hInst, _hParent, _hSelf, DMS_HORIZONTAL);
 		else
 			_vSplitter[iCont]->init(_hInst, _hParent, _hSelf, DMS_VERTICAL);
@@ -352,6 +358,10 @@ LRESULT DockingManager::runProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM l
 							{
 								_dockData.rcRegion[iCont].bottom += offset;
 							}
+							if (_rect.right!=0)
+							{
+								_vPanels[iCont]->_ratio = _dockData.rcRegion[iCont].bottom*1.f/_rect.bottom;
+							}
 							break;
 						case APP_LAYOUT_RNG_BOTTOM:
 							_dockData.rcRegion[iCont].bottom   += offset;
@@ -362,6 +372,10 @@ LRESULT DockingManager::runProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM l
 							if ((_rcWork.bottom < (-SPLITTER_WIDTH)) && (offset > 0))
 							{
 								_dockData.rcRegion[iCont].bottom -= offset;
+							}
+							if (_rect.right!=0)
+							{
+								_vPanels[iCont]->_ratio = _dockData.rcRegion[iCont].bottom*1.f/_rect.bottom;
 							}
 							break;
 						case APP_LAYOUT_RNG_LEFT:
@@ -374,6 +388,10 @@ LRESULT DockingManager::runProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM l
 							{
 								_dockData.rcRegion[iCont].right += offset;
 							}
+							if (_rect.right!=0)
+							{
+								_vPanels[iCont]->_ratio = _dockData.rcRegion[iCont].right*1.f/_rect.right;
+							}
 							break;
 						case APP_LAYOUT_RNG_RIGHT:
 							_dockData.rcRegion[iCont].right    += offset;
@@ -384,6 +402,46 @@ LRESULT DockingManager::runProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM l
 							if ((_rcWork.right < SPLITTER_WIDTH) && (offset > 0))
 							{
 								_dockData.rcRegion[iCont].right -= offset;
+							}
+							if (_rect.right!=0)
+							{
+								_vPanels[iCont]->_ratio = _dockData.rcRegion[iCont].right*1.f/_rect.right;
+							}
+							break;
+						case APP_LAYOUT_RNG_TOP_SUB:
+							_dockData.rcRegion[iCont].right    -= offset;
+							if (_dockData.rcRegion[APP_LAYOUT_RNG_TOP].right!=0)
+							{
+								float value = _dockData.rcRegion[iCont].right*1.f/_dockData.rcRegion[APP_LAYOUT_RNG_TOP].right;
+								if (value < 0) value = 0;
+								_vPanels[iCont]->_ratio = value;
+							}
+							break;
+						case APP_LAYOUT_RNG_BOTTOM_SUB:
+							_dockData.rcRegion[iCont].right    -= offset;
+							if (_dockData.rcRegion[APP_LAYOUT_RNG_BOTTOM].right!=0)
+							{
+								float value = _dockData.rcRegion[iCont].right*1.f/_dockData.rcRegion[APP_LAYOUT_RNG_BOTTOM].right;
+								if (value < 0) value = 0;
+								_vPanels[iCont]->_ratio = value;
+							}
+							break;
+						case APP_LAYOUT_RNG_LEFT_SUB:
+							_dockData.rcRegion[iCont].bottom    -= offset;
+							if (_dockData.rcRegion[APP_LAYOUT_RNG_LEFT].bottom!=0)
+							{
+								float value = _dockData.rcRegion[iCont].bottom*1.f/_dockData.rcRegion[APP_LAYOUT_RNG_LEFT].bottom;
+								if (value < 0) value = 0;
+								_vPanels[iCont]->_ratio = value;
+							}
+							break;
+						case APP_LAYOUT_RNG_RIGHT_SUB:
+							_dockData.rcRegion[iCont].bottom    -= offset;
+							if (_dockData.rcRegion[APP_LAYOUT_RNG_RIGHT].bottom!=0)
+							{
+								float value = _dockData.rcRegion[iCont].bottom*1.f/_dockData.rcRegion[APP_LAYOUT_RNG_RIGHT].bottom;
+								if (value < 0) value = 0;
+								_vPanels[iCont]->_ratio = value;
 							}
 							break;
 					}
@@ -488,6 +546,10 @@ void DockingManager::reSizeTo(RECT & rc)
 	rcAppRgn_Left.left     = rc.left;
 	rcAppRgn_Left.top      = _rcWork.top;
 	rcAppRgn_Left.bottom   = _rcWork.bottom;
+	if (bSetAllPnlsByRatio && rc.right)
+	{
+		rcAppRgn_Left.right = rc.right*_vPanels[APP_LAYOUT_RNG_LEFT]->_ratio;
+	}
 	if (TopExtrudeLeft)
 	{
 		rcAppRgn_Left.top     += TopH;
@@ -508,27 +570,40 @@ void DockingManager::reSizeTo(RECT & rc)
 			rcAppRgn_Left.bottom};
 		_vSplitter[APP_LAYOUT_RNG_LEFT]->reSizeTo(rc);
 		int total = rcAppRgn_Left.bottom;			// 总计尺寸
-		float ratio = 0.5f;							// 比列
 		float main=0;								// 主要尺寸
 		if (LeftVis)
 		{
+			main=total;
+			if (LeftVis1 && (main*=_vPanels[APP_LAYOUT_RNG_LEFT_SUB]->_ratio)>total-SPLITTER_WIDTH)
+			{
+				main=total-SPLITTER_WIDTH;
+			}
 			::SetWindowPos(_vPanels[APP_LAYOUT_RNG_LEFT]->getHSelf(), NULL,
 				rcAppRgn_Left.left  ,
 				rcAppRgn_Left.top   ,
 				rcAppRgn_Left.right ,
-				main=LeftVis1?total*ratio:total,
+				main,
 				SWP_NOZORDER);
-			_vSplitter[APP_LAYOUT_RNG_LEFT]->display();
 		}
 		if (LeftVis1)
 		{
+			_dockData.rcRegion[APP_LAYOUT_RNG_LEFT_SUB].bottom=main;
+			if (LeftVis)
+			{
+				rc = {rcAppRgn_Left.left,
+					(long)(rcAppRgn_Left.top+main),
+					rcAppRgn_Left.right,
+					SPLITTER_WIDTH};
+				_vSplitter[APP_LAYOUT_RNG_LEFT_SUB]->reSizeTo(rc);
+				_vSplitter[APP_LAYOUT_RNG_LEFT_SUB]->display();
+				main+=SPLITTER_WIDTH;
+			}
 			::SetWindowPos(_vPanels[APP_LAYOUT_RNG_LEFT_SUB]->getHSelf(), NULL,
 				rcAppRgn_Left.left  ,
 				rcAppRgn_Left.top+main ,
 				rcAppRgn_Left.right ,
-				LeftVis?total*(1-ratio):total,
+				LeftVis?(total-main):total,
 				SWP_NOZORDER);
-			_vSplitter[APP_LAYOUT_RNG_LEFT_SUB]->display();
 		}
 	}
 	_vSplitter[APP_LAYOUT_RNG_LEFT]->display(LeftVisible);
@@ -537,6 +612,10 @@ void DockingManager::reSizeTo(RECT & rc)
 
 	// 右极界 
 	RECT & rcAppRgn_Right = _dockData.rcRegion[APP_LAYOUT_RNG_RIGHT];
+	if (bSetAllPnlsByRatio && rc.right)
+	{
+		rcAppRgn_Right.right = rc.right*_vPanels[APP_LAYOUT_RNG_RIGHT]->_ratio;
+	}
 	rcAppRgn_Right.left    = rc.right - rcAppRgn_Right.right;
 	rcAppRgn_Right.top     = _rcWork.top;
 	rcAppRgn_Right.bottom  = _rcWork.bottom;
@@ -566,24 +645,39 @@ void DockingManager::reSizeTo(RECT & rc)
 			rcRightTmp.bottom};
 		_vSplitter[APP_LAYOUT_RNG_RIGHT]->reSizeTo(rc);
 		int total = rcRightTmp.bottom;				  // 总计尺寸
-		float ratio = 0.5f;							  // 比列
 		float main=0;								  // 主要尺寸
 		if (RightVis)
 		{
+			main=total;
+			if (RightVis1 && (main*=_vPanels[APP_LAYOUT_RNG_RIGHT_SUB]->_ratio)>total-SPLITTER_WIDTH)
+			{
+				main=total-SPLITTER_WIDTH;
+			}
 			::SetWindowPos(_vPanels[APP_LAYOUT_RNG_RIGHT]->getHSelf(), NULL,
 				rcRightTmp.left  ,
 				rcRightTmp.top   ,
 				rcRightTmp.right ,
-				main=RightVis1?total*ratio:total,
+				main ,
 				SWP_NOZORDER);
 		}
 		if (RightVis1)
 		{
+			_dockData.rcRegion[APP_LAYOUT_RNG_RIGHT_SUB].bottom=main;
+			if (RightVis)
+			{
+				rc = {rcRightTmp.left,
+					(long)(rcRightTmp.top+main),
+					rcRightTmp.right,
+					SPLITTER_WIDTH};
+				_vSplitter[APP_LAYOUT_RNG_RIGHT_SUB]->reSizeTo(rc);
+				_vSplitter[APP_LAYOUT_RNG_RIGHT_SUB]->display();
+				main+=SPLITTER_WIDTH;
+			}
 			::SetWindowPos(_vPanels[APP_LAYOUT_RNG_RIGHT_SUB]->getHSelf(), NULL,
 				rcRightTmp.left  ,
 				rcRightTmp.top+main   ,
 				rcRightTmp.right ,
-				RightVis?total*(1-ratio):total,
+				RightVis?(total-main):total,
 				SWP_NOZORDER);
 		}
 	}
@@ -604,6 +698,10 @@ void DockingManager::reSizeTo(RECT & rc)
 	{
 		rcAppRgn_Top.right -= RightW;
 	}
+	if (bSetAllPnlsByRatio && rc.bottom)
+	{
+		rcAppRgn_Top.bottom = rc.bottom*_vPanels[APP_LAYOUT_RNG_TOP]->_ratio;
+	}
 	if (TopVisible)
 	{
 		_rcWork.top		+= rcAppRgn_Top.bottom + SPLITTER_WIDTH;
@@ -616,24 +714,39 @@ void DockingManager::reSizeTo(RECT & rc)
 					  SPLITTER_WIDTH};
 		_vSplitter[APP_LAYOUT_RNG_TOP]->reSizeTo(rc);
 		int total = rcAppRgn_Top.right;				  // 总计尺寸
-		float ratio = 0.5f;							  // 比列
 		float main=0;								  // 主要尺寸
 		if (TopVis)
 		{
+			main=total;
+			if (TopVis1 && (main*=_vPanels[APP_LAYOUT_RNG_TOP_SUB]->_ratio)>total-SPLITTER_WIDTH)
+			{
+				main=total-SPLITTER_WIDTH;
+			}
 			::SetWindowPos(_vPanels[APP_LAYOUT_RNG_TOP]->getHSelf(), NULL,
 				rcAppRgn_Top.left  ,
 				rcAppRgn_Top.top   ,
-				main=TopVis1?total*ratio:total ,
+				main ,
 				rcAppRgn_Top.bottom,
 				SWP_NOZORDER);
 		}
 		if (TopVis1)
 		{
-			::SetWindowPos(_vPanels[APP_LAYOUT_RNG_TOP]->getHSelf(), NULL,
-				rcAppRgn_Top.left + main ,
+			_dockData.rcRegion[APP_LAYOUT_RNG_TOP_SUB].right=main;
+			if (TopVis)
+			{
+				rc = {(LONG)(rcAppRgn_Top.left+main),
+					rcAppRgn_Top.top,
+					SPLITTER_WIDTH,
+					rcAppRgn_Top.bottom};
+				_vSplitter[APP_LAYOUT_RNG_TOP_SUB]->reSizeTo(rc);
+				_vSplitter[APP_LAYOUT_RNG_TOP_SUB]->display();
+				main += SPLITTER_WIDTH;
+			}
+			::SetWindowPos(_vPanels[APP_LAYOUT_RNG_TOP_SUB]->getHSelf(), NULL,
+				rcAppRgn_Top.left + main  ,
 				rcAppRgn_Top.top   ,
-				rcAppRgn_Top.right ,
-				TopVis?total*(1-ratio):total,
+				TopVis?(total-main):total ,
+				rcAppRgn_Top.bottom,
 				SWP_NOZORDER);
 		}
 	}
@@ -653,6 +766,10 @@ void DockingManager::reSizeTo(RECT & rc)
 	if (RightVisible && !BotExtrudeRight)
 	{
 		rcAppRgn_Bot.right -= RightW;
+	}
+	if (bSetAllPnlsByRatio && rc.bottom)
+	{
+		rcAppRgn_Bot.bottom = rc.bottom*_vPanels[APP_LAYOUT_RNG_BOTTOM]->_ratio;
 	}
 	RECT		rcBottomTmp	= rcAppRgn_Bot;
 	if (BotVisible)
@@ -676,24 +793,39 @@ void DockingManager::reSizeTo(RECT & rc)
 					  SPLITTER_WIDTH};
 		_vSplitter[APP_LAYOUT_RNG_BOTTOM]->reSizeTo(rc);
 		int total = rcBottomTmp.right;					// 总计尺寸
-		float ratio = 0.5f;								// 比列
 		float main=0;									// 主要尺寸
 		if (BotVis)
 		{
+			main=total;
+			if (BotVis1 && (main*=_vPanels[APP_LAYOUT_RNG_BOTTOM_SUB]->_ratio)>total-SPLITTER_WIDTH)
+			{
+				main=total-SPLITTER_WIDTH;
+			}
 			::SetWindowPos(_vPanels[APP_LAYOUT_RNG_BOTTOM]->getHSelf(), NULL,
 				rcBottomTmp.left  ,
 				rcBottomTmp.top   ,
-				main=BotVis1?total*ratio:total ,
+				main ,
 				rcBottomTmp.bottom,
 				SWP_NOZORDER);
 		}
 		//_vPanels[APP_LAYOUT_RNG_BOTTOM_SUB]->display();
 		if (BotVis1)
 		{
+			_dockData.rcRegion[APP_LAYOUT_RNG_BOTTOM_SUB].right=main;
+			if (BotVis)
+			{
+				rc = {(LONG)(rcBottomTmp.left+main),
+					rcBottomTmp.top,
+					SPLITTER_WIDTH,
+					rcBottomTmp.bottom};
+				_vSplitter[APP_LAYOUT_RNG_BOTTOM_SUB]->reSizeTo(rc);
+				_vSplitter[APP_LAYOUT_RNG_BOTTOM_SUB]->display();
+				main += SPLITTER_WIDTH;
+			}
 			::SetWindowPos(_vPanels[APP_LAYOUT_RNG_BOTTOM_SUB]->getHSelf(), NULL,
 				rcBottomTmp.left + main  ,
 				rcBottomTmp.top   ,
-				BotVis?total*(1-ratio):total ,
+				BotVis?(total-main):total ,
 				rcBottomTmp.bottom,
 				SWP_NOZORDER);
 		}
@@ -872,16 +1004,40 @@ LRESULT DockingManager::SendNotify(HWND hWnd, UINT message)
 
 void DockingManager::setDockedContSize(int iCont, int iSize)
 {
-	if (iSize==0)
+	float ratio = 0.22;
+	if (_rect.right<=0||_rect.bottom<=0)
 	{
-		iSize = 10;
+		::GetClientRect(getHParent(), &_rect);
 	}
-	if ((iCont == APP_LAYOUT_RNG_TOP) || (iCont == APP_LAYOUT_RNG_BOTTOM))
+	//LogIs(2, "%d, %d", _rect.right, _rect.bottom);
+	if ((iCont == APP_LAYOUT_RNG_TOP) || (iCont == APP_LAYOUT_RNG_BOTTOM)) {
 		_dockData.rcRegion[iCont].bottom = iSize;
-	else if ((iCont == APP_LAYOUT_RNG_LEFT) || (iCont == APP_LAYOUT_RNG_RIGHT))
+		ratio = iSize*1.f/_rect.bottom;
+	}
+	else if ((iCont == APP_LAYOUT_RNG_LEFT) || (iCont == APP_LAYOUT_RNG_RIGHT)){
 		_dockData.rcRegion[iCont].right = iSize;
-	else
-		return;
+		ratio = iSize*1.f/_rect.right;
+	}
+	else {
+		if (iCont>=APP_LAYOUT_RNG_MAX/2&&iCont<APP_LAYOUT_RNG_MAX)
+		{
+			ratio = iSize==0?0.5f:(iSize*1.f/0xfff);
+		} 
+		else 
+		{
+			(iCont==-1?_rect.right:_rect.bottom) = iSize;
+			return;
+		}
+	}
+	if (ratio<0)
+	{
+		ratio = 0;
+	}
+	if (ratio>=1)
+	{
+		ratio = 0.99;
+	}
+	_vPanels[iCont]->_ratio = ratio;
 	resize();
 }
 
@@ -891,8 +1047,13 @@ int DockingManager::getDockedContSize(int iCont)
 		return _dockData.rcRegion[iCont].bottom;
 	else if ((iCont == APP_LAYOUT_RNG_LEFT) || (iCont == APP_LAYOUT_RNG_RIGHT))
 		return _dockData.rcRegion[iCont].right;
-	else
-		return -1;
+	else  {
+		if (iCont>=APP_LAYOUT_RNG_MAX/2&&iCont<APP_LAYOUT_RNG_MAX)
+		{
+			return _vPanels[iCont]->_ratio*0xfff;
+		} 
+		return iCont==-1?_rect.right:_rect.bottom;
+	}
 }
 
 DockingCont* DockingManager::toggleActiveTb(DockingCont* pContSrc, UINT message, BOOL bNew, LPRECT prcFloat)

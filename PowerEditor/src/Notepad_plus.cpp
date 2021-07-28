@@ -884,10 +884,16 @@ void Notepad_plus::reInitDockingSystem(DockingManagerData* dockingData)
 
 	DockingManagerData& dmd = dockingData?*dockingData:nppGUI._dockingData;
 
+	_dockingManager.setDockedContSize(APP_LAYOUT_WIDTH  , dmd._rectWidth);
+	_dockingManager.setDockedContSize(APP_LAYOUT_HEIGHT  , dmd._rectHeight);
 	_dockingManager.setDockedContSize(APP_LAYOUT_RNG_LEFT  , dmd._leftWidth);
 	_dockingManager.setDockedContSize(APP_LAYOUT_RNG_RIGHT , dmd._rightWidth);
 	_dockingManager.setDockedContSize(APP_LAYOUT_RNG_TOP	 , dmd._topHeight);
 	_dockingManager.setDockedContSize(APP_LAYOUT_RNG_BOTTOM, dmd._bottomHight);
+	_dockingManager.setDockedContSize(APP_LAYOUT_RNG_LEFT_SUB  , dmd._leftWidthSub);
+	_dockingManager.setDockedContSize(APP_LAYOUT_RNG_RIGHT_SUB , dmd._rightWidthSub);
+	_dockingManager.setDockedContSize(APP_LAYOUT_RNG_TOP_SUB	 , dmd._topHeightSub);
+	_dockingManager.setDockedContSize(APP_LAYOUT_RNG_BOTTOM_SUB, dmd._bottomHightSub);
 
 	std::map<int, PluginDlgDockingInfo*> addedDlgMap;
 
@@ -1169,10 +1175,16 @@ void Notepad_plus::saveDockingParams()
 	NppGUI & nppGUI = const_cast<NppGUI &>((NppParameters::getInstance()).getNppGUI());
 
 	// Save the docking information
+	nppGUI._dockingData._rectWidth		= _dockingManager.getDockedContSize(APP_LAYOUT_WIDTH);
+	nppGUI._dockingData._rectHeight		= _dockingManager.getDockedContSize(APP_LAYOUT_HEIGHT);
 	nppGUI._dockingData._leftWidth		= _dockingManager.getDockedContSize(APP_LAYOUT_RNG_LEFT);
 	nppGUI._dockingData._rightWidth		= _dockingManager.getDockedContSize(APP_LAYOUT_RNG_RIGHT);
 	nppGUI._dockingData._topHeight		= _dockingManager.getDockedContSize(APP_LAYOUT_RNG_TOP);
 	nppGUI._dockingData._bottomHight	= _dockingManager.getDockedContSize(APP_LAYOUT_RNG_BOTTOM);
+	nppGUI._dockingData._leftWidthSub	= _dockingManager.getDockedContSize(APP_LAYOUT_RNG_LEFT_SUB);
+	nppGUI._dockingData._rightWidthSub	= _dockingManager.getDockedContSize(APP_LAYOUT_RNG_RIGHT_SUB);
+	nppGUI._dockingData._topHeightSub	= _dockingManager.getDockedContSize(APP_LAYOUT_RNG_TOP_SUB);
+	nppGUI._dockingData._bottomHightSub	= _dockingManager.getDockedContSize(APP_LAYOUT_RNG_BOTTOM_SUB);
 
 	// clear the container tab information (active tab)
 	nppGUI._dockingData._containerTabInfo.clear();

@@ -5717,6 +5717,12 @@ void NppParameters::feedDockingManager(TiXmlNode *node, DockingManagerData & doc
 	TiXmlElement *element = node->ToElement();
 
 	int i;
+	if (element->Attribute(TEXT("rectWidth"), &i))
+		dockingData._rectWidth = i;
+
+	if (element->Attribute(TEXT("rectHeight"), &i))
+		dockingData._rectHeight = i;
+
 	if (element->Attribute(TEXT("leftWidth"), &i))
 		dockingData._leftWidth = i;
 
@@ -5728,6 +5734,18 @@ void NppParameters::feedDockingManager(TiXmlNode *node, DockingManagerData & doc
 
 	if (element->Attribute(TEXT("bottomHeight"), &i))
 		dockingData._bottomHight = i;
+
+	if (element->Attribute(TEXT("leftSub"), &i))
+		dockingData._leftWidthSub = i;
+
+	if (element->Attribute(TEXT("rightSub"), &i))
+		dockingData._rightWidthSub = i;
+
+	if (element->Attribute(TEXT("topSub"), &i))
+		dockingData._topHeightSub = i;
+
+	if (element->Attribute(TEXT("bottomSub"), &i))
+		dockingData._bottomHightSub = i;
 
 
 
@@ -6484,10 +6502,16 @@ void NppParameters::insertDockingParamNode(TiXmlNode *GUIRoot, DockingManagerDat
 	DockingManagerData & dmd = dockingData?*dockingData:_nppGUI._dockingData;
 	TiXmlElement DMNode(TEXT("GUIConfig"));
 	DMNode.SetAttribute(TEXT("name"), TEXT("DockingManager"));
+	DMNode.SetAttribute(TEXT("rectWidth"), dmd._rectWidth);
+	DMNode.SetAttribute(TEXT("rectHeight"), dmd._rectHeight);
 	DMNode.SetAttribute(TEXT("leftWidth"), dmd._leftWidth);
 	DMNode.SetAttribute(TEXT("rightWidth"), dmd._rightWidth);
 	DMNode.SetAttribute(TEXT("topHeight"), dmd._topHeight);
 	DMNode.SetAttribute(TEXT("bottomHeight"), dmd._bottomHight);
+	DMNode.SetAttribute(TEXT("leftSub"), dmd._leftWidthSub);
+	DMNode.SetAttribute(TEXT("rightSub"), dmd._rightWidthSub);
+	DMNode.SetAttribute(TEXT("topSub"), dmd._topHeightSub);
+	DMNode.SetAttribute(TEXT("bottomSub"), dmd._bottomHightSub);
 
 	if (isLayoutFromSession)
 	{

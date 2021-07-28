@@ -72,9 +72,7 @@
     <ClCompile Include="..\src\uchardet\nsSJISProber.cpp" />
     <ClCompile Include="..\src\uchardet\nsUniversalDetector.cpp" />
     <ClCompile Include="..\src\uchardet\nsUTF8Prober.cpp" />
-    <ClCompile Include="..\src\Parameters.cpp" />
     <ClCompile Include="..\src\Misc\PluginsManager\PluginsManager.cpp" />
-    <ClCompile Include="..\src\WinControls\Preference\preferenceDlg.cpp" />
     <ClCompile Include="..\src\ScintillaComponent\Printer.cpp" />
     <ClCompile Include="..\src\MISC\Process\Processus.cpp" />
     <ClCompile Include="..\src\WinControls\ProjectPanel\ProjectPanel.cpp" />
@@ -150,6 +148,12 @@
     <ClCompile Include="..\src\WinControls\DockingWnd\Gripper.cpp">
       <Filter>Docking</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\Parameters.cpp">
+      <Filter>Preference</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\WinControls\Preference\preferenceDlg.cpp">
+      <Filter>Preference</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\clipboardFormats.h" />
@@ -193,7 +197,6 @@
     <ClInclude Include="..\src\WinControls\ReadDirectoryChanges\targetver.h" />
     <ClInclude Include="..\src\WinControls\shortcut\shortcutRc.h" />
     <ClInclude Include="..\src\WinControls\StaticDialog\RunDlg\RunDlg_rc.h" />
-    <ClInclude Include="..\src\WinControls\Preference\preference_rc.h" />
     <ClInclude Include="..\src\WinControls\Preference\resource.h" />
     <ClInclude Include="..\src\WinControls\TabBar\ControlsTab.h" />
     <ClInclude Include="..\src\ScintillaComponent\DocTabView.h" />
@@ -239,10 +242,8 @@
     <ClInclude Include="..\src\uchardet\nsSJISProber.h" />
     <ClInclude Include="..\src\uchardet\nsUniversalDetector.h" />
     <ClInclude Include="..\src\uchardet\nsUTF8Prober.h" />
-    <ClInclude Include="..\src\Parameters.h" />
     <ClInclude Include="..\src\MISC\PluginsManager\PluginInterface.h" />
     <ClInclude Include="..\src\MISC\PluginsManager\PluginsManager.h" />
-    <ClInclude Include="..\src\WinControls\Preference\preferenceDlg.h" />
     <ClInclude Include="..\src\ScintillaComponent\Printer.h" />
     <ClInclude Include="..\src\uchardet\prmem.h" />
     <ClInclude Include="..\src\MISC\Process\Processus.h" />
@@ -346,6 +347,15 @@
     <ClInclude Include="..\src\WinControls\DockingWnd\Gripper.h">
       <Filter>Docking</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\Parameters.h">
+      <Filter>Preference</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\WinControls\Preference\preferenceDlg.h">
+      <Filter>Preference</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\WinControls\Preference\preference_rc.h">
+      <Filter>Preference</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\src\MISC\md5\md5Dlgs.rc" />
@@ -359,7 +369,6 @@
     <ResourceCompile Include="..\src\ScintillaComponent\FindReplaceDlg.rc" />
     <ResourceCompile Include="..\src\WinControls\FunctionList\functionListPanel.rc" />
     <ResourceCompile Include="..\src\Notepad_plus.rc" />
-    <ResourceCompile Include="..\src\WinControls\Preference\preference.rc" />
     <ResourceCompile Include="..\src\WinControls\ProjectPanel\ProjectPanel.rc" />
     <ResourceCompile Include="..\src\WinControls\StaticDialog\RunDlg\RunDlg.rc" />
     <ResourceCompile Include="..\src\WinControls\shortcut\RunMacroDlg.rc" />
@@ -376,6 +385,9 @@
     </ResourceCompile>
     <ResourceCompile Include="..\src\WinControls\DockingWnd\DockingGUIWidget.rc">
       <Filter>Docking</Filter>
+    </ResourceCompile>
+    <ResourceCompile Include="..\src\WinControls\Preference\preference.rc">
+      <Filter>Preference</Filter>
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
@@ -538,6 +550,9 @@
     </Filter>
     <Filter Include="Docking">
       <UniqueIdentifier>{5a8e2404-4755-4ba0-9d5d-ad674b25af09}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Preference">
+      <UniqueIdentifier>{7df30699-9681-49f2-8513-87971939116f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

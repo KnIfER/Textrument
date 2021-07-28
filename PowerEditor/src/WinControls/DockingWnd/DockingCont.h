@@ -249,5 +249,7 @@ public:
 
 	// only for docked panels
 	int _rngIdx = -1;
+	// only for docked sub panels
+	float _ratio = 0.5f;
 };
 

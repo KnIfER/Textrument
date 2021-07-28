@@ -349,10 +349,16 @@ struct ContainerTabInfo final
 
 struct DockingManagerData final
 {
+	int _rectHeight = 0;
+	int _rectWidth = 0;
 	int _leftWidth = 200;
 	int _rightWidth = 200;
 	int _topHeight = 200;
 	int _bottomHight = 200;
+	int _leftWidthSub = 0;
+	int _rightWidthSub = 0;
+	int _topHeightSub = 0;
+	int _bottomHightSub = 0;
 
 	std::vector<FloatingWindowInfo> _floatingWindowInfo;
 	std::vector<PluginDlgDockingInfo> _pluginDockInfo;
