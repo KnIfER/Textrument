@@ -5254,7 +5254,7 @@ void Notepad_plus::fullScreenToggle()
         _restoreButton.setButtonStatus(bs);
 
 		//Hide window so windows can properly update it
-		::ShowWindow(_pPublicInterface->getHSelf(), SW_HIDE);
+		//::ShowWindow(_pPublicInterface->getHSelf(), SW_HIDE);
 
 		//Set popup style for fullscreen window and store the old style
 		if (!_beforeSpecialView._isPostIt)
@@ -5291,7 +5291,7 @@ void Notepad_plus::fullScreenToggle()
 	else	//toggle fullscreen off
 	{
 		//Hide window for updating, restore style and menu then restore position and Z-Order
-		::ShowWindow(_pPublicInterface->getHSelf(), SW_HIDE);
+		//::ShowWindow(_pPublicInterface->getHSelf(), SW_HIDE);
 
         _restoreButton.setButtonStatus(buttonStatus_fullscreen ^ _restoreButton.getButtonStatus());
         _restoreButton.display(false);
