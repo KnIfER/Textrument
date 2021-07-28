@@ -175,9 +175,6 @@
     <ClCompile Include="..\src\Utf8_16.cpp">
       <Filter>TextView</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\WinControls\DockingWnd\SubPanelPlaceHolder.cpp">
-      <Filter>Docking</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\clipboardFormats.h" />
@@ -397,12 +394,6 @@
     <ClInclude Include="..\src\Utf8_16.h">
       <Filter>TextView</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\WinControls\DockingWnd\SubPanelPlaceHolder.h">
-      <Filter>Docking</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\WinControls\DockingWnd\SubPanelPlaceHolder_rc.h">
-      <Filter>Docking</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\WinControls\Window.h">
       <Filter>Core</Filter>
     </ClInclude>
@@ -440,9 +431,6 @@
     </ResourceCompile>
     <ResourceCompile Include="..\src\Notepad_plus.rc">
       <Filter>Core</Filter>
-    </ResourceCompile>
-    <ResourceCompile Include="..\src\WinControls\DockingWnd\SubPanelPlaceHolder.rc">
-      <Filter>Docking</Filter>
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>

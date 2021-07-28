@@ -3881,7 +3881,7 @@ bool FindReplaceDlg::replaceInOpenDocsConfirmCheck(void)
 	generic_string title = pNativeSpeaker->getLocalizedStrFromID("replace-in-open-docs-confirm-title", TEXT("替换确认"));
 	generic_string msg = pNativeSpeaker->getLocalizedStrFromID("replace-in-open-docs-confirm-message", TEXT("您是否要在所有打开的文档中替换所有匹配项？"));
 
-	int res = ::MessageBox(NULL, msg.c_str(), title.c_str(), MB_OKCANCEL | MB_DEFBUTTON2 | MB_TASKMODAL);
+	int res = ::MessageBox(NULL, msg.c_str(), title.c_str(), MB_OKCANCEL | MB_DEFBUTTON1 | MB_TASKMODAL);
 
 	if (res == IDOK)
 	{

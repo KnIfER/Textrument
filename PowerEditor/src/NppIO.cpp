@@ -1683,7 +1683,7 @@ bool Notepad_plus::fileSaveAllConfirm()
 			_pPublicInterface->getHSelf(),
 			TEXT("确认要保存全部文档吗?"),
 			TEXT("确认保存全部"),
-			MB_YESNOCANCEL | MB_DEFBUTTON2);
+			MB_YESNOCANCEL | MB_DEFBUTTON1);
 		UnhookWindowsHookEx(hHook);
 		if (answer == IDYES)
 		{
