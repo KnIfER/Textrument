@@ -222,7 +222,7 @@ void Utf8_16_Read::determineEncoding()
 		m_nSkip = 3;
 	}
 	// try to detect UTF-16 little-endian without BOM
-	else if (m_nLen > 1 && m_nLen % 2 == 0 && m_pBuf[0] != NULL && m_pBuf[1] == NULL && IsTextUnicode(m_pBuf, static_cast<int32_t>(m_nLen), &uniTest))
+	else if (m_nLen > 1 && m_nLen % 2 == 0 && m_pBuf[0] != 0 && m_pBuf[1] == 0 && IsTextUnicode(m_pBuf, static_cast<int32_t>(m_nLen), &uniTest))
 	{
 		m_eEncoding = uni16LE_NoBOM;
 		m_nSkip = 0;
@@ -629,24 +629,18 @@ void Utf16_Iter::operator++()
 				m_highSurrogate = m_nCur16;
 			}
             else if (m_nCur16 < 0x80) {
-                pushout(static_cast<ubyte>(m_nCur16 & 0xFF));
+                pushout(static_cast<ubyte>(m_nCur16));
                 m_eState = eStart;
             } else if (m_nCur16 < 0x800) {
                 pushout(static_cast<ubyte>(0xC0 | m_nCur16 >> 6));
-                m_eState = e2Bytes2;
+                pushout(0x80 | m_nCur16 & 0x3f);
+                m_eState = eStart;
             } else {
-                pushout(static_cast<ubyte>(0xE0 | m_nCur16 >> 12));
-                m_eState = e3Bytes2;
+                pushout(0xE0 | (m_nCur16 >> 12));
+                pushout(0x80 | (m_nCur16 >> 6) & 0x3f);
+                pushout(0x80 | m_nCur16 & 0x3f);
+                m_eState = eStart;
             }
-            break;
-        case e2Bytes2:
-        case e3Bytes3:
-            pushout(static_cast<ubyte>(0x80 | m_nCur16 & 0x3F));
-            m_eState = eStart;
-            break;
-        case e3Bytes2:
-            pushout(static_cast<ubyte>(0x80 | ((m_nCur16 >> 6) & 0x3F)));
-            m_eState = e3Bytes3;
             break;
 		case eSurrogate:
 			read();
@@ -657,8 +651,8 @@ void Utf16_Iter::operator++()
 				pushout(0x80 | (code >> 12) & 0x3f);
 				pushout(0x80 | (code >>  6) & 0x3f);
 				pushout(0x80 | code & 0x3f);
-				m_eState = eStart;
 			}
+			m_eState = eStart;
 			break;
     }
 }
