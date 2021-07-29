@@ -97,7 +97,6 @@ PowerEditor/installer/zipped.package.release/
 PowerEditor/installer/zipped.package.release64/
 PowerEditor/visual.net/Unicode Debug/
 PowerEditor/visual.net/Unicode Release/
-PowerEditor/visual.net/notepadPlus.sln
 PowerEditor/visual.net/x64/Unicode Debug/
 PowerEditor/visual.net/x64/Unicode Release/
 
@@ -164,9 +163,8 @@ PowerEditor/bin/SourceCodePro-Regular.ttf
 
 PowerEditor/src/MISC/md5/RCa06792
 *.db
-*.sln
 *.opendb
 plugins/plugins_dev.props
 plugins/BrowserWidget.props
 NppSaveAsAdmin
-文库/Win32/ModifyMenu的用法.md
+SciLexer.sln
