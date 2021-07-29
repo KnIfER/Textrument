@@ -565,6 +565,14 @@ copy ..\src\contextMenu.xml ..\bin64\contextMenu.xml
     <Image Include="..\src\icons\zoomOut.bmp" />
     <Image Include="..\src\icons\zoomOut_off.ico" />
     <Image Include="..\src\icons\zoomOut_on.ico" />
+    <None Include="..\src\WinControls\PluginsAdmin\pl.x64.json" />
+    <None Include="..\src\WinControls\PluginsAdmin\pl.x86.json" />
+    <ResourceCompile Include="..\src\WinControls\PluginsAdmin\pluginsListX64.rc">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\src\MISC\md5\md5Dlgs.rc" />
@@ -582,6 +590,12 @@ copy ..\src\contextMenu.xml ..\bin64\contextMenu.xml
       <Culture Condition="'$(Configuration)|$(Platform)'=='Release|x64'">0x0c00</Culture>
     </ResourceCompile>
     <ResourceCompile Include="..\src\WinControls\PluginsAdmin\pluginsAdmin.rc" />
+    <ResourceCompile Include="..\src\WinControls\PluginsAdmin\pluginsListX86.rc">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ResourceCompile>
     <ResourceCompile Include="..\src\WinControls\Preference\preference.rc">
       <Culture Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">0x0c00</Culture>
     </ResourceCompile>

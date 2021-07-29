@@ -165,16 +165,16 @@
       <Filter>Core</Filter>
     </ClCompile>
     <ClCompile Include="..\src\ScintillaComponent\ScintillaCtrls.cpp">
-      <Filter>TextView</Filter>
+      <Filter>EditText</Filter>
     </ClCompile>
     <ClCompile Include="..\src\ScintillaComponent\ScintillaEditView.cpp">
-      <Filter>TextView</Filter>
+      <Filter>EditText</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Utf8_16.cpp">
-      <Filter>TextView</Filter>
+      <Filter>EditText</Filter>
     </ClCompile>
     <ClCompile Include="..\src\ScintillaComponent\DocTabView.cpp">
-      <Filter>TextView</Filter>
+      <Filter>EditText</Filter>
     </ClCompile>
     <ClCompile Include="..\src\WinControls\Window.cpp">
       <Filter>Core</Filter>
@@ -385,25 +385,25 @@
       <Filter>Core</Filter>
     </ClInclude>
     <ClInclude Include="..\src\ScintillaComponent\ScintillaCtrls.h">
-      <Filter>TextView</Filter>
+      <Filter>EditText</Filter>
     </ClInclude>
     <ClInclude Include="..\src\ScintillaComponent\ScintillaEditView.h">
-      <Filter>TextView</Filter>
+      <Filter>EditText</Filter>
     </ClInclude>
     <ClInclude Include="..\src\ScintillaComponent\ScintillaRef.h">
-      <Filter>TextView</Filter>
+      <Filter>EditText</Filter>
     </ClInclude>
     <ClInclude Include="..\src\Utf8.h">
-      <Filter>TextView</Filter>
+      <Filter>EditText</Filter>
     </ClInclude>
     <ClInclude Include="..\src\Utf8_16.h">
-      <Filter>TextView</Filter>
+      <Filter>EditText</Filter>
     </ClInclude>
     <ClInclude Include="..\src\WinControls\Window.h">
       <Filter>Core</Filter>
     </ClInclude>
     <ClInclude Include="..\src\ScintillaComponent\DocTabView.h">
-      <Filter>TextView</Filter>
+      <Filter>EditText</Filter>
     </ClInclude>
     <ClInclude Include="..\src\WinControls\StaticDialog\StaticDialog.h">
       <Filter>Core</Filter>
@@ -442,6 +442,12 @@
     </ResourceCompile>
     <ResourceCompile Include="..\src\Notepad_plus.rc">
       <Filter>Core</Filter>
+    </ResourceCompile>
+    <ResourceCompile Include="..\src\WinControls\PluginsAdmin\pluginsListX64.rc">
+      <Filter>PluginList</Filter>
+    </ResourceCompile>
+    <ResourceCompile Include="..\src\WinControls\PluginsAdmin\pluginsListX86.rc">
+      <Filter>PluginList</Filter>
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
@@ -596,6 +602,12 @@
     <None Include="..\src\cursors\drag_interdit.cur" />
     <None Include="..\src\cursors\drag_out.cur" />
     <None Include="..\src\cursors\drag_plus.cur" />
+    <None Include="..\src\WinControls\PluginsAdmin\pl.x86.json">
+      <Filter>PluginList</Filter>
+    </None>
+    <None Include="..\src\WinControls\PluginsAdmin\pl.x64.json">
+      <Filter>PluginList</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="DarkMode">
@@ -616,7 +628,7 @@
     <Filter Include="Core">
       <UniqueIdentifier>{77833f73-6ebc-41bc-9344-c1bdc8ee1f2a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="TextView">
+    <Filter Include="EditText">
       <UniqueIdentifier>{f41d2d3c-b3f3-481e-b26e-618e3833e503}</UniqueIdentifier>
     </Filter>
   </ItemGroup>

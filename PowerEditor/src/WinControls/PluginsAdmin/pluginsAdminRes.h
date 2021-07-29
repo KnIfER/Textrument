@@ -26,14 +26,6 @@
 // Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 
-
-#ifdef _WIN64
-#define PLJSON "pl.x64.json"
-#else
-#define PLJSON "pl.x86.json"
-#endif
-
-
 #define IDD_PLUGINSADMIN_DLG	5500
 #define IDC_PLUGINADM_SEARCH_STATIC (IDD_PLUGINSADMIN_DLG + 1)
 #define IDC_PLUGINADM_SEARCH_EDIT (IDD_PLUGINSADMIN_DLG + 2)
