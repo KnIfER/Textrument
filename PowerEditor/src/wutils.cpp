@@ -6,21 +6,20 @@
 #include "Common.h"
 #include "wutils.h"
 #include "Notepad_plus_msgs.h"
+#include "InsituDebug.h"
 
 LOGFONT logfont{};
 
-FontStack HFontWraps;
+FontStack HFontWraps = NULL;
 
 void setFontStack(FontStack fontStack) {
 	HFontWraps = fontStack;
 }
 
 void fetchFontStack(HWND h) {
-	HFontWraps = (FontStack)::SendMessage(h, NPPM_GETFONTSTACK, 0, 0);
 	if(!HFontWraps) {
 		HFontWraps = FontStack();
 	} 
-	//else ::MessageBox(NULL, TEXT("111"), TEXT(""), MB_OK);
 }
 
 BOOL CALLBACK SetChildFont(HWND hwndChild, LPARAM lParam)

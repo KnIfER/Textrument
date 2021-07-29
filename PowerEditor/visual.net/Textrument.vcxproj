@@ -380,6 +380,7 @@ copy ..\src\contextMenu.xml ..\bin64\contextMenu.xml
     <ClCompile Include="..\src\WinControls\Grid\ShortcutMapper.cpp" />
     <ClCompile Include="..\src\WinControls\TrayIcon\trayIconControler.cpp" />
     <ClCompile Include="..\src\WinControls\TreeView\TreeView.cpp" />
+    <ClCompile Include="..\src\WinControls\Window.cpp" />
     <ClCompile Include="..\src\WinControls\WindowsDlg\SizeableDlg.cpp" />
     <ClCompile Include="..\src\ScintillaComponent\SmartHighlighter.cpp" />
     <ClCompile Include="..\src\WinControls\SplitterContainer\Splitter.cpp" />

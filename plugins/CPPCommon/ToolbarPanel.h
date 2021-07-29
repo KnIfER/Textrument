@@ -21,7 +21,7 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #define TOOLBAR_PANEL_H
 
 #ifndef UNITY_BUILD_SINGLE_INCLUDE
-#include <windows.h>
+#include <Control.h>
 #include "Window.h"
 #include "ToolBar.h"
 #endif
@@ -59,7 +59,7 @@ protected:
 		return ((ToolbarPanel *)(::GetWindowLongPtr(hwnd, GWLP_USERDATA)))->ToolbarPanelProc(hwnd, Message, wParam, lParam);
 	};
 
-	LRESULT CALLBACK ToolbarPanelProc( HWND hwnd ,UINT Message, WPARAM wParam, LPARAM lParam );
+	virtual LRESULT CALLBACK ToolbarPanelProc( HWND hwnd ,UINT Message, WPARAM wParam, LPARAM lParam );
 
 	static LRESULT CALLBACK StaticToolbarPanelProc( HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam );
 };

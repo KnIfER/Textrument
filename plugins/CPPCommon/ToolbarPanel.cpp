@@ -19,6 +19,7 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 #ifndef UNITY_BUILD_SINGLE_INCLUDE
 #include "ToolbarPanel.h"
+#include "NppDarkMode.h"
 #include <windowsx.h>
 #endif
 
@@ -173,7 +174,75 @@ LRESULT ToolbarPanel::ToolbarPanelProc( HWND hwnd, UINT Message, WPARAM wParam, 
 		return ::SendMessage( _hParent, Message, wParam, lParam );
 	}
 	switch ( Message )
-	{
+	{	
+		case WM_CTLCOLOREDIT:
+		{
+			if (NppDarkMode::isEnabled())
+			{
+				return NppDarkMode::onCtlColorSofter(reinterpret_cast<HDC>(wParam));
+			}
+			break;
+		}
+
+		case WM_CTLCOLORLISTBOX:
+		{
+			if (NppDarkMode::isEnabled())
+			{
+				return NppDarkMode::onCtlColor(reinterpret_cast<HDC>(wParam));
+			}
+			break;
+		}
+
+		case WM_CTLCOLORDLG:
+		case WM_CTLCOLORSTATIC:
+		{
+			if (NppDarkMode::isEnabled())
+			{
+				return NppDarkMode::onCtlColorDarker(reinterpret_cast<HDC>(wParam));
+			}
+			break;
+		}
+
+		case WM_PRINTCLIENT:
+		{
+			if (NppDarkMode::isEnabled())
+			{
+				return TRUE;
+			}
+			break;
+		}
+
+		case NPPN_DARKCONF_CHANGED:
+		{
+			NppDarkMode::autoSubclassAndThemeChildControls(_hSelf);
+			return TRUE;
+		}
+
+		case WM_ERASEBKGND:
+		{
+			if (!NppDarkMode::isEnabled())
+			{
+				break;
+			}
+
+			RECT rc = { 0 };
+			getClientRect(rc);
+			FillRect((HDC)wParam, &rc, NppDarkMode::getBackgroundBrush());
+			return 1;
+		}
+
+		//case WM_MEASUREITEM :
+		//{
+		//	MEASUREITEMSTRUCT* st = (MEASUREITEMSTRUCT*)lParam;
+		//	SendMessage((HWND)st->itemData, Message, wParam, lParam);
+		//	return 0;
+		//}
+		case WM_DRAWITEM: // delegate to child
+		{
+			DRAWITEMSTRUCT* st = (DRAWITEMSTRUCT*)lParam;
+			SendMessage((HWND)st->hwndItem, Message, wParam, lParam);
+			break;
+		}
 	case WM_MOVE:
 	case WM_SIZE:
 		ResizeChildren();

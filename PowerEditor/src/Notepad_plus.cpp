@@ -961,6 +961,7 @@ void Notepad_plus::reInitDockingSystem(DockingManagerData* dockingData)
 			}
 			else
 			{
+				//LogIs(2, L"恢复插件面板： %s %d", pdi._name.c_str(), pdi._internalID)		;
 				_pluginsManager.runPluginCommand(pdi._name.c_str(), pdi._internalID);
 			}
 		}

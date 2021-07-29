@@ -54,11 +54,7 @@ public:
 	}
 
 
-	virtual void reSizeTo(RECT & rc) // should NEVER be const !!!
-	{
-		::MoveWindow(_hSelf, rc.left, rc.top, rc.right, rc.bottom, TRUE);
-		redraw();
-	}
+	virtual void reSizeTo(RECT & rc);
 
 
 	virtual void reSizeToWH(RECT& rc) // should NEVER be const !!!
