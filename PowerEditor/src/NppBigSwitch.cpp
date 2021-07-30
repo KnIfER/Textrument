@@ -211,7 +211,7 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 			{
 				RECT rc = { 0 };
 				GetClientRect(hwnd, &rc);
-				FillRect((HDC)wParam, &rc, NppDarkMode::getBackgroundBrush());
+				::FillRect(reinterpret_cast<HDC>(wParam), &rc, NppDarkMode::getDarkerBackgroundBrush());
 				return 0;
 			}
 			else
@@ -228,7 +228,7 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 
 		case NPPM_INTERNAL_REFRESHDARKMODE:
 		{
-			refreshDarkMode();
+			refreshDarkMode(static_cast<bool>(wParam));
 
 			BufferID id = _pEditView->getCurrentBufferID();
 

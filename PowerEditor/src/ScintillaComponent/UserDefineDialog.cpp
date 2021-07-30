@@ -1,29 +1,18 @@
 // This file is part of Notepad++ project
-// Copyright (C)2020 Don HO <don.h@free.fr>
-//
-// This program is free software; you can redistribute it and/or
-// modify it under the terms of the GNU General Public License
-// as published by the Free Software Foundation; either
-// version 2 of the License, or (at your option) any later version.
-//
-// Note that the GPL places important restrictions on "derived works", yet
-// it does not provide a detailed definition of that term.  To avoid
-// misunderstandings, we consider an application to constitute a
-// "derivative work" for the purpose of this license if it does any of the
-// following:
-// 1. Integrates source code from Notepad++.
-// 2. Integrates/includes/aggregates Notepad++ into a proprietary executable
-//    installer, such as those produced by InstallShield.
-// 3. Links to a library or executes a program that does any of the above.
+// Copyright (C)2021 Don HO <don.h@free.fr>
+
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// at your option any later version.
 //
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with this program; if not, write to the Free Software
-// Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+// along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 
 #include "localization.h"
@@ -32,7 +21,7 @@
 #include "Parameters.h"
 #include "resource.h"
 #include "Notepad_plus_msgs.h"
-#include "FileDialog.h"
+#include "CustomFileDialog.h"
 #include "Common.h"
 
 using namespace std;
@@ -115,6 +104,34 @@ INT_PTR CALLBACK SharedParametersDialog::run_dlgProc(UINT Message, WPARAM wParam
         {
             // initControls();
             return TRUE;
+        }
+
+        case WM_CTLCOLOREDIT:
+        {
+            if (NppDarkMode::isEnabled())
+            {
+                return NppDarkMode::onCtlColorSofter(reinterpret_cast<HDC>(wParam));
+            }
+            break;
+        }
+
+        case WM_CTLCOLORDLG:
+        case WM_CTLCOLORSTATIC:
+        {
+            if (NppDarkMode::isEnabled())
+            {
+                return NppDarkMode::onCtlColorDarker(reinterpret_cast<HDC>(wParam));
+            }
+            break;
+        }
+
+        case WM_PRINTCLIENT:
+        {
+            if (NppDarkMode::isEnabled())
+            {
+                return TRUE;
+            }
+            break;
         }
 
         case WM_COMMAND :
@@ -957,7 +974,9 @@ INT_PTR CALLBACK UserDefineDialog::run_dlgProc(UINT message, WPARAM wParam, LPAR
             _pUserLang = _pCurrentUserLang;
 
             _ctrlTab.init(_hInst, _hSelf, false);
-			int tabDpiDynamicalHeight = nppParam._dpiManager.scaleY(13);
+            NppDarkMode::subclassTabControl(_ctrlTab.getHSelf());
+
+            int tabDpiDynamicalHeight = nppParam._dpiManager.scaleY(13);
             _ctrlTab.setFont(TEXT("Tahoma"), tabDpiDynamicalHeight);
 
             _folderStyleDlg.init(_hInst, _hSelf);
@@ -1037,6 +1056,53 @@ INT_PTR CALLBACK UserDefineDialog::run_dlgProc(UINT message, WPARAM wParam, LPAR
 
             ::SetWindowText(_hSelf, udlVersion.c_str());
 
+            NppDarkMode::autoSubclassAndThemeChildControls(_hSelf);
+            NppDarkMode::setDarkScrollBar(_hSelf);
+
+            return TRUE;
+        }
+
+        case WM_CTLCOLOREDIT:
+        {
+            if (NppDarkMode::isEnabled())
+            {
+                return NppDarkMode::onCtlColorSofter(reinterpret_cast<HDC>(wParam));
+            }
+            break;
+        }
+
+        case WM_CTLCOLORLISTBOX:
+        {
+            if (NppDarkMode::isEnabled())
+            {
+                return NppDarkMode::onCtlColor(reinterpret_cast<HDC>(wParam));
+            }
+            break;
+        }
+
+        case WM_CTLCOLORDLG:
+        case WM_CTLCOLORSTATIC:
+        {
+            if (NppDarkMode::isEnabled())
+            {
+                return NppDarkMode::onCtlColorDarker(reinterpret_cast<HDC>(wParam));
+            }
+            break;
+        }
+
+        case WM_PRINTCLIENT:
+        {
+            if (NppDarkMode::isEnabled())
+            {
+                return TRUE;
+            }
+            break;
+        }
+
+        case NPPM_INTERNAL_REFRESHDARKMODE:
+        {
+            NppDarkMode::autoThemeChildControls(_hSelf);
+            NppDarkMode::setDarkScrollBar(_hSelf);
             return TRUE;
         }
 
@@ -1271,11 +1337,10 @@ INT_PTR CALLBACK UserDefineDialog::run_dlgProc(UINT message, WPARAM wParam, LPAR
                     }
                     case IDC_IMPORT_BUTTON :
                     {
-                        FileDialog fDlg(_hSelf, ::GetModuleHandle(NULL));
-                        fDlg.setExtFilter(TEXT("UDL"), TEXT(".xml"), NULL);
-                        TCHAR *fn = fDlg.doOpenSingleFileDlg();
-                        if (!fn) break;
-                        generic_string sourceFile = fn;
+                        CustomFileDialog fDlg(_hSelf);
+                        fDlg.setExtFilter(TEXT("UDL"), TEXT(".xml"));
+                        generic_string sourceFile = fDlg.doOpenSingleFileDlg();
+                        if (sourceFile.empty()) break;
 
                         bool isSuccessful = nppParam.importUDLFromFile(sourceFile);
                         if (isSuccessful)
@@ -1302,12 +1367,11 @@ INT_PTR CALLBACK UserDefineDialog::run_dlgProc(UINT message, WPARAM wParam, LPAR
                             break;
                         }
 
-                        FileDialog fDlg(_hSelf, ::GetModuleHandle(NULL));
-                        fDlg.setExtFilter(TEXT("UDL"), TEXT(".xml"), NULL);
+                        CustomFileDialog fDlg(_hSelf);
+                        fDlg.setExtFilter(TEXT("UDL"), TEXT(".xml"));
 						fDlg.setExtIndex(0);		// 0 Default index else file will be saved without extension
-                        TCHAR *fn = fDlg.doSaveDlg();
-                        if (!fn) break;
-                        generic_string fileName2save = fn;
+						generic_string fileName2save = fDlg.doSaveDlg();
+                        if (fileName2save.empty()) break;
 
                         if (i2Export > 0)
                         {
@@ -1450,6 +1514,8 @@ INT_PTR CALLBACK StringDlg::run_dlgProc(UINT Message, WPARAM wParam, LPARAM)
     {
         case WM_INITDIALOG :
         {
+			NppDarkMode::autoSubclassAndThemeChildControls(_hSelf);
+
 			// Re-route to Subclassed the edit control's proc if needed
 			if (_restrictedChars.length())
 			{
@@ -1478,7 +1544,53 @@ INT_PTR CALLBACK StringDlg::run_dlgProc(UINT Message, WPARAM wParam, LPARAM)
 				goToCenter();
 
 			return TRUE;
-        }
+		}
+
+		case WM_CTLCOLOREDIT:
+		{
+			if (NppDarkMode::isEnabled())
+			{
+				return NppDarkMode::onCtlColorSofter(reinterpret_cast<HDC>(wParam));
+			}
+			break;
+		}
+
+		case WM_CTLCOLORDLG:
+		case WM_CTLCOLORSTATIC:
+		{
+			if (NppDarkMode::isEnabled())
+			{
+				return NppDarkMode::onCtlColorDarker(reinterpret_cast<HDC>(wParam));
+			}
+			break;
+		}
+
+		case WM_PRINTCLIENT:
+		{
+			if (NppDarkMode::isEnabled())
+			{
+				return TRUE;
+			}
+			break;
+		}
+
+		case WM_ERASEBKGND:
+		{
+			if (NppDarkMode::isEnabled())
+			{
+				RECT rc = { 0 };
+				getClientRect(rc);
+				::FillRect(reinterpret_cast<HDC>(wParam), &rc, NppDarkMode::getDarkerBackgroundBrush());
+				return TRUE;
+			}
+			break;
+		}
+
+		case NPPM_INTERNAL_REFRESHDARKMODE:
+		{
+			NppDarkMode::autoThemeChildControls(_hSelf);
+			return TRUE;
+		}
 
         case WM_COMMAND :
         {
@@ -1505,6 +1617,7 @@ INT_PTR CALLBACK StringDlg::run_dlgProc(UINT Message, WPARAM wParam, LPARAM)
         default :
             return FALSE;
     }
+	return FALSE;
 }
 
 LRESULT StringDlg::customEditProc(HWND hEdit, UINT msg, WPARAM wParam, LPARAM lParam)
@@ -1583,6 +1696,19 @@ void StringDlg::HandlePaste(HWND hEdit)
 	}
 }
 
+void StylerDlg::move2CtrlRight(HWND hwndDlg, int ctrlID, HWND handle2Move, int handle2MoveWidth, int handle2MoveHeight)
+{
+    POINT p;
+    RECT rc;
+    ::GetWindowRect(::GetDlgItem(hwndDlg, ctrlID), &rc);
+
+    p.x = rc.right + NppParameters::getInstance()._dpiManager.scaleX(5);
+    p.y = rc.top + ((rc.bottom - rc.top) / 2) - handle2MoveHeight / 2;
+
+    ::ScreenToClient(hwndDlg, &p);
+    ::MoveWindow(handle2Move, p.x, p.y, handle2MoveWidth, handle2MoveHeight, TRUE);
+}
+
 INT_PTR CALLBACK StylerDlg::dlgProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     StylerDlg * dlg = (StylerDlg *)::GetProp(hwnd, TEXT("Styler dialog prop"));
@@ -1592,6 +1718,9 @@ INT_PTR CALLBACK StylerDlg::dlgProc(HWND hwnd, UINT message, WPARAM wParam, LPAR
     {
         case WM_INITDIALOG :
         {
+            NppDarkMode::setDarkTitleBar(hwnd);
+            NppDarkMode::autoSubclassAndThemeChildControls(hwnd);
+
             NativeLangSpeaker *pNativeLangSpeaker = nppParam.getNativeLangSpeaker();
             pNativeLangSpeaker->changeUserDefineLangPopupDlg(hwnd);
 
@@ -1639,9 +1768,6 @@ INT_PTR CALLBACK StylerDlg::dlgProc(HWND hwnd, UINT message, WPARAM wParam, LPAR
                 i = 0;
             ::SendMessage(hFontNameCombo, CB_SETCURSEL, i, 0);
 
-            HWND hFgColourStaticText = ::GetDlgItem(hwnd, IDC_STYLER_FG_STATIC);
-            HWND hBgColourStaticText = ::GetDlgItem(hwnd, IDC_STYLER_BG_STATIC);
-
             if (style._fgColor == COLORREF(-1))
                 style._fgColor = black;
 
@@ -1653,26 +1779,12 @@ INT_PTR CALLBACK StylerDlg::dlgProc(HWND hwnd, UINT message, WPARAM wParam, LPAR
             dlg->_pBgColour->init(dlg->_hInst, hwnd);
             dlg->_pBgColour->setColour(style._bgColor);
 
-            POINT p1, p2;
-            RECT rc1, rc2;
+            int w = nppParam._dpiManager.scaleX(25);
+            int h = nppParam._dpiManager.scaleY(25);
 
-            ::GetWindowRect(hFgColourStaticText, &rc1);
-            ::GetWindowRect(hBgColourStaticText, &rc2);
+            dlg->move2CtrlRight(hwnd, IDC_STYLER_FG_STATIC, dlg->_pFgColour->getHSelf(), w, h);
+            dlg->move2CtrlRight(hwnd, IDC_STYLER_BG_STATIC, dlg->_pBgColour->getHSelf(), w, h);
 
-            p1.x = rc1.left;    p1.y = rc1.top;
-            p2.x = rc2.left;    p2.y = rc2.top;
-
-            p1.x += rc1.right - rc1.left;
-            p2.x += rc2.right - rc2.left;
-
-            ::ScreenToClient(hwnd, &p1);
-            ::ScreenToClient(hwnd, &p2);
-
-            p1.x += 10; p2.x += 10;
-            p1.y -= 6; p2.y -= 6;
-
-            ::MoveWindow(dlg->_pFgColour->getHSelf(), p1.x, p1.y, 30, 30, TRUE);
-            ::MoveWindow(dlg->_pBgColour->getHSelf(), p2.x, p2.y, 30, 30, TRUE);
 
             dlg->_pFgColour->display();
             dlg->_pBgColour->display();
@@ -1683,6 +1795,51 @@ INT_PTR CALLBACK StylerDlg::dlgProc(HWND hwnd, UINT message, WPARAM wParam, LPAR
                 ::SendDlgItemMessage(hwnd, iter->first, BM_SETCHECK, style._nesting & iter->second, 0);
                 ::EnableWindow(::GetDlgItem(hwnd, iter->first), dlg->_enabledNesters & iter->second);
             }
+            return TRUE;
+        }
+
+        case WM_CTLCOLOREDIT:
+        {
+            if (NppDarkMode::isEnabled())
+            {
+                return NppDarkMode::onCtlColorSofter(reinterpret_cast<HDC>(wParam));
+            }
+            break;
+        }
+
+        case WM_CTLCOLORLISTBOX:
+        {
+            if (NppDarkMode::isEnabled())
+            {
+                return NppDarkMode::onCtlColor(reinterpret_cast<HDC>(wParam));
+            }
+            break;
+        }
+
+        case WM_CTLCOLORDLG:
+        case WM_CTLCOLORSTATIC:
+        {
+            if (NppDarkMode::isEnabled())
+            {
+                return NppDarkMode::onCtlColorDarker(reinterpret_cast<HDC>(wParam));
+            }
+            break;
+        }
+
+        case WM_PRINTCLIENT:
+        {
+            if (NppDarkMode::isEnabled())
+            {
+                return TRUE;
+            }
+            break;
+        }
+
+        case NPPM_INTERNAL_REFRESHDARKMODE:
+        {
+            NppDarkMode::setDarkTitleBar(hwnd);
+            NppDarkMode::autoThemeChildControls(hwnd);
+            ::SetWindowPos(hwnd, nullptr, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER | SWP_FRAMECHANGED);
             return TRUE;
         }
 
@@ -1796,4 +1953,5 @@ INT_PTR CALLBACK StylerDlg::dlgProc(HWND hwnd, UINT message, WPARAM wParam, LPAR
         default :
             return FALSE;
     }
+    return FALSE;
 }

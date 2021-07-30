@@ -168,3 +168,4 @@ plugins/plugins_dev.props
 plugins/BrowserWidget.props
 NppSaveAsAdmin
 SciLexer.sln
+RC*
