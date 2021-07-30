@@ -27,6 +27,7 @@
 
 
 #include "GoToLineDlg.h"
+#include "DarkMode\DarkModePlus.h"
 
 
 INT_PTR CALLBACK GoToLineDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM)
@@ -35,10 +36,20 @@ INT_PTR CALLBACK GoToLineDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM)
 	{
 		case WM_INITDIALOG :
 		{
+			NppDarkMode::autoSubclassAndThemeChildControls(_hSelf);
+
 			::SendDlgItemMessage(_hSelf, IDC_RADIO_GOTOLINE, BM_SETCHECK, TRUE, 0);
 			goToCenter();
 			return TRUE;
 		}
+
+		DMPlus_handleEdit
+		DMPlus_handleDLG
+		DMPlus_handlePrint
+		DMPlus_handleErase
+		DMPlus_handleRefresh
+
+
 		case WM_COMMAND : 
 		{
 			switch (wParam)
@@ -50,42 +61,8 @@ INT_PTR CALLBACK GoToLineDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM)
 
 				case IDOK :
                 {
-					int offset=0;
-                    int line = getLine(offset);
-					auto mode = _mode;
-					if(offset>0) {
-						if(mode==go2offsset) {
-							line+=offset;
-						} else {
-							mode = go2offsset;
-							(*_ppEditView)->execute(SCI_ENSUREVISIBLE, line-1);
-							line = (*_ppEditView)->execute(SCI_POSITIONFROMLINE, line-1)+offset;
-						}
-					}
-                    if (line>=0)
-                    {
-                        //display(false);
-                        //cleanLineEdit();
-						if (mode == go2line)
-						{
-							(*_ppEditView)->execute(SCI_ENSUREVISIBLE, line-1);
-							(*_ppEditView)->execute(SCI_GOTOLINE, line-1);
-						}
-						else
-						{
-							auto sci_line = (*_ppEditView)->execute(SCI_LINEFROMPOSITION, line);
-							(*_ppEditView)->execute(SCI_ENSUREVISIBLE, sci_line);
-							(*_ppEditView)->execute(SCI_GOTOPOS, line);
-						}
-                    }
-
-					SCNotification notification = {};
-					notification.nmhdr.code = SCN_PAINTED;
-					notification.nmhdr.hwndFrom = _hSelf;
-					notification.nmhdr.idFrom = ::GetDlgCtrlID(_hSelf);
-					::SendMessage(_hParent, WM_NOTIFY, LINKTRIGGERED, reinterpret_cast<LPARAM>(&notification));
-
-                    (*_ppEditView)->getFocus();
+					execGoToLn(_hSelf, ID_GOLINE_EDIT);
+					display(false);
                     return TRUE;
                 }
 
@@ -130,6 +107,7 @@ INT_PTR CALLBACK GoToLineDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM)
 		default :
 			return FALSE;
 	}
+	return FALSE;
 }
 
 void GoToLineDlg::updateLinesNumbers() const 
@@ -150,5 +128,102 @@ void GoToLineDlg::updateLinesNumbers() const
 
     ::SetDlgItemInt(_hSelf, ID_CURRLINE, current, FALSE);
     ::SetDlgItemInt(_hSelf, ID_LASTLINE, limit, FALSE);
+}
+
+int GoToLineDlg::getLine(int& outOffset, HWND hDlg, int controlID) 
+{
+	//BOOL isSuccessful;
+	//int line = ::GetDlgItemInt(_hSelf, ID_GOLINE_EDIT, &isSuccessful, FALSE);
+	//return (isSuccessful?line:-1);
+
+	const int max = 256;
+	TCHAR filters[max+1];
+
+	int len = GetDlgItemText(hDlg, controlID, filters, max);
+
+	bool intClosed=false;
+	outOffset=-1;
+	int number=-1;
+	int intVal, valval;
+	for(int i=0;i<len;i++) {
+		intVal = filters[i]-'0';
+		valval = intVal>=0&&intVal<=9;
+		if(!valval) {
+			if(number>=0) {
+				intClosed = true;
+				if(filters[i]==':') {
+					continue;
+				}
+				break;
+			}
+			if(outOffset>=0) {
+				break;
+			}
+		} else {
+			if(intClosed) {
+				if(outOffset==-1) {
+					outOffset = 0;
+				}
+			} else if(number==-1){
+				number = 0;
+			}
+		}
+		if(outOffset>=0) {
+			outOffset = outOffset*10+intVal;
+		}
+		else if(number>=0) {
+			number = number*10+intVal;
+		}
+	}
+
+	return number;
+}
+
+int GoToLineDlg::execGoToLn(HWND hDlg, int controlID)
+{
+	int offset=0;
+	int line = getLine(offset, hDlg, controlID);
+	auto mode = _mode;
+	if (hDlg!=_hSelf)
+	{
+		mode = go2line;
+	}
+	if(offset>0) 
+	{
+		if(mode==go2offsset) {
+			line+=offset;
+		} else {
+			mode = go2offsset;
+			(*_ppEditView)->execute(SCI_ENSUREVISIBLE, line-1);
+			line = (*_ppEditView)->execute(SCI_POSITIONFROMLINE, line-1)+offset;
+		}
+	}
+	if (line>=0)
+	{
+		//display(false);
+		//cleanLineEdit();
+		if (mode == go2line)
+		{
+			(*_ppEditView)->execute(SCI_ENSUREVISIBLE, line-1);
+			(*_ppEditView)->execute(SCI_GOTOLINE, line-1);
+		}
+		else
+		{
+			auto sci_line = (*_ppEditView)->execute(SCI_LINEFROMPOSITION, line);
+			(*_ppEditView)->execute(SCI_ENSUREVISIBLE, sci_line);
+			(*_ppEditView)->execute(SCI_GOTOPOS, line);
+		}
+	}
+
+	SCNotification notification = {};
+	notification.nmhdr.code = SCN_PAINTED;
+	notification.nmhdr.hwndFrom = _hSelf;
+	notification.nmhdr.idFrom = ::GetDlgCtrlID(_hSelf);
+	::SendMessage(_hParent, WM_NOTIFY, LINKTRIGGERED, reinterpret_cast<LPARAM>(&notification));
+
+
+	(*_ppEditView)->getFocus();
+
+	return line;
 }
 

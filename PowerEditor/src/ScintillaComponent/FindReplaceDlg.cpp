@@ -33,6 +33,7 @@
 #include "localization.h"
 #include "Notepad_plus.h"
 #include "Utf8.h"
+#include "DarkMode\DarkModePlus.h"
 
 
 extern NppParameters *nppParms;
@@ -294,11 +295,11 @@ void FindReplaceDlg::create(int dialogID, bool isRTL, bool msgDestParent)
 	int tabDpiDynamicalHeight = nppParms->_dpiManager.scaleY(13);
 	_tab.setFont(TEXT("Tahoma"), tabDpiDynamicalHeight);
 	
-	const TCHAR *find = TEXT("Find");
-	const TCHAR *replace = TEXT("Replace");
-	const TCHAR *findInFiles = TEXT("Find in Files");
-	const TCHAR *findInProjects = TEXT("Find in Projects");
-	const TCHAR *mark = TEXT("Mark");
+	const TCHAR *find = TEXT("查找");
+	const TCHAR *replace = TEXT("替换");
+	const TCHAR *findInFiles = TEXT("文件查找");
+	const TCHAR *findInProjects = TEXT("工程中查找");
+	const TCHAR *mark = TEXT("标记");
 
 	_tab.insertAtEnd(find);
 	_tab.insertAtEnd(replace);
@@ -726,9 +727,22 @@ INT_PTR CALLBACK FindInFinderDlg::run_dlgProc(UINT message, WPARAM wParam, LPARA
 		{
 			NativeLangSpeaker *pNativeSpeaker = nppParms->getNativeLangSpeaker();
 			pNativeSpeaker->changeDlgLang(_hSelf, "FindInFinder");
+
+			EnableThemeDialogTexture(_hSelf, ETDT_ENABLETAB);
+			NppDarkMode::autoSubclassAndThemeChildControls(_hSelf);
+
 			initFromOptions();
 		}
 		return TRUE;
+
+		DMPlus_handleEdit
+
+		case WM_CTLCOLORLISTBOX:
+		DMPlus_handleDLG
+
+		DMPlus_handlePrint
+		DMPlus_handleErase
+		DMPlus_handleRefresh
 
 		case WM_COMMAND:
 		{
@@ -752,6 +766,7 @@ INT_PTR CALLBACK FindInFinderDlg::run_dlgProc(UINT message, WPARAM wParam, LPARA
 		default:
 			return FALSE;
 	}
+	return FALSE;
 }
 
 
@@ -829,64 +844,24 @@ INT_PTR CALLBACK FindReplaceDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 			return 0;
 		}
 
-		case WM_CTLCOLOREDIT:
-		{
-			if (NppDarkMode::isEnabled())
-			{
-				return NppDarkMode::onCtlColorSofter(reinterpret_cast<HDC>(wParam));
-			}
-			break;
-		}
-
+		DMPlus_handleEdit
+		
 		case WM_CTLCOLORLISTBOX:
-		case WM_CTLCOLORDLG:
-		case WM_CTLCOLORSTATIC:
-		{
-			if (NppDarkMode::isEnabled())
-			{
-				return NppDarkMode::onCtlColorDarker(reinterpret_cast<HDC>(wParam));
-			}
-			break;
-		}
+		DMPlus_handleDLG
 
-		case WM_PRINTCLIENT:
-		{
-			if (NppDarkMode::isEnabled())
-			{
-				return TRUE;
-			}
-			break;
-		}
-
-		case WM_ERASEBKGND:
-		{
-			if (NppDarkMode::isEnabled())
-			{
-				RECT rcClient = { 0 };
-				GetClientRect(_hSelf, &rcClient);
-				FillRect((HDC)wParam, &rcClient, NppDarkMode::getBackgroundBrush());
-				return TRUE;
-			}
-			else
-			{
-				HWND hParent = ::GetParent(_hSelf);
-				HDC winDC = (HDC)wParam;
-				//RTL handling
-				POINT pt = { 0, 0 }, ptOrig = { 0, 0 };
-				::MapWindowPoints(_hSelf, hParent, &pt, 1);
-				::OffsetWindowOrgEx((HDC)wParam, pt.x, pt.y, &ptOrig);
-				LRESULT lResult = SendMessage(hParent, WM_ERASEBKGND, reinterpret_cast<WPARAM>(winDC), 0);
-				::SetWindowOrgEx(winDC, ptOrig.x, ptOrig.y, NULL);
-				return (BOOL)lResult;
-			}
-			break;
-		}
+		DMPlus_handlePrint
+		DMPlus_handleErase
 
 		case NPPM_INTERNAL_REFRESHDARKMODE:
 		{
 			NppDarkMode::setDarkTooltips(_shiftTrickUpTip, NppDarkMode::ToolTipsType::tooltip);
 			NppDarkMode::setDarkTooltips(_2ButtonsTip, NppDarkMode::ToolTipsType::tooltip);
 			NppDarkMode::setDarkTooltips(_filterTip, NppDarkMode::ToolTipsType::tooltip);
+
+			if (_statusbarTooltipWnd)
+			{
+				NppDarkMode::setDarkTooltips(_statusbarTooltipWnd, NppDarkMode::ToolTipsType::tooltip);
+			}
 
 			HWND finder = getHFindResults();
 			if (finder)
@@ -3812,6 +3787,8 @@ void FindReplaceDlg::drawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
 				rect.right = rect.left + s;
 				rect.bottom = rect.top + s;
 				_statusbarTooltipWnd = CreateToolTipRect(1, _statusBar.getHSelf(), _hInst, const_cast<PTSTR>(_statusbarTooltipMsg.c_str()), rect);
+
+				NppDarkMode::setDarkTooltips(_statusbarTooltipWnd, NppDarkMode::ToolTipsType::tooltip);
 			}
 		}
 		else
@@ -4205,6 +4182,8 @@ void Finder::setFinderStyle()
 	// Set global styles for the finder
 	_scintView.performGlobalStyles();
 	
+	NppDarkMode::setBorder(_scintView.getHSelf()); // ???
+
 	// Set current line background color for the finder
 	const TCHAR * lexerName = ScintillaEditView::langNames[L_SEARCHRESULT].lexerName;
 	LexerStyler *pStyler = nppParms->getLStylerArray().getLexerStylerByName(lexerName);
@@ -4410,7 +4389,9 @@ void FindIncrementDlg::init(HINSTANCE hInst, HWND hPere, FindReplaceDlg *pFRDlg,
 		throw std::runtime_error("FindIncrementDlg::init : Parameter pFRDlg is null");
 
 	_pFRDlg = pFRDlg;
-	create(IDD_INCREMENT_FIND, isRTL);
+
+	const NppGUI & nppGui = nppParms->getNppGUI();
+	create(nppGui._enlargedFontFindDlg?IDD_INCREMENT_FIND_LARGER:IDD_INCREMENT_FIND, isRTL);
 	_isRTL = isRTL;
 }
 
@@ -4423,8 +4404,9 @@ void FindIncrementDlg::destroy()
 	}
 }
 
-void FindIncrementDlg::display(bool toShow) const
+void FindIncrementDlg::display(int focusId) const
 {
+	bool toShow = focusId!=0;
 	if (!_pRebar)
 	{
 		Window::display(toShow);
@@ -4432,9 +4414,17 @@ void FindIncrementDlg::display(bool toShow) const
 	}
 	if (toShow)
 	{
-		::SetFocus(::GetDlgItem(_hSelf, IDC_INCFINDTEXT));
+		if (focusId==1)
+		{
+			focusId = IDC_INCFINDTEXT;
+		}
+		else if (focusId==2)
+		{
+			focusId = IDC_INCGOTOTEXT;
+		}
+		::SetFocus(::GetDlgItem(_hSelf, focusId));
 		// select the whole find editor text
-		::SendDlgItemMessage(_hSelf, IDC_INCFINDTEXT, EM_SETSEL, 0, -1);
+		::SendDlgItemMessage(_hSelf, focusId, EM_SETSEL, 0, -1);
 	}
 	_pRebar->setIDVisible(_rbBand.wID, toShow);
 }
@@ -4443,14 +4433,43 @@ INT_PTR CALLBACK FindIncrementDlg::run_dlgProc(UINT message, WPARAM wParam, LPAR
 {
 	switch (message)
 	{
+		case WM_INITDIALOG:
+		{
+			LRESULT lr = DefWindowProc(getHSelf(), message, wParam, lParam);
+
+			NppDarkMode::setBorder(::GetDlgItem(getHSelf(), IDC_INCFINDTEXT));
+			NppDarkMode::autoSubclassAndThemeChildControls(getHSelf());
+			
+			
+			const NppGUI & nppGui = nppParms->getNppGUI();
+			if (nppGui._monospacedFontFindDlg||nppGui._enlargedFontFindDlg)
+			{
+				const TCHAR* fontName = _T("Courier New");
+				const long nFontSize = nppGui._enlargedFontFindDlg?15:8;
+
+				LOGFONT logFont = { 0 };
+				HDC hdc = GetDC(_hSelf);
+				logFont.lfHeight = -MulDiv(nFontSize, GetDeviceCaps(hdc, LOGPIXELSY), 72);
+				ReleaseDC(_hSelf, hdc);
+				if(nppGui._monospacedFontFindDlg) {
+					_tcscpy_s(logFont.lfFaceName, fontName);
+				}
+				auto _hMonospaceFont = CreateFontIndirect(&logFont);
+
+				SendMessage(::GetDlgItem(_hSelf, IDC_INCFINDTEXT), WM_SETFONT, (WPARAM)_hMonospaceFont, MAKELPARAM(true, 0));
+				SendMessage(::GetDlgItem(_hSelf, IDC_INCGOTOTEXT), WM_SETFONT, (WPARAM)_hMonospaceFont, MAKELPARAM(true, 0));
+			}
+			return lr;
+		}
+
 		// Make edit field red if not found
 		case WM_CTLCOLOREDIT :
 		{
 			auto hdc = reinterpret_cast<HDC>(wParam);
-
+			bool isEtSearch = IDC_INCFINDTEXT==GetWindowLong((HWND)lParam, GWL_ID);
 			if (NppDarkMode::isEnabled())
 			{
-				if (FSNotFound != getFindStatus())
+				if (!isEtSearch || FSNotFound != getFindStatus())
 				{
 					return NppDarkMode::onCtlColorSofter(hdc);
 				}
@@ -4462,7 +4481,7 @@ INT_PTR CALLBACK FindIncrementDlg::run_dlgProc(UINT message, WPARAM wParam, LPAR
 
 			// if the text not found modify the background color of the editor
 			static HBRUSH hBrushBackground = CreateSolidBrush(BCKGRD_COLOR);
-			if (FSNotFound != getFindStatus())
+			if (!isEtSearch || FSNotFound != getFindStatus())
 				return FALSE; // text found, use the default color
 
 			// text not found
@@ -4471,30 +4490,8 @@ INT_PTR CALLBACK FindIncrementDlg::run_dlgProc(UINT message, WPARAM wParam, LPAR
 			return reinterpret_cast<LRESULT>(hBrushBackground);
 		}
 		
-		case WM_CTLCOLORDLG:
-		case WM_CTLCOLORSTATIC:
-		{
-			if (!NppDarkMode::isEnabled())
-			{
-				return DefWindowProc(getHSelf(), message, wParam, lParam);
-			}
-
-			return NppDarkMode::onCtlColor(reinterpret_cast<HDC>(wParam));
-		}
-
-		case NPPM_INTERNAL_REFRESHDARKMODE:
-		{
-			NppDarkMode::autoThemeChildControls(getHSelf());
-			return TRUE;
-		}
-
-		case WM_INITDIALOG:
-		{
-			LRESULT lr = DefWindowProc(getHSelf(), message, wParam, lParam);
-
-			NppDarkMode::autoSubclassAndThemeChildControls(getHSelf());
-			return lr;
-		}
+		DMPlus_handleDLG
+		DMPlus_handleRefresh
 
 		case WM_COMMAND : 
 		{
@@ -4526,6 +4523,12 @@ INT_PTR CALLBACK FindIncrementDlg::run_dlgProc(UINT message, WPARAM wParam, LPAR
 				case IDC_INCFINDPREVOK:
 				case IDC_INCFINDNXTOK:
 				case IDOK:
+					if (LOWORD(wParam) == IDOK && ::GetFocus() == GetDlgItem(_hSelf, IDC_INCGOTOTEXT) )
+					{
+						//LogIs(2, "OKOK");
+						run_dlgProc(WM_COMMAND, IDC_INCGOTOBTN, 0);
+						return TRUE;
+					}
 					updateSearch = true;
 					advance = true;
 					forward = (LOWORD(wParam) == IDC_INCFINDNXTOK) ||
@@ -4544,6 +4547,34 @@ INT_PTR CALLBACK FindIncrementDlg::run_dlgProc(UINT message, WPARAM wParam, LPAR
 					updateHiLight = true;
 					break;
 
+				case IDC_INCGOTOBTN:
+				{
+					// 增量 GOTO
+					nppApp->_goToLineDlg.execGoToLn(_hSelf, IDC_INCGOTOTEXT);
+				} return TRUE;
+
+				case IDC_INCGOTOPASTEBTN:
+				{
+					// 增量 GOTO 粘贴
+					if (OpenClipboard(NULL))
+					{
+						HGLOBAL hClipboardData = GetClipboardData(CF_UNICODETEXT);
+						if (hClipboardData != NULL)
+						{
+							WCHAR *pchData = (WCHAR*) GlobalLock(hClipboardData);
+							if (pchData != NULL)
+							{
+								//LogIs(2, pchData);
+								::SendDlgItemMessage(_hSelf, IDC_INCGOTOTEXT, WM_SETTEXT, 0, reinterpret_cast<LPARAM>(pchData));
+								::SendDlgItemMessage(_hSelf, IDC_INCGOTOTEXT, EM_SETSEL, 0, -1);
+								::SetFocus(::GetDlgItem(_hSelf, IDC_INCGOTOTEXT));
+								GlobalUnlock(hClipboardData);
+							}
+						}
+						CloseClipboard();
+					}
+				} return TRUE;
+
 				case IDC_INCFINDTEXT:
 					if (HIWORD(wParam) == EN_CHANGE)
 					{
@@ -4553,6 +4584,7 @@ INT_PTR CALLBACK FindIncrementDlg::run_dlgProc(UINT message, WPARAM wParam, LPAR
 						break;
 					}
 					// treat other edit notifications as unhandled
+
 				default:
 					return DefWindowProc(getHSelf(), message, wParam, lParam);
 			}
@@ -4593,15 +4625,25 @@ INT_PTR CALLBACK FindIncrementDlg::run_dlgProc(UINT message, WPARAM wParam, LPAR
 
 		case WM_ERASEBKGND:
 		{
-			HWND hParent = ::GetParent(_hSelf);
-			HDC winDC = (HDC)wParam;
-			//RTL handling
-			POINT pt = {0, 0}, ptOrig = {0, 0};
-			::MapWindowPoints(_hSelf, hParent, &pt, 1);
-			::OffsetWindowOrgEx((HDC)wParam, pt.x, pt.y, &ptOrig);
-			LRESULT lResult = SendMessage(hParent, WM_ERASEBKGND, reinterpret_cast<WPARAM>(winDC), 0);
-			::SetWindowOrgEx(winDC, ptOrig.x, ptOrig.y, NULL);
-			return (BOOL)lResult;
+			if (NppDarkMode::isEnabled())
+			{
+				RECT rcClient = { 0 };
+				GetClientRect(_hSelf, &rcClient);
+				::FillRect(reinterpret_cast<HDC>(wParam), &rcClient, NppDarkMode::getDarkerBackgroundBrush());
+				return TRUE;
+			}
+			else
+			{
+				HWND hParent = ::GetParent(_hSelf);
+				HDC winDC = (HDC)wParam;
+				//RTL handling
+				POINT pt = { 0, 0 }, ptOrig = { 0, 0 };
+				::MapWindowPoints(_hSelf, hParent, &pt, 1);
+				::OffsetWindowOrgEx((HDC)wParam, pt.x, pt.y, &ptOrig);
+				LRESULT lResult = SendMessage(hParent, WM_ERASEBKGND, reinterpret_cast<WPARAM>(winDC), 0);
+				::SetWindowOrgEx(winDC, ptOrig.x, ptOrig.y, NULL);
+				return (BOOL)lResult;
+			}
 		}
 	}
 	return DefWindowProc(getHSelf(), message, wParam, lParam);
@@ -4684,10 +4726,10 @@ void FindIncrementDlg::addToRebar(ReBar * rebar)
 const TCHAR Progress::cClassName[] = TEXT("NppProgressClass");
 const TCHAR Progress::cDefaultHeader[] = TEXT("Operation progress...");
 const int Progress::cBackgroundColor = COLOR_3DFACE;
-const int Progress::cPBwidth = 600;
-const int Progress::cPBheight = 10;
-const int Progress::cBTNwidth = 80;
-const int Progress::cBTNheight = 25;
+const int Progress::cPBwidth = NppParameters::getInstance()._dpiManager.scaleX(550);
+const int Progress::cPBheight = NppParameters::getInstance()._dpiManager.scaleY(10);
+const int Progress::cBTNwidth = NppParameters::getInstance()._dpiManager.scaleX(80);
+const int Progress::cBTNheight = NppParameters::getInstance()._dpiManager.scaleY(25);
 
 
 volatile LONG Progress::refCount = 0;
@@ -4736,6 +4778,9 @@ HWND Progress::open(HWND hCallerWnd, const TCHAR* header)
 	// Create manually reset non-signalled event
 	_hActiveState = ::CreateEvent(NULL, TRUE, FALSE, NULL);
 	if (!_hActiveState)
+		return NULL;
+
+	if (!hCallerWnd)
 		return NULL;
 
 	_hCallerWnd = hCallerWnd;
@@ -4822,6 +4867,8 @@ int Progress::thread()
 
 int Progress::createProgressWindow()
 {
+	DPIManager& dpiManager = NppParameters::getInstance()._dpiManager;
+
 	_hwnd = ::CreateWindowEx(
 		WS_EX_APPWINDOW | WS_EX_TOOLWINDOW | WS_EX_OVERLAPPEDWINDOW,
 		cClassName, _header, WS_POPUP | WS_CAPTION,
@@ -4830,34 +4877,50 @@ int Progress::createProgressWindow()
 	if (!_hwnd)
 		return -1;
 
-	int width = cPBwidth + 10;
-	int height = cPBheight + cBTNheight + 35;
-	RECT win = adjustSizeAndPos(width, height);
-	::MoveWindow(_hwnd, win.left, win.top,
-		win.right - win.left, win.bottom - win.top, TRUE);
+	int widthPadding = dpiManager.scaleX(15);
+	int width = cPBwidth + widthPadding;
 
-	::GetClientRect(_hwnd, &win);
-	width = win.right - win.left;
-	height = win.bottom - win.top;
+	int textHeight = dpiManager.scaleY(20);
+	int progressBarPadding = dpiManager.scaleY(10);
+	int morePadding = dpiManager.scaleY(45);
+	int height = cPBheight + cBTNheight + textHeight + progressBarPadding + morePadding;
 
+
+	POINT center;
+	RECT callerRect;
+	::GetWindowRect(_hCallerWnd, &callerRect);
+	center.x = (callerRect.left + callerRect.right) / 2;
+	center.y = (callerRect.top + callerRect.bottom) / 2;
+
+	int x = center.x - width / 2;
+	int y = center.y - height / 2;
+	::MoveWindow(_hwnd, x, y, width, height, TRUE);
+
+
+	int xStartPos = dpiManager.scaleX(5);
+	int yTextPos = dpiManager.scaleY(5);
 	_hPText = ::CreateWindowEx(0, TEXT("STATIC"), TEXT(""),
 		WS_CHILD | WS_VISIBLE | BS_TEXT | SS_PATHELLIPSIS,
-		5, 5,
-		width - 10, 20, _hwnd, NULL, _hInst, NULL);
+		xStartPos, yTextPos,
+		width - widthPadding, textHeight, _hwnd, NULL, _hInst, NULL);
+
 	HFONT hf = (HFONT)::GetStockObject(DEFAULT_GUI_FONT);
 	if (hf)
 		::SendMessage(_hPText, WM_SETFONT, reinterpret_cast<WPARAM>(hf), MAKELPARAM(TRUE, 0));
 
 	_hPBar = ::CreateWindowEx(0, PROGRESS_CLASS, TEXT("Progress Bar"),
 		WS_CHILD | WS_VISIBLE | PBS_SMOOTH,
-		5, 25, width - 10, cPBheight,
+		xStartPos, yTextPos + textHeight,
+		width - widthPadding, cPBheight,
 		_hwnd, NULL, _hInst, NULL);
 	SendMessage(_hPBar, PBM_SETRANGE, 0, MAKELPARAM(0, 100));
 
+
 	_hBtn = ::CreateWindowEx(0, TEXT("BUTTON"), TEXT("Cancel"),
 		WS_CHILD | WS_VISIBLE | BS_DEFPUSHBUTTON | BS_TEXT,
-		(width - cBTNwidth) / 2, height - cBTNheight - 5,
-		cBTNwidth, cBTNheight, _hwnd, NULL, _hInst, NULL);
+		(width - cBTNwidth) / 2, yTextPos + textHeight + cPBheight + progressBarPadding,
+		cBTNwidth, cBTNheight,
+		_hwnd, NULL, _hInst, NULL);
 
 	if (hf)
 		::SendMessage(_hBtn, WM_SETFONT, reinterpret_cast<WPARAM>(hf), MAKELPARAM(TRUE, 0));
@@ -4868,81 +4931,7 @@ int Progress::createProgressWindow()
 	return 0;
 }
 
-
-RECT Progress::adjustSizeAndPos(int width, int height)
-{
-	RECT maxWin;
-	maxWin.left		= ::GetSystemMetrics(SM_XVIRTUALSCREEN);
-	maxWin.top		= ::GetSystemMetrics(SM_YVIRTUALSCREEN);
-	maxWin.right	= ::GetSystemMetrics(SM_CXVIRTUALSCREEN) + maxWin.left;
-	maxWin.bottom	= ::GetSystemMetrics(SM_CYVIRTUALSCREEN) + maxWin.top;
-
-	POINT center;
-
-	if (_hCallerWnd)
-	{
-		RECT biasWin;
-		::GetWindowRect(_hCallerWnd, &biasWin);
-		center.x = (biasWin.left + biasWin.right) / 2;
-		center.y = (biasWin.top + biasWin.bottom) / 2;
-	}
-	else
-	{
-		center.x = (maxWin.left + maxWin.right) / 2;
-		center.y = (maxWin.top + maxWin.bottom) / 2;
-	}
-
-	RECT win = maxWin;
-	win.right = win.left + width;
-	win.bottom = win.top + height;
-
-	DWORD style = static_cast<DWORD>(::GetWindowLongPtr(_hwnd, GWL_EXSTYLE));
-	::AdjustWindowRectEx(&win, static_cast<DWORD>(::GetWindowLongPtr(_hwnd, GWL_STYLE)), FALSE, style);
-
-	width = win.right - win.left;
-	height = win.bottom - win.top;
-
-	if (width < maxWin.right - maxWin.left)
-	{
-		win.left = center.x - width / 2;
-		if (win.left < maxWin.left)
-			win.left = maxWin.left;
-		win.right = win.left + width;
-		if (win.right > maxWin.right)
-		{
-			win.right = maxWin.right;
-			win.left = win.right - width;
-		}
-	}
-	else
-	{
-		win.left = maxWin.left;
-		win.right = maxWin.right;
-	}
-
-	if (height < maxWin.bottom - maxWin.top)
-	{
-		win.top = center.y - height / 2;
-		if (win.top < maxWin.top)
-			win.top = maxWin.top;
-		win.bottom = win.top + height;
-		if (win.bottom > maxWin.bottom)
-		{
-			win.bottom = maxWin.bottom;
-			win.top = win.bottom - height;
-		}
-	}
-	else
-	{
-		win.top = maxWin.top;
-		win.bottom = maxWin.bottom;
-	}
-
-	return win;
-}
-
-
-LRESULT APIENTRY Progress::wndProc(HWND hwnd, UINT umsg, WPARAM wparam, LPARAM lparam)
+LRESULT APIENTRY Progress::wndProc(HWND hwnd, UINT umsg, WPARAM wParam, LPARAM lparam)
 {
 	switch (umsg)
 	{
@@ -4951,6 +4940,21 @@ LRESULT APIENTRY Progress::wndProc(HWND hwnd, UINT umsg, WPARAM wparam, LPARAM l
 			Progress* pw = reinterpret_cast<Progress*>(reinterpret_cast<LPCREATESTRUCT>(lparam)->lpCreateParams);
 			::SetWindowLongPtr(hwnd, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(pw));
 			return 0;
+		}
+
+		DMPlus_handleDLG
+
+		case WM_ERASEBKGND:
+		{
+			if (NppDarkMode::isEnabled())
+			{
+				RECT rc = { 0 };
+				GetClientRect(hwnd, &rc);
+				::FillRect(reinterpret_cast<HDC>(wParam), &rc, NppDarkMode::getDarkerBackgroundBrush());
+				return TRUE;
+			}
+
+			break;
 		}
 
 		case WM_SETFOCUS:
@@ -4962,7 +4966,7 @@ LRESULT APIENTRY Progress::wndProc(HWND hwnd, UINT umsg, WPARAM wparam, LPARAM l
 		}
 
 		case WM_COMMAND:
-			if (HIWORD(wparam) == BN_CLICKED)
+			if (HIWORD(wParam) == BN_CLICKED)
 			{
 				Progress* pw = reinterpret_cast<Progress*>(static_cast<LONG_PTR>(::GetWindowLongPtr(hwnd, GWLP_USERDATA)));
 				::ResetEvent(pw->_hActiveState);
@@ -4977,5 +4981,5 @@ LRESULT APIENTRY Progress::wndProc(HWND hwnd, UINT umsg, WPARAM wparam, LPARAM l
 			return 0;
 	}
 
-	return ::DefWindowProc(hwnd, umsg, wparam, lparam);
+	return ::DefWindowProc(hwnd, umsg, wParam, lparam);
 }

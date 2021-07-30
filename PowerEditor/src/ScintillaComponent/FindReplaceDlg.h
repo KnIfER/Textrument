@@ -470,7 +470,7 @@ public :
 	FindIncrementDlg() = default;
 	void init(HINSTANCE hInst, HWND hPere, FindReplaceDlg *pFRDlg, bool isRTL = false);
 	virtual void destroy();
-	virtual void display(bool toShow = true) const;
+	void display(int focusId = IDC_INCFINDTEXT) const;
 
 	void setSearchText(const TCHAR * txt2find, bool) {
 		::SendDlgItemMessage(_hSelf, IDC_INCFINDTEXT, WM_SETTEXT, 0, reinterpret_cast<LPARAM>(txt2find));
@@ -506,7 +506,7 @@ public:
 	Progress(const Progress&) = delete;
 	const Progress& operator=(const Progress&) = delete;
 
-	HWND open(HWND hCallerWnd = NULL, const TCHAR* header = NULL);
+	HWND open(HWND hCallerWnd, const TCHAR* header = NULL);
 	void close();
 
 	bool isCancelled() const
@@ -540,7 +540,6 @@ private:
 
 	int thread();
 	int createProgressWindow();
-	RECT adjustSizeAndPos(int width, int height);
 
 	HINSTANCE _hInst = nullptr;
 	volatile HWND _hwnd = nullptr;

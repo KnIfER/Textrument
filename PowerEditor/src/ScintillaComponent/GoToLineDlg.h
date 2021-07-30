@@ -61,6 +61,10 @@ public :
             ::SetFocus(::GetDlgItem(_hSelf, ID_GOLINE_EDIT));
     };
 
+	int execGoToLn(HWND hDlg, int controlID);
+
+	int getLine(int& outOffset, HWND hDlg, int controlID);
+
 protected :
 	enum mode {go2line, go2offsset};
 	mode _mode = go2line;
@@ -74,54 +78,5 @@ private :
     void cleanLineEdit() const {
         ::SetDlgItemText(_hSelf, ID_GOLINE_EDIT, TEXT(""));
     };
-
-    int getLine(int& outOffset) const {
-		//BOOL isSuccessful;
-		//int line = ::GetDlgItemInt(_hSelf, ID_GOLINE_EDIT, &isSuccessful, FALSE);
-		//return (isSuccessful?line:-1);
-		
-		const int max = 256;
-		TCHAR filters[max+1];
-
-		int len = GetDlgItemText(_hSelf, ID_GOLINE_EDIT, filters, max);
-
-		bool intClosed=false;
-		outOffset=-1;
-		int number=-1;
-		int intVal, valval;
-		for(int i=0;i<len;i++) {
-			intVal = filters[i]-'0';
-			valval = intVal>=0&&intVal<=9;
-			if(!valval) {
-				if(number>=0) {
-					intClosed = true;
-					if(filters[i]==':') {
-						continue;
-					}
-					break;
-				}
-				if(outOffset>=0) {
-					break;
-				}
-			} else {
-				if(intClosed) {
-					if(outOffset==-1) {
-						outOffset = 0;
-					}
-				} else if(number==-1){
-					number = 0;
-				}
-			}
-			if(outOffset>=0) {
-				outOffset = outOffset*10+intVal;
-			}
-			else if(number>=0) {
-				number = number*10+intVal;
-			}
-		}
-
-		return number;
-    };
-
 };
 
