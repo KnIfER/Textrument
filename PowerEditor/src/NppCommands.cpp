@@ -1145,6 +1145,12 @@ void Notepad_plus::command(int id)
 		}
 		break;
 
+		case IDM_SEARCH_GOTOINCREMENT :
+		{
+			_incrementFindDlg.display(2);
+		}
+		break;
+
 		case IDM_SEARCH_FINDNEXT :
 		case IDM_SEARCH_FINDPREV :
 		{
@@ -2927,7 +2933,8 @@ void Notepad_plus::command(int id)
 		{
 			//refer to IDM_LANGSTYLE_CONFIG_DLG below.
 
-			if(!_pShortcutMapper) {
+			if(!_pShortcutMapper) 
+			{
 				_pShortcutMapper = new ShortcutMapper;
 			}
             GridState st = id==IDM_SETTING_SHORTCUT_MAPPER_MACRO?STATE_MACRO:id==IDM_SETTING_SHORTCUT_MAPPER_RUN?STATE_USER:STATE_MENU;

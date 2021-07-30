@@ -162,7 +162,7 @@
       <ProgramDatabaseFile>$(OutDir)Textrument.pdb</ProgramDatabaseFile>
       <SubSystem>Windows</SubSystem>
       <MinimumRequiredVersion>5.02</MinimumRequiredVersion>
-      <AdditionalLibraryDirectories>..\..\scintilla\bin;$(IntDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(IntDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <Manifest>
       <AdditionalManifestFiles>..\src\dpiAware.manifest;%(AdditionalManifestFiles)</AdditionalManifestFiles>
@@ -474,6 +474,7 @@ copy ..\src\contextMenu.xml ..\bin64\contextMenu.xml
     <Image Include="..\src\icons\functionList.ico" />
     <Image Include="..\src\icons\imprim_off.ico" />
     <Image Include="..\src\icons\imprim_on.ico" />
+    <Image Include="..\src\icons\incrementalBg.bmp" />
     <Image Include="..\src\icons\indentGuide.bmp" />
     <Image Include="..\src\icons\indentGuide_off.ico" />
     <Image Include="..\src\icons\indentGuide_on.ico" />
@@ -620,6 +621,7 @@ copy ..\src\contextMenu.xml ..\bin64\contextMenu.xml
   <ItemGroup>
     <ClInclude Include="..\src\clipboardFormats.h" />
     <ClInclude Include="..\src\DarkMode\DarkMode.h" />
+    <ClInclude Include="..\src\DarkMode\DarkModePlus.h" />
     <ClInclude Include="..\src\DarkMode\IatHook.h" />
     <ClInclude Include="..\src\DarkMode\UAHMenuBar.h" />
     <ClInclude Include="..\src\dpiManager.h" />
@@ -633,6 +635,7 @@ copy ..\src\contextMenu.xml ..\bin64\contextMenu.xml
     <ClInclude Include="..\src\NppDarkMode.h" />
     <ClInclude Include="..\src\ScintillaComponent\columnEditor_rc.h" />
     <ClInclude Include="..\src\ScintillaComponent\FindReplaceDlg_rc.h" />
+    <ClInclude Include="..\src\ScintillaComponent\resource.h" />
     <ClInclude Include="..\src\ScintillaComponent\ScintillaRef.h" />
     <ClInclude Include="..\src\Utf8.h" />
     <ClInclude Include="..\src\WinControls\AboutDlg\AboutDlg.h" />

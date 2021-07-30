@@ -108,8 +108,14 @@ bool ShouldAppsUseDarkMode()
 	return _ShouldAppsUseDarkMode();
 }
 
+#include "InsituDebug.h"
 bool AllowDarkModeForWindow(HWND hWnd, bool allow)
 {
+	if ((((LONG_PTR)_AllowDarkModeForWindow)&0xFFFFFFFF)==0)
+	{ // debug av
+		return false;
+	}
+
 	if (g_darkModeSupported && _AllowDarkModeForWindow)
 		return _AllowDarkModeForWindow(hWnd, allow);
 	return false;
@@ -139,6 +145,10 @@ void RefreshTitleBarThemeColor(HWND hWnd)
 	BOOL dark = FALSE;
 	if (_IsDarkModeAllowedForWindow && _ShouldAppsUseDarkMode)
 	{
+		//if (0x0000000074e04be0==(LONG_PTR)_ShouldAppsUseDarkMode)
+		//{ // debug av
+		//	return;
+		//}
 		if (_IsDarkModeAllowedForWindow(hWnd) && _ShouldAppsUseDarkMode() && !IsHighContrast())
 		{
 			dark = TRUE;

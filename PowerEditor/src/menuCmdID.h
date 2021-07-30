@@ -271,6 +271,8 @@
     #define    IDM_SEARCH_MARKONEEXT4          (IDM_SEARCH + 65)
     #define    IDM_SEARCH_MARKONEEXT5          (IDM_SEARCH + 66)
 
+    #define    IDM_SEARCH_GOTOINCREMENT          (IDM_SEARCH + 200)
+
 #define    IDM_MISC    (IDM + 3500)
 	#define    IDM_FILESWITCHER_FILESCLOSE            (IDM_MISC + 1)
 	#define    IDM_FILESWITCHER_FILESCLOSEOTHERS      (IDM_MISC + 2)

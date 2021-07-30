@@ -407,8 +407,9 @@ void VerticalFileSwitcherListView::resizeColumns(int totalWidth)
 	bool isExtColumn = nppParams.getNppGUI()._fileSwitcherWithExtColumn;
 	if (isExtColumn)
 	{
-		ListView_SetColumnWidth(_hSelf, 0, totalWidth - 50);
-		ListView_SetColumnWidth(_hSelf, 1, 50);
+		int extWidthDyn = nppParams._dpiManager.scaleX(50);
+		ListView_SetColumnWidth(_hSelf, 0, totalWidth - extWidthDyn);
+		ListView_SetColumnWidth(_hSelf, 1, extWidthDyn);
 	}
 	else
 	{

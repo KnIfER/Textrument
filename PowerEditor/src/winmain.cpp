@@ -574,7 +574,7 @@ LRESULT CALLBACK MinBoxMouseProc(int nCode, WPARAM wParam,  LPARAM lParam)
 
 bool hookNcRightButtonDown(MSG & msg)
 {
-	if (msg.wParam==HTMINBUTTON)
+	if (msg.wParam==HTMINBUTTON||msg.wParam==HTMAXBUTTON||msg.wParam==HTCLOSE)
 	{
 		hookMouse(WH_MOUSE_LL, MinBoxMouseProc);
 		return true;

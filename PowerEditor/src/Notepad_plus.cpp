@@ -974,6 +974,8 @@ void Notepad_plus::reInitDockingSystem(DockingManagerData* dockingData)
 		ContainerTabInfo & cti = dmd._containerTabInfo[i];
 		_dockingManager.setActiveTab(cti._cont, cti._activeTab, true);
 	}
+
+	_incrementFindDlg.display(dmd._showIncrementalSearch);
 }
 
 int Notepad_plus::getButtonCommand(POINT &pointer) {
@@ -1196,6 +1198,8 @@ void Notepad_plus::saveDockingParams()
 	nppGUI._dockingData._TopExtrudeRight = _dockingManager._TopExtrudeRight;
 	nppGUI._dockingData._BotExtrudeLeft =  _dockingManager._BotExtrudeLeft ;
 	nppGUI._dockingData._BotExtrudeRight = _dockingManager._BotExtrudeRight;
+
+	nppGUI._dockingData._showIncrementalSearch = _incrementFindDlg.isVisible();
 
 	// clear the container tab information (active tab)
 	nppGUI._dockingData._containerTabInfo.clear();
@@ -7839,24 +7843,40 @@ void Notepad_plus::switchToIconMode(toolBarStatusType targetState, bool fromPref
 	syncToolbarHwnd();
 }
 
-void Notepad_plus::refreshDarkMode()
+void Notepad_plus::refreshDarkMode(bool resetStyle)
 {
-	SendMessage(_pPublicInterface->getHSelf(), NPPM_SETEDITORBORDEREDGE, 0, NppParameters::getInstance().getSVP()._showBorderEdge);
-	if (NppDarkMode::isExperimentalSupported())
+	NppParameters& nppParams = NppParameters::getInstance();
+
+	SendMessage(_pPublicInterface->getHSelf(), NPPM_SETEDITORBORDEREDGE, 0, nppParams.getSVP()._showBorderEdge);
+
+	if (resetStyle && NppDarkMode::isExperimentalSupported())
 	{
 		NppDarkMode::allowDarkModeForApp(NppDarkMode::isEnabled());
-	}
-	NppDarkMode::setDarkTitleBar(_pPublicInterface->getHSelf());
 
-	for (auto &hwndDlg : _hModelessDlgs)
-	{
-		NppDarkMode::setDarkTitleBar(hwndDlg);
-		::SendMessage(hwndDlg, NPPM_INTERNAL_REFRESHDARKMODE, 0, 0);
-		::RedrawWindow(hwndDlg, nullptr, nullptr, RDW_INVALIDATE | RDW_ERASE | RDW_FRAME | RDW_ALLCHILDREN);
+		NppDarkMode::setDarkTitleBar(_pPublicInterface->getHSelf());
+		::SetWindowPos(_pPublicInterface->getHSelf(), nullptr, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER | SWP_FRAMECHANGED);
+
+		for (auto& docCont : _dockingManager.getContainerInfo())
+		{
+			NppDarkMode::setDarkTitleBar(docCont->getCaptionWnd());
+			::SetWindowPos(docCont->getCaptionWnd(), nullptr, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER | SWP_FRAMECHANGED);
+		}
+
+		for (auto& hwndDlg : _hModelessDlgs)
+		{
+			NppDarkMode::setDarkTitleBar(hwndDlg);
+			::SendMessage(hwndDlg, NPPM_INTERNAL_REFRESHDARKMODE, 0, 0);
+			::RedrawWindow(hwndDlg, nullptr, nullptr, RDW_INVALIDATE | RDW_ERASE | RDW_FRAME | RDW_ALLCHILDREN);
+			::SetWindowPos(hwndDlg, nullptr, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER | SWP_FRAMECHANGED);
+		}
 	}
-	for (auto &docCont : _dockingManager.getContainerInfo())
+	else
 	{
-		NppDarkMode::setDarkTitleBar(docCont->getCaptionWnd());
+		for (auto& hwndDlg : _hModelessDlgs)
+		{
+			::SendMessage(hwndDlg, NPPM_INTERNAL_REFRESHDARKMODE, 0, 0);
+			::RedrawWindow(hwndDlg, nullptr, nullptr, RDW_INVALIDATE | RDW_ERASE | RDW_FRAME | RDW_ALLCHILDREN);
+		}
 	}
 
 	if (_pProjectPanel_1)
@@ -7904,82 +7924,67 @@ void Notepad_plus::refreshDarkMode()
 	RedrawWindow(_pPublicInterface->getHSelf(), nullptr, nullptr, RDW_INVALIDATE | RDW_ERASE | RDW_FRAME | RDW_ALLCHILDREN);
 	SendMessage(_pPublicInterface->getHSelf(), NPPM_INTERNAL_CHANGETABBAEICONS, 0, NppDarkMode::isEnabled() ? 2 : 0);
 
-	toolBarStatusType state = _toolBar.getState();
-	switch (state)
+	::SendMessage(_findInFinderDlg.getHSelf(), NPPM_INTERNAL_REFRESHDARKMODE, 0, 0);
+	::RedrawWindow(_findInFinderDlg.getHSelf(), nullptr, nullptr, RDW_INVALIDATE | RDW_ERASE | RDW_FRAME | RDW_ALLCHILDREN);
+	if (resetStyle && NppDarkMode::isExperimentalSupported())
 	{
-	case TB_SMALL:
-		_toolBar.reduce();
-		break;
-
-	case TB_LARGE:
-		_toolBar.enlarge();
-		break;
-
-	case TB_STANDARD:
-		// Force standard colorful icon to Fluent UI small icon in dark mode
-		if (NppDarkMode::isEnabled())
-			_toolBar.reduce();
-		break;
+		NppDarkMode::setDarkTitleBar(_findInFinderDlg.getHSelf());
+		::SetWindowPos(_findInFinderDlg.getHSelf(), nullptr, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER | SWP_FRAMECHANGED);
 	}
 
-
-	NppParameters& nppParams = NppParameters::getInstance();
-	ThemeSwitcher & themeSwitcher = nppParams.getThemeSwitcher();
-	generic_string themePath;
-	generic_string themeName;
-	const TCHAR darkModeXmlFileName[] = TEXT("DarkModeDefault.xml");
-	if (NppDarkMode::isEnabled())
+	if (resetStyle)
 	{
-		themePath = themeSwitcher.getThemeDirPath();
-		PathAppendCompat(themePath, darkModeXmlFileName);
-
-		themeName = themeSwitcher.getThemeFromXmlFileName(themePath.c_str());
-	}
-	else
-	{
-		//use _stylerPath;
-
-		pair<generic_string, generic_string> & themeInfo = themeSwitcher.getElementFromIndex(0);
-		themePath = themeInfo.second;
-		themeName = themeSwitcher.getDefaultThemeLabel();
-	}
-
-	//LogIs(L"themePath PathFileExists %s %d", themePath.c_str(), ::PathFileExists(themePath.c_str()));
-	if (::PathFileExists(themePath.c_str()))
-	{
-		((NppGUI*)&nppParams.getNppGUI())->_themeName = (TCHAR*)themePath.c_str();
-
-		if (_configStyleDlg.isCreated())
+		toolBarStatusType state = _toolBar.getState();
+		switch (state)
 		{
-			_configStyleDlg.selectThemeByName((TCHAR*)themeName.c_str());
+		case TB_SMALL:
+			_toolBar.reduce();
+			break;
+
+		case TB_LARGE:
+			_toolBar.enlarge();
+			break;
+
+		case TB_STANDARD:
+			// Force standard colorful icon to Fluent UI small icon in dark mode
+			if (NppDarkMode::isEnabled())
+				_toolBar.reduce();
+			break;
+		}
+
+		ThemeSwitcher& themeSwitcher = nppParams.getThemeSwitcher();
+		generic_string themePath;
+		generic_string themeName;
+		const TCHAR darkModeXmlFileName[] = TEXT("DarkModeDefault.xml");
+		if (NppDarkMode::isEnabled())
+		{
+			themePath = themeSwitcher.getThemeDirPath();
+			PathAppendCompat(themePath, darkModeXmlFileName);
+
+			themeName = themeSwitcher.getThemeFromXmlFileName(themePath.c_str());
 		}
 		else
 		{
-			nppParams.reloadStylers((TCHAR*)themePath.c_str());
-			::SendMessage(_pPublicInterface->getHSelf(), WM_UPDATESCINTILLAS, 0, 0);
+			//use _stylerPath;
+
+			pair<generic_string, generic_string>& themeInfo = themeSwitcher.getElementFromIndex(0);
+			themePath = themeInfo.second;
+			themeName = themeSwitcher.getDefaultThemeLabel();
 		}
-	}
 
-	if (NppDarkMode::isExperimentalSupported())
-	{
-		RECT rcClient;
+		if (::PathFileExists(themePath.c_str()))
+		{
+			nppParams.getNppGUI()._themeName = themePath;
 
-		GetWindowRect(_pPublicInterface->getHSelf(), &rcClient);
-
-		// Inform application of the frame change.
-		SetWindowPos(_pPublicInterface->getHSelf(),
-			NULL,
-			rcClient.left, rcClient.top,
-			rcClient.right - rcClient.left, rcClient.bottom - rcClient.top,
-			SWP_FRAMECHANGED);
-
-		GetWindowRect(_findReplaceDlg.getHSelf(), &rcClient);
-
-		// Inform application of the frame change.
-		SetWindowPos(_findReplaceDlg.getHSelf(),
-			NULL,
-			rcClient.left, rcClient.top,
-			rcClient.right - rcClient.left, rcClient.bottom - rcClient.top,
-			SWP_FRAMECHANGED);
+			if (_configStyleDlg.isCreated())
+			{
+				_configStyleDlg.selectThemeByName(themeName.c_str());
+			}
+			else
+			{
+				nppParams.reloadStylers((TCHAR*)themePath.c_str());
+				::SendMessage(_pPublicInterface->getHSelf(), WM_UPDATESCINTILLAS, 0, 0);
+			}
+		}
 	}
 }

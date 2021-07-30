@@ -200,6 +200,7 @@ static const WinMenuKeyDefinition winKeyDefs[] =
 	{ VK_F3,      IDM_SEARCH_VOLATILE_FINDPREV,                 true,  true,  true,  nullptr },
 	{ VK_H,       IDM_SEARCH_REPLACE,                           true,  false, false, nullptr },
 	{ VK_I,       IDM_SEARCH_FINDINCREMENT,                     true,  true,  false, nullptr },
+	{ VK_G,       IDM_SEARCH_GOTOINCREMENT,                     true,  false, true, nullptr },
 	{ VK_F7,      IDM_FOCUS_ON_FOUND_RESULTS,                   false, false, false, nullptr },
 	{ VK_F4,      IDM_SEARCH_GOTOPREVFOUND,                     false, false, true,  nullptr },
 	{ VK_F4,      IDM_SEARCH_GOTONEXTFOUND,                     false, false, false, nullptr },
@@ -5759,6 +5760,8 @@ void NppParameters::feedDockingManager(TiXmlNode *node, DockingManagerData & doc
 	if (element->Attribute(TEXT("BER"), &i))
 		dockingData._BotExtrudeRight = i;
 
+	if (element->Attribute(TEXT("INC"), &i))
+		dockingData._showIncrementalSearch = i;
 
 
 	for (TiXmlNode *childNode = node->FirstChildElement(TEXT("FloatingWindow"));
@@ -6529,6 +6532,7 @@ void NppParameters::insertDockingParamNode(TiXmlNode *GUIRoot, DockingManagerDat
 	DMNode.SetAttribute(TEXT("TER"), dmd._TopExtrudeRight);
 	DMNode.SetAttribute(TEXT("BEL"), dmd._BotExtrudeLeft);
 	DMNode.SetAttribute(TEXT("BER"), dmd._BotExtrudeRight);
+	DMNode.SetAttribute(TEXT("INC"), dmd._showIncrementalSearch);
 
 	if (isLayoutFromSession)
 	{

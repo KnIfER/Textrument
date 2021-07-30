@@ -365,6 +365,8 @@ struct DockingManagerData final
 	bool _BotExtrudeLeft =  true;
 	bool _BotExtrudeRight = true;
 
+	bool _showIncrementalSearch = false;
+
 	std::vector<FloatingWindowInfo> _floatingWindowInfo;
 	std::vector<PluginDlgDockingInfo> _pluginDockInfo;
 	std::vector<ContainerTabInfo> _containerTabInfo;

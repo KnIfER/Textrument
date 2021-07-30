@@ -40,6 +40,7 @@
 #include "Processus.h"
 #include "PluginsManager.h"
 #include "verifySignedfile.h"
+#include "DarkMode\DarkModePlus.h"
 
 using namespace std;
 using nlohmann::json;
@@ -266,6 +267,7 @@ void PluginsAdminDlg::create(int dialogID, bool isRTL, bool msgDestParent)
 	RECT rect;
 	getClientRect(rect);
 	_tab.init(_hInst, _hSelf, false, true);
+	NppDarkMode::subclassTabControl(_tab.getHSelf());
 	int tabDpiDynamicalHeight = nppParms->_dpiManager.scaleY(13);
 	_tab.setFont(TEXT("Tahoma"), tabDpiDynamicalHeight);
 
@@ -356,7 +358,15 @@ void PluginsAdminDlg::create(int dialogID, bool isRTL, bool msgDestParent)
 	//_availableList.addColumn(columnInfo(loading, nppParms->_dpiManager.scaleX(70)));
 	_availableList.setViewStyleOption(LVS_EX_CHECKBOXES);
 
+	COLORREF fgColor = (NppParameters::getInstance()).getCurrentDefaultFgColor();
+	COLORREF bgColor = (NppParameters::getInstance()).getCurrentDefaultBgColor();
+
 	_availableList.initView(_hInst, _hSelf);
+
+	ListView_SetBkColor(_availableList.getViewHwnd(), bgColor);
+	ListView_SetTextBkColor(_availableList.getViewHwnd(), bgColor);
+	ListView_SetTextColor(_availableList.getViewHwnd(), fgColor);
+
 	_availableList.reSizeView(listRect);
 	
 	_updateList.addColumn(columnInfo(pluginStr, nppParms->_dpiManager.scaleX(200)));
@@ -365,6 +375,11 @@ void PluginsAdminDlg::create(int dialogID, bool isRTL, bool msgDestParent)
 	_updateList.setViewStyleOption(LVS_EX_CHECKBOXES);
 
 	_updateList.initView(_hInst, _hSelf);
+
+	ListView_SetBkColor(_updateList.getViewHwnd(), bgColor);
+	ListView_SetTextBkColor(_updateList.getViewHwnd(), bgColor);
+	ListView_SetTextColor(_updateList.getViewHwnd(), fgColor);
+
 	_updateList.reSizeView(listRect);
 
 	_installedList.addColumn(columnInfo(pluginStr, nppParms->_dpiManager.scaleX(200)));
@@ -373,6 +388,11 @@ void PluginsAdminDlg::create(int dialogID, bool isRTL, bool msgDestParent)
 	_installedList.setViewStyleOption(LVS_EX_CHECKBOXES);
 
 	_installedList.initView(_hInst, _hSelf);
+
+	ListView_SetBkColor(_installedList.getViewHwnd(), bgColor);
+	ListView_SetTextBkColor(_installedList.getViewHwnd(), bgColor);
+	ListView_SetTextColor(_installedList.getViewHwnd(), fgColor);
+
 	_installedList.reSizeView(listRect);
 
 	HWND hDesc = ::GetDlgItem(_hSelf, IDC_PLUGINADM_EDIT);
@@ -1020,6 +1040,22 @@ INT_PTR CALLBACK PluginsAdminDlg::run_dlgProc(UINT message, WPARAM wParam, LPARA
 	{
         case WM_INITDIALOG :
 		{
+			NppDarkMode::autoSubclassAndThemeChildControls(_hSelf);
+			return TRUE;
+		}
+
+		DMPlus_handleEdit
+		DMPlus_handleDLG
+		DMPlus_handlePrint
+
+		case NPPM_INTERNAL_REFRESHDARKMODE:
+		{
+			NppDarkMode::autoThemeChildControls(_hSelf);
+
+			NppDarkMode::setDarkListView(_availableList.getViewHwnd());
+			NppDarkMode::setDarkListView(_updateList.getViewHwnd());
+			NppDarkMode::setDarkListView(_installedList.getViewHwnd());
+
 			return TRUE;
 		}
 

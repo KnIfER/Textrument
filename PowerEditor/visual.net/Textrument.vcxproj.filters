@@ -194,7 +194,6 @@
     <ClInclude Include="..\src\MISC\md5\md5Dlgs_rc.h" />
     <ClInclude Include="..\src\MISC\sha2\sha-256.h" />
     <ClInclude Include="..\src\ScintillaComponent\columnEditor_rc.h" />
-    <ClInclude Include="..\src\ScintillaComponent\FindReplaceDlg_rc.h" />
     <ClInclude Include="..\src\WinControls\AboutDlg\AboutDlg.h" />
     <ClInclude Include="..\src\WinControls\AnsiCharPanel\ansiCharPanel.h" />
     <ClInclude Include="..\src\ScintillaComponent\AutoCompletion.h" />
@@ -408,6 +407,11 @@
     <ClInclude Include="..\src\WinControls\StaticDialog\StaticDialog.h">
       <Filter>Core</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\DarkMode\DarkModePlus.h">
+      <Filter>DarkMode</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\ScintillaComponent\resource.h" />
+    <ClInclude Include="..\src\ScintillaComponent\FindReplaceDlg_rc.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\src\MISC\md5\md5Dlgs.rc" />
@@ -595,6 +599,7 @@
     <Image Include="..\src\icons\npp.ico">
       <Filter>Core</Filter>
     </Image>
+    <Image Include="..\src\icons\incrementalBg.bmp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\src\icons\new_off.ico" />

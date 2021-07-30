@@ -405,7 +405,9 @@ namespace NppDarkMode
 
 #ifndef PluginToolbar
 		HWND hwndRoot = GetAncestor(hwnd, GA_ROOTOWNER);
-		::SendMessage(hwndRoot, NPPM_INTERNAL_REFRESHDARKMODE, 0, 0);
+
+		// wParam == true, will reset style and toolbar icon
+		::SendMessage(hwndRoot, NPPM_INTERNAL_REFRESHDARKMODE, static_cast<WPARAM>(!forceRefresh), 0);
 #endif
 	}
 
@@ -811,11 +813,12 @@ namespace NppDarkMode
 			hFont = hCreatedFont;
 		}
 
-		if (!hFont) {
+		if (!hFont) 
+		{
 			hFont = reinterpret_cast<HFONT>(SendMessage(hwnd, WM_GETFONT, 0, 0));
 		}
 
-		SelectObject(hdc, hFont);
+		hOldFont = static_cast<HFONT>(::SelectObject(hdc, hFont));
 
 		DWORD dtFlags = DT_LEFT; // DT_LEFT is 0
 		dtFlags |= (nStyle & BS_MULTILINE) ? DT_WORDBREAK : DT_SINGLELINE;
@@ -1070,12 +1073,18 @@ namespace NppDarkMode
 		WCHAR szText[256] = { 0 };
 		GetWindowText(hwnd, szText, _countof(szText));
 
+		auto style = static_cast<long>(::GetWindowLongPtr(hwnd, GWL_STYLE));
+		bool isCenter = (style & BS_CENTER) == BS_CENTER;
+
 		if (szText[0])
 		{
 			SIZE textSize = { 0 };
 			GetTextExtentPoint32(hdc, szText, static_cast<int>(wcslen(szText)), &textSize);
+
+			int centerPosX = isCenter ? ((rcClient.right - rcClient.left - textSize.cx) / 2) : 7;
+
 			rcBackground.top += textSize.cy / 2;
-			rcText.left += 7;
+			rcText.left += centerPosX;
 			rcText.bottom = rcText.top + textSize.cy;
 			rcText.right = rcText.left + textSize.cx + 4;
 
@@ -1105,7 +1114,9 @@ namespace NppDarkMode
 			DTTOPTS dtto = { sizeof(DTTOPTS), DTT_TEXTCOLOR };
 			dtto.crText = NppDarkMode::getTextColor();
 
-			DrawThemeTextEx(buttonData.hTheme, hdc, BP_GROUPBOX, iStateID, szText, -1, DT_LEFT | DT_SINGLELINE, &rcText, &dtto);
+			DWORD textFlags = isCenter ? DT_CENTER : DT_LEFT;
+
+			DrawThemeTextEx(buttonData.hTheme, hdc, BP_GROUPBOX, iStateID, szText, -1, textFlags | DT_SINGLELINE, &rcText, &dtto);		
 		}
 
 		if (hCreatedFont) DeleteObject(hCreatedFont);
@@ -1470,6 +1481,11 @@ namespace NppDarkMode
 			, theme
 		};
 
+		if (subclass)
+		{
+			::EnableThemeDialogTexture(hwndParent, theme ? ETDT_ENABLETAB : ETDT_DISABLE);
+		}
+
 		EnumChildWindows(hwndParent, [](HWND hwnd, LPARAM lParam) {
 			auto& p = *reinterpret_cast<Params*>(lParam);
 			const size_t classNameLen = 16;
@@ -1639,7 +1655,7 @@ namespace NppDarkMode
 
 		HWND hHeader = ListView_GetHeader(hwnd);
 		NppDarkMode::allowDarkModeForWindow(hHeader, useDark);
-		SetWindowTheme(hHeader, L"ItemsView", nullptr);
+		SetWindowTheme(hHeader, useDark ? L"ItemsView" : nullptr, nullptr);
 
 		NppDarkMode::allowDarkModeForWindow(hwnd, useDark);
 		SetWindowTheme(hwnd, L"Explorer", nullptr);
@@ -1661,6 +1677,30 @@ namespace NppDarkMode
 	void setTreeViewStyle(HWND hwnd)
 	{
 		SetWindowTheme(hwnd, nullptr, nullptr);
+	}
+
+	void setBorder(HWND hwnd, bool border)
+	{
+		auto style = static_cast<long>(::GetWindowLongPtr(hwnd, GWL_STYLE));
+		bool hasBorder = (style & WS_BORDER) == WS_BORDER;
+		bool change = false;
+
+		if (!hasBorder && border)
+		{
+			style |= WS_BORDER;
+			change = true;
+		}
+		else if (hasBorder && !border)
+		{
+			style &= ~WS_BORDER;
+			change = true;
+		}
+
+		if (change)
+		{
+			::SetWindowLongPtr(hwnd, GWL_STYLE, style);
+			::SetWindowPos(hwnd, nullptr, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER | SWP_FRAMECHANGED);
+		}
 	}
 
 	LRESULT onCtlColor(HDC hdc)

@@ -686,7 +686,7 @@ public:
 
 	void invokeCurrentFile(int source);
 
-	void refreshDarkMode();
+	void refreshDarkMode(bool resetStyle = false);
 };
 
 
