@@ -33,6 +33,7 @@
 #include "AboutDlg.h"
 #include "Parameters.h"
 #include "localization.h"
+#include "DarkMode\DarkModePlus.h"
 
 #pragma warning(disable : 4996) // for GetVersion()
 
@@ -42,6 +43,8 @@ INT_PTR CALLBACK AboutDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM lPara
 	{
         case WM_INITDIALOG :
 		{
+			NppDarkMode::autoSubclassAndThemeChildControls(_hSelf);
+
 			HWND compileDateHandle = ::GetDlgItem(_hSelf, IDC_BUILD_DATETIME);
 			generic_string buildTime = TEXT("Build time : ");
 
@@ -78,11 +81,16 @@ INT_PTR CALLBACK AboutDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM lPara
 			return TRUE;
 		}
 
+		DMPlus_handleDLG
+		DMPlus_handleRefresh
+
 		case WM_DRAWITEM :
 		{
+			DPIManager& dpiManager = NppParameters::getInstance()._dpiManager;
+
 			HICON hIcon = (HICON)::LoadImage(_hInst, MAKEINTRESOURCE(IDI_FLAG), IMAGE_ICON, 64, 64, LR_DEFAULTSIZE);
 			DRAWITEMSTRUCT *pdis = (DRAWITEMSTRUCT *)lParam;
-			::DrawIconEx(pdis->hDC, 0, 0, hIcon, 64, 64, 0, NULL, DI_NORMAL);
+			::DrawIconEx(pdis->hDC, 0, 0, hIcon, dpiManager.scaleX(48), dpiManager.scaleY(48), 0, NULL, DI_NORMAL);
 			return TRUE;
 		}
 
@@ -125,6 +133,8 @@ INT_PTR CALLBACK DebugInfoDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM /
 		case WM_INITDIALOG:
 		{
 			NppParameters& nppParam = NppParameters::getInstance();
+
+			NppDarkMode::autoSubclassAndThemeChildControls(_hSelf);
 
 			// Notepad++ version
 			_debugInfoStr = NOTEPAD_PLUS_VERSION;
@@ -274,6 +284,9 @@ INT_PTR CALLBACK DebugInfoDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM /
 			getClientRect(_rc);
 			return TRUE;
 		}
+		
+		DMPlus_handleDLG
+		DMPlus_handleRefresh
 
 		case WM_COMMAND:
 		{
@@ -359,12 +372,16 @@ INT_PTR CALLBACK DoSaveOrNotBox::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 	{
 		case WM_INITDIALOG :
 		{
+			NppDarkMode::autoSubclassAndThemeChildControls(_hSelf);
+
 			changeLang();
 			::EnableWindow(::GetDlgItem(_hSelf, IDRETRY), _isMulti);
 			::EnableWindow(::GetDlgItem(_hSelf, IDIGNORE), _isMulti);
 			goToCenter();
 			return TRUE;
 		}
+
+		DMPlus_handleDLG
 
 		case WM_COMMAND:
 		{
@@ -409,4 +426,5 @@ INT_PTR CALLBACK DoSaveOrNotBox::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 		default:
 			return FALSE;
 	}
+	return FALSE;
 }

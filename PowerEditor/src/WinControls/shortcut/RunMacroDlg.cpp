@@ -31,6 +31,7 @@
 #include "RunMacroDlg.h"
 #include "ScintillaEditView.h"
 #include "Notepad_plus_msgs.h"
+#include "DarkMode\DarkModePlus.h"
 
 void RunMacroDlg::initMacroList()
 {
@@ -57,6 +58,8 @@ INT_PTR CALLBACK RunMacroDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM)
 	{
 		case WM_INITDIALOG :
 		{
+			NppDarkMode::autoSubclassAndThemeChildControls(_hSelf);
+
 			initMacroList();
 			::SetDlgItemInt(_hSelf, IDC_M_RUN_TIMES, nppParms->_RunMacro_times, FALSE);
 			check(nppParms->_RunMacro_modeEof?IDC_M_RUN_EOF:IDC_M_RUN_MULTI);
@@ -70,6 +73,12 @@ INT_PTR CALLBACK RunMacroDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM)
 			return TRUE;
 		}
 		
+		DMPlus_handleEdit
+		DMPlus_handleListBox
+		DMPlus_handleDLG
+		DMPlus_handlePrint
+		DMPlus_handleRefresh
+
 		case WM_COMMAND : 
 		{
 			if (HIWORD(wParam) == EN_CHANGE)

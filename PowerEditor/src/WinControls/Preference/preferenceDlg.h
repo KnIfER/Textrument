@@ -44,18 +44,18 @@ private :
 	INT_PTR CALLBACK run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam);
 };
 
-class BarsDlg : public StaticDialog
+class GeneralSubDlg : public StaticDialog
 {
 public :
-	BarsDlg() = default;
+	GeneralSubDlg() = default;
 private :
 	INT_PTR CALLBACK run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam);
 };
 
-class MarginsDlg : public StaticDialog
+class EditingSubDlg : public StaticDialog
 {
 public :
-	MarginsDlg() = default;
+	EditingSubDlg() = default;
 	virtual void destroy() {
 		if (_multiEdgeTip)
 			::DestroyWindow(_multiEdgeTip);
@@ -254,6 +254,7 @@ private:
 
 	INT_PTR CALLBACK run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam);
 	void enableCustomizedColorCtrls(bool doEnable);
+	void move2CtrlLeft(int ctrlID, HWND handle2Move, int handle2MoveWidth, int handle2MoveHeight);
 };
 
 
@@ -298,8 +299,8 @@ private :
 	int32_t getIndexFromName(const TCHAR *name) const;
 	void showDialogByIndex(size_t index, bool init=false) const;
 	WindowVector _wVector;
-	BarsDlg _barsDlg;
-	MarginsDlg _marginsDlg;
+	GeneralSubDlg _barsDlg;
+	EditingSubDlg _marginsDlg;
 	MiscSettingsDlg _miscSettingsDlg;
 	RegExtDlg _fileAssocDlg;
 	LangMenuDlg _langMenuDlg;

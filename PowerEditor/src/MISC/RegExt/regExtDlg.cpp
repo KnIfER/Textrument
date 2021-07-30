@@ -29,6 +29,7 @@
 #include "resource.h"
 #include "Parameters.h"
 #include "PreferenceDlg.h"
+#include "DarkMode\DarkModePlus.h"
 
 
 
@@ -142,6 +143,10 @@ INT_PTR CALLBACK RegExtDlg::run_dlgProc(UINT Message, WPARAM wParam, LPARAM lPar
 			}
 			return TRUE;
 		}
+
+		DMPlus_handleListBox
+		DMPlus_handleDLG
+		DMPlus_handlePrint
 
 		case WM_DRAWITEM :
 		{
@@ -348,7 +353,7 @@ INT_PTR CALLBACK RegExtDlg::run_dlgProc(UINT Message, WPARAM wParam, LPARAM lPar
 		default :
 			return FALSE;
 	}
-	//return FALSE;
+	return FALSE;
 }
 
 void RegExtDlg::getRegisteredExts()

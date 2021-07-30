@@ -35,6 +35,7 @@
 #include "localization.h"
 #include "wutils.h"
 #include "Notepad_plus.h"
+#include "../DarkMode/DarkModePlus.h"
 #include <windowsx.h>
 
 struct DOREGSTRUCT {
@@ -212,8 +213,15 @@ INT_PTR CALLBACK PreferenceDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM 
 			if (enableDlgTheme)
 				enableDlgTheme(_hSelf, ETDT_ENABLETAB);
 
+			NppDarkMode::autoSubclassAndThemeChildControls(_hSelf);
+
 			return TRUE;
 		}
+
+		DMPlus_handleListBox
+		DMPlus_handleDLG
+		DMPlus_handlePrint
+		DMPlus_handleRefresh
 
 		case WM_COMMAND :
 		{
@@ -453,7 +461,8 @@ void PreferenceDlg::invalidateRadioBtns(bool forPrefDLg)
 	}
 }
 
-INT_PTR CALLBACK BarsDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM)
+// bars
+INT_PTR CALLBACK GeneralSubDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM)
 {
 		
 	switch (message) 
@@ -510,6 +519,10 @@ INT_PTR CALLBACK BarsDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM)
 
 			return TRUE;
 		}
+
+		DMPlus_handleListBox
+		DMPlus_handleDLG
+		DMPlus_handlePrint
 		
 		case WM_COMMAND : 
 		{
@@ -733,6 +746,19 @@ void DarkModeSubDlg::enableCustomizedColorCtrls(bool doEnable)
 	}
 }
 
+void DarkModeSubDlg::move2CtrlLeft(int ctrlID, HWND handle2Move, int handle2MoveWidth, int handle2MoveHeight)
+{
+	POINT p;
+	RECT rc;
+	::GetWindowRect(::GetDlgItem(_hSelf, ctrlID), &rc);
+
+	p.x = rc.left - NppParameters::getInstance()._dpiManager.scaleX(5) - handle2MoveWidth;
+	p.y = rc.top + ((rc.bottom - rc.top) / 2) - handle2MoveHeight / 2;
+
+	::ScreenToClient(_hSelf, &p);
+	::MoveWindow(handle2Move, p.x, p.y, handle2MoveWidth, handle2MoveHeight, TRUE);
+}
+
 INT_PTR CALLBACK DarkModeSubDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam)
 {
 	UNREFERENCED_PARAMETER(lParam);
@@ -795,42 +821,19 @@ INT_PTR CALLBACK DarkModeSubDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 			_pEdgeColorPicker->init(_hInst, _hSelf);
 			_pLinkColorPicker->init(_hInst, _hSelf);
 
-			POINT p1, p2, p3, p4, p5, p6, p7, p8, p9, p10;
-			alignWith(::GetDlgItem(_hSelf, IDD_CUSTOMIZED_COLOR1_STATIC), _pPureBackgroundColorPicker->getHSelf(), PosAlign::left, p1);
-			alignWith(::GetDlgItem(_hSelf, IDD_CUSTOMIZED_COLOR2_STATIC), _pHotBackgroundColorPicker->getHSelf(), PosAlign::left, p2);
-			alignWith(::GetDlgItem(_hSelf, IDD_CUSTOMIZED_COLOR3_STATIC), _pSofterBackgroundColorPicker->getHSelf(), PosAlign::left, p3);
-			alignWith(::GetDlgItem(_hSelf, IDD_CUSTOMIZED_COLOR4_STATIC), _pBackgroundColorPicker->getHSelf(), PosAlign::left, p4);
-			alignWith(::GetDlgItem(_hSelf, IDD_CUSTOMIZED_COLOR5_STATIC), _pErrorBackgroundColorPicker->getHSelf(), PosAlign::left, p5);
-			alignWith(::GetDlgItem(_hSelf, IDD_CUSTOMIZED_COLOR6_STATIC), _pTextColorPicker->getHSelf(), PosAlign::left, p6);
-			alignWith(::GetDlgItem(_hSelf, IDD_CUSTOMIZED_COLOR7_STATIC), _pDarkerTextColorPicker->getHSelf(), PosAlign::left, p7);
-			alignWith(::GetDlgItem(_hSelf, IDD_CUSTOMIZED_COLOR8_STATIC), _pDisabledTextColorPicker->getHSelf(), PosAlign::left, p8);
-			alignWith(::GetDlgItem(_hSelf, IDD_CUSTOMIZED_COLOR9_STATIC), _pEdgeColorPicker->getHSelf(), PosAlign::left, p9);
-			alignWith(::GetDlgItem(_hSelf, IDD_CUSTOMIZED_COLOR10_STATIC), _pLinkColorPicker->getHSelf(), PosAlign::left, p10);
-
 			int cpDynamicalWidth = NppParameters::getInstance()._dpiManager.scaleX(25);
 			int cpDynamicalHeight = NppParameters::getInstance()._dpiManager.scaleY(25);
 
-			p1.x -= cpDynamicalWidth ; p1.y -= cpDynamicalHeight / 6;
-			p2.x -= cpDynamicalWidth ; p2.y -= cpDynamicalHeight / 6;
-			p3.x -= cpDynamicalWidth ; p3.y -= cpDynamicalHeight / 6;
-			p4.x -= cpDynamicalWidth ; p4.y -= cpDynamicalHeight / 6;
-			p5.x -= cpDynamicalWidth ; p5.y -= cpDynamicalHeight / 6;
-			p6.x -= cpDynamicalWidth ; p6.y -= cpDynamicalHeight / 6;
-			p7.x -= cpDynamicalWidth ; p7.y -= cpDynamicalHeight / 6;
-			p8.x -= cpDynamicalWidth ; p8.y -= cpDynamicalHeight / 6;
-			p9.x -= cpDynamicalWidth ; p9.y -= cpDynamicalHeight / 6;
-			p10.x -= cpDynamicalWidth; p10.y -= cpDynamicalHeight / 6;
-
-			::MoveWindow(reinterpret_cast<HWND>(_pPureBackgroundColorPicker->getHSelf()), p1.x, p1.y, cpDynamicalWidth, cpDynamicalHeight, TRUE);
-			::MoveWindow(reinterpret_cast<HWND>(_pHotBackgroundColorPicker->getHSelf()), p2.x, p2.y, cpDynamicalWidth, cpDynamicalHeight, TRUE);
-			::MoveWindow(reinterpret_cast<HWND>(_pSofterBackgroundColorPicker->getHSelf()), p3.x, p3.y, cpDynamicalWidth, cpDynamicalHeight, TRUE);
-			::MoveWindow(reinterpret_cast<HWND>(_pBackgroundColorPicker->getHSelf()), p4.x, p4.y, cpDynamicalWidth, cpDynamicalHeight, TRUE);
-			::MoveWindow(reinterpret_cast<HWND>(_pErrorBackgroundColorPicker->getHSelf()), p5.x, p5.y, cpDynamicalWidth, cpDynamicalHeight, TRUE);
-			::MoveWindow(reinterpret_cast<HWND>(_pTextColorPicker->getHSelf()), p6.x, p6.y, cpDynamicalWidth, cpDynamicalHeight, TRUE);
-			::MoveWindow(reinterpret_cast<HWND>(_pDarkerTextColorPicker->getHSelf()), p7.x, p7.y, cpDynamicalWidth, cpDynamicalHeight, TRUE);
-			::MoveWindow(reinterpret_cast<HWND>(_pDisabledTextColorPicker->getHSelf()), p8.x, p8.y, cpDynamicalWidth, cpDynamicalHeight, TRUE);
-			::MoveWindow(reinterpret_cast<HWND>(_pEdgeColorPicker->getHSelf()), p9.x, p9.y, cpDynamicalWidth, cpDynamicalHeight, TRUE);
-			::MoveWindow(reinterpret_cast<HWND>(_pLinkColorPicker->getHSelf()), p10.x, p10.y, cpDynamicalWidth, cpDynamicalHeight, TRUE);
+			move2CtrlLeft(IDD_CUSTOMIZED_COLOR1_STATIC, _pPureBackgroundColorPicker->getHSelf(), cpDynamicalWidth, cpDynamicalHeight);
+			move2CtrlLeft(IDD_CUSTOMIZED_COLOR2_STATIC, _pHotBackgroundColorPicker->getHSelf(), cpDynamicalWidth, cpDynamicalHeight);
+			move2CtrlLeft(IDD_CUSTOMIZED_COLOR3_STATIC, _pSofterBackgroundColorPicker->getHSelf(), cpDynamicalWidth, cpDynamicalHeight);
+			move2CtrlLeft(IDD_CUSTOMIZED_COLOR4_STATIC, _pBackgroundColorPicker->getHSelf(), cpDynamicalWidth, cpDynamicalHeight);
+			move2CtrlLeft(IDD_CUSTOMIZED_COLOR5_STATIC, _pErrorBackgroundColorPicker->getHSelf(), cpDynamicalWidth, cpDynamicalHeight);
+			move2CtrlLeft(IDD_CUSTOMIZED_COLOR6_STATIC, _pTextColorPicker->getHSelf(), cpDynamicalWidth, cpDynamicalHeight);
+			move2CtrlLeft(IDD_CUSTOMIZED_COLOR7_STATIC, _pDarkerTextColorPicker->getHSelf(), cpDynamicalWidth, cpDynamicalHeight);
+			move2CtrlLeft(IDD_CUSTOMIZED_COLOR8_STATIC, _pDisabledTextColorPicker->getHSelf(), cpDynamicalWidth, cpDynamicalHeight);
+			move2CtrlLeft(IDD_CUSTOMIZED_COLOR9_STATIC, _pEdgeColorPicker->getHSelf(), cpDynamicalWidth, cpDynamicalHeight);
+			move2CtrlLeft(IDD_CUSTOMIZED_COLOR10_STATIC, _pLinkColorPicker->getHSelf(), cpDynamicalWidth, cpDynamicalHeight);
 
 			_pBackgroundColorPicker->display();
 			_pSofterBackgroundColorPicker->display();
@@ -859,6 +862,9 @@ INT_PTR CALLBACK DarkModeSubDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 				enableDlgTheme(_hSelf, ETDT_ENABLETAB);
 			return TRUE;
 		}
+
+		DMPlus_handleDLG
+		DMPlus_handlePrint
 
 		case WM_DESTROY:
 		{
@@ -906,7 +912,8 @@ INT_PTR CALLBACK DarkModeSubDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 					::EnableWindow(::GetDlgItem(_hSelf, IDC_RADIO_DARKMODE_OLIVE), enableDarkMode);
 					::EnableWindow(::GetDlgItem(_hSelf, IDC_RADIO_DARKMODE_CUSTOMIZED), enableDarkMode);
 
-					enableCustomizedColorCtrls(enableDarkMode&& nppGUI._darkmode._colorTone == NppDarkMode::customizedTone);
+					doEnableCustomizedColorCtrls = enableDarkMode && nppGUI._darkmode._colorTone == NppDarkMode::customizedTone;
+					enableCustomizedColorCtrls(doEnableCustomizedColorCtrls);
 
 					// Maintain the coherence in preferences
 					if (nppGUI._darkmode._isEnabled)
@@ -1076,6 +1083,7 @@ INT_PTR CALLBACK DarkModeSubDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 							NppDarkMode::setDarkTone(nppGUI._darkmode._colorTone);
 							changed = true;
 							forceRefresh = true;
+							doEnableCustomizedColorCtrls = true;
 						}
 						break;
 
@@ -1088,6 +1096,24 @@ INT_PTR CALLBACK DarkModeSubDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 
 			if (changed)
 			{
+				if (!doEnableCustomizedColorCtrls)
+				{
+					COLORREF disabledColor = nppGUI._darkmode._isEnabled ? NppDarkMode::getDarkerBackgroundColor() : ::GetSysColor(COLOR_3DFACE);
+
+					_pBackgroundColorPicker->setColour(disabledColor);
+					_pSofterBackgroundColorPicker->setColour(disabledColor);
+					_pHotBackgroundColorPicker->setColour(disabledColor);
+					_pPureBackgroundColorPicker->setColour(disabledColor);
+					_pErrorBackgroundColorPicker->setColour(disabledColor);
+					_pTextColorPicker->setColour(disabledColor);
+					_pDarkerTextColorPicker->setColour(disabledColor);
+					_pDisabledTextColorPicker->setColour(disabledColor);
+					_pEdgeColorPicker->setColour(disabledColor);
+					_pLinkColorPicker->setColour(disabledColor);
+
+					redraw();
+				}
+
 				NppDarkMode::refreshDarkMode(_hSelf, forceRefresh);
 				getFocus(); // to make black mode title bar appear
 				return TRUE;
@@ -1099,7 +1125,7 @@ INT_PTR CALLBACK DarkModeSubDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM
 	return FALSE;
 }
 
-void MarginsDlg::initScintParam()
+void EditingSubDlg::initScintParam()
 {
 		ScintillaViewParams & svp = const_cast<ScintillaViewParams &>(nppParms->getSVP());
 	
@@ -1177,9 +1203,10 @@ void MarginsDlg::initScintParam()
 	oldFunclstToolbarProc = reinterpret_cast<WNDPROC>(::SetWindowLongPtr(::GetDlgItem(_hSelf, IDC_COLUMNPOS_EDIT), GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(editNumSpaceProc)));
 }
 
-INT_PTR CALLBACK MarginsDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam)
+// MarginsDlg MarginsBorderEdgeSubDlg
+INT_PTR CALLBACK EditingSubDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam)
 {
-		NppGUI & nppGUI = const_cast<NppGUI &>(nppParms->getNppGUI());
+	NppGUI & nppGUI = const_cast<NppGUI &>(nppParms->getNppGUI());
 	switch (message) 
 	{
 		case WM_INITDIALOG :
@@ -1235,6 +1262,10 @@ INT_PTR CALLBACK MarginsDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM lPa
 				enableDlgTheme(_hSelf, ETDT_ENABLETAB);
 			return TRUE;
 		}
+
+		DMPlus_handleListBox
+		DMPlus_handleDLG
+		DMPlus_handlePrint
 
 		case WM_HSCROLL:
 		{
@@ -1427,7 +1458,7 @@ const size_t fileUpdateChoiceEnable4All = 1;
 const size_t fileUpdateChoiceDisable = 2;
 INT_PTR CALLBACK MiscSettingsDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM)
 {
-		NppGUI & nppGUI = const_cast<NppGUI &>(nppParms->getNppGUI());
+	NppGUI & nppGUI = const_cast<NppGUI &>(nppParms->getNppGUI());
 	switch (message) 
 	{
 		case WM_INITDIALOG :
@@ -1496,6 +1527,11 @@ INT_PTR CALLBACK MiscSettingsDlg::run_dlgProc(UINT message, WPARAM wParam, LPARA
 
 			return TRUE;
 		}
+
+		DMPlus_handleEdit
+		DMPlus_handleListBox
+		DMPlus_handleDLG
+		DMPlus_handlePrint
 
 		case WM_COMMAND : 
 		{
@@ -1707,7 +1743,7 @@ void RecentFilesHistoryDlg::setCustomLen(int val)
 
 INT_PTR CALLBACK DefaultNewDocDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM)
 {
-		NppGUI & nppGUI = (NppGUI & )nppParms->getNppGUI();
+	NppGUI & nppGUI = (NppGUI & )nppParms->getNppGUI();
 	NewDocDefaultSettings & ndds = (NewDocDefaultSettings &)nppGUI.getNewDocDefaultSettings();
 
 	switch (message)
@@ -1811,6 +1847,10 @@ INT_PTR CALLBACK DefaultNewDocDlg::run_dlgProc(UINT message, WPARAM wParam, LPAR
 			if (enableDlgTheme)
 				enableDlgTheme(_hSelf, ETDT_ENABLETAB);
 		}
+
+		DMPlus_handleListBox
+		DMPlus_handleDLG
+		DMPlus_handlePrint
 
 		case WM_COMMAND:
 			switch (wParam)
@@ -2062,6 +2102,10 @@ INT_PTR CALLBACK DefaultDirectoryDlg::run_dlgProc(UINT message, WPARAM wParam, L
 			originalComboEditProc = SetWindowLongPtr(hwndEdit, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(comboEditProc));
 		}
 
+		DMPlus_handleEdit
+		DMPlus_handleDLG
+		DMPlus_handlePrint
+
 		case WM_COMMAND : 
 		{
 			if (HIWORD(wParam) == EN_CHANGE)
@@ -2128,7 +2172,7 @@ INT_PTR CALLBACK DefaultDirectoryDlg::run_dlgProc(UINT message, WPARAM wParam, L
 
 INT_PTR CALLBACK RecentFilesHistoryDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM)
 {
-		NppGUI & nppGUI = (NppGUI & )nppParms->getNppGUI();
+	NppGUI & nppGUI = (NppGUI & )nppParms->getNppGUI();
 	NativeLangSpeaker *pNativeSpeaker = nppParms->getNativeLangSpeaker();
 
 	switch (message) 
@@ -2176,6 +2220,9 @@ INT_PTR CALLBACK RecentFilesHistoryDlg::run_dlgProc(UINT message, WPARAM wParam,
 			if (enableDlgTheme)
 				enableDlgTheme(_hSelf, ETDT_ENABLETAB);
 		}
+
+		DMPlus_handleDLG
+		DMPlus_handlePrint
 
 		case WM_COMMAND : 
 		{
@@ -2264,7 +2311,7 @@ INT_PTR CALLBACK RecentFilesHistoryDlg::run_dlgProc(UINT message, WPARAM wParam,
 
 INT_PTR CALLBACK LangMenuDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam)
 {
-		NppGUI & nppGUI = const_cast<NppGUI &>(nppParms->getNppGUI());
+	NppGUI & nppGUI = const_cast<NppGUI &>(nppParms->getNppGUI());
 	NativeLangSpeaker *pNativeSpeaker = nppParms->getNativeLangSpeaker();
 
 	switch (message) 
@@ -2332,6 +2379,10 @@ INT_PTR CALLBACK LangMenuDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM lP
 
 			return TRUE;
 		}
+
+		DMPlus_handleListBox
+		DMPlus_handleDLG
+		DMPlus_handlePrint
 
 		case WM_COMMAND : 
 		{
@@ -2678,7 +2729,7 @@ INT_PTR CALLBACK LangMenuDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM lP
 
 INT_PTR CALLBACK Highlighting::run_dlgProc(UINT message, WPARAM wParam, LPARAM/* lParam*/)
 {
-		NppGUI & nppGUI = (NppGUI & )nppParms->getNppGUI();
+	NppGUI & nppGUI = (NppGUI & )nppParms->getNppGUI();
 
 	switch (message) 
 	{
@@ -2711,6 +2762,9 @@ INT_PTR CALLBACK Highlighting::run_dlgProc(UINT message, WPARAM wParam, LPARAM/*
 
 			return TRUE;
 		}
+
+		DMPlus_handleDLG
+		DMPlus_handlePrint
 
 		case WM_COMMAND : 
 		{
@@ -2833,7 +2887,7 @@ INT_PTR CALLBACK Highlighting::run_dlgProc(UINT message, WPARAM wParam, LPARAM/*
 
 INT_PTR CALLBACK PrintSettingsDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM)
 {
-		NppGUI & nppGUI = (NppGUI & )nppParms->getNppGUI();
+	NppGUI & nppGUI = (NppGUI & )nppParms->getNppGUI();
 
 	switch (message) 
 	{
@@ -2929,6 +2983,12 @@ INT_PTR CALLBACK PrintSettingsDlg::run_dlgProc(UINT message, WPARAM wParam, LPAR
 				enableDlgTheme(_hSelf, ETDT_ENABLETAB);
 			break;
 		}
+
+		DMPlus_handleEdit
+		DMPlus_handleListBox
+		DMPlus_handleDLG
+		DMPlus_handlePrint
+
 		case WM_COMMAND : 
 		{
 			if (HIWORD(wParam) == EN_CHANGE)
@@ -3150,9 +3210,9 @@ INT_PTR CALLBACK PrintSettingsDlg::run_dlgProc(UINT message, WPARAM wParam, LPAR
 }
 
 
-INT_PTR CALLBACK BackupDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM)
+INT_PTR CALLBACK BackupDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam)
 {
-		NppGUI & nppGUI = const_cast<NppGUI &>(nppParms->getNppGUI());
+	NppGUI & nppGUI = const_cast<NppGUI &>(nppParms->getNppGUI());
 	switch (message) 
 	{
 		case WM_INITDIALOG :
@@ -3190,6 +3250,27 @@ INT_PTR CALLBACK BackupDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM)
 			updateBackupGUI();
 			return TRUE;
 		}
+		
+		DMPlus_handleEdit
+
+		case WM_CTLCOLORDLG:
+		case WM_CTLCOLORSTATIC:
+		{
+			if (NppDarkMode::isEnabled())
+			{
+				auto dlgCtrlID = ::GetDlgCtrlID(reinterpret_cast<HWND>(lParam));
+				if (dlgCtrlID == IDD_BACKUPDIR_RESTORESESSION_PATH_EDIT)
+				{
+					return NppDarkMode::onCtlColor(reinterpret_cast<HDC>(wParam));
+				}
+				return NppDarkMode::onCtlColorDarker(reinterpret_cast<HDC>(wParam));
+
+			}
+			break;
+		}
+
+		DMPlus_handlePrint
+
 		case WM_COMMAND : 
 		{
 			if (HIWORD(wParam) == EN_CHANGE)
@@ -3345,7 +3426,7 @@ void BackupDlg::updateBackupGUI()
 
 INT_PTR CALLBACK AutoCompletionDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM)
 {
-		NppGUI & nppGUI = const_cast<NppGUI &>(nppParms->getNppGUI());
+	NppGUI & nppGUI = const_cast<NppGUI &>(nppParms->getNppGUI());
 	switch (message) 
 	{
 		case WM_INITDIALOG :
@@ -3446,6 +3527,11 @@ INT_PTR CALLBACK AutoCompletionDlg::run_dlgProc(UINT message, WPARAM wParam, LPA
 
 			return TRUE;
 		}
+		
+		DMPlus_handleEdit
+		DMPlus_handleDLG
+		DMPlus_handlePrint
+
 		case WM_COMMAND : 
 		{
 			if (HIWORD(wParam) == EN_CHANGE)
@@ -3657,6 +3743,9 @@ INT_PTR CALLBACK MultiInstDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM)
 			::SendDlgItemMessage(_hSelf, IDC_MONOINST_RADIO, BM_SETCHECK, multiInstSetting == monoInst?BST_CHECKED:BST_UNCHECKED, 0);
 		}
 		break;
+
+		DMPlus_handleDLG
+		DMPlus_handlePrint
 
 		case WM_COMMAND : 
 		{
@@ -3875,11 +3964,32 @@ INT_PTR CALLBACK DelimiterSettingsDlg::run_dlgProc(UINT message, WPARAM wParam, 
 			return TRUE;
 		}
 
+		DMPlus_handleEdit
+		DMPlus_handlePrint
+
+		case WM_CTLCOLORDLG:
+		{
+			if (NppDarkMode::isEnabled())
+			{
+				return NppDarkMode::onCtlColorDarker(reinterpret_cast<HDC>(wParam));
+			}
+			break;
+		}
+
 		case WM_CTLCOLORSTATIC:
 		{
-			HDC hdcStatic = (HDC) wParam;
-			HWND hwnd = reinterpret_cast<HWND>(lParam);
-			if (hwnd == ::GetDlgItem(_hSelf, IDD_STATIC_BLABLA) || hwnd == ::GetDlgItem(_hSelf, IDD_STATIC_BLABLA2NDLINE))
+			auto hdcStatic = reinterpret_cast<HDC>(wParam);
+			auto dlgCtrlID = ::GetDlgCtrlID(reinterpret_cast<HWND>(lParam));
+			bool isBlabla = (dlgCtrlID == IDD_STATIC_BLABLA) || (dlgCtrlID == IDD_STATIC_BLABLA2NDLINE);
+			if (NppDarkMode::isEnabled())
+			{
+				if (isBlabla)
+				{
+					return NppDarkMode::onCtlColor(hdcStatic);
+				}
+				return NppDarkMode::onCtlColorDarker(hdcStatic);
+			}
+			else if (isBlabla)
 			{
 				COLORREF bgColor = getCtrlBgColor(_hSelf);
 				SetTextColor(hdcStatic, RGB(0, 0, 0));
@@ -3889,7 +3999,7 @@ INT_PTR CALLBACK DelimiterSettingsDlg::run_dlgProc(UINT message, WPARAM wParam, 
 				SetBkColor(hdcStatic, RGB(r, g, b));
 				return TRUE;
 			}
-			return FALSE;
+			break;
 		}
 
 		case WM_COMMAND : 
@@ -4043,6 +4153,10 @@ INT_PTR CALLBACK SettingsOnCloudDlg::run_dlgProc(UINT message, WPARAM wParam, LP
 		}
 		break;
 
+		DMPlus_handleEdit
+		DMPlus_handleDLG
+		DMPlus_handlePrint
+
 		case WM_COMMAND:
 		{
 			NativeLangSpeaker *pNativeSpeaker = nppParms->getNativeLangSpeaker();
@@ -4135,6 +4249,10 @@ INT_PTR CALLBACK SearchEngineChoiceDlg::run_dlgProc(UINT message, WPARAM wParam,
 		}
 		break;
 
+		DMPlus_handleEdit
+		DMPlus_handleDLG
+		DMPlus_handlePrint
+
 		case WM_COMMAND:
 		{
 			switch (wParam)
@@ -4214,6 +4332,9 @@ INT_PTR CALLBACK SearchingSettingsDlg::run_dlgProc(UINT message, WPARAM wParam, 
 			::SendDlgItemMessage(_hSelf, IDC_CHECK_CONFIRMREPLOPENDOCS, BM_SETCHECK, nppGUI._confirmReplaceInAllOpenDocs, 0);
 		}
 		break;
+
+		DMPlus_handleDLG
+		DMPlus_handlePrint
 
 		case WM_COMMAND:
 		{
@@ -4349,8 +4470,16 @@ INT_PTR CALLBACK PreferenceDlg::DlgProcShellSettings(HWND hwndDlg, UINT uMsg, WP
 			SetDlgItemText(hwndDlg, IDC_EDIT_MENU, menuText);
 			SetDlgItemText(hwndDlg, IDC_EDIT_COMMAND, cmdArgs);
 
+			NppDarkMode::autoSubclassAndThemeChildControls(hwndDlg);
+
 			_preferenceDlg->goToCenter(hwndDlg);
 		} return TRUE; 
+		
+		DMPlus_handleDLG
+		DMPlus_handleListBox
+		DMPlus_handleEdit
+		DMPlus_handlePrint
+		
 		case WM_COMMAND: {
 			switch(LOWORD(wParam)) {
 				case IDOK: {

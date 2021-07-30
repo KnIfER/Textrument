@@ -328,6 +328,13 @@ bool FunctionListPanel::serialize(const generic_string & outputFilename)
 
 void FunctionListPanel::reload()
 {
+	bool isScrollBarOn = GetWindowLongPtr(_treeView.getHSelf(), GWL_STYLE) & WS_VSCROLL;
+	//get scroll position
+	if (isScrollBarOn)
+	{
+		GetScrollInfo(_treeView.getHSelf(), SB_VERT, &si);
+	}
+
 	// clean up
 	_findLine = -1;
 	_findEndLine = -1;
@@ -409,6 +416,13 @@ void FunctionListPanel::reload()
 
 	// invalidate the editor rect
 	::InvalidateRect(_hSearchEdit, NULL, TRUE);
+
+	
+	//set scroll position
+	if (isScrollBarOn)
+	{
+		SetScrollInfo(_treeView.getHSelf(), SB_VERT, &si, TRUE);
+	}
 }
 
 void FunctionListPanel::markEntry()
@@ -478,13 +492,19 @@ void FunctionListPanel::init(HINSTANCE hInst, HWND hPere, ScintillaEditView **pp
 {
 	DockingDlgInterface::init(hInst, hPere);
 	_ppEditView = ppEditView;
-	bool doLocalConf = (NppParameters::getInstance()).isLocal();
+	NppParameters& nppParams = NppParameters::getInstance();
+	bool doLocalConf = nppParams.isLocal();
 
-	generic_string funcListXmlPath = (NppParameters::getInstance()).getUserPath();
-	generic_string funcListDefaultXmlPath = (NppParameters::getInstance()).getNppPath();
+	generic_string funcListXmlPath = nppParams.getUserPath();
+	generic_string funcListDefaultXmlPath = nppParams.getNppPath();
 	PathAppendCompat(funcListXmlPath, TEXT("functionList"));
 	PathAppendCompat(funcListDefaultXmlPath, TEXT("functionList"));
 	_funcParserMgr.init(funcListXmlPath, funcListDefaultXmlPath, ppEditView);
+
+	//init scrollinfo structure
+	ZeroMemory(&si, sizeof(si));
+	si.cbSize = sizeof(si);
+	si.fMask = SIF_POS;
 }
 
 bool FunctionListPanel::openSelection(const TreeView & treeView)
@@ -587,7 +607,7 @@ void FunctionListPanel::notified(LPNMHDR notification)
 		if (NppDarkMode::isEnabled())
 		{
 			auto nmtbcd = reinterpret_cast<LPNMTBCUSTOMDRAW>(notification);
-			FillRect(nmtbcd->nmcd.hdc, &nmtbcd->nmcd.rc, NppDarkMode::getBackgroundBrush());
+			::FillRect(nmtbcd->nmcd.hdc, &nmtbcd->nmcd.rc, NppDarkMode::getDarkerBackgroundBrush());
 		}
 	}
 }
@@ -785,9 +805,11 @@ INT_PTR CALLBACK FunctionListPanel::run_dlgProc(UINT message, WPARAM wParam, LPA
 
         case WM_INITDIALOG :
         {
-			int editWidth = NppParameters::getInstance()._dpiManager.scaleX(100);
-			int editWidthSep = NppParameters::getInstance()._dpiManager.scaleX(105); //editWidth + 5
-			int editHeight = NppParameters::getInstance()._dpiManager.scaleY(20);
+			NppParameters& nppParams = NppParameters::getInstance();
+
+			int editWidth = nppParams._dpiManager.scaleX(100);
+			int editWidthSep = nppParams._dpiManager.scaleX(105); //editWidth + 5
+			int editHeight = nppParams._dpiManager.scaleY(20);
 
 			// Create toolbar menu
 			int style = WS_CHILD | WS_VISIBLE | CCS_ADJUSTABLE | TBSTYLE_AUTOSIZE | TBSTYLE_FLAT | TBSTYLE_LIST | TBSTYLE_TRANSPARENT | BTNS_AUTOSIZE | BTNS_SEP | TBSTYLE_TOOLTIPS;
@@ -834,7 +856,7 @@ INT_PTR CALLBACK FunctionListPanel::run_dlgProc(UINT message, WPARAM wParam, LPA
 			ShowWindow(_hToolbarMenu, SW_SHOW);
 
 			// tips text for toolbar buttons
-			NativeLangSpeaker *pNativeSpeaker = (NppParameters::getInstance()).getNativeLangSpeaker();
+			NativeLangSpeaker *pNativeSpeaker = nppParams.getNativeLangSpeaker();
 			_sortTipStr = pNativeSpeaker->getAttrNameStr(_sortTipStr.c_str(), FL_FUCTIONLISTROOTNODE, FL_SORTLOCALNODENAME);
 			_reloadTipStr = pNativeSpeaker->getAttrNameStr(_reloadTipStr.c_str(), FL_FUCTIONLISTROOTNODE, FL_RELOADLOCALNODENAME);
 

@@ -125,6 +125,7 @@ private:
 	TreeView _treeView;
 	TreeView _treeViewSearchResult;
 
+	SCROLLINFO si;
 	long _findLine = -1;
 	long _findEndLine = -1;
 	HTREEITEM _findItem;
